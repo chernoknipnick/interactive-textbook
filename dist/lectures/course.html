@@ -523,36 +523,6 @@ html, body { margin:0; padding:0; overflow:hidden; height:100vh; }
 <body>
 <div class="portal">
 
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-eyebrow">ОП.08</div>
-    <div class="logo-title">Базы данных<br>и <em>SQL</em></div>
-    <div class="logo-sub">5 лекций · MySQL</div>
-  </div>
-  <div class="lec-list">
-    <div class="lec-item active" onclick="switchLecture('01')">
-      <div class="lec-icon">🗄</div>
-      <div class="lec-label"><span class="lec-num">Лекция 01</span>Базовые понятия</div>
-    </div>
-    <div class="lec-item" onclick="switchLecture('02')">
-      <div class="lec-icon">🔗</div>
-      <div class="lec-label"><span class="lec-num">Лекция 02</span>Связи между таблицами</div>
-    </div>
-    <div class="lec-item" onclick="switchLecture('03')">
-      <div class="lec-icon">📐</div>
-      <div class="lec-label"><span class="lec-num">Лекция 03</span>Нормализация</div>
-    </div>
-    <div class="lec-item" onclick="switchLecture('04')">
-      <div class="lec-icon">🔍</div>
-      <div class="lec-label"><span class="lec-num">Лекция 04</span>SELECT и запросы</div>
-    </div>
-    <div class="lec-item" onclick="switchLecture('05')">
-      <div class="lec-icon">⚡</div>
-      <div class="lec-label"><span class="lec-num">Лекция 05</span>Продвинутый SQL</div>
-    </div>
-  </div>
-</aside>
-
 <div class="main-area">
   <nav class="lecture-nav active" id="nav-01">
     <button class="nav-btn active" onclick="show('l01_why',this)">1. Зачем БД</button>
@@ -3846,7 +3816,8 @@ function switchLecture(num) {
   document.querySelectorAll('.lecture-nav').forEach(function(n) { n.classList.remove('active'); });
   var nums = ['01','02','03','04','05'];
   var idx = nums.indexOf(num);
-  if (idx >= 0) document.querySelectorAll('.lec-item')[idx].classList.add('active');
+  var item = document.querySelectorAll('.lec-item')[idx];
+  if (item) item.classList.add('active');
   document.getElementById('panel-' + num).classList.add('active');
   document.getElementById('nav-' + num).classList.add('active');
 }
