@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лекция 0 — Настройка окружения</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --bg2: #171b26;
+    --bg3: #1e2333;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #e8eaf0;
+    --muted: #7a8299;
+    --mysql: #f5a623;
+    --mysql-dim: rgba(245,166,35,0.12);
+    --pg: #4b8ef1;
+    --pg-dim: rgba(75,142,241,0.12);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.12);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.12);
+    --purple: #a78bfa;
+    --accent: #00d4aa;
+    --accent-dim: rgba(0,212,170,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── ШАПКА ── */
+  .hero {
+    background: linear-gradient(135deg, #0f1117 0%, #1a1f35 50%, #0f1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(0,212,170,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-tag::before { content: '//'; opacity: 0.5; }
+  .hero h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+  .hero-badges {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .hbadge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .hbadge.mysql { color: var(--mysql); border-color: rgba(245,166,35,0.3); background: var(--mysql-dim); }
+  .hbadge.pg    { color: var(--pg);    border-color: rgba(75,142,241,0.3);  background: var(--pg-dim); }
+  .hbadge.goal  { color: var(--accent); border-color: rgba(0,212,170,0.3);  background: var(--accent-dim); }
+
+  /* ── НАВИГАЦИЯ ── */
+  .nav {
+    display: flex; gap: 4px;
+    padding: 16px 40px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .nav-btn {
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--bg3); color: var(--text); }
+  .nav-btn.active { background: var(--accent-dim); color: var(--accent); }
+
+  /* ── КОНТЕНТ ── */
+  .content { max-width: 960px; margin: 0 auto; padding: 40px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── КАРТОЧКИ ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 16px; font-weight: 600;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  /* ── ШАГИ ── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    padding-bottom: 24px;
+    position: relative;
+  }
+  .step:not(:last-child) .step-line {
+    position: absolute;
+    left: 19px; top: 40px; bottom: 0;
+    width: 2px; background: var(--border2);
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 600;
+    flex-shrink: 0; position: relative; z-index: 1;
+    border: 2px solid;
+  }
+  .step-num.mysql { color: var(--mysql); border-color: rgba(245,166,35,0.5); background: var(--mysql-dim); }
+  .step-num.pg    { color: var(--pg);    border-color: rgba(75,142,241,0.5);  background: var(--pg-dim); }
+  .step-num.both  { color: var(--accent); border-color: rgba(0,212,170,0.4);  background: var(--accent-dim); }
+  .step-body { padding-top: 8px; }
+  .step-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .step-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+
+  .code-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-top: 8px;
+    position: relative;
+  }
+  .code-block .kw  { color: #a78bfa; }
+  .code-block .str { color: #4ade80; }
+  .code-block .cmt { color: #4a5568; font-style: italic; }
+  .code-block .num { color: var(--mysql); }
+
+  .copy-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: var(--bg3); border: 1px solid var(--border2);
+    color: var(--muted); border-radius: 6px;
+    padding: 3px 8px; font-size: 11px; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { color: var(--text); border-color: var(--border2); }
+  .copy-btn.copied { color: var(--green); border-color: rgba(74,222,128,0.3); }
+
+  .tip {
+    background: var(--accent-dim);
+    border: 1px solid rgba(0,212,170,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 8px;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .tip::before { content: '💡'; flex-shrink: 0; }
+
+  .warn {
+    background: rgba(248,113,113,0.08);
+    border: 1px solid rgba(248,113,113,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--red);
+    margin-top: 8px;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .warn::before { content: '⚠️'; flex-shrink: 0; }
+
+  /* ── ДЕМО ТАБЛИЦА ── */
+  .demo-area {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .demo-toolbar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap;
+  }
+  .demo-toolbar span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--muted);
+  }
+  .demo-btn {
+    padding: 5px 14px;
+    border-radius: 6px; border: 1px solid;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .demo-btn.insert { color: var(--green); border-color: rgba(74,222,128,0.3); background: var(--green-dim); }
+  .demo-btn.insert:hover { background: rgba(74,222,128,0.2); }
+  .demo-btn.update { color: var(--mysql); border-color: rgba(245,166,35,0.3); background: var(--mysql-dim); }
+  .demo-btn.update:hover { background: rgba(245,166,35,0.2); }
+  .demo-btn.delete { color: var(--red); border-color: rgba(248,113,113,0.3); background: var(--red-dim); }
+  .demo-btn.delete:hover { background: rgba(248,113,113,0.2); }
+  .demo-btn.select { color: var(--pg); border-color: rgba(75,142,241,0.3); background: var(--pg-dim); }
+  .demo-btn.select:hover { background: rgba(75,142,241,0.2); }
+  .demo-btn.reset { color: var(--muted); border-color: var(--border2); background: transparent; }
+
+  .sql-display {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    min-height: 38px;
+    display: flex; align-items: center; gap: 6px;
+    color: var(--muted);
+    transition: all 0.3s;
+  }
+  .sql-display .prompt { color: var(--purple); flex-shrink: 0; }
+  .sql-display .sql-text { color: var(--text); }
+  .sql-display .kw { color: var(--purple); }
+  .sql-display .tbl { color: var(--accent); }
+  .sql-display .val { color: var(--green); }
+  .sql-display .cond { color: var(--mysql); }
+
+  .log-line {
+    padding: 4px 16px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    animation: fadeSlide 0.3s ease;
+  }
+  .log-line.ok { color: var(--green); }
+  .log-line.err { color: var(--red); }
+  .log-line.info { color: var(--pg); }
+
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .table-wrap { padding: 16px; overflow-x: auto; }
+  table.db-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.db-table th {
+    background: var(--bg3);
+    padding: 8px 14px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 600;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border2);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  table.db-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    transition: all 0.3s;
+  }
+  table.db-table tr.new-row td { background: rgba(74,222,128,0.08); }
+  table.db-table tr.updated td.changed { background: rgba(245,166,35,0.12); color: var(--mysql); }
+  table.db-table tr.deleted { opacity: 0; height: 0; transition: all 0.4s; }
+  table.db-table tr.highlighted td { background: rgba(75,142,241,0.1); }
+  table.db-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .null-val { color: var(--border2); font-style: italic; }
+  .pk-val { color: var(--accent); }
+  .row-count {
+    padding: 10px 16px;
+    font-size: 12px; color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  /* ── АНАЛОГИИ ── */
+  .analogy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .analogy-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+  .analogy-card:hover { border-color: var(--border2); }
+  .analogy-icon { font-size: 28px; margin-bottom: 10px; }
+  .analogy-term {
+    font-size: 13px; font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .analogy-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .analogy-arrow {
+    font-size: 12px; color: var(--border2);
+    margin: 6px 0;
+  }
+  .analogy-real { font-size: 12px; color: var(--text); }
+
+  /* ── СРАВНЕНИЕ ── */
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .compare-col { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .compare-header {
+    padding: 12px 16px;
+    font-weight: 600; font-size: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .compare-header.mysql { background: var(--mysql-dim); color: var(--mysql); border-bottom: 1px solid rgba(245,166,35,0.2); }
+  .compare-header.pg    { background: var(--pg-dim);    color: var(--pg);    border-bottom: 1px solid rgba(75,142,241,0.2); }
+  .compare-row {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .label { color: var(--muted); font-size: 11px; min-width: 90px; margin-top: 2px; }
+  .compare-row .val { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* ── ЧЕКЛИСТ ── */
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item {
+    display: flex; gap: 12px; align-items: center;
+    padding: 10px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--border2); }
+  .check-item.done { border-color: rgba(74,222,128,0.3); background: var(--green-dim); }
+  .check-box {
+    width: 20px; height: 20px; border-radius: 5px;
+    border: 2px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 12px;
+    transition: all 0.2s;
+  }
+  .check-item.done .check-box {
+    background: var(--green); border-color: var(--green);
+    color: #000;
+  }
+  .check-text { font-size: 13px; }
+  .check-item.done .check-text { color: var(--muted); text-decoration: line-through; }
+
+  /* ── ПРОГРЕСС ── */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 4px; height: 4px;
+    margin-bottom: 20px; overflow: hidden;
+  }
+  .progress-bar { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .content { padding: 20px; }
+    .hero { padding: 30px 20px; }
+    .nav { padding: 12px 20px; }
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">ОП.08 Основы проектирования баз данных</div>
+  <h1>Лекция <span>0</span><br>Настройка окружения</h1>
+  <p class="hero-sub">Прежде чем писать первый SQL — настроим всё так, чтобы на практике не было сюрпризов. Установим MySQL и PostgreSQL, разберём инструменты и визуально увидим, что происходит с данными.</p>
+  <div class="hero-badges">
+    <span class="hbadge mysql">MySQL 8 + Workbench</span>
+    <span class="hbadge pg">PostgreSQL 16 + pgAdmin</span>
+    <span class="hbadge goal">DBeaver — работаем с обоими</span>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('overview')">📋 Обзор</button>
+  <button class="nav-btn" onclick="showSection('mysql')">🟠 MySQL</button>
+  <button class="nav-btn" onclick="showSection('postgres')">🔵 PostgreSQL</button>
+  <button class="nav-btn" onclick="showSection('dbeaver')">🛠 DBeaver</button>
+  <button class="nav-btn" onclick="showSection('demo')">▶ Демо данных</button>
+  <button class="nav-btn" onclick="showSection('analogies')">💡 Аналогии</button>
+  <button class="nav-btn" onclick="showSection('checklist')">✅ Чеклист</button>
+</div>
+
+<div class="content">
+
+<!-- ── ОБЗОР ── -->
+<div id="overview" class="section active">
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--accent-dim)">🗺</div>
+      Что сегодня установим и зачем
+    </div>
+    <div class="analogy-grid">
+      <div class="analogy-card">
+        <div class="analogy-icon">🟠</div>
+        <div class="analogy-term">MySQL 8</div>
+        <div class="analogy-desc">Самая популярная СУБД для веб-проектов. Простой старт, широкое применение.</div>
+        <div class="analogy-arrow">→ Инструмент: MySQL Workbench</div>
+        <div class="analogy-real">Используется в: WordPress, VK, Instagram (исторически), большинство хостингов</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🔵</div>
+        <div class="analogy-term">PostgreSQL 16</div>
+        <div class="analogy-desc">Мощная профессиональная СУБД. Строже, богаче типами данных, лучше для сложных задач.</div>
+        <div class="analogy-arrow">→ Инструмент: pgAdmin 4</div>
+        <div class="analogy-real">Используется в: банки, госсистемы, аналитические платформы</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🛠</div>
+        <div class="analogy-term">DBeaver</div>
+        <div class="analogy-desc">Универсальный клиент. Работает и с MySQL, и с PostgreSQL из одного окна. Бесплатный.</div>
+        <div class="analogy-arrow">→ На работе чаще всего именно он</div>
+        <div class="analogy-real">Используется в: большинство IT-компаний, удобен для обеих СУБД</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--pg-dim)">🏗</div>
+      Как это всё связано
+    </div>
+    <div style="background:var(--bg3); border-radius:10px; padding:20px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:2;">
+      <div style="color:var(--muted)">┌─────────────────────────────────────────────┐</div>
+      <div>│  <span style="color:var(--accent)">Ваш компьютер</span>                               │</div>
+      <div>│                                             │</div>
+      <div>│  ┌──────────────┐    ┌──────────────────┐  │</div>
+      <div>│  │  <span style="color:var(--mysql)">MySQL 8</span>      │    │  <span style="color:var(--pg)">PostgreSQL 16</span>  │  │</div>
+      <div>│  │  порт: 3306  │    │  порт: 5432      │  │</div>
+      <div>│  └──────┬───────┘    └────────┬─────────┘  │</div>
+      <div>│         │                     │             │</div>
+      <div>│  ┌──────┴───────┐    ┌────────┴─────────┐  │</div>
+      <div>│  │  <span style="color:var(--mysql)">Workbench</span>   │    │  <span style="color:var(--pg)">pgAdmin 4</span>       │  │</div>
+      <div>│  │  (GUI клиент)│    │  (GUI клиент)    │  │</div>
+      <div>│  └──────┬───────┘    └────────┬─────────┘  │</div>
+      <div>│         └──────────┬──────────┘             │</div>
+      <div>│               ┌────┴────┐                   │</div>
+      <div>│               │ <span style="color:var(--accent)">DBeaver</span> │  ← один клиент        │</div>
+      <div>│               │  для всех               │</div>
+      <div>│               └─────────┘                   │</div>
+      <div style="color:var(--muted)">└─────────────────────────────────────────────┘</div>
+    </div>
+    <div class="tip">Сервер (MySQL/PostgreSQL) — это программа, которая хранит данные и принимает запросы. Клиент (Workbench/pgAdmin/DBeaver) — это программа, через которую мы эти запросы отправляем. Можно иметь несколько клиентов для одного сервера.</div>
+  </div>
+</div>
+
+<!-- ── MySQL ── -->
+<div id="mysql" class="section">
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--mysql-dim); color:var(--mysql)">🟠</div>
+      Установка MySQL 8 + Workbench
+    </div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num mysql">1</div>
+        <div class="step-body">
+          <div class="step-title">Скачиваем MySQL Installer</div>
+          <div class="step-desc">Заходим на mysql.com/downloads → MySQL Community Downloads → MySQL Installer for Windows (файл ~500 МБ, «Full» включает всё нужное)</div>
+          <div class="tip">Скачивать нужно «MySQL Installer» — он установит сразу и сервер, и Workbench, и другие компоненты в одном мастере.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num mysql">2</div>
+        <div class="step-body">
+          <div class="step-title">Запускаем установщик</div>
+          <div class="step-desc">В мастере установки выбираем тип: <strong>Developer Default</strong>. Это установит: MySQL Server, MySQL Workbench, MySQL Shell, коннекторы.</div>
+          <div class="code-block">
+Тип установки:
+  ● Developer Default  ← выбираем это
+  ○ Server only
+  ○ Client only
+  ○ Full
+  ○ Custom
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num mysql">3</div>
+        <div class="step-body">
+          <div class="step-title">Настройка сервера</div>
+          <div class="step-desc">На шаге конфигурации оставляем всё по умолчанию. Главное — запомнить пароль root!</div>
+          <div class="code-block">
+Порт:     <span class="num">3306</span>  (по умолчанию, не менять)
+Пользователь: <span class="str">root</span>
+Пароль:   придумываем и <span class="kw">ЗАПИСЫВАЕМ</span>
+          </div>
+          <div class="warn">Пароль root — это главный пароль от всей СУБД. Если забудете — переустанавливать. Запишите прямо сейчас.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num mysql">4</div>
+        <div class="step-body">
+          <div class="step-title">Проверяем установку</div>
+          <div class="step-desc">Открываем MySQL Workbench → видим соединение «Local instance MySQL80» → кликаем → вводим пароль.</div>
+          <div class="code-block">
+<span class="cmt">-- В открывшемся редакторе пишем:</span>
+<span class="kw">SELECT</span> VERSION();
+
+<span class="cmt">-- Должно вернуть что-то вроде:</span>
+<span class="str">'8.0.36'</span>
+          </div>
+          <div class="tip">Если увидели таблицу с версией — MySQL работает. Поздравляем!</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num mysql">5</div>
+        <div class="step-body">
+          <div class="step-title">Создаём учебную базу данных</div>
+          <div class="step-desc">Эту БД будем использовать на всех практиках. Выполняем в Workbench:</div>
+          <div class="code-block" id="mysql-init-code">
+<span class="kw">CREATE DATABASE</span> <span class="str">shop_db</span>
+  <span class="kw">CHARACTER SET</span> utf8mb4
+  <span class="kw">COLLATE</span> utf8mb4_unicode_ci;
+
+<span class="kw">USE</span> <span class="str">shop_db</span>;
+
+<span class="kw">SELECT</span> <span class="str">'MySQL готов к работе!'</span> <span class="kw">AS</span> status;
+<button class="copy-btn" onclick="copyCode('mysql-init-code', this)">copy</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── PostgreSQL ── -->
+<div id="postgres" class="section">
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--pg-dim); color:var(--pg)">🔵</div>
+      Установка PostgreSQL 16 + pgAdmin 4
+    </div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num pg">1</div>
+        <div class="step-body">
+          <div class="step-title">Скачиваем PostgreSQL</div>
+          <div class="step-desc">Заходим на postgresql.org/download → Windows → Download the installer (EDB). Версия 16.x — самая актуальная стабильная.</div>
+          <div class="tip">Установщик от EDB (EnterpriseDB) — официальный, включает pgAdmin 4 автоматически.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num pg">2</div>
+        <div class="step-body">
+          <div class="step-title">Запускаем установщик</div>
+          <div class="step-desc">В мастере установки отмечаем все компоненты:</div>
+          <div class="code-block">
+Компоненты:
+  ☑ PostgreSQL Server     ← основной сервер
+  ☑ pgAdmin 4             ← визуальный клиент
+  ☑ Stack Builder         ← доп. расширения
+  ☑ Command Line Tools    ← psql в терминале
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num pg">3</div>
+        <div class="step-body">
+          <div class="step-title">Настройка сервера</div>
+          <div class="step-desc">Порт и суперпользователь:</div>
+          <div class="code-block">
+Порт:         <span class="num">5432</span>  (по умолчанию, не менять)
+Суперюзер:    <span class="str">postgres</span>
+Пароль:       придумываем и <span class="kw">ЗАПИСЫВАЕМ</span>
+Locale:       Russian, Russia  <span class="cmt">← для кириллицы</span>
+          </div>
+          <div class="warn">Два разных пароля: MySQL — пароль root, PostgreSQL — пароль postgres. Это РАЗНЫЕ базы данных на разных портах!</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num pg">4</div>
+        <div class="step-body">
+          <div class="step-title">Открываем pgAdmin 4</div>
+          <div class="step-desc">Запускаем pgAdmin → в браузере откроется веб-интерфейс. Находим сервер PostgreSQL 16 → правая кнопка → Connect Server → вводим пароль postgres.</div>
+          <div class="tip">pgAdmin работает как веб-приложение в браузере, но на вашем компьютере — интернет не нужен.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num pg">5</div>
+        <div class="step-body">
+          <div class="step-title">Создаём учебную базу данных</div>
+          <div class="step-desc">В pgAdmin: правая кнопка на Databases → Create → Database. Или через Query Tool:</div>
+          <div class="code-block" id="pg-init-code">
+<span class="kw">CREATE DATABASE</span> shop_db
+    <span class="kw">WITH</span>
+    ENCODING = <span class="str">'UTF8'</span>
+    LC_COLLATE = <span class="str">'ru_RU.UTF-8'</span>
+    TEMPLATE = template0;
+
+<span class="cmt">-- Подключаемся к ней:</span>
+<span class="kw">\c</span> shop_db
+
+<span class="kw">SELECT</span> <span class="str">'PostgreSQL готов!'</span> <span class="kw">AS</span> status;
+<button class="copy-btn" onclick="copyCode('pg-init-code', this)">copy</button>
+          </div>
+
+          <div style="margin-top:20px;">
+            <div class="card-title" style="font-size:14px; margin-bottom:12px;">🔄 Сравнение: MySQL vs PostgreSQL при старте</div>
+            <div class="compare-grid">
+              <div class="compare-col">
+                <div class="compare-header mysql">🟠 MySQL</div>
+                <div class="compare-row"><span class="label">Порт</span><span class="val" style="color:var(--mysql)">3306</span></div>
+                <div class="compare-row"><span class="label">Суперюзер</span><span class="val">root</span></div>
+                <div class="compare-row"><span class="label">Клиент</span><span class="val">Workbench</span></div>
+                <div class="compare-row"><span class="label">Кодировка</span><span class="val">utf8mb4</span></div>
+                <div class="compare-row"><span class="label">БД по умолч.</span><span class="val">mysql, sys, ...</span></div>
+              </div>
+              <div class="compare-col">
+                <div class="compare-header pg">🔵 PostgreSQL</div>
+                <div class="compare-row"><span class="label">Порт</span><span class="val" style="color:var(--pg)">5432</span></div>
+                <div class="compare-row"><span class="label">Суперюзер</span><span class="val">postgres</span></div>
+                <div class="compare-row"><span class="label">Клиент</span><span class="val">pgAdmin 4</span></div>
+                <div class="compare-row"><span class="label">Кодировка</span><span class="val">UTF8</span></div>
+                <div class="compare-row"><span class="label">БД по умолч.</span><span class="val">postgres, template0/1</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── DBeaver ── -->
+<div id="dbeaver" class="section">
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--accent-dim)">🛠</div>
+      DBeaver — один клиент для MySQL и PostgreSQL
+    </div>
+    <div class="tip" style="margin-bottom:20px;">DBeaver — это то, чем пользуются в реальных компаниях. Один инструмент, умеет подключаться к 80+ СУБД. На практиках будем работать именно в нём.</div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num both">1</div>
+        <div class="step-body">
+          <div class="step-title">Скачиваем DBeaver Community Edition</div>
+          <div class="step-desc">dbeaver.io → Download → Community Edition (бесплатная). Устанавливаем как обычную программу.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num both">2</div>
+        <div class="step-body">
+          <div class="step-title">Подключаем MySQL</div>
+          <div class="step-desc">Новое подключение → MySQL → заполняем:</div>
+          <div class="code-block">
+Server Host:  <span class="str">localhost</span>
+Port:         <span class="num">3306</span>
+Database:     <span class="str">shop_db</span>
+Username:     <span class="str">root</span>
+Password:     ваш пароль MySQL
+
+→ Test Connection  <span class="cmt">← должно показать "Connected"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-line"></div>
+        <div class="step-num both">3</div>
+        <div class="step-body">
+          <div class="step-title">Подключаем PostgreSQL</div>
+          <div class="step-desc">Новое подключение → PostgreSQL → заполняем:</div>
+          <div class="code-block">
+Server Host:  <span class="str">localhost</span>
+Port:         <span class="num">5432</span>
+Database:     <span class="str">shop_db</span>
+Username:     <span class="str">postgres</span>
+Password:     ваш пароль PostgreSQL
+
+→ Test Connection  <span class="cmt">← должно показать "Connected"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num both">4</div>
+        <div class="step-body">
+          <div class="step-title">Что видим в DBeaver</div>
+          <div class="step-desc">В левой панели — оба подключения. Можно открыть SQL Editor для любого и писать запросы. Результаты — в таблице внизу, сразу видно данные.</div>
+          <div class="tip">Горячая клавиша Ctrl+Enter — выполнить запрос. Это первое, что нужно запомнить в DBeaver.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ДЕМО ── -->
+<div id="demo" class="section">
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--green-dim)">▶</div>
+      Интерактивное демо — что происходит с данными
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">Нажимай кнопки и наблюдай как SQL-команды изменяют таблицу в реальном времени. Это именно то, что происходит в MySQL и PostgreSQL когда ты пишешь запросы.</p>
+
+    <div class="demo-area">
+      <div class="demo-toolbar">
+        <span>TABLE: товары (products)</span>
+        <button class="demo-btn insert" onclick="demoInsert()">INSERT — добавить товар</button>
+        <button class="demo-btn update" onclick="demoUpdate()">UPDATE — изменить цену</button>
+        <button class="demo-btn delete" onclick="demoDelete()">DELETE — удалить товар</button>
+        <button class="demo-btn select" onclick="demoSelect()">SELECT — выбрать дорогие</button>
+        <button class="demo-btn reset" onclick="demoReset()">сброс</button>
+      </div>
+
+      <div class="sql-display" id="sql-display">
+        <span class="prompt">mysql&gt;</span>
+        <span style="color:var(--muted)">нажми кнопку выше чтобы увидеть SQL-запрос...</span>
+      </div>
+      <div id="log-area"></div>
+
+      <div class="table-wrap">
+        <table class="db-table" id="demo-table">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>name</th>
+              <th>category</th>
+              <th>price</th>
+              <th>in_stock</th>
+            </tr>
+          </thead>
+          <tbody id="demo-tbody"></tbody>
+        </table>
+      </div>
+      <div class="row-count" id="row-count">
+        <span id="row-count-text">Строк: 0</span>
+        <span style="color:var(--muted); font-size:11px;">← это и есть реляционная таблица</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--purple)" style="color:#000">💡</div>
+      Что только что произошло — объяснение
+    </div>
+    <div class="analogy-grid">
+      <div class="analogy-card">
+        <div class="analogy-icon">➕</div>
+        <div class="analogy-term">INSERT</div>
+        <div class="analogy-desc">Добавляет новую строку в таблицу. Как вписать новую запись в журнал.</div>
+        <div class="analogy-arrow">→</div>
+        <div class="analogy-real" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--green)">INSERT INTO products (name, price) VALUES ('Ноутбук', 45000);</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">✏️</div>
+        <div class="analogy-term">UPDATE</div>
+        <div class="analogy-desc">Изменяет существующие строки. Как зачеркнуть старое и написать новое.</div>
+        <div class="analogy-arrow">→</div>
+        <div class="analogy-real" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--mysql)">UPDATE products SET price = 50000 WHERE id = 1;</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🗑</div>
+        <div class="analogy-term">DELETE</div>
+        <div class="analogy-desc">Удаляет строки. Как вырвать страницу из журнала — навсегда.</div>
+        <div class="analogy-arrow">→</div>
+        <div class="analogy-real" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--red)">DELETE FROM products WHERE id = 3;</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🔍</div>
+        <div class="analogy-term">SELECT</div>
+        <div class="analogy-desc">Запрашивает данные. Как попросить библиотекаря: «Дай все книги дороже 500 руб».</div>
+        <div class="analogy-arrow">→</div>
+        <div class="analogy-real" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--pg)">SELECT * FROM products WHERE price > 10000;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── АНАЛОГИИ ── -->
+<div id="analogies" class="section">
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:rgba(167,139,250,0.15)">💡</div>
+      Главные аналогии курса — объяснение через знакомое
+    </div>
+    <div class="analogy-grid">
+      <div class="analogy-card">
+        <div class="analogy-icon">📚</div>
+        <div class="analogy-term">База данных (БД)</div>
+        <div class="analogy-desc">Это вся библиотека целиком. Внутри — много таблиц (стеллажей с книгами).</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">👨‍💼</div>
+        <div class="analogy-term">СУБД (MySQL/PG)</div>
+        <div class="analogy-desc">Библиотекарь. Знает где что лежит, принимает запросы, следит за порядком.</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">📊</div>
+        <div class="analogy-term">Таблица</div>
+        <div class="analogy-desc">Excel-лист. Только связан с другими листами и защищён от мусора.</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">↔️</div>
+        <div class="analogy-term">Строка (запись)</div>
+        <div class="analogy-desc">Один конкретный объект: один клиент, один товар, один заказ.</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">⬇️</div>
+        <div class="analogy-term">Столбец (поле)</div>
+        <div class="analogy-desc">Одна характеристика: имя, цена, дата. Одного типа для всех строк.</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🪪</div>
+        <div class="analogy-term">Первичный ключ (PK)</div>
+        <div class="analogy-desc">Паспорт строки. Уникальный у каждой, не меняется, нельзя повторить.</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🔗</div>
+        <div class="analogy-term">Внешний ключ (FK)</div>
+        <div class="analogy-desc">Ссылка на паспорт другой таблицы. «Этот заказ принадлежит клиенту №5».</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🗣</div>
+        <div class="analogy-term">SQL</div>
+        <div class="analogy-desc">Язык, на котором мы разговариваем с библиотекарем. Понятен и MySQL, и PostgreSQL.</div>
+      </div>
+      <div class="analogy-card">
+        <div class="analogy-icon">🔍</div>
+        <div class="analogy-term">SELECT</div>
+        <div class="analogy-desc">«Дай мне...» — запрос данных. Ничего не меняет, просто смотрит.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ЧЕКЛИСТ ── -->
+<div id="checklist" class="section">
+  <div class="card">
+    <div class="card-title">
+      <div class="icon" style="background:var(--green-dim)">✅</div>
+      Чеклист: всё готово к первой практике?
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+    <div class="checklist" id="checklist-items">
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">MySQL 8 установлен (проверка: <code>SELECT VERSION();</code> в Workbench возвращает версию)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">MySQL Workbench открывается и подключается к localhost:3306</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">PostgreSQL 16 установлен (проверка: <code>SELECT VERSION();</code> в pgAdmin возвращает версию)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">pgAdmin 4 открывается в браузере и подключается к localhost:5432</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">DBeaver установлен и видит оба подключения (MySQL и PostgreSQL)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">База данных <code>shop_db</code> создана в MySQL</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">База данных <code>shop_db</code> создана в PostgreSQL</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">Пароли root (MySQL) и postgres (PostgreSQL) записаны и не забыты</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">Понимаю разницу: сервер (хранит данные) vs клиент (интерфейс для запросов)</div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">Могу объяснить аналогию: БД = библиотека, СУБД = библиотекарь, SQL = язык запроса</div></div>
+    </div>
+    <div id="all-done" style="display:none; margin-top:20px; padding:16px; background:var(--green-dim); border:1px solid rgba(74,222,128,0.3); border-radius:10px; text-align:center; color:var(--green); font-weight:600;">
+      🎉 Отлично! Окружение настроено. Готовы к ПР01 — первый SQL-запрос!
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ── НАВИГАЦИЯ ──
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── COPY ──
+function copyCode(id, btn) {
+  const block = document.getElementById(id);
+  const text = block.innerText.replace('copy','').replace('copied!','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── ДЕМО ДАННЫХ ──
+let demoData = [
+  { id: 1, name: 'Ноутбук Dell', category: 'Электроника', price: 45000, in_stock: 12 },
+  { id: 2, name: 'Мышь Logitech', category: 'Электроника', price: 1800, in_stock: 45 },
+  { id: 3, name: 'Стол офисный', category: 'Мебель', price: 8500, in_stock: 3 },
+  { id: 4, name: 'Кресло геймерское', category: 'Мебель', price: 12000, in_stock: 7 },
+];
+let nextId = 5;
+let highlightedIds = [];
+
+const newProducts = [
+  { name: 'Клавиатура Mechanical', category: 'Электроника', price: 3200, in_stock: 20 },
+  { name: 'Монитор 27"', category: 'Электроника', price: 22000, in_stock: 8 },
+  { name: 'Наушники Sony', category: 'Электроника', price: 9500, in_stock: 15 },
+  { name: 'Полка книжная', category: 'Мебель', price: 4200, in_stock: 6 },
+];
+let insertIdx = 0;
+
+function renderTable(newId = null, updatedId = null, deletedId = null) {
+  const tbody = document.getElementById('demo-tbody');
+  tbody.innerHTML = '';
+  demoData.forEach(row => {
+    const tr = document.createElement('tr');
+    if (row.id === newId) tr.classList.add('new-row');
+    if (highlightedIds.includes(row.id)) tr.classList.add('highlighted');
+    ['id','name','category','price','in_stock'].forEach(col => {
+      const td = document.createElement('td');
+      if (col === 'id') td.style.color = 'var(--accent)';
+      if (col === 'price') {
+        td.textContent = row[col].toLocaleString('ru-RU') + ' ₽';
+        if (row.id === updatedId) td.classList.add('changed');
+      } else {
+        td.textContent = row[col];
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+    if (row.id === newId) {
+      setTimeout(() => tr.classList.remove('new-row'), 1500);
+    }
+  });
+  document.getElementById('row-count-text').textContent = `Строк: ${demoData.length}`;
+}
+
+function addLog(text, type = '') {
+  const area = document.getElementById('log-area');
+  const div = document.createElement('div');
+  div.className = 'log-line ' + type;
+  div.textContent = text;
+  area.insertBefore(div, area.firstChild);
+  if (area.children.length > 3) area.removeChild(area.lastChild);
+}
+
+function setSql(html) {
+  document.getElementById('sql-display').innerHTML = '<span class="prompt">mysql&gt;</span> ' + html;
+}
+
+function demoInsert() {
+  highlightedIds = [];
+  const p = newProducts[insertIdx % newProducts.length];
+  insertIdx++;
+  const newRow = { id: nextId++, ...p };
+  demoData.push(newRow);
+  setSql(`<span class="kw">INSERT INTO</span> <span class="tbl">products</span> (name, category, price, in_stock)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">VALUES</span> (<span class="val">'${p.name}'</span>, <span class="val">'${p.category}'</span>, <span class="val">${p.price}</span>, <span class="val">${p.in_stock}</span>);`);
+  addLog(`✓ Query OK, 1 row affected (0.01 sec)`, 'ok');
+  addLog(`→ Добавлена строка с id = ${newRow.id}`, 'info');
+  renderTable(newRow.id);
+}
+
+function demoUpdate() {
+  highlightedIds = [];
+  if (demoData.length === 0) { addLog('✗ Таблица пуста, нечего обновлять', 'err'); return; }
+  const target = demoData[Math.floor(Math.random() * demoData.length)];
+  const oldPrice = target.price;
+  const newPrice = Math.round(oldPrice * (1.1 + Math.random() * 0.2));
+  target.price = newPrice;
+  setSql(`<span class="kw">UPDATE</span> <span class="tbl">products</span><br>&nbsp;&nbsp;&nbsp;<span class="kw">SET</span> price = <span class="val">${newPrice}</span><br>&nbsp;&nbsp;<span class="kw">WHERE</span> <span class="cond">id = ${target.id}</span>;`);
+  addLog(`✓ Query OK, 1 row affected (0.00 sec)`, 'ok');
+  addLog(`→ Товар #${target.id}: цена ${oldPrice.toLocaleString('ru-RU')} → ${newPrice.toLocaleString('ru-RU')} ₽`, 'info');
+  renderTable(null, target.id);
+  setTimeout(() => renderTable(), 1800);
+}
+
+function demoDelete() {
+  highlightedIds = [];
+  if (demoData.length === 0) { addLog('✗ Таблица пуста, нечего удалять', 'err'); return; }
+  const idx = Math.floor(Math.random() * demoData.length);
+  const target = demoData[idx];
+  setSql(`<span class="kw">DELETE FROM</span> <span class="tbl">products</span><br>&nbsp;&nbsp;&nbsp;<span class="kw">WHERE</span> <span class="cond">id = ${target.id}</span>;`);
+  addLog(`✓ Query OK, 1 row affected (0.01 sec)`, 'ok');
+  addLog(`→ Удалена строка: #${target.id} "${target.name}"`, 'info');
+  demoData.splice(idx, 1);
+  renderTable();
+}
+
+function demoSelect() {
+  highlightedIds = [];
+  const threshold = 5000;
+  const matches = demoData.filter(r => r.price > threshold);
+  highlightedIds = matches.map(r => r.id);
+  setSql(`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">products</span><br>&nbsp;&nbsp;&nbsp;<span class="kw">WHERE</span> <span class="cond">price > ${threshold.toLocaleString('ru-RU')}</span><br>&nbsp;&nbsp;&nbsp;<span class="kw">ORDER BY</span> price <span class="kw">DESC</span>;`);
+  addLog(`✓ ${matches.length} row(s) in set (0.00 sec)`, 'ok');
+  addLog(`→ Подсвечены товары дороже ${threshold.toLocaleString('ru-RU')} ₽`, 'info');
+  renderTable();
+}
+
+function demoReset() {
+  demoData = [
+    { id: 1, name: 'Ноутбук Dell', category: 'Электроника', price: 45000, in_stock: 12 },
+    { id: 2, name: 'Мышь Logitech', category: 'Электроника', price: 1800, in_stock: 45 },
+    { id: 3, name: 'Стол офисный', category: 'Мебель', price: 8500, in_stock: 3 },
+    { id: 4, name: 'Кресло геймерское', category: 'Мебель', price: 12000, in_stock: 7 },
+  ];
+  nextId = 5; insertIdx = 0; highlightedIds = [];
+  document.getElementById('log-area').innerHTML = '';
+  document.getElementById('sql-display').innerHTML = '<span class="prompt">mysql&gt;</span> <span style="color:var(--muted)">таблица сброшена к начальному состоянию</span>';
+  renderTable();
+}
+
+// ── ЧЕКЛИСТ ──
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  updateProgress();
+}
+
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.done').length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('all-done').style.display = done === items.length ? 'block' : 'none';
+}
+
+// Инициализация
+renderTable();
+</script>
+<script>const items=[...document.querySelectorAll('.check-item')];let states=[];try{states=JSON.parse(localStorage.getItem('sql-setup-checks')||'[]')}catch(e){}states.forEach(i=>{if(items[i])toggleCheck(items[i])});items.forEach(el=>el.addEventListener('click',()=>localStorage.setItem('sql-setup-checks',JSON.stringify(items.map((e,i)=>e.classList.contains('done')?i:-1).filter(i=>i>=0)))));</script></body>
+</html>

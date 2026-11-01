@@ -1,0 +1,523 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SQL — Практикум</title></head><body><link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#EEF1F0;
+    --panel:#FFFFFF;
+    --ink:#16212B;
+    --ink-muted:#56636D;
+    --line:#D7DEDC;
+    --teal:#0E7C7B;
+    --teal-deep:#0A5958;
+    --gold:#F5C451;
+    --gold-soft:#FCEBB8;
+    --coral:#E4572E;
+    --coral-soft:#FBE3DA;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Fraunces', serif;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:40px 28px 80px;}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--teal-deep);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:1px;background:var(--teal-deep);
+  }
+
+  h1{
+    font-family:var(--display);
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:clamp(28px,4vw,44px);
+    line-height:1.08;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{font-style:italic;font-weight:400;color:var(--teal-deep);}
+
+  .subhead{
+    font-size:16.5px;
+    color:var(--ink-muted);
+    max-width:640px;
+    margin:0 0 36px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:28px;
+    align-items:start;
+  }
+  @media (max-width:920px){ .grid{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:26px 26px 28px;
+  }
+
+  /* THEORY COLUMN */
+  .theory p{margin:0 0 16px;font-size:15.5px;}
+  .theory h3{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:19px;
+    margin:26px 0 10px;
+  }
+  .theory h3:first-child{margin-top:0;}
+  code.inline{
+    font-family:var(--mono);
+    background:var(--gold-soft);
+    padding:1px 6px;
+    border-radius:5px;
+    font-size:.9em;
+  }
+
+  .try-callout{
+    margin-top:22px;
+    border-left:3px solid var(--teal);
+    background:#F3FAF9;
+    padding:14px 18px;
+    border-radius:0 10px 10px 0;
+    font-size:14.5px;
+  }
+  .try-callout b{color:var(--teal-deep);}
+
+  .schema-box{
+    margin-top:24px;
+    border:1px dashed var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-muted);
+  }
+  .schema-box .tbl-name{color:var(--ink);font-weight:600;}
+
+  /* PLAYGROUND COLUMN (sticky) */
+  .playground{position:sticky; top:24px;}
+  .pg-label{
+    font-family:var(--mono);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--ink-muted);
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .pg-label .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--teal);
+    display:inline-block;
+    margin-right:6px;
+    box-shadow:0 0 0 3px rgba(14,124,123,0.15);
+  }
+
+  textarea#sql-input{
+    width:100%;
+    min-height:108px;
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--ink);
+    background:#101A22;
+    color:#EAF3F1;
+    border:none;
+    border-radius:10px;
+    padding:16px 16px;
+    resize:vertical;
+    line-height:1.6;
+    tab-size:2;
+  }
+  textarea#sql-input:focus{outline:2px solid var(--teal);outline-offset:1px;}
+
+  .pg-actions{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+    align-items:center;
+  }
+  button#run-btn{
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:14px;
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  button#run-btn:hover{background:var(--teal-deep);}
+  button#run-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  .hint-reset{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-muted);
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  .status-msg{
+    font-family:var(--mono);
+    font-size:12.5px;
+    margin-top:10px;
+    min-height:16px;
+  }
+  .status-msg.err{color:var(--coral);}
+  .status-msg.ok{color:var(--teal-deep);}
+
+  .result-wrap{
+    margin-top:16px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  table.result{
+    width:100%;
+    border-collapse:collapse;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  table.result thead th{
+    background:#F5F7F6;
+    text-align:left;
+    padding:9px 12px;
+    font-weight:600;
+    border-bottom:1px solid var(--line);
+    color:var(--ink-muted);
+    text-transform:uppercase;
+    font-size:11px;
+    letter-spacing:.04em;
+  }
+  table.result tbody td{
+    padding:8px 12px;
+    border-bottom:1px solid #EEF1F0;
+  }
+  table.result tbody tr:last-child td{border-bottom:none;}
+  table.result tbody tr.flash{
+    animation:sweep 900ms ease-out;
+  }
+  @keyframes sweep{
+    0%{background:var(--gold-soft);}
+    100%{background:transparent;}
+  }
+  .row-idx{color:var(--ink-muted); width:28px;}
+
+  /* QUIZ */
+  .quiz{margin-top:34px;}
+  .quiz-title{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:22px;
+    margin:0 0 4px;
+  }
+  .quiz-sub{color:var(--ink-muted);font-size:14px;margin:0 0 20px;}
+  .q-block{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px 22px;
+    margin-bottom:16px;
+  }
+  .q-num{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--teal-deep);
+    margin-bottom:6px;
+  }
+  .q-text{font-weight:600;margin:0 0 14px;font-size:15px;}
+  .q-options{display:flex;flex-direction:column;gap:8px;}
+  .q-opt{
+    text-align:left;
+    font-family:var(--mono);
+    font-size:13.5px;
+    padding:10px 14px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    cursor:pointer;
+    transition:all .12s ease;
+  }
+  .q-opt:hover{border-color:var(--teal);}
+  .q-opt.correct{
+    background:#F0FAF6;
+    border-color:var(--teal);
+    color:var(--teal-deep);
+  }
+  .q-opt.wrong{
+    background:var(--coral-soft);
+    border-color:var(--coral);
+    color:#8A2E17;
+  }
+  .q-opt:disabled{cursor:default;}
+  .q-feedback{
+    margin-top:10px;
+    font-size:13.5px;
+    min-height:18px;
+  }
+  .q-feedback.ok{color:var(--teal-deep);}
+  .q-feedback.err{color:var(--coral);}
+
+  .progress-strip{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-muted);
+    margin-top:26px;
+  }
+  .progress-strip .bar{
+    flex:1;
+    height:5px;
+    background:var(--line);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .progress-strip .fill{
+    height:100%;
+    background:var(--teal);
+    width:0%;
+    transition:width .3s ease;
+  }
+</style>
+
+<div class="wrap"><section class="flow-card"><small>КАК ВЫПОЛНЯЕТСЯ SELECT</small><h2>Путь запроса</h2><p>Упрощённая модель для изучения SELECT: СУБД читает источник, применяет условия и формирует результат. Реальный план может быть другим.</p><div id="flow"><span>Запрос</span><b>→</b><span>SQL-движок</span><b>→</b><span>Чтение таблицы</span><b>→</b><span>Фильтр WHERE</span><b>→</b><span>Результат</span></div><button id="animate">Проследить путь →</button><p id="flow-detail" aria-live="polite">Нажми, чтобы пройти процесс по шагам.</p></section>
+  <div class="eyebrow">Урок 1 · SQL · Учебная база «employees»</div>
+  <h1>SELECT и WHERE — <em>научись выбирать нужные строки</em></h1>
+  <p class="subhead">Слева — теория, справа — настоящая база данных SQLite, которая работает прямо у вас в браузере. Меняйте запрос и жмите «Выполнить», чтобы сразу увидеть результат.</p>
+
+  <div class="grid">
+    <!-- THEORY -->
+    <div class="card theory">
+      <h3>Зачем нужен WHERE</h3>
+      <p>Оператор <code class="inline">SELECT</code> достаёт данные из таблицы, но по умолчанию — все строки подряд. Если нужны не все, а только те, что подходят под условие, добавляется <code class="inline">WHERE</code>.</p>
+      <p>Например, чтобы найти всех сотрудников из отдела продаж, мы не перебираем таблицу вручную — мы описываем условие, и база сама находит нужные строки:</p>
+      <div class="schema-box">
+<span class="tbl-name">employees</span>(id, name, department, salary, hired_year)</div>
+      <p style="margin-top:14px">Попробуйте справа: замените <code class="inline">'Sales'</code> на <code class="inline">'Engineering'</code> и запустите запрос ещё раз — результат изменится мгновенно.</p>
+
+      <h3>Сравнения и диапазоны</h3>
+      <p><code class="inline">WHERE</code> работает не только с текстом. Можно сравнивать числа: <code class="inline">salary &gt; 70000</code>, комбинировать условия через <code class="inline">AND</code> / <code class="inline">OR</code>, или проверять диапазон через <code class="inline">BETWEEN</code>.</p>
+
+      <div class="try-callout">
+        <b>Попробуйте сами →</b> в поле справа впишите условие <code class="inline">salary &gt; 75000 AND department = 'Engineering'</code> вместо текущего и нажмите «Выполнить». Сколько строк вернётся?
+      </div>
+    </div>
+
+    <!-- PLAYGROUND -->
+    <div class="playground">
+      <div class="card">
+        <div class="pg-label"><span><span class="dot"></span>SQL-песочница · живой SQLite</span><span id="engine-status">загрузка…</span></div>
+        <textarea id="sql-input" spellcheck="false">SELECT name, department, salary
+FROM employees
+WHERE department = 'Sales';</textarea>
+        <div class="pg-actions">
+          <button id="run-btn" disabled>Выполнить ▷</button>
+          <button class="hint-reset" id="reset-btn">вернуть исходный запрос</button>
+        </div>
+        <div class="status-msg" id="status-msg"></div>
+        <div class="result-wrap" id="result-wrap" style="display:none">
+          <table class="result" id="result-table"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz">
+    <div class="quiz-title">Проверь себя</div>
+    <p class="quiz-sub">Два коротких вопроса по материалу урока — ответ проверяется сразу.</p>
+
+    <div class="q-block" data-qid="1">
+      <div class="q-num">Вопрос 1 из 2</div>
+      <p class="q-text">Какой запрос вернёт сотрудников с зарплатой строго больше 80000?</p>
+      <div class="q-options">
+        <button class="q-opt" data-correct="false">SELECT * FROM employees WHERE salary = 80000;</button>
+        <button class="q-opt" data-correct="true">SELECT * FROM employees WHERE salary &gt; 80000;</button>
+        <button class="q-opt" data-correct="false">SELECT * FROM employees ORDER BY salary;</button>
+      </div>
+      <div class="q-feedback"></div>
+    </div>
+
+    <div class="q-block" data-qid="2">
+      <div class="q-num">Вопрос 2 из 2</div>
+      <p class="q-text">Что делает <code class="inline">AND</code> внутри WHERE?</p>
+      <div class="q-options">
+        <button class="q-opt" data-correct="false">Объединяет результаты двух разных таблиц</button>
+        <button class="q-opt" data-correct="true">Требует, чтобы выполнялись оба условия одновременно</button>
+        <button class="q-opt" data-correct="false">Сортирует результат по возрастанию</button>
+      </div>
+      <div class="q-feedback"></div>
+    </div>
+
+    <div class="progress-strip">
+      <span id="progress-label">Прогресс урока: 0 / 3</span>
+      <div class="bar"><div class="fill" id="progress-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/sql-wasm.js"></script>
+<script>
+(function(){
+  const runBtn = document.getElementById('run-btn');
+  const statusEl = document.getElementById('status-msg');
+  const engineStatus = document.getElementById('engine-status');
+  const input = document.getElementById('sql-input');
+  const resultWrap = document.getElementById('result-wrap');
+  const table = document.getElementById('result-table');
+  const resetBtn = document.getElementById('reset-btn');
+  const DEFAULT_QUERY = input.value;
+
+  let db;
+  let progress;try{progress=JSON.parse(localStorage.getItem('sql-practice'))}catch(e){};progress=progress||{query:false,q1:false,q2:false};
+
+  function updateProgress(){
+    localStorage.setItem('sql-practice',JSON.stringify(progress));
+    const done = Object.values(progress).filter(Boolean).length;
+    document.getElementById('progress-label').textContent = `Прогресс урока: ${done} / 3`;
+    document.getElementById('progress-fill').style.width = (done/3*100) + '%';
+  }
+
+  initSqlJs({ locateFile: f => `assets/${f}` })
+    .then(SQL => {
+      db = new SQL.Database();
+      db.run(`
+        CREATE TABLE employees (
+          id INTEGER PRIMARY KEY,
+          name TEXT,
+          department TEXT,
+          salary INTEGER,
+          hired_year INTEGER
+        );
+        INSERT INTO employees (name, department, salary, hired_year) VALUES
+          ('Анна Волкова','Sales',72000,2021),
+          ('Дмитрий Орлов','Engineering',95000,2019),
+          ('Ирина Соколова','Sales',68000,2022),
+          ('Павел Кузнецов','Engineering',88000,2020),
+          ('Мария Лебедева','Marketing',61000,2023),
+          ('Сергей Новиков','Engineering',77000,2022),
+          ('Ольга Морозова','Sales',81000,2018),
+          ('Артём Зайцев','Marketing',59000,2021);
+      `);
+      engineStatus.textContent = 'готово';
+      engineStatus.style.color = 'var(--teal-deep)';
+      runBtn.disabled = false;
+      // First execution belongs to the student.
+    })
+    .catch(err => {
+      engineStatus.textContent = 'ошибка загрузки';
+      statusEl.textContent = 'Не удалось загрузить SQL-движок: ' + err.message;
+      statusEl.className = 'status-msg err';
+    });
+
+  function escapeHTML(v){const e=document.createElement('span');e.textContent=v===null?'NULL':String(v);return e.innerHTML;}
+  function renderResults(res){
+    table.innerHTML = '';
+    if (!res.length){
+      resultWrap.style.display = 'none';
+      statusEl.textContent = 'Запрос выполнен успешно — но подходящих строк не найдено.';
+      statusEl.className = 'status-msg ok';
+      return;
+    }
+    const { columns, values } = res[0];
+    const thead = document.createElement('thead');
+    const trh = document.createElement('tr');
+    trh.innerHTML = '<th class="row-idx">#</th>' + columns.map(c=>`<th>${escapeHTML(c)}</th>`).join('');
+    thead.appendChild(trh);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    values.forEach((row, i) => {
+      const tr = document.createElement('tr');
+      tr.className = 'flash';
+      tr.innerHTML = `<td class="row-idx">${i+1}</td>` + row.map(v=>`<td>${escapeHTML(v)}</td>`).join('');
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    resultWrap.style.display = 'block';
+    statusEl.textContent = `Готово — найдено строк: ${values.length}`;
+    statusEl.className = 'status-msg ok';
+
+    if (!progress.query){ progress.query = true; updateProgress(); }
+  }
+
+  function runQuery(){
+    if (!db) return;
+    try{
+      const res = db.exec(input.value);
+      renderResults(res);
+    }catch(e){
+      resultWrap.style.display = 'none';
+      statusEl.textContent = 'Ошибка в запросе: ' + e.message;
+      statusEl.className = 'status-msg err';
+    }
+  }
+
+  runBtn.addEventListener('click', runQuery);
+  resetBtn.addEventListener('click', () => { input.value = DEFAULT_QUERY; runQuery(); });
+  input.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter'){ runQuery(); }
+  });
+
+  // Quiz logic
+  document.querySelectorAll('.q-block').forEach(block => {
+    const opts = block.querySelectorAll('.q-opt');
+    const feedback = block.querySelector('.q-feedback');
+    const qid = 'q' + block.dataset.qid;
+    opts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        const correct = opt.dataset.correct === 'true';
+        
+        if (correct){
+          opt.classList.add('correct');
+          feedback.textContent = 'Верно.';
+          feedback.className = 'q-feedback ok';
+          if (!progress[qid]){ progress[qid] = true; updateProgress(); }
+        } else {
+          opt.classList.add('wrong');
+          
+          feedback.textContent = 'Попробуй ещё раз. Сравни смысл операторов в условии.';
+          feedback.className = 'q-feedback err';
+        }
+      });
+    });
+  });
+
+  updateProgress();
+})();
+</script>
+<style>.flow-card{background:#fff;border:1px solid #d7dedc;padding:28px;border-radius:14px;margin:24px auto;max-width:1124px}.flow-card small{color:#0e7c7b;letter-spacing:.15em}#flow{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:24px 0}#flow span{padding:12px;background:#eef1f0;border-radius:6px;transition:.3s}#flow .lit{background:#f5c451;transform:translateY(-4px)}button{cursor:pointer}#animate,.terminal button{padding:12px 18px;border:0;background:#0e7c7b;color:white;border-radius:6px}.terminal{max-width:1124px;margin:30px auto;padding:28px;background:#16212b;color:#eef1f0;border-radius:14px}.terminal input{padding:12px;width:min(70%,650px);font-family:monospace;background:#24343e;color:white;border:1px solid #56636d}.terminal pre{white-space:pre-wrap}.terminal p{color:#bdcbd0}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+<section class="terminal"><small>НАСТРОЙКА ОКРУЖЕНИЯ · ТРЕНАЖЁР</small><h2>Первые команды в SQLite</h2><p>Это симуляция терминала: команды не устанавливают программы. Настоящие инструкции для MySQL, PostgreSQL и DBeaver находятся в лекции 0.</p><p>Введи по порядку: <code>sqlite3 --version</code> → <code>sqlite3 college.db</code> → <code>.databases</code> → <code>.quit</code></p><form id="terminal-form"><label for="command">Команда</label><br><input id="command" autocomplete="off" placeholder="sqlite3 --version"><button>Выполнить</button></form><pre id="terminal-output" aria-live="polite">Шаг 1 из 4. Проверь версию SQLite.</pre></section>
+<script>
+let running=false;document.getElementById('animate').onclick=async()=>{if(running)return;running=true;const steps=[...document.querySelectorAll('#flow span')],desc=['Ты отправляешь текст SELECT в SQL-движок.','Движок разбирает синтаксис и проверяет имена таблиц и столбцов.','FROM определяет, из какой таблицы получить строки.','WHERE оставляет строки, для которых условие истинно.','SELECT определяет столбцы результата. Результат запроса сам по себе не сохраняется как новая таблица.'];for(let i=0;i<steps.length;i++){steps.forEach(e=>e.classList.remove('lit'));steps[i].classList.add('lit');document.getElementById('flow-detail').textContent=desc[i];await new Promise(r=>setTimeout(r,1100));}running=false;};
+let stage=0;const commands=['sqlite3 --version','sqlite3 college.db','.databases','.quit'],answers=['Версия SQLite проверена. Теперь открой учебную базу.','База college.db открыта. Посмотри список подключённых баз.','main: college.db — учебная база подключена. Заверши сеанс.','Готово! Ты прошёл все четыре шага. Повтори команды в установленном SQLite.'];document.getElementById('terminal-form').onsubmit=e=>{e.preventDefault();const input=document.getElementById('command'),out=document.getElementById('terminal-output');if(stage===4){out.textContent='Тренажёр пройден. Обнови страницу для повторения.';return}if(input.value.trim()===commands[stage]){out.textContent=answers[stage++];if(stage===4)localStorage.setItem('sql-terminal-done','true');input.value=''}else out.textContent='Сейчас ожидается: '+commands[stage]+'. Проверь порядок и написание.'};
+</script></body></html>
