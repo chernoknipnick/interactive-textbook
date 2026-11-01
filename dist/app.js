@@ -25,7 +25,7 @@ function route(){
   const reader=Boolean(titles[key]);
   document.getElementById('reader').hidden=!reader;
   if(reader){
-    const url=key==='practice'?'practice.html':key==='setup'?'lectures/setup.html':'lectures/course.html#'+key;
+    const url=key==='practice'?'practice.html':key==='setup'?'lectures/setup.html':'lectures/course.html?v=2#'+key;
     document.getElementById('frame').src=url;
     document.getElementById('external').href=url;
     document.getElementById('reader-name').textContent=titles[key];
