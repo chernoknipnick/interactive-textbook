@@ -1,0 +1,398 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Методы: процедуры и функции · Java</title><link rel="stylesheet" href="lecture.css?v=3"></head><body><main><div class="eyebrow">JAVA / ТЕМА 09 ИЗ 12 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Методы: объявление, вызов, параметры и возврат значения</h1>
+<blockquote>
+<p>Тема 1.1.6 по программе. К этому моменту в курсе уже разобраны типы и операции (<a target="_top" href="../#java-types">лекция 1.1.1</a>), ветвление (<a target="_top" href="../#java-conditions">лекция 1.1.3</a>), а на практике (ПР02) — циклы и массивы. Всё это время весь код жил в одном месте — внутри <code>main</code>. Чем больше становится программа, тем очевиднее проблема: <code>main</code> разрастается в длинную нечитаемую простыню, а одинаковые куски кода (например, поиск максимума в массиве) приходится копировать заново там, где они снова нужны. Методы — способ этого избежать.</p>
+</blockquote>
+<h2 id="lecture-1">1. Зачем нужны методы</h2>
+<p>Откройте мысленно <code>ArrayWork</code> из ПР02: там были отдельные куски кода для суммы, среднего, максимума, минимума, подсчёта по условию — все один за другим внутри одного <code>main</code>. Если бы в той же программе понадобилось посчитать статистику ещё для <strong>второго</strong> массива, пришлось бы либо копировать весь этот код второй раз (и почти наверняка где-то ошибиться при копировании), либо вынести каждый расчёт в отдельный именованный блок, который можно <strong>вызвать</strong> сколько угодно раз для любого массива. Второй путь — это и есть методы.</p>
+<p><strong>Метод — это именованный блок кода, который можно вызвать по имени столько раз, сколько нужно, передав ему разные данные каждый раз.</strong> Метод объявляется один раз, а используется — сколько угодно.</p>
+<p>Вы уже пользовались методами с самого начала курса, просто как «готовыми чёрными ящиками»: <code>System.out.println(...)</code>, <code>scanner.nextInt()</code>, <code>Integer.parseInt(...)</code>, <code>numbers.length</code> — то есть нет, <code>length</code> не метод, а вот <code>String.valueOf(...)</code> — метод, и <code>Math.round(...)</code> тоже был бы методом. Сегодня — как объявлять <strong>свои</strong>.</p>
+<h2 id="lecture-2">2. Анатомия объявления метода</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Разберём каждое слово по порядку:</p>
+<ul>
+<li><strong><code>static</code></strong> — то же самое ключевое слово, что вы уже видели в заголовке <code>main</code>: <code>public static void main(String[] args)</code>. Оно означает «этот метод принадлежит классу целиком, а не какому-то отдельному объекту» — вызывать его можно напрямую по имени, без создания объекта через <code>new</code>. Полноценно про разницу между <code>static</code>-методами и методами объектов расскажем в теме 1.2.1 «Классы и объекты», когда появится сам смысл создавать объекты; пока что <strong>все свои методы в этом курсе объявляем как <code>static</code></strong> — точно так же, как уже объявлен <code>main</code>, и вызываем их прямо по имени из <code>main</code> того же класса.</li>
+<li><strong><code>int</code></strong> (перед именем метода) — <strong>тип возвращаемого значения</strong>. Метод обязан вернуть значение именно этого типа — не <code>String</code>, не <code>boolean</code>, не что-то ещё, а именно <code>int</code>. Если метод ничего не возвращает, здесь пишется специальное слово <code>void</code> (см. раздел 3).</li>
+<li><strong><code>square</code></strong> — имя метода. Как и у переменных, имена методов пишутся в стиле camelCase — с маленькой буквы, каждое следующее слово с заглавной (<code>square</code>, <code>findMax</code>, <code>isEven</code>). Имя должно описывать, <strong>что делает</strong> метод, а не как он это делает — по хорошему имени понятно назначение метода, даже не заглядывая внутрь.</li>
+<li><strong><code>(int n)</code></strong> — список <strong>параметров</strong> в круглых скобках: данные, которые метод получает на входе. Здесь один параметр <code>n</code> типа <code>int</code>. Скобки обязательны, даже если параметров нет вообще — тогда пишутся просто пустые <code>()</code>.</li>
+<li><strong><code>{ ... }</code></strong> — тело метода, точно так же, как тело <code>if</code> или цикла — блок инструкций, которые выполнятся при вызове.</li>
+<li><strong><code>return result;</code></strong> — команда, которая немедленно завершает выполнение метода и передаёт указанное значение туда, откуда метод был вызван. Тип значения после <code>return</code> должен совпадать с типом, объявленным перед именем метода (здесь — <code>int</code>).</li>
+</ul>
+<h2 id="lecture-3-void">3. Методы без возврата значения — <code>void</code></h2>
+<p>Если метод должен что-то <strong>сделать</strong> (например, напечатать что-то в консоль), но ему не нужно ничего <strong>возвращать</strong> обратно вызывающему коду — вместо типа возврата пишется <code>void</code> («пустота»):</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printSquare</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Квадрат числа &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>У <code>void</code>-метода <code>return;</code> (без значения после него) необязателен, но допустим — например, чтобы досрочно прервать выполнение метода внутри <code>if</code>, точно так же, как <code>return</code> иногда используется внутри <code>if</code> в обычных функциях:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printPositiveSquare</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Число отрицательное, квадрат не считаем&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="c1">// выходим из метода, дальше код не выполнится</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Квадрат числа &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Написать <code>return result;</code> (со значением) внутри <code>void</code>-метода — ошибка компиляции: компилятор считает это противоречием («ты же обещал ничего не возвращать») и не позволит такой код запустить.</p>
+<h2 id="lecture-4">4. Методы с возвратом значения — та же задача, другой подход</h2>
+<p>Сравните два метода из разделов 2 и 3 — они делают <strong>одно и то же вычисление</strong> (квадрат числа), но по-разному распоряжаются результатом:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printSquare</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">          </span><span class="c1">// печатает сам, ничего не возвращает</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Квадрат: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">                 </span><span class="c1">// возвращает число, ничего не печатает</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>printSquare</code> <strong>решает сам</strong>, что делать с результатом — печатает его. Вызвать его и как-то использовать результат дальше в коде нельзя, потому что результата (в виде значения) у него просто нет. <code>square</code> результат ничего не делает с ним сам — он <strong>отдаёт</strong> значение туда, откуда его вызвали, а что с этим значением делать дальше — решает вызывающий код:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span><span class="w">              </span><span class="c1">// сохранили в переменную</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Результат: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">                </span><span class="c1">// использовали прямо в условии</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Квадрат больше 10&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="mi">4</span><span class="p">));</span><span class="w"> </span><span class="c1">// использовали в выражении</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Это и есть главное преимущество функции (метода с возвратом) над процедурой (<code>void</code>-методом): результат функции можно передавать дальше, комбинировать с другими значениями, использовать в условиях — то есть встраивать в остальной код, а не быть жёстко привязанным к одному конкретному действию (печати).</p>
+<blockquote>
+<p>Старая терминология (ещё до объектно-ориентированных языков) называла <code>void</code>-методы <strong>процедурами</strong>, а методы с возвратом значения — <strong>функциями</strong>. В Java формально и то, и другое называется просто «методом» — но термины «процедура»/«функция» по-прежнему часто используют неформально, в том числе в этом курсе, потому что разница в поведении (возвращает что-то или нет) — реальная и важная.</p>
+</blockquote>
+<h2 id="lecture-5">5. Параметры: сколько угодно, и они могут быть разных типов</h2>
+<p>Метод может принимать несколько параметров, перечисленных через запятую — каждый со своим типом:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateAverage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Обратите внимание на <code>calculateAverage</code> — это ровно та же логика, что была в ПР02 внутри <code>main</code> (включая то же самое <code>(double)</code> перед делением, по той же причине: <code>int / int</code> без приведения дало бы обрубленный результат). Разница только в том, что теперь это отдельный именованный метод, который можно вызвать для любых <code>sum</code> и <code>count</code>, а не код, намертво привязанный к одной конкретной переменной <code>numbers</code> внутри одного <code>main</code>.</p>
+<p>При вызове метода количество и типы переданных значений (<strong>аргументов</strong>) должны точно соответствовать тому, что объявлено в параметрах (это называется <strong>сигнатурой</strong> метода) — <code>add(2, 3)</code> подходит, <code>add(2)</code> (не хватает аргумента) или <code>add("2", "3")</code> (не те типы) не скомпилируются.</p>
+<h2 id="lecture-6">6. Вызов метода</h2>
+<p>Внутри одного класса методы можно вызывать друг у друга просто по имени, без каких-либо дополнительных слов впереди — компилятор ищет метод с таким именем и подходящей сигнатурой прямо в этом же классе:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MethodsDemo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Сумма: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Важная деталь, которая отличает методы от переменных: метод <code>add</code> объявлен <strong>ниже</strong> <code>main</code>, но вызван из <code>main</code> <strong>выше</strong> — и это прекрасно работает. В отличие от переменных (которые обязательно должны быть объявлены раньше первого использования), Java сначала «видит» вообще все методы класса целиком, а только потом начинает выполнять <code>main</code> — поэтому порядок расположения методов в файле не имеет значения для компиляции. Тем не менее общепринятая практика — располагать <code>main</code> первым, а вспомогательные методы ниже, просто для удобства чтения человеком.</p>
+<h2 id="lecture-7-overloading">7. Перегрузка методов (overloading) — коротко</h2>
+<p>В Java можно объявить <strong>несколько методов с одинаковым именем</strong>, если у них разное количество параметров или разные типы параметров — это называется <strong>перегрузкой</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;чётное&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;нечётное&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">divisor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">divisor</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;делится на &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">divisor</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;не делится на &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">divisor</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>При вызове <code>describe(7)</code> или <code>describe(7, 3)</code> Java сама определяет, какой из двух методов имелся в виду — по количеству и типам переданных аргументов, компилятор подбирает подходящую сигнатуру автоматически, вам не нужно как-то дополнительно уточнять, какую версию вызвать. Перегрузка — это удобство для того, кто <strong>вызывает</strong> метод: не нужно запоминать разные имена (<code>describeSimple</code>, <code>describeWithDivisor</code>) для по сути одной и той же смысловой операции.</p>
+<h2 id="lecture-8">8. Частые ошибки</h2>
+<table>
+<thead>
+<tr>
+<th>Ошибка</th>
+<th>Что происходит</th>
+<th>Как избежать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Тип возврата <code>int</code>, а в методе нет <code>return</code> на каком-то из путей выполнения (например, <code>return</code> только внутри <code>if</code>, без <code>else</code>)</td>
+<td>Ошибка компиляции: <code>missing return statement</code></td>
+<td>Убедиться, что метод возвращает значение при <strong>любом</strong> возможном пути выполнения — если есть <code>if</code>, должен быть и <code>else</code>, либо <code>return</code> после всей конструкции</td>
+</tr>
+<tr>
+<td><code>return</code> со значением внутри <code>void</code>-метода</td>
+<td>Ошибка компиляции: несовместимые типы</td>
+<td>В <code>void</code>-методе <code>return</code> — либо вообще без значения, либо не писать его совсем</td>
+</tr>
+<tr>
+<td>Не совпадает количество или порядок аргументов при вызове (<code>calculateAverage(count, sum)</code> вместо <code>calculateAverage(sum, count)</code>)</td>
+<td>Либо ошибка компиляции (если типы явно не подходят), либо, что опаснее — код скомпилируется, но посчитает неверный результат, если типы параметров случайно совпадают (оба <code>int</code>)</td>
+<td>Внимательно сверять порядок параметров с объявлением метода при каждом вызове</td>
+</tr>
+<tr>
+<td>Забыли использовать (никуда не записали и не вывели) результат функции с возвратом</td>
+<td>Компилятор не ругается — вызвать <code>square(5);</code> без сохранения результата совершенно законно, просто бессмысленно</td>
+<td>Не ошибка сама по себе, но повод перепроверить логику: если вызываете функцию (не <code>void</code>) и не используете результат, скорее всего, вы либо хотели <code>void</code>-метод, либо забыли <code>int result = ...</code></td>
+</tr>
+<tr>
+<td>Путают тип возврата метода с типом параметра</td>
+<td>Например, объявили <code>static int printSquare(int n)</code>, хотя метод ничего не возвращает</td>
+<td>Тип <strong>перед именем метода</strong> — это то, что метод отдаёт наружу; типы <strong>внутри скобок</strong> — то, что метод получает на входе; это две независимые вещи</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-9">9. Итог лекции</h2>
+<p>Метод — именованный блок кода, объявляемый один раз и вызываемый сколько угодно раз с разными данными. Ключевые части объявления — <code>static</code> (пока используем всегда, полноценно разберём в теме 1.2.1), тип возврата (<code>void</code>, если метод ничего не отдаёт, либо конкретный тип, если отдаёт — тогда внутри обязателен <code>return</code> с значением этого типа на каждом возможном пути выполнения), имя в camelCase и список параметров в скобках. Методы без возврата исторически называют процедурами, с возвратом — функциями; разница не только в терминах, а в том, что результат функции можно использовать дальше в коде (сохранять, сравнивать, комбинировать), а результат процедуры — нельзя, потому что его просто нет. Перегрузка позволяет нескольким методам делить одно имя, если у них разные сигнатуры. Дальше на практике (ПР03) — рефакторинг кода из ПР02 в отдельные методы, чтобы увидеть разницу «всё в одном <code>main</code>» vs «код, разложенный по именованным методам», своими руками.</p>
+<p><strong>Проверь себя:</strong></p>
+<ol>
+<li>Чем метод <code>static int square(int n) { return n * n; }</code> принципиально отличается от <code>static void printSquare(int n) { System.out.println(n * n); }</code>, если оба «по сути» считают квадрат числа?</li>
+<li>Почему следующий метод не скомпилируется: <code>static int abs(int n) { if (n &lt; 0) { return -n; } }</code> — и как его исправить?</li>
+<li>Что выведет <code>System.out.println(add(2, 3) + add(4, 5));</code>, если <code>add</code> объявлен как в разделе 6 — и почему здесь корректно использовать результат функции прямо внутри выражения?</li>
+<li>В разделе 7 показана перегрузка <code>describe(int n)</code> и <code>describe(int n, int divisor)</code>. Что произойдёт, если вызвать <code>describe(7, 3, 2)</code> — метод с тремя параметрами не объявлен?</li>
+<li>Метод <code>add</code> объявлен ниже <code>main</code>, но вызывается из <code>main</code>, который идёт раньше по тексту файла. Почему это допустимо для методов, но было бы ошибкой, попробуй вы использовать переменную до её объявления?</li>
+<li>Объясните своими словами, почему в <code>calculateAverage(int sum, int count)</code> результат объявлен как <code>double</code>, а не <code>int</code>, хотя оба параметра — <code>int</code> (подсказка: вспомните ПР02).</li>
+<li>Придумайте пример ситуации (не обязательно из программирования), где было бы удобнее получить от кого-то готовый результат («функция»), а не попросить кого-то сразу что-то сделать и объявить результат вслух («процедура») — и наоборот.</li>
+</ol></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-116">1.1.6. Методы (процедуры и функции) — под запись</h1>
+<blockquote>
+<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. После темы — практическая работа ПР03.</p>
+</blockquote>
+<h2 id="notes-1">1. Зачем нужны методы</h2>
+<p><strong>Метод</strong> — именованный блок кода, который выполняет определённую задачу и может быть вызван по имени.</p>
+<p><strong>Зачем нужны методы:</strong>
+1. <strong>нет повторений</strong> — код пишется один раз, вызывается много раз; ошибка исправляется в одном месте;
+2. <strong>читаемость</strong> — имя метода говорит, что делает код: <code>findMax(scores)</code>;
+3. <strong>разделение задачи</strong> — большую программу разбивают на небольшие части, каждую пишут и проверяют отдельно.</p>
+<p>Метод без возвращаемого значения называют <strong>процедурой</strong>, метод с возвращаемым значением — <strong>функцией</strong>.</p>
+<h2 id="notes-2">2. Объявление и вызов</h2>
+<div class="codehilite"><pre><span></span><code>static   int    square  (int x)   {
+  │       │       │        │
+  │       │       │        └ параметры: что метод получает
+  │       │       └ имя метода
+  │       └ тип возвращаемого значения: что метод отдаёт
+  └ метод принадлежит классу
+
+    return x * x;        ← тело метода
+}
+</code></pre></div>
+
+<p><strong>Объявление метода:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="n">тип_возврата</span><span class="w"> </span><span class="nf">имяМетода</span><span class="p">(</span><span class="n">параметры</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">тело</span><span class="w"> </span><span class="n">метода</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li><strong>тип возврата</strong> — тип значения, которое метод отдаёт; <code>void</code>, если ничего не отдаёт;</li>
+<li><strong>имя</strong> — с маленькой буквы, начинается с глагола: <code>printLine</code>, <code>findMax</code>, <code>calculateAverage</code>;</li>
+<li><strong>параметры</strong> — входные данные метода; скобки пишутся, даже если параметров нет;</li>
+<li><strong>тело</strong> — код между <code>{</code> и <code>}</code>.</li>
+</ul>
+<p>Методы объявляются внутри класса, <strong>рядом</strong> с <code>main</code>, а не внутри него.</p>
+<p><strong>Объявление</strong> описывает, что делает метод. <strong>Вызов</strong> запускает его выполнение: <code>имяМетода(аргументы);</code>
+Объявленный, но ни разу не вызванный метод не выполняется.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Main</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printLine</span><span class="p">();</span><span class="w">                          </span><span class="c1">// вызов</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Отчёт по группе&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printLine</span><span class="p">();</span><span class="w">                          </span><span class="c1">// вызов</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printLine</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">                 </span><span class="c1">// объявление</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;--------------------&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Порядок методов в классе не важен: выполнение всегда начинается с <code>main</code>.</p>
+<h2 id="notes-3">3. Параметры и аргументы</h2>
+<p><strong>Параметр</strong> — переменная в объявлении метода, которая принимает входное значение: <code>static void greet(String name)</code>.
+<strong>Аргумент</strong> — конкретное значение, которое передаётся в метод при вызове: <code>greet("Анна")</code>.</p>
+<div class="codehilite"><pre><span></span><code>greet(&quot;Анна&quot;);                      ← аргумент: конкретное значение
+        │
+        ▼ копируется
+static void greet(String name) {    ← параметр: переменная, которая его принимает
+</code></pre></div>
+
+<p>При вызове аргументы копируются в параметры <strong>по порядку</strong>. Количество и типы аргументов должны соответствовать параметрам.
+Тип указывается у каждого параметра отдельно: <code>(int a, int b)</code>.</p>
+<h2 id="notes-4">4. Возврат значения</h2>
+<p><strong><code>return значение;</code></strong> — завершает метод и возвращает значение в место вызова.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printSquare</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">     </span><span class="c1">// процедура: выводит</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">           </span><span class="c1">// функция: возвращает</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>void</code>-метод (процедура)</th>
+<th>Метод с возвратом (функция)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Тип возврата</td>
+<td><code>void</code></td>
+<td><code>int</code>, <code>double</code>, <code>boolean</code>, <code>String</code>…</td>
+</tr>
+<tr>
+<td>Что даёт</td>
+<td>выполняет действие</td>
+<td>вычисляет и отдаёт значение</td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td>не обязателен</td>
+<td>обязателен, тип значения должен совпадать с типом возврата</td>
+</tr>
+<tr>
+<td>Как вызывают</td>
+<td><code>printSquare(5);</code></td>
+<td><code>int r = square(5);</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вывести и вернуть — разные вещи.</strong> <code>System.out.println</code> показывает значение человеку. <code>return</code> отдаёт значение программе, чтобы она могла использовать его дальше.
+Метод, который вычисляет результат, должен его возвращать, а не печатать: вызывающий сам решит, что с ним делать.</p>
+<p>Что можно сделать с возвращённым значением:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span><span class="w">                     </span><span class="c1">// сохранить</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span><span class="w">         </span><span class="c1">// вывести</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span><span class="w">       </span><span class="c1">// использовать в выражении</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w">            </span><span class="c1">// использовать в условии</span>
+</code></pre></div>
+
+<p><code>return</code> завершает метод сразу: код после него не выполняется.
+Метод с типом возврата не <code>void</code> должен возвращать значение <strong>при любом</strong> ходе выполнения, в том числе во всех ветках <code>if</code>.
+Метод возвращает только одно значение.</p>
+<p>Метод, возвращающий <code>boolean</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isEven</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="notes-5">5. Как выполняется вызов</h2>
+<div class="codehilite"><pre><span></span><code>main:  int result = square(5);
+                      │  ▲
+          1) переход  │  │  3) возврат: на место вызова
+             x = 5    ▼  │     подставляется 25
+square:        return x * x;
+               2) вычисление: 25
+</code></pre></div>
+
+<p><strong>Локальная переменная</strong> — переменная, объявленная внутри метода (включая параметры). Существует только во время выполнения этого метода и не видна в других методах.</p>
+<p><strong>Передача по значению:</strong> в метод передаётся копия значения аргумента. Изменение параметра внутри метода не меняет переменную в вызывающем методе.
+Чтобы получить изменённое значение, его возвращают: <code>x = addOne(x);</code></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="n">addOne</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">                  </span><span class="c1">// внутри метода n стало 6</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">      </span><span class="c1">// 5 — переменная x не изменилась</span>
+</code></pre></div>
+
+<h2 id="notes-6">6. Методы и массивы</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">findMax</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">numbers</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numbers</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">numbers</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">max</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">numbers</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">max</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateAverage</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numbers</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">numbers</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">numbers</span><span class="p">.</span><span class="na">length</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Вызов: <code>int best = findMax(groupA);</code></p>
+<h2 id="notes-7">7. Перегрузка</h2>
+<p><strong>Сигнатура метода</strong> — имя метода вместе со списком типов его параметров: <code>max(int, int)</code>. По сигнатуре компилятор определяет, какой метод вызван.</p>
+<p><strong>Перегрузка методов</strong> — несколько методов с одним именем, но разными списками параметров (по количеству или по типам). Компилятор выбирает нужный метод по аргументам вызова.
+Методы, которые отличаются только типом возврата или только именами параметров, перегруженными не являются: это ошибка компиляции.
+Пример из стандартной библиотеки: <code>System.out.println</code> принимает <code>String</code>, <code>int</code>, <code>double</code>, <code>boolean</code>…</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<h2 id="notes-8">8. Сообщения об ошибках</h2>
+<table>
+<thead>
+<tr>
+<th>Сообщение</th>
+<th>Причина</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>non-static method … cannot be referenced from a static context</code></td>
+<td>у метода забыли <code>static</code></td>
+</tr>
+<tr>
+<td><code>illegal start of expression</code></td>
+<td>метод объявлен внутри другого метода</td>
+</tr>
+<tr>
+<td><code>missing return statement</code></td>
+<td>метод с возвратом не возвращает значение на каком-то пути</td>
+</tr>
+<tr>
+<td><code>unreachable statement</code></td>
+<td>код написан после <code>return</code></td>
+</tr>
+<tr>
+<td><code>'void' type not allowed here</code></td>
+<td>пытаются использовать результат <code>void</code>-метода</td>
+</tr>
+<tr>
+<td><code>method … cannot be applied to given types</code></td>
+<td>количество или типы аргументов не соответствуют параметрам</td>
+</tr>
+<tr>
+<td><code>method … is already defined</code></td>
+<td>два метода с одинаковым именем и одинаковыми параметрами</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes-_1">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>Написать и вызвать из <code>main</code> методы:
+   - <code>static void printGreeting(String name, int age)</code> — выводит «Привет, Анна! Тебе 16 лет»;
+   - <code>static int cube(int x)</code> — возвращает куб числа;
+   - <code>static boolean isAdult(int age)</code> — возвращает <code>true</code>, если возраст 18 и больше;
+   - <code>static int sum(int[] numbers)</code> — возвращает сумму элементов массива;
+   - <code>static int findMin(int[] numbers)</code> — возвращает минимальный элемент.</li>
+<li>Для каждого метода записать в тетрадь: это процедура или функция, и почему выбран такой тип возврата.</li>
+</ol>
+<h2 id="notes-_2">Проверь себя</h2>
+<p>По этим вопросам — опрос в начале следующей пары.</p>
+<ol>
+<li>Что такое метод? Назовите три причины выносить код в методы.</li>
+<li>Из каких частей состоит объявление метода?</li>
+<li>Чем объявление метода отличается от вызова?</li>
+<li>Где в файле должны находиться объявления методов?</li>
+<li>Чем параметр отличается от аргумента?</li>
+<li>Что означает <code>void</code>? Можно ли написать <code>int r = printSquare(5);</code>, если <code>printSquare</code> — <code>void</code>?</li>
+<li>Чем <code>return x * x;</code> отличается от <code>System.out.println(x * x);</code>?</li>
+<li>Метод <code>static int square(int x) { int r = x * x; }</code> не компилируется. Почему?</li>
+<li>Почему метод с <code>return</code> только внутри <code>if</code> не компилируется?</li>
+<li>Что произойдёт с кодом, написанным после <code>return</code>?</li>
+<li>Что такое локальная переменная? Видна ли переменная из <code>main</code> в другом методе?</li>
+<li><code>int x = 5; addOne(x);</code>, где <code>addOne</code> увеличивает свой параметр на 1. Чему равен <code>x</code> после вызова и почему?</li>
+<li>Что такое перегрузка? Являются ли перегруженными <code>int f(int a)</code> и <code>double f(int a)</code>?</li>
+<li>Почему метод, считающий среднее, должен возвращать результат, а не печатать его?</li>
+</ol></article></details><footer><a target="_top" href="../#java-arrays">← Массивы</a><a target="_top" href="../#java-references">Ссылки →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

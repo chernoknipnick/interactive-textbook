@@ -1,0 +1,185 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Классы и объекты · Java</title><link rel="stylesheet" href="lecture.css?v=3"></head><body><main><div class="eyebrow">JAVA / ТЕМА 11 ИЗ 12 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-121">1.2.1. Классы и объекты — под запись</h1>
+<blockquote>
+<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары.</p>
+</blockquote>
+<h2 id="notes-1">1. Зачем нужны классы</h2>
+<p><strong>Проблема параллельных массивов:</strong> данные об одном объекте разнесены по разным массивам и связаны только одинаковым индексом. При сортировке, добавлении и удалении данные легко рассогласовать.
+<strong>Решение:</strong> собрать все данные об объекте в одну конструкцию — <strong>класс</strong>.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Борис&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Вера&quot;</span><span class="p">};</span><span class="w">   </span><span class="c1">// имя Анны — names[0],</span>
+<span class="kt">double</span><span class="o">[]</span><span class="w"> </span><span class="n">marks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">4.8</span><span class="p">,</span><span class="w"> </span><span class="mf">3.9</span><span class="p">,</span><span class="w"> </span><span class="mf">4.5</span><span class="p">};</span><span class="w">             </span><span class="c1">// её балл — marks[0]: связь только через индекс</span>
+</code></pre></div>
+
+<h2 id="notes-2">2. Класс и объект</h2>
+<p><strong>Класс</strong> — описание (шаблон) нового типа данных: какие данные будут у каждого объекта и какие действия он может выполнять.
+<strong>Объект</strong> (экземпляр класса) — конкретный представитель класса, созданный по этому описанию, со своими значениями данных.</p>
+<p><strong>Поле</strong> — переменная, объявленная в классе; хранит данные объекта.
+<strong>Метод</strong> — действие, которое умеет выполнять объект.</p>
+<p>Класс один — объектов может быть сколько угодно, у каждого свои значения полей.</p>
+<div class="codehilite"><pre><span></span><code>        КЛАСС Student                    ОБЪЕКТЫ
+    ┌──────────────────┐          ┌──────────────────┐
+    │ поля:            │          │ name = &quot;Анна&quot;    │
+    │   name           │ ──new──► │ age = 17         │
+    │   age            │          │ averageMark = 4.8│
+    │   averageMark    │          └──────────────────┘
+    │ методы:          │          ┌──────────────────┐
+    │   printInfo()    │ ──new──► │ name = &quot;Борис&quot;   │
+    │   isExcellent()  │          │ age = 18         │
+    └──────────────────┘          │ averageMark = 3.9│
+                                  └──────────────────┘
+</code></pre></div>
+
+<h2 id="notes-3">3. Объявление класса и создание объекта</h2>
+<p><strong>Объявление класса</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w">          </span><span class="c1">// поля</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">averageMark</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Создание объекта:</strong> <code>Student anna = new Student();</code>
+<code>new</code> создаёт объект в куче; в переменной сохраняется ссылка на него.</p>
+<p><strong>Обращение к полю:</strong> <code>объект.поле</code> — <code>anna.name = "Анна";</code>, <code>System.out.println(anna.age);</code></p>
+<p>В одном файле — только один <code>public</code>-класс, его имя совпадает с именем файла. Остальные классы в том же файле пишутся без <code>public</code>; обычно каждый класс помещают в отдельный файл.</p>
+<p><strong>Поля получают значения по умолчанию:</strong> числа — <code>0</code>, <code>boolean</code> — <code>false</code>, ссылочные типы — <code>null</code>. Локальные переменные значений по умолчанию не получают.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Main</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span>
+<span class="w">        </span><span class="n">anna</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Анна&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">anna</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">anna</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">anna</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; лет&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">averageMark</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="notes-4">4. Объекты — это ссылки</h2>
+<p>Переменная типа класса хранит <strong>ссылку</strong> на объект.
+- <code>Student s2 = s1;</code> — две ссылки на один объект.
+- <code>s1 == s2</code> — <code>true</code>, только если это один и тот же объект.
+- <code>Student s = null;</code> — ссылка без объекта; <code>s.name</code> даст <code>NullPointerException</code>.</p>
+<div class="codehilite"><pre><span></span><code> s1 ┌───┐
+    │ ●─┼──┐    ┌───────────────────┐
+    └───┘  ├───►│ name = &quot;Вера&quot;     │
+ s2 ┌───┐  │    │ age = 0           │
+    │ ●─┼──┘    └───────────────────┘
+    └───┘
+</code></pre></div>
+
+<h2 id="notes-5">5. Методы объекта</h2>
+<p><strong>Метод объекта</strong> объявляется в классе без слова <code>static</code> и вызывается через объект: <code>anna.printInfo();</code>
+Внутри метода поля объекта доступны по имени: <code>name</code> — это поле того объекта, у которого вызван метод.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">averageMark</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">printInfo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; лет, средний балл &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">averageMark</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isExcellent</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">averageMark</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">4.5</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">birthday</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">age</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>anna.printInfo()</code> выводит данные Анны, <code>boris.printInfo()</code> — данные Бориса: код один, объекты разные.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>static</code>-метод</th>
+<th>Метод объекта</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Принадлежит</td>
+<td>классу</td>
+<td>каждому объекту</td>
+</tr>
+<tr>
+<td>Как вызвать</td>
+<td><code>Main.square(5)</code> или <code>square(5)</code></td>
+<td><code>anna.printInfo()</code> — только через объект</td>
+</tr>
+<tr>
+<td>Видит поля объекта</td>
+<td>нет</td>
+<td>да</td>
+</tr>
+<tr>
+<td>Пример</td>
+<td><code>main</code>, <code>Math.round</code>, <code>Integer.parseInt</code></td>
+<td><code>name.length()</code>, <code>scanner.nextInt()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ошибка <code>non-static method … cannot be referenced from a static context</code> — метод объекта вызван без объекта. Исправление: вызвать через объект, а не дописывать <code>static</code>.</p>
+<h2 id="notes-6">6. Массив объектов</h2>
+<p><strong>Массив объектов:</strong> <code>Student[] group = new Student[3];</code>
+Массив хранит <strong>ссылки</strong>; сразу после создания все элементы равны <code>null</code>. Каждый объект нужно создать: <code>group[0] = new Student();</code></p>
+<p>Обход: <code>for (Student s : group) { ... s.name ... }</code></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="w"> </span><span class="n">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">group</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">group</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="na">averageMark</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">best</span><span class="p">.</span><span class="na">averageMark</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Лучший средний балл: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">best</span><span class="p">.</span><span class="na">name</span><span class="p">);</span>
+</code></pre></div>
+
+<h2 id="notes-7-tostring">7. Метод <code>toString</code></h2>
+<p><strong><code>toString()</code></strong> — метод, который возвращает строковое представление объекта. Java вызывает его автоматически при выводе через <code>println</code> и при склейке со строкой.</p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@Override</span>
+<span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">toString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; (&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; лет)&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Без <code>toString</code> объект выводится как <code>Student@1b6d3586</code>.</p>
+<h2 id="notes-8">8. Принципы ООП</h2>
+<p><strong>Объектно-ориентированное программирование (ООП)</strong> — подход, при котором программа строится из объектов, объединяющих данные и действия.</p>
+<p><strong>Четыре принципа ООП:</strong>
+1. <strong>Абстракция</strong> — в классе описываются только существенные для задачи свойства (у студента для журнала важны имя и оценки, но не цвет глаз).
+2. <strong>Инкапсуляция</strong> — данные и методы объединены в классе, а прямой доступ к данным ограничен. (Тема 1.2.2.)
+3. <strong>Наследование</strong> — новый класс создаётся на основе существующего и получает его поля и методы. (Тема 1.2.4.)
+4. <strong>Полиморфизм</strong> — один и тот же вызов метода по-разному работает для объектов разных классов. (Тема 1.2.4.)</p>
+<h2 id="notes-_1">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>Класс <code>Phone</code>: поля <code>model</code> (<code>String</code>), <code>battery</code> (<code>int</code>, заряд в процентах), <code>isOn</code> (<code>boolean</code>). Методы:
+   - <code>void printInfo()</code> — выводит модель, заряд и включён ли телефон;
+   - <code>void charge(int percent)</code> — увеличивает заряд, но не выше 100;
+   - <code>boolean isLow()</code> — <code>true</code>, если заряд меньше 20;
+   - <code>toString()</code>.
+   В <code>main</code> создать два телефона, заполнить поля, вызвать все методы, показать, что объекты независимы.</li>
+<li>Массив из трёх телефонов: вывести все и найти телефон с наименьшим зарядом.</li>
+</ol>
+<h2 id="notes-_2">Проверь себя</h2>
+<p>По этим вопросам — опрос в начале следующей пары.</p>
+<ol>
+<li>Какую проблему решают классы? Объясните на примере параллельных массивов.</li>
+<li>Чем класс отличается от объекта?</li>
+<li>Что такое поле? Чем оно отличается от локальной переменной?</li>
+<li>Что делает <code>new Student()</code>? Что лежит в переменной после <code>Student s = new Student();</code>?</li>
+<li>Какие значения у полей <code>String name; int age; boolean active;</code> в новом объекте?</li>
+<li>Почему в одном файле нельзя написать два <code>public</code>-класса?</li>
+<li><code>Student s2 = s1; s2.age = 20;</code> — изменится ли <code>s1.age</code>? Почему?</li>
+<li>Чем метод объекта отличается от <code>static</code>-метода?</li>
+<li>Чьи поля использует метод <code>printInfo()</code> при вызове <code>boris.printInfo()</code>?</li>
+<li>Почему вызов <code>printInfo();</code> из <code>main</code> не компилируется и как правильно?</li>
+<li><code>Student[] g = new Student[5]; g[0].name = "Анна";</code> — что произойдёт и почему?</li>
+<li>Зачем нужен <code>toString()</code>? Когда он вызывается?</li>
+<li>Назовите четыре принципа ООП.</li>
+</ol></article><footer><a target="_top" href="../#java-references">← Ссылки</a><a target="_top" href="../#java-constructors">Конструкторы →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

@@ -1,0 +1,320 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Первая программа на Java · Java</title><link rel="stylesheet" href="lecture.css?v=3"></head><body><main><div class="eyebrow">JAVA / ТЕМА 03 ИЗ 12 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-java">Первая программа на Java: структура кода и как её запустить</h1>
+<blockquote>
+<p>Дополнение между <a target="_top" href="../#java-intro">Введением в курс</a> и <a target="_top" href="../#java-types">1.1.1 Типы данных и операции</a>. В прошлой лекции уже был код с <code>public class</code> и <code>main</code>, но без объяснения, что каждое слово там значит и почему структура именно такая. Здесь — это объяснение, плюс разбор лабораторной работы 1 построчно.</p>
+</blockquote>
+<h2 id="lecture-1">1. Зачем это отдельная тема</h2>
+<p>Сейчас мы пишем код в <strong>онлайн-компиляторе</strong> — это нормально и достаточно для первых занятий: не нужно ничего ставить на компьютер, код пишется и запускается прямо в браузере. Но у этого есть обратная сторона: онлайн-компилятор скрывает от вас то, что на самом деле происходит при запуске программы, а без этого понимания структура кода (<code>public class</code>, <code>static</code>, <code>void</code>, <code>main</code>) выглядит как магическое заклинание, которое просто «надо писать, потому что так надо». Эта лекция закрывает именно этот пробел — а заодно готовит к переходу на Android Studio, о котором говорилось в <a target="_top" href="../#java-intro">лекции 0</a>: там всё то же самое, только компилятор встроен в среду разработки, а не находится на чужом сервере в интернете.</p>
+<h2 id="lecture-2-java">2. Что вообще нужно, чтобы Java заработала</h2>
+<p>У Java, в отличие от, например, Python, нет «одного шага» от текста программы до результата. Путь такой:</p>
+<ol>
+<li>Вы пишете код в текстовом файле с расширением <code>.java</code> — это обычный текст, компьютер (и тем более процессор) его пока не понимает.</li>
+<li><strong>Компилятор</strong> <code>javac</code> (входит в JDK — Java Development Kit) переводит этот текст в <strong>байт-код</strong> — файл с расширением <code>.class</code>. Байт-код — это уже не текст и не машинный код процессора, а промежуточный формат, понятный не процессору напрямую, а специальной программе.</li>
+<li><strong>Виртуальная машина Java</strong> (JVM, Java Virtual Machine) запускает этот байт-код — уже она превращает его в реальные инструкции для процессора и печатает результат.</li>
+</ol>
+<p>Схематически:</p>
+<div class="codehilite"><pre><span></span><code>MyProgram.java  --(javac)--&gt;  MyProgram.class  --(java, то есть JVM)--&gt;  результат на экране
+   (текст)                      (байт-код)
+</code></pre></div>
+
+<p>Именно из-за этого двойного шага (компиляция → выполнение) Java называют «компилируемым в байт-код» языком — не совсем как C++ (который компилируется сразу в код процессора) и не совсем как Python (который построчно выполняется интерпретатором без отдельного шага компиляции). Тот же самый байт-код, кстати, порождает и Kotlin после компиляции — поэтому в лекции 0 говорилось, что Java и Kotlin «работают на одной JVM»: <code>javac</code> там заменяется на компилятор Kotlin, но дальше всё то же самое.</p>
+<p><strong>Что делает онлайн-компилятор.</strong> Он выполняет оба шага (и <code>javac</code>, и <code>java</code>) за вас на своём сервере, а вам показывает только результат — то, что вывела программа. Когда позже вы поставите JDK и/или Android Studio на свой компьютер, вы будете делать ровно то же самое, просто явно (либо кнопкой «Run» в IDE, либо командами <code>javac</code> и <code>java</code> в терминале) и на своей машине, а не на чужой.</p>
+<h2 id="lecture-3">3. Анатомия простейшей программы — разбор каждого слова</h2>
+<p>Вот минимальная работающая Java-программа:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">HelloWorld</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Привет, мир!&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Разберём буквально каждое слово — что оно значит и что будет, если его убрать или изменить.</p>
+<ul>
+<li><strong><code>public</code></strong> (у класса) — модификатор доступа: класс виден отовсюду, в том числе снаружи файла. Без этого слова класс тоже скомпилируется, но не сможет быть точкой входа для запуска извне так же свободно — на первых порах просто всегда пишите <code>public</code> перед классом, который запускаете.</li>
+<li><strong><code>class</code></strong> — ключевое слово: «дальше идёт описание класса». В Java <strong>вообще весь код</strong> обязан находиться внутри какого-нибудь класса — в отличие от Python, где <code>print("привет")</code> можно написать прямо в файле само по себе, в Java такой «код сам по себе» без класса компилятор не примет.</li>
+<li><strong><code>HelloWorld</code></strong> — имя класса. Правило, которое ломает программу чаще всего у новичков: <strong>имя файла обязано совпадать с именем public-класса</strong>. Если класс называется <code>HelloWorld</code>, файл обязан называться <code>HelloWorld.java</code> — не <code>hello.java</code>, не <code>main.java</code>. Компилятор <code>javac</code> буквально ищет по имени файла, какой класс в нём главный.</li>
+<li><strong><code>{</code> и <code>}</code></strong> (первая пара) — обозначают начало и конец тела класса: всё, что относится к классу <code>HelloWorld</code> (в данном случае — единственный метод <code>main</code>), находится между этими скобками.</li>
+<li><strong><code>public static void main(String[] args)</code></strong> — это не четыре независимых слова, а единая, фиксированная <strong>сигнатура точки входа</strong>. JVM, запуская программу, ищет в классе метод, который выглядит ровно так — измените в этой строке хоть одно слово не по правилам, и программа перестанет запускаться (хотя может при этом успешно скомпилироваться). Разберём и здесь каждое слово:</li>
+<li><strong><code>public</code></strong> — метод должен быть виден снаружи класса, потому что JVM вызывает его как раз «снаружи», не будучи частью вашего класса.</li>
+<li><strong><code>static</code></strong> — ключевое слово, означающее «метод принадлежит самому классу, а не какому-то конкретному объекту». Это важно понять именно сейчас, до темы классов и объектов (лекция 1.2.1): обычно, чтобы вызвать метод объекта, сначала нужно создать сам объект (<code>new HelloWorld()</code>), а чтобы создать объект — нужна уже работающая программа, которая это сделает. Получается замкнутый круг: чтобы начать программу, нужен уже работающий метод, но чтобы вызвать обычный метод — нужен объект. <code>static</code> разрывает этот круг: <code>main</code> привязан к классу целиком, и JVM может вызвать его безо всякого объекта, с самого начала, с чистого листа.</li>
+<li><strong><code>void</code></strong> — метод <code>main</code> ничего не <strong>возвращает</strong> обратно тому, кто его вызвал (в данном случае — самой JVM). Здесь нет <code>return значение;</code>, и это осознанное решение: программа сообщает о своём результате не через возвращаемое значение метода, а через побочные эффекты — печать на экран, запись в файл, изменение данных на сервере и так далее.</li>
+<li><strong><code>main</code></strong> — не ключевое слово, а строго зафиксированное <strong>имя</strong> метода, которое ищет JVM. Назовите его <code>Main</code> (с большой буквы) или <code>mian</code> (опечатка) — и JVM скажет: «метод main не найден», хотя код скомпилируется без единой ошибки, ведь с точки зрения синтаксиса Java это просто обычный метод с необычным именем.</li>
+<li><strong><code>(String[] args)</code></strong> — параметр метода: массив строк. Через него в программу попадают <strong>аргументы командной строки</strong> — то, что можно передать программе при запуске (<code>java HelloWorld один два три</code>, тогда <code>args = {"один", "два", "три"}</code>). Если ничего не передать (как чаще всего и происходит в онлайн-компиляторе), <code>args</code> — это просто пустой массив, не <code>null</code>, а именно массив длины <code>0</code>. Даже если вы им никогда не пользуетесь, писать этот параметр всё равно обязательно — того требует сигнатура точки входа.</li>
+<li><strong><code>System.out.println("Привет, мир!");</code></strong> — единственная содержательная строка. Разбор по частям:</li>
+<li><strong><code>System</code></strong> — встроенный класс Java, представляющий саму систему (компьютер, на котором выполняется программа): доступ к консоли, часам, переменным окружения.</li>
+<li><strong><code>.out</code></strong> — статическое поле класса <code>System</code>, представляющее поток стандартного вывода (то есть «консоль» / «экран»); тип этого поля — <code>PrintStream</code>.</li>
+<li><strong><code>.println(...)</code></strong> — метод объекта <code>System.out</code>, который печатает переданное значение и переводит строку (<code>ln</code> — сокращение от <em>line</em>). Есть и <code>.print(...)</code> — то же самое, но без перевода строки в конце: следующий вывод продолжится на той же строке.</li>
+<li><strong><code>"Привет, мир!"</code></strong> — строковый литерал (тип <code>String</code>), заключённый в двойные кавычки — то, что будет напечатано.</li>
+<li><strong><code>;</code></strong> — точка с запятой, обязательный конец каждой инструкции в Java. Забытая точка с запятой — вторая по частоте причина ошибок компиляции у новичков (первая — незакрытая или лишняя фигурная скобка).</li>
+</ul>
+<h2 id="lecture-4">4. Типичные ошибки при первом запуске</h2>
+<p>Все эти ошибки в онлайн-компиляторе выглядят как «красный текст» с сообщением — вот как их читать:</p>
+<table>
+<thead>
+<tr>
+<th>Что написали</th>
+<th>Что говорит компилятор/JVM</th>
+<th>В чём дело</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>class HelloWorld</code> без <code>public</code>, а файл называется иначе</td>
+<td>Компилируется, но не запускается как ожидалось</td>
+<td>Некоторые онлайн-компиляторы жёстко требуют, чтобы класс назывался именно <code>Main</code> — если ошибка про «имя класса», переименуйте класс в <code>Main</code></td>
+</tr>
+<tr>
+<td><code>public static void Main(...)</code> (с большой буквы)</td>
+<td><code>Error: Main method not found in class ...</code></td>
+<td>Java чувствительна к регистру: <code>Main</code> ≠ <code>main</code></td>
+</tr>
+<tr>
+<td>Забыта <code>;</code> после <code>System.out.println(...)</code></td>
+<td><code>error: ';' expected</code></td>
+<td>Каждая инструкция обязана заканчиваться <code>;</code></td>
+</tr>
+<tr>
+<td>Не закрыта фигурная скобка <code>{</code></td>
+<td><code>error: reached end of file while parsing</code></td>
+<td>Компилятор досчитал до конца файла, а пары скобке так и не нашёл — считайте открывающие и закрывающие скобки парами</td>
+</tr>
+<tr>
+<td><code>System.out.Println(...)</code> (с большой буквы)</td>
+<td><code>cannot find symbol</code></td>
+<td>Имена методов тоже чувствительны к регистру — правильно <code>println</code>, не <code>Println</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-5-1">5. Разбор лабораторной работы 1 — построчно</h2>
+<p>Лабораторная работа 1 (та, что осталась с прошлого года) состоит из пяти маленьких программ. Разберём первую и вторую полностью — по тому же принципу дальше читаются и остальные три.</p>
+<h3 id="lecture-1_1">Программа 1 — явное и неявное преобразование</h3>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FloatConversion</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">doubleValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.5</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">intValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">doubleValue</span><span class="p">;</span><span class="w"> </span><span class="c1">// явное преобразование</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Явное преобразование: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">intValue</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">floatValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">15.75f</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">doubleVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floatValue</span><span class="p">;</span><span class="w"> </span><span class="c1">// неявное преобразование</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Неявное преобразование: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">doubleVal</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li><code>public class FloatConversion</code> — файл обязан называться <code>FloatConversion.java</code> (см. раздел 3 выше).</li>
+<li><code>double doubleValue = 10.5;</code> — объявление переменной типа <code>double</code> (число с плавающей точкой двойной точности) и сразу присваивание значения. Слева от <code>=</code> — тип и имя, справа — значение; это одна инструкция, поэтому в конце <code>;</code>.</li>
+<li><code>int intValue = (int) doubleValue;</code> — здесь <code>(int)</code> перед <code>doubleValue</code> — это <strong>явное приведение типа</strong> (cast): вы прямо говорите компилятору «преврати double в int, даже если при этом что-то потеряется». Потеряется дробная часть: <code>10.5</code> станет <code>10</code> (округления в большую сторону не будет — дробная часть просто отбрасывается, это называется усечением). Явное приведение нужно именно потому, что такое преобразование <strong>сужающее</strong> — из типа, который вмещает больше информации (<code>double</code>), в тип, который вмещает меньше (<code>int</code>), — и Java не станет делать это молча, заставит написать <code>(int)</code> явно, чтобы вы точно понимали, что теряете точность.</li>
+<li><code>// явное преобразование</code> — однострочный комментарий: всё после <code>//</code> до конца строки компилятор игнорирует, это заметка для человека, читающего код.</li>
+<li><code>System.out.println("Явное преобразование: " + intValue);</code> — здесь знак <code>+</code> работает не как арифметическое сложение, а как <strong>конкатенация строк</strong>: раз слева от <code>+</code> стоит <code>String</code> (<code>"Явное преобразование: "</code>), Java автоматически превращает <code>intValue</code> (число) в его текстовое представление и склеивает строки. Это отдельное, важное правило: <code>+</code> между строкой и числом всегда означает склейку, а не сложение — частая путаница у тех, кто уже писал на языках, где это работает иначе.</li>
+<li><code>float floatValue = 15.75f;</code> — буква <code>f</code> в конце числового литерала обязательна для типа <code>float</code>: без неё <code>15.75</code> компилятор по умолчанию считает <code>double</code>, и присвоить <code>double</code>-литерал переменной типа <code>float</code> напрямую нельзя (это тоже сужающее преобразование — <code>float</code> занимает меньше памяти и не хранит всю точность <code>double</code>).</li>
+<li><code>double doubleVal = floatValue;</code> — а вот здесь приведения <code>(double)</code> не нужно: <code>float</code> → <code>double</code> — это <strong>расширяющее</strong> преобразование (из типа с меньшим диапазоном в тип с большим), Java выполняет его автоматически и молча, потому что при расширении ничего не теряется.</li>
+</ul>
+<h3 id="lecture-2">Программа 2 — преобразование между числом и строкой</h3>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TypeConversion</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">intValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">strValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">String</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">intValue</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Целочисленный тип в строковый тип: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">strValue</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;25&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">intVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">parseInt</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Строковый тип в целочисленный тип: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">intVal</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li><code>String strValue = String.valueOf(intValue);</code> — <code>String.valueOf(...)</code> — статический метод класса <code>String</code> (обратите внимание: вызывается через имя класса <code>String</code>, а не через объект, — это тоже <code>static</code>, как и <code>main</code>), превращающий число в его текстовое представление. Это <strong>не</strong> то же самое, что приведение типа <code>(String) intValue</code> — так вообще написать нельзя, приведение типов работает только между «родственными» типами (числовыми между собой, например), а превращение числа в текст — это не приведение типа, а настоящее преобразование данных, поэтому и нужен отдельный метод.</li>
+<li><code>int intVal = Integer.parseInt(str);</code> — обратная операция: <code>Integer</code> — класс-обёртка над примитивным типом <code>int</code> (о таких классах будет отдельный разговор в теме про ссылочные типы), его статический метод <code>parseInt</code> разбирает строку и возвращает <code>int</code>. Важно: если строка не является корректным числом (например, <code>"двадцать пять"</code> или <code>"25a"</code>), эта строка выбросит ошибку времени выполнения (<code>NumberFormatException</code>) — программа скомпилируется без проблем, но упадёт именно в момент выполнения этой строки. Про обработку таких ошибок (<code>try</code>/<code>catch</code>) будет отдельная тема позже, пока просто держите в голове: <code>parseInt</code> — операция, которая может не сработать, если строка «не похожа» на число.</li>
+</ul>
+<h3 id="lecture-34-1">Программы 3–4 — то же самое, но с логикой, которую вы уже разбирали в лекции 1</h3>
+<p><code>LogicalOperations</code> и <code>ComparisonOperations</code> не вводят ничего нового по структуре — это тот же самый скелет <code>public class ... { public static void main(String[] args) { ... } }</code>, а внутри — операции <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, <code>&gt;</code>, <code>&lt;</code>, <code>==</code>, которые уже разобраны в <a target="_top" href="../#java-types">лекции 1</a>. Если структура (класс, <code>main</code>, <code>System.out.println</code>) теперь понятна, эти две программы читаются свободно — тренируйтесь читать их самостоятельно, сверяя с разделом 3 этой лекции при любом непонятном слове.</p>
+<h2 id="lecture-6">6. Итог лекции</h2>
+<p>Структура <code>public class Имя { public static void main(String[] args) { ... } }</code> — не набор слов «для галочки», а точная формула, где у каждого слова есть причина: <code>public class</code> — единица кода, которую видит JVM снаружи; <code>static</code> — разрывает круг «нужен объект, чтобы вызвать метод, но нужен метод, чтобы создать первый объект»; <code>void</code> — программа сообщает результат не через <code>return</code>, а через побочные эффекты вроде печати на экран; <code>String[] args</code> — канал для аргументов командной строки, даже когда он не используется. Путь от текста программы до результата на экране всегда проходит два шага — компиляцию (<code>javac</code>, текст → байт-код) и выполнение (<code>java</code>/JVM, байт-код → результат), просто в онлайн-компиляторе оба шага скрыты под одной кнопкой «Run». Когда в лекции 0 речь пойдёт про установку Android Studio — это будет ровно тот же процесс, просто явный и локальный, а не спрятанный на чужом сервере.</p>
+<p><strong>Проверь себя:</strong></p>
+<ol>
+<li>Почему метод <code>main</code> обязан быть <code>static</code>, а не обычным методом объекта? Что произошло бы, если бы JVM пришлось сначала создать объект класса, чтобы вызвать его метод?</li>
+<li>В программе <code>FloatConversion</code> строка <code>int intValue = (int) doubleValue;</code> требует явного приведения типа <code>(int)</code>, а строка <code>double doubleVal = floatValue;</code> — нет. В чём разница между этими двумя преобразованиями и почему Java требует явности только в одном случае?</li>
+<li>Вы написали класс <code>public class Solution</code> в файле с именем <code>main.java</code>. Что произойдёт при попытке скомпилировать этот код и как это исправить?</li>
+<li>Чем отличается результат выражения <code>"Результат: " + 5 + 3</code> от <code>"Результат: " + (5 + 3)</code>? Объясните, почему они дают разный вывод, опираясь на то, как работает <code>+</code> со строками.</li>
+<li><code>Integer.parseInt("25a")</code> не сработает и «уронит» программу в момент выполнения, хотя код с этой строкой компилируется без единой ошибки. Почему компилятор не может обнаружить эту проблему заранее, на этапе <code>javac</code>?</li>
+<li>Что бы вы сказали студенту, который спрашивает «а зачем вообще нужен <code>void</code> перед <code>main</code>, если программа и так печатает результат через <code>System.out.println</code>»?</li>
+</ol></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-05-java">0.5. Первая программа на Java: структура и запуск — под запись</h1>
+<blockquote>
+<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. Рамку программы нужно уметь написать по памяти.</p>
+</blockquote>
+<h2 id="notes-1-java">1. Запуск программы на Java — два шага</h2>
+<div class="codehilite"><pre><span></span><code>HelloWorld.java ──[javac]──► HelloWorld.class ──[java]──► результат
+ исходный текст              байт-код          запуск JVM
+</code></pre></div>
+
+<ol>
+<li><strong>Компиляция:</strong> <code>javac HelloWorld.java</code> — компилятор проверяет текст и создаёт файл <code>HelloWorld.class</code> с байт-кодом. Если в тексте есть ошибка, файл <code>.class</code> не создаётся.</li>
+<li><strong>Запуск:</strong> <code>java HelloWorld</code> — виртуальная машина загружает класс <code>HelloWorld</code> и выполняет его.</li>
+</ol>
+<p><strong>Исходный файл</strong> (<code>.java</code>) — текст программы, который пишет человек.
+<strong>Файл класса</strong> (<code>.class</code>) — байт-код, который создаёт компилятор и выполняет JVM.</p>
+<p>Кнопка «Запуск» в онлайн-компиляторе и в среде разработки выполняет оба шага подряд.</p>
+<h2 id="notes-2">2. Структура программы</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">HelloWorld</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Привет, мир!&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>┌─ класс HelloWorld ─────────────────────────┐
+│  ┌─ метод main ─────────────────────────┐  │
+│  │   инструкция: вывести текст          │  │
+│  └──────────────────────────────────────┘  │
+└────────────────────────────────────────────┘
+</code></pre></div>
+
+<p><strong>Структура программы на Java:</strong> класс → метод → инструкции.</p>
+<p><strong>Класс</strong> — основная единица кода в Java. Весь код программы находится внутри классов.
+<strong>Метод</strong> — именованный блок кода внутри класса, который выполняет действие.
+<strong>Инструкция</strong> — одна команда программы. Каждая инструкция заканчивается точкой с запятой <code>;</code>.
+<strong>Блок</strong> — код между фигурными скобками <code>{</code> и <code>}</code>. Каждая открывающая скобка должна иметь закрывающую.</p>
+<p><strong>Правило имени файла:</strong> имя файла должно совпадать с именем <code>public</code>-класса с точностью до регистра букв. Класс <code>HelloWorld</code> → файл <code>HelloWorld.java</code>.</p>
+<p><strong>Java различает регистр букв:</strong> <code>Main</code>, <code>main</code> и <code>MAIN</code> — три разных имени.</p>
+<p>Имена классов пишут с большой буквы: <code>HelloWorld</code>, <code>Calculator</code>.</p>
+<h2 id="notes-3">3. Точка входа</h2>
+<p><strong>Точка входа</strong> — метод, с которого виртуальная машина начинает выполнение программы. В Java это метод
+<code>public static void main(String[] args)</code>.
+Эта строка пишется всегда одинаково.</p>
+<table>
+<thead>
+<tr>
+<th>Слово</th>
+<th>Что означает</th>
+<th>Зачем в <code>main</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code></td>
+<td>метод доступен снаружи класса</td>
+<td>JVM вызывает <code>main</code> снаружи</td>
+</tr>
+<tr>
+<td><code>static</code></td>
+<td>метод принадлежит классу, а не объекту</td>
+<td>в момент запуска ни одного объекта ещё нет</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td>метод ничего не возвращает</td>
+<td><code>main</code> не отдаёт результат, а выполняет действия</td>
+</tr>
+<tr>
+<td><code>main</code></td>
+<td>имя метода</td>
+<td>именно это имя ищет JVM</td>
+</tr>
+<tr>
+<td><code>String[] args</code></td>
+<td>входные данные: массив строк</td>
+<td>аргументы командной строки</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes-4">4. Вывод на экран</h2>
+<p><code>System.out.println("текст");</code> — вывести текст на экран и перейти на новую строку.
+<code>System</code> — встроенный класс; <code>out</code> — канал вывода в консоль; <code>println</code> — метод вывода.
+<strong>Строка</strong> — текст в двойных кавычках: <code>"Привет, мир!"</code>.</p>
+<p><code>System.out.print(...)</code> — вывести и остаться на той же строке.
+<code>System.out.println(...)</code> — вывести и перейти на новую строку.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="s">&quot;Раз, &quot;</span><span class="p">);</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="s">&quot;два, &quot;</span><span class="p">);</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;три!&quot;</span><span class="p">);</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Конец&quot;</span><span class="p">);</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>Раз, два, три!
+Конец
+</code></pre></div>
+
+<p><strong>Знак <code>+</code>:</strong> между числами — сложение; если хотя бы один из операндов — строка, то склейка (конкатенация). Выражение вычисляется слева направо, скобки — в первую очередь.</p>
+<p><code>"Сумма: " + 5 + 3</code> → <code>Сумма: 53</code>
+<code>"Сумма: " + (5 + 3)</code> → <code>Сумма: 8</code>
+<code>5 + 3 + " — сумма"</code> → <code>8 — сумма</code></p>
+<h2 id="notes-5">5. Комментарии</h2>
+<p><strong>Комментарий</strong> — текст в программе, который компилятор пропускает; пояснение для человека.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// текст — до конца строки</span>
+
+<span class="cm">/* текст — от этого знака до закрывающего,</span>
+<span class="cm">   может занимать несколько строк */</span>
+</code></pre></div>
+
+<h2 id="notes-6">6. Ошибки</h2>
+<p><strong>Ошибка компиляции</strong> — ошибку находит компилятор до запуска. Программа не запускается вообще. Сообщение начинается со слова <code>error</code> и содержит номер строки.
+<strong>Ошибка выполнения</strong> — программа скомпилировалась и запустилась, но остановилась во время работы.</p>
+<table>
+<thead>
+<tr>
+<th>Сообщение</th>
+<th>Перевод</th>
+<th>Что искать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>';' expected</code></td>
+<td>ожидалась <code>;</code></td>
+<td>пропущена точка с запятой в указанной строке</td>
+</tr>
+<tr>
+<td><code>cannot find symbol</code></td>
+<td>не найдено имя</td>
+<td>опечатка или неверный регистр в имени</td>
+</tr>
+<tr>
+<td><code>reached end of file while parsing</code></td>
+<td>файл кончился раньше времени</td>
+<td>не хватает закрывающей <code>}</code></td>
+</tr>
+<tr>
+<td><code>unclosed string literal</code></td>
+<td>незакрытая строка</td>
+<td>не хватает закрывающей <code>"</code></td>
+</tr>
+<tr>
+<td><code>class X is public, should be declared in a file named X.java</code></td>
+<td>имя класса не совпадает с именем файла</td>
+<td>переименовать класс или файл</td>
+</tr>
+<tr>
+<td><code>Main method not found in class X</code></td>
+<td>не найден метод <code>main</code></td>
+<td>ошибка в строке <code>public static void main(String[] args)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Порядок чтения ошибки:</strong> 1) номер строки; 2) текст после слова <code>error</code>; 3) галочка <code>^</code> под местом ошибки. Исправлять начинают с первой ошибки в списке: остальные часто являются её следствием.</p>
+<h2 id="notes-_1">Домашнее задание</h2>
+<ol>
+<li>Выучить рамку программы наизусть: уметь написать на листке без подсказок.</li>
+<li>Ответить на вопросы «Проверь себя».</li>
+<li>Написать программу <code>Visitka</code>, которая выводит «визитку» в рамке из символов: фамилия и имя, группа, любимая игра или фильм. Использовать и <code>print</code>, и <code>println</code>, и хотя бы один комментарий.</li>
+<li>В готовой программе по очереди сделать три поломки из таблицы ошибок, каждый раз записать в тетрадь номер строки и сообщение компилятора.</li>
+</ol>
+<h2 id="notes-_2">Проверь себя</h2>
+<p>По этим вопросам — опрос в начале следующей пары.</p>
+<ol>
+<li>Какие два шага проходит программа на Java от текста до результата? Какой файл получается после первого шага?</li>
+<li>Почему в команде <code>java HelloWorld</code> нет расширения файла?</li>
+<li>Класс объявлен как <code>public class Solution</code>, файл называется <code>main.java</code>. Что произойдёт при компиляции и как исправить?</li>
+<li>Что такое точка входа?</li>
+<li>Почему <code>main</code> должен быть <code>static</code>?</li>
+<li>Что означает <code>void</code> перед <code>main</code>?</li>
+<li>Что попадает в <code>args</code>?</li>
+<li>Метод назвали <code>Main</code> вместо <code>main</code>. На каком шаге и кто сообщит об ошибке?</li>
+<li>Чем ошибка компиляции отличается от ошибки выполнения?</li>
+<li>Компилятор пишет <code>reached end of file while parsing</code>. Что искать?</li>
+<li>Что выведут <code>"Итог: " + 2 + 2</code> и <code>"Итог: " + (2 + 2)</code>? Почему по-разному?</li>
+<li>Чем <code>print</code> отличается от <code>println</code>?</li>
+</ol></article></details><footer><a target="_top" href="../#java-intro">← Введение в курс</a><a target="_top" href="../#java-types">Типы данных и операции →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

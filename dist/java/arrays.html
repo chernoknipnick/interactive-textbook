@@ -1,0 +1,237 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Массивы · Java</title><link rel="stylesheet" href="lecture.css?v=3"></head><body><main><div class="eyebrow">JAVA / ТЕМА 08 ИЗ 12 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-115">1.1.5. Массивы — под запись</h1>
+<blockquote>
+<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. После темы — практическая работа ПР02.</p>
+</blockquote>
+<h2 id="notes-1">1. Массив, элемент, индекс</h2>
+<p><strong>Массив</strong> — набор значений одного типа, которые хранятся подряд под общим именем.
+<strong>Элемент</strong> — одно значение в массиве.
+<strong>Индекс</strong> — номер элемента. Индексы начинаются <strong>с нуля</strong>: в массиве из <code>n</code> элементов индексы от 0 до <code>n − 1</code>.</p>
+<div class="codehilite"><pre><span></span><code>marks
+┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+│ 5 │ 3 │ 5 │ 3 │ 4 │ 4 │ 3 │ 2 │ 5 │ 4 │   ← элементы
+└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+  0   1   2   3   4   5   6   7   8   9      ← индексы
+
+длина: 10        первый: marks[0]        последний: marks[9]
+</code></pre></div>
+
+<p><strong>Создание массива</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">marks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span><span class="p">;</span><span class="w">           </span><span class="c1">// 1) пустой массив заданного размера</span>
+<span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">marks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span><span class="w">      </span><span class="c1">// 2) массив с готовыми значениями</span>
+</code></pre></div>
+
+<p><strong>Обращение к элементу:</strong> <code>имя[индекс]</code> — <code>marks[0] = 5;</code>, <code>int x = marks[2];</code></p>
+<p><strong>Значения по умолчанию</strong> при создании через <code>new</code>: числа — <code>0</code>, <code>boolean</code> — <code>false</code>, <code>char</code> — символ с кодом 0, <code>String</code> и другие ссылочные типы — <code>null</code>.</p>
+<p><strong>Размер массива задаётся при создании и не меняется.</strong></p>
+<h2 id="notes-2">2. Длина массива</h2>
+<p><strong><code>имя.length</code></strong> — длина массива (количество элементов). Пишется без круглых скобок.
+Индекс последнего элемента: <code>имя.length - 1</code>.</p>
+<p>Обращение к индексу меньше 0 или больше <code>length − 1</code> — ошибка выполнения <code>ArrayIndexOutOfBoundsException</code>.</p>
+<p>Пример сообщения: <code>Index 10 out of bounds for length 10</code> — обратились к индексу 10 в массиве длины 10.</p>
+<h2 id="notes-3">3. Обход массива</h2>
+<p><strong>Обход массива циклом <code>for</code>:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">marks</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// marks[i] — текущий элемент, i — его индекс</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Цикл <code>for-each</code></strong> перебирает все элементы по порядку:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">mark</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">marks</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// mark — копия текущего элемента</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Нужно</th>
+<th><code>for</code></th>
+<th><code>for-each</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>только прочитать все элементы</td>
+<td>можно</td>
+<td>удобнее</td>
+</tr>
+<tr>
+<td>знать индекс элемента</td>
+<td>да</td>
+<td>нет</td>
+</tr>
+<tr>
+<td>изменять элементы массива</td>
+<td>да</td>
+<td>нет</td>
+</tr>
+<tr>
+<td>обход в обратном порядке, через один, части массива</td>
+<td>да</td>
+<td>нет</td>
+</tr>
+</tbody>
+</table>
+<p>Вывод массива целиком: <code>System.out.println(Arrays.toString(marks));</code>
+Нужен <code>import java.util.Arrays;</code></p>
+<h2 id="notes-4">4. Типовые алгоритмы</h2>
+<p><strong>Сумма и среднее</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">marks</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">marks</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">average</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">marks</span><span class="p">.</span><span class="na">length</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong>Максимум</strong> (минимум — так же, со знаком <code>&lt;</code>)</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">marks</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span><span class="w">                          </span><span class="c1">// начинаем с первого элемента, а не с нуля</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">marks</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">marks</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">max</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">marks</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Подсчёт по условию</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">mark</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">marks</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mark</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Поиск элемента</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="w">                           </span><span class="c1">// -1 означает «не найден»</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">marks</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">marks</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="notes-5-random">5. Случайные числа — класс <code>Random</code></h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Random</span><span class="p">;</span>
+
+<span class="n">Random</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Random</span><span class="p">();</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="p">.</span><span class="na">nextInt</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w">                      </span><span class="c1">// от 0 до 9</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="p">.</span><span class="na">nextInt</span><span class="p">(</span><span class="n">max</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">min</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">min</span><span class="p">;</span><span class="w">     </span><span class="c1">// от min до max включительно</span>
+</code></pre></div>
+
+<p>Заполнение массива:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numbers</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">numbers</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="p">.</span><span class="na">nextInt</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">          </span><span class="c1">// от 2 до 5</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>нужно: от 2 до 5              вариантов: 5 − 2 + 1 = 4   (2, 3, 4, 5)
+
+random.nextInt(4)        →  0, 1, 2, 3
+random.nextInt(4) + 2    →  2, 3, 4, 5
+</code></pre></div>
+
+<h2 id="notes-6">6. Массив — ссылочный тип</h2>
+<p><strong>Массив — ссылочный тип.</strong> В переменной хранится не сам массив, а ссылка на него (адрес в памяти).</p>
+<ul>
+<li><code>int[] b = a;</code> копирует <strong>ссылку</strong>: <code>a</code> и <code>b</code> указывают на один и тот же массив.</li>
+<li>Настоящая копия: <code>int[] c = Arrays.copyOf(a, a.length);</code></li>
+<li><code>a == b</code> сравнивает ссылки. Сравнение по содержимому: <code>Arrays.equals(a, b)</code>.</li>
+</ul>
+<div class="codehilite"><pre><span></span><code> a ┌─────┐
+   │  ●──┼───┐     ┌───┬───┬───┐
+   └─────┘   ├────►│ 1 │ 2 │ 3 │
+ b ┌─────┐   │     └───┴───┴───┘
+   │  ●──┼───┘
+   └─────┘
+две переменные, один массив
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="n">b</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span><span class="w">    </span><span class="c1">// 100</span>
+</code></pre></div>
+
+<h2 id="notes-7">7. Двумерные массивы</h2>
+<p><strong>Двумерный массив</strong> — массив, элементы которого являются массивами; таблица из строк и столбцов.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="o">[][]</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[</span><span class="mi">2</span><span class="o">][</span><span class="mi">3</span><span class="o">]</span><span class="p">;</span><span class="w">               </span><span class="c1">// 2 строки, 3 столбца</span>
+<span class="kt">int</span><span class="o">[][]</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">}</span><span class="w"> </span><span class="p">};</span><span class="w">    </span><span class="c1">// с готовыми значениями</span>
+</code></pre></div>
+
+<p><code>table[i][j]</code> — элемент в строке <code>i</code>, столбце <code>j</code>.
+<code>table.length</code> — число строк; <code>table[i].length</code> — число столбцов в строке <code>i</code>.</p>
+<p>Обход — вложенными циклами:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">table</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">table</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// table[i][j]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="notes-8">8. Частые ошибки</h2>
+<table>
+<thead>
+<tr>
+<th>Что написано</th>
+<th>Что происходит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>i &lt;= a.length</code> в условии цикла</td>
+<td><code>ArrayIndexOutOfBoundsException</code> на последней итерации</td>
+</tr>
+<tr>
+<td><code>a.length()</code> со скобками</td>
+<td>ошибка компиляции: у массива <code>length</code> без скобок</td>
+</tr>
+<tr>
+<td>максимум начинается с 0</td>
+<td>неверный ответ, если все числа отрицательные</td>
+</tr>
+<tr>
+<td><code>System.out.println(a)</code></td>
+<td>выводится адрес вида <code>[I@1b6d3586</code>, а не элементы</td>
+</tr>
+<tr>
+<td><code>b = a</code> вместо копирования</td>
+<td>изменения в <code>b</code> меняют <code>a</code></td>
+</tr>
+<tr>
+<td><code>nextInt(max - min) + min</code></td>
+<td>максимальное значение никогда не выпадает</td>
+</tr>
+<tr>
+<td>среднее без <code>(double)</code></td>
+<td>дробная часть отбрасывается</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes-_1">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>Программа <code>Week</code>: массив температур за 7 дней (значения задать в коде, среди них должны быть отрицательные). Вывести массив, среднюю температуру, самый тёплый и самый холодный день (номер дня и температуру), количество дней с температурой ниже нуля.</li>
+<li>Программа <code>Dice</code>: бросить кубик 20 раз (случайные числа от 1 до 6), сохранить результаты в массив, вывести массив и сколько раз выпала шестёрка.</li>
+<li>Программа <code>Reverse</code>: вывести массив <code>{1, 2, 3, 4, 5}</code> в обратном порядке.</li>
+</ol>
+<h2 id="notes-_2">Проверь себя</h2>
+<p>По этим вопросам — опрос в начале следующей пары.</p>
+<ol>
+<li>Что такое массив, элемент, индекс?</li>
+<li>С какого числа начинаются индексы? Какой индекс у последнего элемента массива из 20 элементов?</li>
+<li>Какими двумя способами можно создать массив?</li>
+<li>Что лежит в массиве <code>new int[5]</code> и <code>new String[3]</code> сразу после создания?</li>
+<li>Можно ли изменить размер созданного массива?</li>
+<li>Чем <code>marks.length</code> отличается от <code>name.length()</code>?</li>
+<li>Что произойдёт при <code>marks[marks.length]</code>? Как называется ошибка?</li>
+<li>Запишите цикл <code>for</code>, который проходит по всем элементам массива <code>a</code>.</li>
+<li>Чем <code>for-each</code> отличается от <code>for</code>? Когда <code>for-each</code> использовать нельзя?</li>
+<li>Почему <code>for (int m : marks) { m = 0; }</code> не обнуляет массив?</li>
+<li>Почему максимум нельзя начинать с нуля? С чего начинать?</li>
+<li>Как получить случайное целое от 10 до 50 включительно?</li>
+<li><code>int[] a = {1, 2, 3}; int[] b = a; b[1] = 9;</code> — чему равен <code>a[1]</code> и почему?</li>
+<li>Как создать независимую копию массива? Как сравнить два массива по содержимому?</li>
+<li>Как вывести массив целиком одной строкой?</li>
+<li><code>int[][] t = new int[3][4];</code> — сколько строк, столбцов, элементов? Как обойти?</li>
+</ol></article><footer><a target="_top" href="../#java-loops">← Циклы</a><a target="_top" href="../#java-methods">Методы: процедуры и функции →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

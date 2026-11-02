@@ -1,0 +1,305 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Поразрядные операции · Java</title><link rel="stylesheet" href="lecture.css?v=3"></head><body><main><div class="eyebrow">JAVA / ТЕМА 05 ИЗ 12 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-112">1.1.2. Поразрядные операции — под запись</h1>
+<blockquote>
+<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары.</p>
+</blockquote>
+<h2 id="notes-1">1. Двоичная система</h2>
+<p><strong>Бит</strong> — минимальная единица информации; принимает значение 0 или 1.
+<strong>Байт</strong> — 8 бит. В n битах можно записать 2ⁿ разных значений: в байте — 256.
+<strong>Двоичная система счисления</strong> — способ записи чисел двумя цифрами, 0 и 1. Каждый разряд — степень двойки.</p>
+<div class="codehilite"><pre><span></span><code>разряды:   128  64  32  16   8   4   2   1
+            0   0   0   0   1   1   0   1    = 8 + 4 + 1 = 13
+</code></pre></div>
+
+<p><strong>Из двоичной в десятичную:</strong> сложить степени двойки тех разрядов, где стоит 1.
+<code>1101</code> = 8 + 4 + 0 + 1 = 13.</p>
+<p><strong>Из десятичной в двоичную:</strong> делить число на 2, записывая остатки, пока не получится 0; остатки прочитать в обратном порядке.</p>
+<div class="codehilite"><pre><span></span><code>22 / 2 = 11   остаток 0   ▲
+11 / 2 = 5    остаток 1   │
+ 5 / 2 = 2    остаток 1   │ читать
+ 2 / 2 = 1    остаток 0   │ снизу вверх
+ 1 / 2 = 0    остаток 1   │
+                               → 10110
+</code></pre></div>
+
+<p><code>Integer.toBinaryString(n)</code> — двоичная запись числа в виде строки.
+Литералы: <code>0b1101</code> — двоичный, <code>0xFF</code> — шестнадцатеричный (одна шестнадцатеричная цифра = 4 бита, <code>0xFF</code> = <code>1111 1111</code> = 255).</p>
+<h2 id="notes-2">2. Поразрядные операции</h2>
+<p><strong>Поразрядные (побитовые) операции</strong> выполняются над каждым битом целого числа отдельно. Работают только с целыми типами.</p>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Название</th>
+<th>Бит результата равен 1, если…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;</code></td>
+<td>И</td>
+<td>оба бита равны 1</td>
+</tr>
+<tr>
+<td><code>\|</code></td>
+<td>ИЛИ</td>
+<td>хотя бы один бит равен 1</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>исключающее ИЛИ (XOR)</td>
+<td>биты различаются</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>НЕ (инверсия)</td>
+<td>бит был равен 0</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>b</th>
+<th><code>a &amp; b</code></th>
+<th><code>a \| b</code></th>
+<th><code>a ^ b</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code>  1100   (12)        1100   (12)        1100   (12)
+&amp; 1010   (10)      | 1010   (10)      ^ 1010   (10)
+  ────               ────               ────
+  1000   (8)         1110   (14)        0110   (6)
+</code></pre></div>
+
+<p><strong>Маска</strong> — число, биты которого указывают, с какими битами другого числа работать.
+- <code>x &amp; маска</code> — оставить только биты, отмеченные в маске (остальные обнулить); проверить бит;
+- <code>x | маска</code> — установить отмеченные биты в 1;
+- <code>x ^ маска</code> — переключить отмеченные биты;
+- <code>x &amp; ~маска</code> — сбросить отмеченные биты в 0.</p>
+<p>В Java <code>^</code> — это XOR, а не возведение в степень.</p>
+<h2 id="notes-3">3. Сдвиги</h2>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Название</th>
+<th>Что делает</th>
+<th>Арифметически</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x &lt;&lt; n</code></td>
+<td>сдвиг влево</td>
+<td>биты сдвигаются влево, справа добавляются нули</td>
+<td><code>x * 2ⁿ</code></td>
+</tr>
+<tr>
+<td><code>x &gt;&gt; n</code></td>
+<td>сдвиг вправо со знаком</td>
+<td>биты сдвигаются вправо, слева копируется знаковый бит</td>
+<td><code>x / 2ⁿ</code></td>
+</tr>
+<tr>
+<td><code>x &gt;&gt;&gt; n</code></td>
+<td>сдвиг вправо без знака</td>
+<td>биты сдвигаются вправо, слева добавляются нули</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><code>1 &lt;&lt; n</code> — число 2ⁿ (единица в разряде n).</p>
+<div class="codehilite"><pre><span></span><code>       5 = 0000 0101
+  5 &lt;&lt; 2 = 0001 0100 = 20
+
+      20 = 0001 0100
+ 20 &gt;&gt; 2 = 0000 0101 = 5
+</code></pre></div>
+
+<h2 id="notes-4">4. Отрицательные числа</h2>
+<p><strong>Дополнительный код</strong> — способ хранения отрицательных целых чисел. Старший (левый) бит — знаковый: 0 — число неотрицательное, 1 — отрицательное.
+Чтобы получить <code>−x</code>: инвертировать все биты <code>x</code> и прибавить 1.
+Следствие: <code>~x</code> = <code>−x − 1</code>. Например, <code>~12</code> = <code>−13</code>.</p>
+<div class="codehilite"><pre><span></span><code>  5  =  0000 0101
+        1111 1010     1) инвертировать все биты
+      +         1     2) прибавить единицу
+        1111 1011  = -5
+</code></pre></div>
+
+<h2 id="notes-5">5. Применение поразрядных операций</h2>
+<ol>
+<li><strong>Флаги</strong> — несколько признаков «да/нет» в одном числе, по биту на признак:
+   включить — <code>flags | FLAG</code>; проверить — <code>(flags &amp; FLAG) != 0</code>; выключить — <code>flags &amp; ~FLAG</code>; переключить — <code>flags ^ FLAG</code>.</li>
+<li><strong>Упаковка нескольких значений в одно число</strong> (например, цвет ARGB в <code>int</code>):
+   извлечь байт — <code>(color &gt;&gt; сдвиг) &amp; 0xFF</code>.</li>
+<li><strong>Шифрование:</strong> <code>(x ^ key) ^ key</code> = <code>x</code> — повторное применение XOR с тем же ключом возвращает исходное значение.</li>
+<li><strong>Быстрые вычисления:</strong> <code>n &amp; 1</code> — проверка чётности; <code>x &lt;&lt; n</code> — умножение на 2ⁿ.</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">READ</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 001</span>
+<span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">WRITE</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 010</span>
+<span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">EXECUTE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">   </span><span class="c1">// 100</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">permissions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">READ</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">WRITE</span><span class="p">;</span><span class="w">                     </span><span class="c1">// 011 = 3</span>
+<span class="kt">boolean</span><span class="w"> </span><span class="n">canWrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">permissions</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">WRITE</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">      </span><span class="c1">// true</span>
+<span class="n">permissions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">permissions</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="n">WRITE</span><span class="p">;</span><span class="w">                 </span><span class="c1">// 001 = 1</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFF3366CC</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">red</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">    </span><span class="c1">// 51</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">     </span><span class="c1">// 102</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">blue</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">            </span><span class="c1">// 204</span>
+</code></pre></div>
+
+<h2 id="notes-6">6. <code>&amp;</code> и <code>&amp;&amp;</code>. Приоритет операций</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>&amp;&amp;</code>, <code>\|\|</code></th>
+<th><code>&amp;</code>, <code>\|</code>, <code>^</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>С какими типами</td>
+<td>только <code>boolean</code></td>
+<td>целые числа и <code>boolean</code></td>
+</tr>
+<tr>
+<td>Сокращённое вычисление</td>
+<td>да</td>
+<td>нет, обе части вычисляются всегда</td>
+</tr>
+<tr>
+<td>Где применять</td>
+<td>в условиях</td>
+<td>в работе с битами</td>
+</tr>
+</tbody>
+</table>
+<p>В условиях используют <code>&amp;&amp;</code> и <code>||</code>. Исключение — <code>^</code> для <code>boolean</code>: «истинно ровно одно из двух».</p>
+<p><strong>Приоритет операций</strong> (от высшего к низшему)</p>
+<table>
+<thead>
+<tr>
+<th>№</th>
+<th>Операции</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>x++</code> <code>x--</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>++x</code> <code>--x</code> <code>+x</code> <code>-x</code> <code>~</code> <code>!</code> <code>(тип)</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>*</code> <code>/</code> <code>%</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>+</code> <code>-</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code> <code>&gt;&gt;&gt;</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>==</code> <code>!=</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>&amp;</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>^</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>\|</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>\|\|</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>? :</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>=</code> <code>+=</code> <code>-=</code> и другие присваивания</td>
+</tr>
+</tbody>
+</table>
+<p>Поразрядные <code>&amp;</code>, <code>^</code>, <code>|</code> имеют приоритет <strong>ниже</strong> сравнений: пишут <code>(flags &amp; FLAG) != 0</code>.
+Если порядок неочевиден, ставят скобки.</p>
+<h2 id="notes-_1">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>В тетради, в столбик, без компьютера: перевести в двоичную систему 9, 25, 100; перевести в десятичную <code>10011</code>, <code>111000</code>; вычислить <code>9 &amp; 5</code>, <code>9 | 5</code>, <code>9 ^ 5</code>, <code>3 &lt;&lt; 3</code>, <code>40 &gt;&gt; 2</code>. Проверить запуском.</li>
+<li>Программа <code>Rights</code>: константы <code>READ = 1</code>, <code>WRITE = 2</code>, <code>EXECUTE = 4</code>, <code>DELETE = 8</code>. Создать переменную с правами «чтение и удаление», вывести её значение, проверить каждое из четырёх прав и вывести <code>true</code>/<code>false</code>, затем добавить право записи и убрать право удаления.</li>
+</ol>
+<h2 id="notes-_2">Проверь себя</h2>
+<p>По этим вопросам — опрос в начале следующей пары.</p>
+<ol>
+<li>Что такое бит и байт? Сколько значений можно записать в 8 битах?</li>
+<li>Переведите 22 в двоичную систему и <code>1101</code> в десятичную.</li>
+<li>Чему равны <code>12 &amp; 10</code>, <code>12 | 10</code>, <code>12 ^ 10</code>?</li>
+<li>Что делает операция <code>^</code>? Чему равно <code>x ^ x</code>?</li>
+<li>Что такое маска?</li>
+<li>Как с помощью поразрядной операции проверить, чётное ли число?</li>
+<li>Чему равны <code>5 &lt;&lt; 2</code> и <code>35 &gt;&gt; 2</code>? Какой арифметической операции соответствует сдвиг?</li>
+<li>Чем <code>&gt;&gt;</code> отличается от <code>&gt;&gt;&gt;</code>?</li>
+<li>Как хранится отрицательное число? Почему <code>~12</code> равно <code>−13</code>?</li>
+<li>Как включить флаг, проверить флаг и выключить флаг?</li>
+<li>Цвет хранится как <code>0xFF3366CC</code>. Как получить значение зелёного канала?</li>
+<li>Чем <code>&amp;</code> отличается от <code>&amp;&amp;</code>?</li>
+<li>Почему <code>if (flags &amp; WRITE != 0)</code> не компилируется?</li>
+<li>Почему двойное применение XOR с одним ключом возвращает исходное число?</li>
+</ol></article><footer><a target="_top" href="../#java-types">← Типы данных и операции</a><a target="_top" href="../#java-conditions">Условный оператор →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

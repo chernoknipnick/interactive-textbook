@@ -1,0 +1,827 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Типы данных и операции · Java</title><link rel="stylesheet" href="lecture.css?v=3"></head><body><main><div class="eyebrow">JAVA / ТЕМА 04 ИЗ 12 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><p><strong>1/21</strong> · <a target="_top" href="../#java-intro">⟵ Введение</a> · Навигатор · <a target="_top" href="../#java-bitwise">Поразрядные операции ⟶</a></p>
+<h1 id="lecture-_1">Типы данных</h1>
+<ol>
+<li>
+<p>Примитивные типы данных: int, double, boolean, char и другие. Они представляют базовые значения, такие как числа, символы и логические значения.
+- Целочисленные данные:
+    int age = 25;
+    int count = 10;
+- Дробные числа:
+    double average = 7.5;
+    float price = 19.99f;
+- Символьные данные:
+    char grade = 'A';
+    char initial = 'J';
+- Логические значения:
+    boolean isFull = false;
+    boolean hasPassed = true;</p>
+</li>
+<li>
+<p>Ссылочные типы данных: классы и интерфейсы, которые представляют сложные структуры данных и абстракции.
+- Строковые данные:
+    String name = "John Smith";
+    String message = "Hello, World!";
+- Массивы:
+    int[] numbers = {1, 2, 3, 4, 5};
+    String[] names = {"Alice", "Bob", "Charlie"};
+- Списки:
+    List numbersList = new ArrayList&lt;&gt;();
+    numbersList.add(1);
+    numbersList.add(2);
+    numbersList.add(3);
+- Карты:
+    Map<String, Integer> scores = new HashMap&lt;&gt;();
+    scores.put("Alice", 85);
+    scores.put("Bob", 95);
+- Другие пользовательские типы данных:
+    class Person {
+    String name;
+    int age;
+    }
+    Person person1 = new Person();
+    person1.name = "Alice";
+    person1.age = 30;</p>
+</li>
+</ol>
+<p>Классы и объекты
+    В Java все данные и функциональность организуются в классах. Класс описывает атрибуты (переменные) и методы (функции) объекта. Например:</p>
+<div class="codehilite"><pre><span></span><code>public class Car {
+String brand;
+int year;
+blic void drive() {
+System.out.println(&quot;The car is driving&quot;);
+    }
+public static void main(String[] args){
+Car myCar = new Car();
+myCar.brand = &quot;Toyota&quot;;
+myCar.year = 2020; myCar.drive();
+    }
+}
+</code></pre></div>
+
+<p>В этом примере у нас есть класс Car, который имеет два атрибута brand и year, а также метод drive. Мы создаем объект myCar класса Car и вызываем метод drive.</p>
+<p>Используя классы и объекты, можно создавать сложные структуры данных и функциональность, необходимую для мобильных приложений. Java обладает богатым набором библиотек и инструментов для разработки мобильных приложений, что делает его привлекательным выбором для разработчиков.</p>
+<h1 id="lecture-_2"><strong>ОПЕРАЦИИ НАД ПРИМЕТИВНЫМИ ТИПАМИ ДАННЫХ</strong></h1>
+<h2 id="lecture-_3">Операция присваивания</h2>
+<p>Присвоение переменной значения константы, другой переменной или выражения (переменных и/или констант, разделенных знаками операций), называется <strong>операцией присваивания</strong> и обозначается знаком "<strong>=</strong>", например:</p>
+<p><code>x = 3; y = x; z = x;</code></p>
+<p>В Java допустимо многократное использование операции присваивания в одном выражении, например:</p>
+<p><code>x1 = x2 = x3 = 0;</code></p>
+<p>Эта операция выполняется справа налево, т.е. сначала переменной <code>x3</code> присваивается значение <code>0</code>, затем переменной <code>x2</code> присваивается значение переменной <code>x3</code> (<code>0</code>), и, наконец, переменной <code>x1</code> присваивается значение переменной <code>x2</code> (<code>0</code>). Знаки операций, аргументами которых являются числа, разделяются на две категории: <em>унарные</em> (unary) знаки операций с одним аргументом и <em>бинарные</em> (binary) с двумя аргументами.</p>
+<h2 id="lecture-_4">Унарные операции</h2>
+<p>В Java определены следующие <code>унарные операции</code>:</p>
+<ul>
+<li>унарный минус "<code>-</code>" – меняет знак числа или выражения на противоположный;</li>
+<li>унарный плюс "<code>+</code>" – не выполняет никаких действий над числом или выражением;</li>
+<li>побитовое дополнение "<code>~</code>" (только для целых) – инвертирует все биты поля числа (меняет 0 на 1 и 1 на 0);</li>
+<li>инкремент "<code>++</code>" (только для целых) – увеличивает значение переменной на 1;</li>
+<li>декремент "<code>--</code>" (только для целых) – уменьшает значение переменной на 1.</li>
+</ul>
+<p>Примеры унарных операций "<code>+</code>" и "<code>-</code>":</p>
+<p><code>int i = 3, j, k; j= -i; // j = -3 k = +i; // k = 3</code></p>
+<p>Пример операции побитового дополнения:</p>
+<p><code>int a = 15;</code>int b; b = ~a; 
+<code>// b = -16</code></p>
+<p>Числа <code>a</code> и <code>b</code> являются числами типа <code>int</code>, т.е. представляются внутри компьютера как двоичные целые числа со знаком длиной 32 бита, поэтому двоичное представление чисел <code>a</code> и <code>b</code> будет выглядеть следующим образом:</p>
+<p><code>a = 00000000 00000000 00000000 00001111</code>
+<code>b = 11111111 11111111 11111111 11110000</code></p>
+<p>Как видно из этого представления, все нулевые биты в числе a изменены на единичные биты в числе <code>b</code>, а единичные биты в a изменены на нулевые биты. Десятичным представлением числа <code>b</code> будет <code>–16</code>. Знаки операции инкремента и декремента могут размещаться как до, так и после переменной. Эти варианты называются соответственно <strong>префиксной</strong> и <strong>постфиксной</strong> записью этих операции. Знак операции в префиксной записи возвращает значение своего операнда <em>после</em> вычисления выражения. При постфиксной записи знак операции <em>сначала</em> воз­вращает значение своего операнда и только после этого вычисляет инкремент или декремент, например:</p>
+<p><code>int x = 1, y, z; y = ++x; z=x++;</code></p>
+<p>Переменная <code>y</code> будет присвоено значение <code>2</code>, поскольку сначала значение <code>x</code> будет увеличено на <code>1</code>, а затем результат будет присвоен переменной <code>y</code>. Переменной <code>z</code> будет присвоено значение <code>1</code>, поскольку сначала переменной <code>z</code> будет присвоено значение, а затем значение <code>x</code> будет увеличено на <code>1</code>. В обоих случаях новое значение переменной <code>x</code> будет равно <code>2</code>. Следует отметить, что в Java, в отличие от языка C, операции декремента и инкремента могут применяться и к вещественным переменным (типа <code>float</code> и <code>double</code>). <strong>Бинарные знаки операций</strong> подразделяются на операции с числовым результатом и операции сравнения, результатом которых является булевское значение.</p>
+<h2 id="lecture-_5">Арифметические бинарные операции</h2>
+<p>В Java определены следующие <strong>арифметические бинарные операции</strong>:</p>
+<ul>
+<li>сложение "<code>+</code>";</li>
+<li>вычитание "<code>-</code>";</li>
+<li>умножение "<code>*</code>";</li>
+<li>деление "<code>/</code>";</li>
+<li>вычисление остатка от деления целых чисел "<code>%</code>" (возвращает остаток от деления первого числа на второе, причем результат будет иметь тот же знак, что и делимое), например, результат операции <code>5%3</code> будет равен <code>2</code>, а результат операции (-7)%(-4) будет равен <code>-3</code>. В Java операция может использоваться и для вещественных переменных (типа <code>float</code> или <code>double</code>).</li>
+</ul>
+<p><strong>Примеры бинарных арифметических операций:</strong></p>
+<p><code>int x = 7, x1, x2, x3, x4, x5;  x1 = x +10; // x1 = 17  x2 = x – 8; // x2 = -1  x3 = x2 * x; // x3 = -7</code></p>
+<p><code>x4 = x/4; // x4 = 1 (при делении целых чисел  // дробная часть отбрасывается)  x5 = x%4 // x5 = 3 (остаток от деления  // 7 на 4)</code></p>
+<h2 id="lecture-_6">Побитовые операции</h2>
+<ul>
+<li><code>Побитовые операции</code> рассматривают исходные числовые значения как поля битов и выполняют над ними следующие действия:</li>
+<li>установка бита в <em>i</em>-ой позиции поля результата в <code>1</code>, если оба бита в <em>i</em>-ых позициях операндов равны <code>1</code>, или в <code>0</code> в противном случае – <code>побитовое И</code> ("<code>&amp;</code>");</li>
+<li>установка бита в <em>i</em>-ой позиции поля результата в <code>1</code>, если хотя бы один бит в <em>i</em>-ых позициях операндов равен <code>1</code>, или в <code>0</code> в противном случае – <code>побитовое ИЛИ</code> ("<code>|</code>");</li>
+<li>установка бита в <em>i</em>-ой позиции поля результата в <code>1</code>, если биты в <em>i</em>-ых позициях операндов не равны друг другу, или в <code>0</code> в противном случае – <code>побитовое исключающее ИЛИ</code> ("<code>^</code>");</li>
+<li>сдвиг влево битов поля первого операнда на количество битов, определяемое вторым операндом (бит знака числа при этом не меняется) – <code>побитовый сдвиг влево с учетом знака</code> "<code>&lt;&lt;</code>";</li>
+<li>сдвиг вправо битов поля первого операнда на количество битов, определяемое вторым операндом (бит знака числа при этом не меняется) – <code>побитовый сдвиг вправо с учетом знака</code> "<code>&gt;&gt;</code>";</li>
+<li>сдвиг вправо битов поля первого операнда на количество битов, определяемое вторым операндом (бит знака числа при этом также сдвигается) – <code>побитовый сдвиг вправо без учета знака</code> "<code>&gt;&gt;&gt;</code>".</li>
+</ul>
+<p><strong>Примеры побитовых операций:</strong></p>
+<ol>
+<li>
+<p><strong>Побитовое И</strong></p>
+<p><code>int x = 112; // x: 00000000 00000000 00000000 01110000 int y = 94; // y: 00000000 00000000 00000000 01011110 int z; z = x &amp; y; // z=80: 00000000 00000000 00000000 01010000</code></p>
+</li>
+<li>
+<p><strong>Побитовое ИЛИ</strong></p>
+<p><code>int x = 112; // x: 00000000 00000000 00000000 01110000 int y = 94; // y: 00000000 00000000 00000000 01011110 int z; z =x | y; // z = 126: 00000000 00000000 00000000 01111110</code></p>
+</li>
+<li>
+<p><strong>Побитовое исключающее ИЛИ</strong></p>
+<p><code>int x = 112; // x: 00000000 00000000 00000000 01110000 int y = 94; // y: 00000000 00000000 00000000 01011110 int z; z =x ^ y; // z = 46: 00000000 00000000 00000000 00101110</code></p>
+</li>
+<li>
+<p><strong>Сдвиг влево с учетом знака</strong></p>
+<p><code>int x = 31, z; // x: 00000000 00000000 00000000 00011111 z = x &lt;&lt; 2; // z = 124: 00000000 00000000 00000000 01111100</code></p>
+</li>
+<li>
+<p><strong>Сдвиг вправо с учетом знака</strong></p>
+<p><code>int x = -17, z; // x: 11111111 11111111 11111111 11101111 z = x &gt;&gt; 2; // z = -5: 11111111 11111111 11111111 11111011</code></p>
+</li>
+<li>
+<p><strong>Сдвиг вправо без учета знака</strong></p>
+<p><code>int x = -17, z; // x: 11111111 11111111 11111111 11101111 z = x &gt;&gt;&gt; 2; // z = 1073741819 // z: 00111111 11111111 11111111 11111011</code></p>
+</li>
+</ol>
+<h2 id="lecture-_7">Комбинированные операции</h2>
+<p>В Java для бинарных арифметических операций можно использовать <strong>комбинированные</strong> (составные) знаки операций: <code>идентификатор операция = выражение</code> Это эквивалентно следующей операции: <code>идентификатор = идентификатор операция выражение</code> Примеры:</p>
+<ol>
+<li>Выражение <code>x += b</code> означает <code>x = x + b</code>.</li>
+<li>Выражение <code>x -= b</code> означает <code>x = x - b</code>.</li>
+<li>Выражение <code>x *= b</code> означает <code>x = x * b</code>.</li>
+<li>Выражение <code>x /= b</code> означает <code>x = x / b</code>.</li>
+<li>Выражение <code>x %= b</code> означает <code>x = x % b</code>.</li>
+<li>Выражение <code>x &amp;= b</code> означает <code>x = x &amp; b</code>.</li>
+<li>Выражение <code>x |= b</code> означает <code>x = x | b</code>.</li>
+<li>Выражение <code>x ^= b</code> означает <code>x = x ^ b</code>.</li>
+<li>Выражение <code>x &lt;&lt;= b</code> означает <code>x = x &lt;&lt; b</code>.</li>
+<li>Выражение <code>x &gt;&gt;= b</code> означает <code>x = x &gt;&gt; b</code>.</li>
+<li>Выражение <code>x &gt;&gt;&gt;= b</code> означает <code>x = x &gt;&gt;&gt; b</code>.</li>
+</ol>
+<h2 id="lecture-_8">Операции сравнения</h2>
+<p>В Java определены следующие операции сравнения:</p>
+<ul>
+<li>"<code>==</code>" (равно), "<code>!=</code>" (не равно),</li>
+<li>"<code>&gt;</code>" (больше), "<code>&gt;=</code>" (больше или равно),</li>
+<li>"<code>&lt;</code>" (меньше) "<code>&lt;=</code>" (меньше или равно)</li>
+</ul>
+<p>имеют два операнда и возвращают булевское значение, соответствующее результату сравнения (<strong>false</strong> или <strong>true</strong>). Следует обратить внимание, что при сравнении двух величин на равенство в Java, как и в C и в C++, используются символы "<strong>==</strong>" (два идущих без пробела друг за другом знака равенства), в отличие от оператора присваивания, в котором используется символ "<strong>=</strong>". Использование символа "<code>=</code>" при сравнении двух величин либо вызывает ошибку при компиляции, либо приводит к неверному результату. <strong>Примеры операций сравнения:</strong></p>
+<p><code>boolean isEqual, isNonEqual, isGreater, isGreaterOrEqual, isLess, isLessOrEqual; int x1 = 5, x2 = 5, x3 = 3, x4 = 7; isEqual = x1 == x2; // isEqual = true isNonEqual = x1 != x2; // isNonEqual = false isGreater = x1 &gt; x3; // isGreater = true // isGreaterOrEqual = true isGreaterOrEqual = x2 &gt;= x3; isLess = x3 &lt; x1; // isLess = true isLessOrEqual = x1 &lt;= x3; // isLessOrEqual = false</code></p>
+<h2 id="lecture-_9">Булевские операции</h2>
+<p><strong>Булевские операции</strong> выполняются над булевскими переменными и их результатом также является значение типа <strong>boolean</strong>. В Java определены следующие булевские операции:</p>
+<ul>
+<li>отрицание <code>"!"</code> – замена <code>false</code> на <code>true</code>, или наоборот;</li>
+<li>операция <code>И</code> <code>"&amp;"</code> – результат равен <code>true</code>, только, если оба операнда равны <code>true</code>, иначе результат – <code>false</code>;</li>
+<li>операция <code>ИЛИ</code> "<code>|</code>" – результат равен <code>true</code>, только, если хотя бы один из операндов равен <code>true</code>, иначе результат – <code>false</code>.</li>
+<li>операция исключающее <code>ИЛИ</code> "<code>^</code>" – результат равен <code>true</code>, только, если операнды не равны друг другу, иначе результат – <code>false</code>.</li>
+</ul>
+<p>Операции "<code>&amp;</code>", "<code>|</code>" и "<code>^</code>" можно, также как и соответствующие побитовые операции использовать в составных операциях присваивания: "<code>&amp;=</code>", "<code>|=</code>" и "<code>^=</code>" Кроме того, к булевским операндам применимы операции "<code>==</code>" (равно) и "<code>!=</code>" (не равно). Как видно из определения операций ИЛИ и И, операция ИЛИ приводит к результату <code>true</code>, когда первый операнд равен <code>true</code>, незави­симо от значения второго операнда, а операция И приводит к результату <code>false</code>, когда первый операнд равен <code>false</code>, независимо от значения второго операнда. В Java определены еще две булевские операции: вторые версии булевских операций И и ИЛИ, известные как укороченные (short-circuit) логические операции: укороченное И "<code>&amp;&amp;</code>" и укороченное ИЛИ "<code>||</code>". При использовании этих операций второй операнд вообще не будет вычисляться, что полезно в тех случаях, когда правильное функционирование правого операнда зависит от того, имеет ли левый операнд значение <code>true</code> или <code>false</code>. <strong>Примеры булевских операций:</strong></p>
+<p><code>boolean isInRange, isValid, isNotValid, isEqual, isNotEqual; int x = 8; isInRange = x &gt; 0 &amp;&amp; x &lt; 5; // isInRange = false isValid = x &gt; 0 || x &gt; 5; // isValid = true isNotValid = !isValid; // isNotValid = false isEqual = isInRange == isValid; // isEqual = false // isNotEqual = true isNotEqual = isInRange != isValid</code></p>
+<h2 id="lecture-_10">Условная операция</h2>
+<p>Условная операция записывается в форме <code>выражение-1?выражение-2:выражение-3</code>. При этом сначала вычисляется выражение <code>выражение-1</code>, которое должно дать булевское значение, а затем, если <code>выражение-1</code> имеет значение <code>true</code>, вычисляется и возвращается <code>выражение-2</code> как результат выполнения операции, либо (если <code>выражение-1</code> имеет значение <code>false</code>), вычисляется и, как результат выполнения операции, возвращается <code>выражение-3</code>. <strong>Пример условной операции:</strong></p>
+<p><code>x=n&gt;1?0:1;</code></p>
+<p>Переменной x будет присвоено значение <code>0</code>, если <code>n&gt;1</code> (выражение <code>n&gt;1</code> имеет значение <code>true</code>) или <code>1</code>, если <code>n≤1</code> (выражение <code>n&gt;1</code> имеет значение <code>false</code>).</p>
+<h2 id="lecture-_11">Старшинство операций</h2>
+<p>Операции в выражениях выполняются слева направо, однако, в соответствии со своим приоритетом. Так операции умножения в выражении</p>
+<p><code>y = x +z*5;</code></p>
+<p>будет выполнена раньше, чем операция сложения, поскольку приоритет операции умножения выше, чем приоритет операции сложения. Круглые скобки повышают старшинство операций, которые находятся внутри них. Так, если в приведенное выше выражение вставить скобки:</p>
+<p><code>y = (x +z)*5;</code></p>
+<p>то сначала будет выполнена операция сложения, а затем операция умножения. Иногда скобки используют просто для того, чтобы сделать выражение более читаемым, например:</p>
+<p><code>(x &gt; 1) &amp;&amp; (x &lt;= 5);</code></p>
+<h2 id="lecture-_12">Преобразование и приведение типов при выполнении операций</h2>
+<p>В операции присваивания и арифметических выражениях могут использоваться литералы, переменные и выражения разных типов, например:</p>
+<p><code>double y; byte x; y = x + 5;</code></p>
+<p>В этом примере выполняется операция сложения переменной <code>x</code> типа <code>byte</code> и литерала <code>5</code> (типа <code>int</code>) и результат присваивается переменной <code>y</code> типа <code>double</code>. В Java, как и в языке C, преобразования типов при вычислении выражений могут выполняться автоматически, либо с помощью оператора приведения типа. Однако правила приведения типов несколько отличаются от правил языка C, и в целом являются более строгими, чем в языке C. При выполнении операции присваивания преобразование типов происходит автоматически, если происходит <em>расширяющее преобразование</em> (widening conversion) и <em>два типа совместимы</em>. Расширяющими преобразованиями являются преобразования <strong>byte</strong>®<strong>short</strong>®<strong>int</strong>®<strong>long</strong>®<strong>float</strong>®<strong>double</strong>. Для расширяющих преобразований числовые типы, включая целый и с пла­вающей точкой, являются совместимыми друг с другом. Однако числовые типы не совместимы с типами <code>char</code> и <code>boolean</code>. Типы <code>char</code> и <code>boolean</code> не совмес­тимы также и друг с другом. В языке Java выполняется автоматическое преобразование типов также и при сохранении литеральной целочисленной константы (которая имеет по умолчанию тип <code>int</code>) в перемен­ных типа <code>byte</code>, <code>short</code> или <code>long</code> (однако если литерал имеет значение вне диапазона допустимых значений для данного типа, выдается сообщение об ошибке: возможная потеря точности). Если преобразование является сужающим (narrowing conversion), т. е. выполняется преобразование <code>byte</code>¬<code>short</code>¬<code>char</code>¬<code>int</code>¬<code>long</code>¬<code>float</code>¬<code>double</code>, то такое преобразование может привести к потере точности числа или к его искажению. Поэтому при сужающих преобразованиях при компиляции программы выводится диагностическое сообщение о несовместимости типов и файлы классов не создаются. Такое сообщение будет выдано и при попытке преобразование выражений типа <code>byte</code> или <code>short</code> в переменную типа <code>char</code>. Если все же необходимо выполнить такие преобразования, используется операция приведения (cast) типа, которая имеет следующий формат: (<em>тип-преобразования</em>) <em>значение</em>, где <em>тип-преобразования</em> определяет тип, в который необходимо преобразовать заданное <em>значение</em>, например, в результате выполнения операторов:</p>
+<p><code>byte x = 71; char symbol = (char) x;</code></p>
+<p>переменная <code>symbol</code> получит значение '<code>G</code>'. Если значение с плавающей точкой присваивается целому типу, то (если значение с плавающей точкой имеет дробную часть) при явном преобразовании типа происходит также <strong>усечение</strong> (truncation) числа. Так, в результате выполнения оператора</p>
+<p><code>int x = (int) 77.85;</code></p>
+<p>переменная x получит значение <code>77</code>. Если же присваиваемое значение лежит вне диапазона <em>типа-преобразования</em>, то результатом преобразования будет остаток от деления значения на модуль диапазона присваиваемого типа (для чисел типа <code>byte</code> модуль диапазона будет равен <code>256</code>, для <code>short – 65536</code>, для <code>int – 4294967296</code> и для <code>long – 18446744073709551616</code>). Например, в результате выполнения оператора</p>
+<p><code>byte x = (byte) 514;</code></p>
+<p>переменная x получит значение <code>2</code>. При преобразовании целых или вещественных чисел в данные типа <code>char</code>, преобразование в символ происходит, если исходное число лежит в диапазоне от 0 до 127, иначе символ получает значение '<code>?</code>'. При выполнении арифметических и побитовых преобразований все значения <code>byte</code> и <code>short</code>, а также <code>char</code> расширяются до <code>int</code>, (при этом в вычислениях для <code>char</code> используется числовое значение кода символа) затем, если хотя бы один операнд имеет тип <code>long</code>, тип целого выражения расширяется до <code>long</code>. Если один из операндов имеет тип <code>float</code>, то тип полного вы­ражения расширяется до <code>float</code>, а если один из операндов имеет тип <code>double</code>, то тип результата будет <code>double</code>. Так, если объявлены переменные</p>
+<p><code>byte a, c; short b;</code></p>
+<p>то в выражении</p>
+<p><code>a + b*c – 15L + 1.5F + 1.08 - 10;</code></p>
+<p>сначала, перед вычислением <code>a + b*c</code> значения переменных будут расширены до <code>int</code>, затем, поскольку константа <code>15</code> имеет тип <code>long</code>, перед вычитанием результат вычисления будет увеличен до <code>long</code>. После этого, поскольку литерал <code>1.5</code> имеет тип <code>float</code> перед сложением с этим литералом результат вычисления <code>a + b*c – 15L</code> будет расширен до <code>float</code>. Перед выполнением сложения с числом <code>1.08</code> результат предыдущих вычислений будет расширен до <code>double</code> (поскольку вещественные константы по умолчанию имеют тип <code>double</code>) и, наконец, перед выполнением последнего сложения литерал 10 (по умолчанию <code>int</code>) будет расширен до <code>double</code>. Таким образом, результат вычисления выражения будет иметь тип <code>double</code>. Автоматические расширения типов (особенно расширения <code>short</code> и <code>byte</code> до <code>int</code>) могут вызывать плохо распознаваемые ошибки во время компиляции. Например, в операторах:</p>
+<p><code>byte x = 30, y =5; x = x + y;</code></p>
+<p>перед выполнением сложения значение переменных <code>x</code> и <code>y</code> будет расширено до <code>int</code>, а затем при выполнении попытки присвоения результата вычисления типа <code>int</code> переменной типа <code>byte</code> будет выдано сообщение об ошибке. Чтобы этого избежать надо использовать во втором операторе явное преобразование типов:</p>
+<p><code>x = (byte) (x + y);</code></p>
+<p>Выражение <code>x + y</code> необходимо заключит в скобки потому, что приоритет операции приведения типа, заключенной в скобки, выше, чем приоритет операции сложения. Кстати, если записать второй оператор в виде:</p>
+<p><code>x += y;</code></p>
+<p>то сообщения об ошибке не будет.</p>
+<hr />
+<h1 id="lecture-kotlin">Kotlin: те же типы и операции</h1>
+<p>Синтаксис короче, но модель данных та же — Kotlin компилируется в тот же байт-код JVM, что и Java, поэтому все числовые типы (<code>Int</code>, <code>Long</code>, <code>Double</code>, <code>Float</code>, <code>Byte</code>, <code>Short</code>, <code>Char</code>, <code>Boolean</code>) занимают ровно те же биты, что и их Java-аналоги.</p>
+<h2 id="lecture-valvar">Объявление переменных: <code>val</code>/<code>var</code> вместо явного типа</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">age</span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="w">      </span><span class="c1">// val — неизменяемая переменная (аналог final в Java)</span>
+<span class="kd">var</span><span class="w"> </span><span class="nv">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="w">          </span><span class="c1">// var — изменяемая; тип Int выведен компилятором автоматически</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">19.99</span><span class="w">       </span><span class="c1">// Double по умолчанию (не Float, как f-литерал в Java)</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">grade</span><span class="p">:</span><span class="w"> </span><span class="kt">Char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;A&#39;</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">hasPassed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">    </span><span class="c1">// Boolean</span>
+</code></pre></div>
+
+<p><strong>Важное отличие от Java</strong>: <code>val</code> — это не «переменная с типом по умолчанию неизменяемая», а явный выбор архитектуры кода. В Kotlin принято объявлять <code>val</code>, если значение не должно меняться после инициализации, и использовать <code>var</code> только тогда, когда переприсваивание действительно нужно — это снижает число ошибок, связанных со случайным изменением состояния.</p>
+<h2 id="lecture-_13">Строки, массивы, списки, карты</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;John Smith&quot;</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">numbers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">intArrayOf</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w">          </span><span class="c1">// примитивный массив, как int[] в Java</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arrayOf</span><span class="p">(</span><span class="s">&quot;Alice&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Charlie&quot;</span><span class="p">)</span><span class="w">     </span><span class="c1">// массив ссылочного типа</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">numbersList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mutableListOf</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span><span class="w">             </span><span class="c1">// аналог ArrayList</span>
+<span class="n">numbersList</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="m">1</span><span class="p">);</span><span class="w"> </span><span class="n">numbersList</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="m">2</span><span class="p">);</span><span class="w"> </span><span class="n">numbersList</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">scores</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mutableMapOf</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span><span class="w">            </span><span class="c1">// аналог HashMap</span>
+<span class="n">scores</span><span class="o">[</span><span class="s">&quot;Alice&quot;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">85</span><span class="w">   </span><span class="c1">// оператор [] вместо .put() — короче и читабельнее</span>
+<span class="n">scores</span><span class="o">[</span><span class="s">&quot;Bob&quot;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">95</span>
+</code></pre></div>
+
+<h2 id="lecture-_14">Классы — короче за счёт первичного конструктора</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">Car</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">brand</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">drive</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;The car is driving&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">myCar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Car</span><span class="p">(</span><span class="s">&quot;Toyota&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">2020</span><span class="p">)</span><span class="w">   </span><span class="c1">// поля заполняются прямо при создании — конструктор не пишется отдельно</span>
+<span class="w">    </span><span class="n">myCar</span><span class="p">.</span><span class="na">drive</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>То же самое на Java требовало отдельного конструктора и явного <code>new</code> — в Kotlin поля класса объявляются прямо в скобках после имени класса (это называется <em>primary constructor</em>), а <code>new</code> не нужен вовсе.</p>
+<h2 id="lecture-_15">Арифметические, побитовые и логические операции</h2>
+<p>Арифметика (<code>+ - * / %</code>), сравнение (<code>== != &gt; &gt;= &lt; &lt;=</code>) и составные присваивания (<code>+= -= *= /= %=</code>) — синтаксически идентичны Java. Разница — в двух местах:</p>
+<p><strong>1. Побитовые операции — не символы, а именованные inline-функции:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Java</th>
+<th>Kotlin</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a &amp; b</code></td>
+<td><code>a and b</code></td>
+<td>побитовое И</td>
+</tr>
+<tr>
+<td><code>a \| b</code></td>
+<td><code>a or b</code></td>
+<td>побитовое ИЛИ</td>
+</tr>
+<tr>
+<td><code>a ^ b</code></td>
+<td><code>a xor b</code></td>
+<td>побитовое исключающее ИЛИ</td>
+</tr>
+<tr>
+<td><code>~a</code></td>
+<td><code>a.inv()</code></td>
+<td>побитовое дополнение</td>
+</tr>
+<tr>
+<td><code>a &lt;&lt; n</code></td>
+<td><code>a shl n</code></td>
+<td>сдвиг влево</td>
+</tr>
+<tr>
+<td><code>a &gt;&gt; n</code></td>
+<td><code>a shr n</code></td>
+<td>сдвиг вправо с учётом знака</td>
+</tr>
+<tr>
+<td><code>a &gt;&gt;&gt; n</code></td>
+<td><code>a ushr n</code></td>
+<td>сдвиг вправо без учёта знака</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">112</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">94</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">z1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">y</span><span class="w">   </span><span class="c1">// побитовое И</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">z2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">y</span><span class="w">    </span><span class="c1">// побитовое ИЛИ</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">z3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">shl</span><span class="w"> </span><span class="m">2</span><span class="w">   </span><span class="c1">// сдвиг влево на 2</span>
+</code></pre></div>
+
+<p>Символы <code>&amp;</code>, <code>|</code>, <code>^</code> в Kotlin зарезервированы <strong>только</strong> за логическими (булевыми) операциями и работают исключительно через короткое замыкание — <code>&amp;&amp;</code> и <code>||</code>, отдельных «нескороткозамкнутых» версий <code>&amp;</code>/<code>|</code> для <code>Boolean</code>, в отличие от Java, в Kotlin нет.</p>
+<p><strong>2. Нет автоматического расширения/сужения типов.</strong> Это самое важное отличие от Java для этой темы: там, где Java молча расширяет <code>byte</code> до <code>int</code> или требует явного <code>(byte)</code>-приведения при сужении, Kotlin требует явного вызова функции преобразования <strong>всегда</strong>, даже при расширении:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">b</span><span class="p">:</span><span class="w"> </span><span class="kt">Byte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">71</span>
+<span class="c1">// val x: Int = b       // ОШИБКА КОМПИЛЯЦИИ — неявного расширения нет!</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">x</span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="na">toInt</span><span class="p">()</span><span class="w">   </span><span class="c1">// так — правильно</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">f</span><span class="p">:</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">77.85</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">i</span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="na">toInt</span><span class="p">()</span><span class="w">   </span><span class="c1">// усечение до 77, как и в Java, но только через явный вызов</span>
+</code></pre></div>
+
+<p>Доступные функции преобразования: <code>toByte()</code>, <code>toShort()</code>, <code>toInt()</code>, <code>toLong()</code>, <code>toFloat()</code>, <code>toDouble()</code>, <code>toChar()</code>. Это осознанное решение авторов языка: Kotlin считает, что незаметные преобразования типов — частый источник трудноуловимых ошибок (в том числе тех самых, что разбираются в конце этой лекции на примере Java), поэтому все они в Kotlin <strong>видны в коде явно</strong>.</p>
+<h2 id="lecture-if">Тернарный оператор — его нет, вместо него <code>if</code> как выражение</h2>
+<p>В Java: <code>x = n &gt; 1 ? 0 : 1;</code>. В Kotlin отдельного тернарного оператора <code>?:</code> (символ <code>?:</code> в Kotlin занят под другую конструкцию — Elvis-оператор, подстановку значения по умолчанию для <code>null</code>) не существует — вместо него <code>if</code> сам по себе является выражением и возвращает значение:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+
+<h2 id="lecture-_16">Итог сравнения</h2>
+<p>Модель памяти, приоритеты операций, побитовая арифметика по смыслу — те же, что в Java (и то же самое будет верно для любого JVM-языка). Разница почти everywhere синтаксическая: короче объявления, символьные побитовые операции заменены именованными функциями, а неявные преобразования типов, которые в Java являются источником ошибок «на слух» (см. раздел о них), в Kotlin просто отключены на уровне компилятора.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-111">1.1.1. Типы данных и операции — под запись</h1>
+<blockquote>
+<p>МДК.01.03 «Разработка мобильных приложений». Тема на две пары. Это то, что должно быть в тетради. После темы — практическая работа ПР00.</p>
+</blockquote>
+<h1 id="notes-_1">Часть А. Переменные и типы</h1>
+<h2 id="notes-1">1. Переменная</h2>
+<p><strong>Переменная</strong> — именованная область памяти, в которой хранится значение определённого типа.
+У переменной есть <strong>тип</strong>, <strong>имя</strong> и <strong>значение</strong>.</p>
+<p><strong>Объявление</strong> — создание переменной: <code>int age;</code>
+<strong>Присваивание</strong> — запись значения в переменную: <code>age = 18;</code>
+<strong>Инициализация</strong> — объявление вместе с первым присваиванием: <code>int age = 18;</code></p>
+<p>Общий вид: <code>тип имя = значение;</code></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span><span class="w">                            </span><span class="c1">// создать и положить 18</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">age</span><span class="p">);</span><span class="w">                 </span><span class="c1">// 18</span>
+<span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">;</span><span class="w">                                </span><span class="c1">// изменить (тип второй раз не пишется)</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Возраст: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="p">);</span><span class="w">   </span><span class="c1">// Возраст: 19</span>
+</code></pre></div>
+
+<p>Знак <code>=</code> — команда «положить значение справа в переменную слева», а не математическое равенство.</p>
+<p><strong>Правила имён переменных:</strong>
+1. состоят из букв, цифр, знаков <code>_</code> и <code>$</code>; не начинаются с цифры;
+2. не совпадают с ключевыми словами (<code>int</code>, <code>class</code>, <code>public</code> и т. д.);
+3. регистр важен: <code>age</code> и <code>Age</code> — разные переменные.</p>
+<p><strong>Соглашение:</strong> имя переменной пишут с маленькой буквы, каждое следующее слово — с большой, без пробелов и подчёркиваний: <code>studentAge</code>, <code>totalPrice</code>. Имя должно говорить, что хранится: <code>price</code>, а не <code>a</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Сообщение компилятора</th>
+<th>Причина</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable x might not have been initialized</code></td>
+<td>переменную читают до первого присваивания</td>
+</tr>
+<tr>
+<td><code>variable x is already defined</code></td>
+<td>переменную объявили второй раз</td>
+</tr>
+<tr>
+<td><code>incompatible types: possible lossy conversion from double to int</code></td>
+<td>значение не подходит по типу</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes-2">2. Примитивные типы</h2>
+<p><strong>Примитивные типы</strong> — восемь базовых типов, встроенных в язык: <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code> (целые); <code>float</code>, <code>double</code> (дробные); <code>char</code> (символ); <code>boolean</code> (логический).</p>
+<table>
+<thead>
+<tr>
+<th>Тип</th>
+<th>Что хранит</th>
+<th>Размер</th>
+<th>Диапазон</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>byte</code></td>
+<td>целое</td>
+<td>1 байт</td>
+<td>−128 … 127</td>
+<td><code>byte level = 5;</code></td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>целое</td>
+<td>2 байта</td>
+<td>−32 768 … 32 767</td>
+<td><code>short year = 2026;</code></td>
+</tr>
+<tr>
+<td><strong><code>int</code></strong></td>
+<td>целое</td>
+<td>4 байта</td>
+<td>≈ ±2,1 миллиарда</td>
+<td><code>int age = 18;</code></td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>целое</td>
+<td>8 байт</td>
+<td>≈ ±9,2 · 10¹⁸</td>
+<td><code>long views = 5000000000L;</code></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>дробное</td>
+<td>4 байта</td>
+<td>≈ 7 значащих цифр</td>
+<td><code>float weight = 72.5f;</code></td>
+</tr>
+<tr>
+<td><strong><code>double</code></strong></td>
+<td>дробное</td>
+<td>8 байт</td>
+<td>≈ 15 значащих цифр</td>
+<td><code>double price = 19.99;</code></td>
+</tr>
+<tr>
+<td><strong><code>char</code></strong></td>
+<td>один символ</td>
+<td>2 байта</td>
+<td>65 536 символов</td>
+<td><code>char grade = 'A';</code></td>
+</tr>
+<tr>
+<td><strong><code>boolean</code></strong></td>
+<td>логическое</td>
+<td>—</td>
+<td><code>true</code> или <code>false</code></td>
+<td><code>boolean isReady = true;</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Что использовать по умолчанию:</strong>
+- целое число → <code>int</code>;
+- дробное число → <code>double</code>;
+- да/нет → <code>boolean</code>;
+- один символ → <code>char</code>;
+- целое больше двух миллиардов → <code>long</code>.</p>
+<p><code>byte</code>, <code>short</code>, <code>float</code> применяют редко: когда нужно экономить память в больших массивах.</p>
+<h2 id="notes-3">3. Литералы</h2>
+<p><strong>Литерал</strong> — значение, записанное прямо в коде программы.</p>
+<table>
+<thead>
+<tr>
+<th>Запись</th>
+<th>Тип</th>
+<th>Примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>18</code></td>
+<td><code>int</code></td>
+<td>любое целое без суффикса</td>
+</tr>
+<tr>
+<td><code>5000000000L</code></td>
+<td><code>long</code></td>
+<td>суффикс <code>L</code></td>
+</tr>
+<tr>
+<td><code>19.99</code></td>
+<td><code>double</code></td>
+<td>любое число с точкой</td>
+</tr>
+<tr>
+<td><code>72.5f</code></td>
+<td><code>float</code></td>
+<td>суффикс <code>f</code></td>
+</tr>
+<tr>
+<td><code>'A'</code></td>
+<td><code>char</code></td>
+<td>одинарные кавычки, ровно один символ</td>
+</tr>
+<tr>
+<td><code>"A"</code></td>
+<td><code>String</code></td>
+<td>двойные кавычки, сколько угодно символов</td>
+</tr>
+<tr>
+<td><code>true</code>, <code>false</code></td>
+<td><code>boolean</code></td>
+<td>без кавычек</td>
+</tr>
+</tbody>
+</table>
+<p>В длинных числах для удобства можно ставить подчёркивание: <code>1_000_000</code>.
+Дробная часть отделяется точкой, а не запятой: <code>3.14</code>.</p>
+<h2 id="notes-4">4. Переполнение и точность</h2>
+<p><strong>Переполнение</strong> — выход результата за границы диапазона типа. Java не сообщает о переполнении: результат «перескакивает» на другой край диапазона.
+<code>2147483647 + 1</code> → <code>-2147483648</code>.
+Если результат может превысить два миллиарда, используют <code>long</code>.</p>
+<p><strong>Дробные числа хранятся приближённо.</strong> <code>0.1 + 0.2</code> → <code>0.30000000000000004</code>.
+1. Дробные числа не сравнивают через <code>==</code>.
+2. Деньги не хранят в <code>double</code>: суммы считают в копейках в типе <code>long</code> или в специальном классе <code>BigDecimal</code>.</p>
+<h2 id="notes-5">5. Символ и строка</h2>
+<p><strong><code>char</code></strong> — один символ в одинарных кавычках: <code>'A'</code>. Хранится как число — номер символа в таблице Unicode (<code>'A'</code> = 65).
+<strong><code>String</code></strong> — строка, последовательность символов в двойных кавычках: <code>"Анна"</code>. Это не примитивный тип, а класс; у строки есть методы, например <code>name.length()</code> — длина строки.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">char</span><span class="w"> </span><span class="n">letter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">;</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">letter</span><span class="p">);</span><span class="w">          </span><span class="c1">// 65</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">((</span><span class="kt">char</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">letter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span><span class="w">   </span><span class="c1">// B</span>
+</code></pre></div>
+
+<p><strong>Примитивные типы</strong> хранят само значение. Их восемь, имена пишутся с маленькой буквы.
+<strong>Ссылочные типы</strong> хранят ссылку на объект в памяти. К ним относятся <code>String</code>, массивы и все классы; имена пишутся с большой буквы.</p>
+<h2 id="notes-6">6. Константы</h2>
+<p><strong>Константа</strong> — переменная, значение которой нельзя изменить после инициализации. Объявляется словом <code>final</code>:
+<code>final double PI = 3.14159;</code>
+Имена констант пишут заглавными буквами через подчёркивание: <code>MAX_SCORE</code>.</p>
+<h2 id="notes-_2">Домашнее задание (часть А)</h2>
+<ol>
+<li>Выучить таблицу типов: для <code>int</code>, <code>double</code>, <code>char</code>, <code>boolean</code> — что хранит, размер, пример.</li>
+<li>Вопросы «Проверь себя» 1–10.</li>
+<li>Написать программу <code>Anketa</code>: объявить переменные для своих данных — имя (<code>String</code>), возраст (<code>int</code>), рост в метрах (<code>double</code>), первая буква фамилии (<code>char</code>), есть ли водительские права (<code>boolean</code>) — и вывести каждую с подписью.</li>
+</ol>
+<hr />
+<h1 id="notes-_3">Часть Б. Операции и преобразование типов</h1>
+<h2 id="notes-7">7. Арифметические операции</h2>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Операция</th>
+<th>Пример</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>сложение</td>
+<td><code>7 + 2</code></td>
+<td><code>9</code></td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>вычитание</td>
+<td><code>7 - 2</code></td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>умножение</td>
+<td><code>7 * 2</code></td>
+<td><code>14</code></td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>деление</td>
+<td><code>7 / 2</code></td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>остаток от деления</td>
+<td><code>7 % 2</code></td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Целочисленное деление:</strong> если оба операнда целые, результат деления — целое число, дробная часть отбрасывается: <code>7 / 2</code> → <code>3</code>. Если хотя бы один операнд дробный, результат дробный: <code>7 / 2.0</code> → <code>3.5</code>.</p>
+<p><strong>Остаток от деления <code>%</code>:</strong> <code>7 % 2</code> → <code>1</code>.
+Применение:
+- проверка чётности: <code>n % 2</code> равно 0 → число чётное;
+- последняя цифра числа: <code>1234 % 10</code> → <code>4</code>; число без последней цифры: <code>1234 / 10</code> → <code>123</code>;
+- перевод единиц: <code>135 / 60</code> → 2 часа, <code>135 % 60</code> → 15 минут.</p>
+<p><strong>Порядок действий:</strong> сначала <code>*</code>, <code>/</code>, <code>%</code>, потом <code>+</code>, <code>-</code>; операции одного приоритета — слева направо; скобки меняют порядок.
+<code>2 + 3 * 4</code> → <code>14</code>; <code>(2 + 3) * 4</code> → <code>20</code>.</p>
+<p>Деление целого числа на ноль — ошибка выполнения <code>ArithmeticException: / by zero</code>.</p>
+<h2 id="notes-8">8. Присваивание, инкремент, декремент</h2>
+<p><strong>Составные операции присваивания</strong></p>
+<table>
+<thead>
+<tr>
+<th>Короткая запись</th>
+<th>Полная запись</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x += 5</code></td>
+<td><code>x = x + 5</code></td>
+</tr>
+<tr>
+<td><code>x -= 5</code></td>
+<td><code>x = x - 5</code></td>
+</tr>
+<tr>
+<td><code>x *= 5</code></td>
+<td><code>x = x * 5</code></td>
+</tr>
+<tr>
+<td><code>x /= 5</code></td>
+<td><code>x = x / 5</code></td>
+</tr>
+<tr>
+<td><code>x %= 5</code></td>
+<td><code>x = x % 5</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Инкремент</strong> <code>x++</code> — увеличить на 1. <strong>Декремент</strong> <code>x--</code> — уменьшить на 1.</p>
+<p><code>y = x++;</code> — постфиксная форма: сначала значение <code>x</code> используется, потом увеличивается.
+<code>y = ++x;</code> — префиксная форма: сначала <code>x</code> увеличивается, потом используется.
+Если <code>x++</code> стоит отдельной инструкцией, разницы нет.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">++</span><span class="p">;</span><span class="w">   </span><span class="c1">// y = 5, x = 6</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">++</span><span class="n">x</span><span class="p">;</span><span class="w">   </span><span class="c1">// x = 7, z = 7</span>
+</code></pre></div>
+
+<h2 id="notes-9">9. Операции сравнения</h2>
+<p>Результат — значение типа <code>boolean</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Значение</th>
+<th>Пример</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>==</code></td>
+<td>равно</td>
+<td><code>5 == 5</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>не равно</td>
+<td><code>5 != 5</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>больше</td>
+<td><code>5 &gt; 3</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>меньше</td>
+<td><code>5 &lt; 3</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>больше или равно</td>
+<td><code>5 &gt;= 5</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>меньше или равно</td>
+<td><code>5 &lt;= 3</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>=</code> — присваивание («положить»). <code>==</code> — сравнение («равны ли?»).</p>
+<p><strong>Строки сравнивают методом <code>equals</code>, а не знаком <code>==</code>:</strong>
+<code>a.equals(b)</code> — <code>true</code>, если текст строк совпадает.
+<code>==</code> для строк сравнивает ссылки (адреса в памяти), а не текст.</p>
+<h2 id="notes-10">10. Логические операции</h2>
+<p>Работают со значениями <code>boolean</code>, результат — <code>boolean</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Название</th>
+<th>Когда <code>true</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>И</td>
+<td>оба операнда <code>true</code></td>
+</tr>
+<tr>
+<td><code>\|\|</code></td>
+<td>ИЛИ</td>
+<td>хотя бы один операнд <code>true</code></td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>НЕ</td>
+<td>операнд <code>false</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><code>a</code></th>
+<th><code>b</code></th>
+<th><code>a &amp;&amp; b</code></th>
+<th><code>a \|\| b</code></th>
+<th><code>!a</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<p>Двойное неравенство записывают двумя сравнениями: <code>age &gt;= 14 &amp;&amp; age &lt; 18</code>.</p>
+<p><strong>Сокращённое вычисление:</strong> если результат ясен по первому операнду, второй не вычисляется. Для <code>&amp;&amp;</code>: первый <code>false</code> → результат <code>false</code>. Для <code>||</code>: первый <code>true</code> → результат <code>true</code>.</p>
+<p><strong>Приоритет:</strong> <code>!</code> → арифметика → сравнения → <code>&amp;&amp;</code> → <code>||</code>. В сложных условиях ставят скобки.</p>
+<h2 id="notes-11">11. Преобразование типов</h2>
+<div class="codehilite"><pre><span></span><code>          расширение: автоматически, без потерь ──────►
+byte → short → int → long → float → double
+          ◄────── сужение: только явно, возможна потеря
+</code></pre></div>
+
+<p><strong>Расширяющее преобразование</strong> — из типа с меньшим диапазоном в тип с большим. Выполняется автоматически, без потери данных.</p>
+<p><strong>Сужающее преобразование</strong> — в обратную сторону. Выполняется только явно, операцией <strong>приведения типа</strong>: <code>(тип) значение</code>. Возможна потеря данных.
+<code>(int) 10.9</code> → <code>10</code> (дробная часть отбрасывается, а не округляется).
+Округление по правилам математики: <code>Math.round(10.9)</code> → <code>11</code>.</p>
+<p><strong>Тип результата выражения</strong> — самый широкий из типов операндов:
+<code>int</code> и <code>int</code> → <code>int</code>; <code>int</code> и <code>double</code> → <code>double</code>; <code>int</code> и <code>long</code> → <code>long</code>.</p>
+<p><strong>Ловушка среднего значения:</strong>
+<code>double average = sum / count;</code> при целых <code>sum</code> и <code>count</code> даёт целый результат (<code>3.0</code>).
+Правильно: <code>double average = (double) sum / count;</code></p>
+<div class="codehilite"><pre><span></span><code>double average = sum / count;
+                 └────┬────┘
+              1) int / int = 3
+└──────┬──────┘
+ 2) 3 → 3.0
+</code></pre></div>
+
+<h2 id="notes-12">12. Строка ↔ число</h2>
+<p><strong>Преобразование между строкой и числом</strong> выполняется методами, а не приведением типа.</p>
+<table>
+<thead>
+<tr>
+<th>Что нужно</th>
+<th>Как</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>строка → целое</td>
+<td><code>Integer.parseInt(строка)</code></td>
+<td><code>Integer.parseInt("25")</code> → <code>25</code></td>
+</tr>
+<tr>
+<td>строка → дробное</td>
+<td><code>Double.parseDouble(строка)</code></td>
+<td><code>Double.parseDouble("3.5")</code> → <code>3.5</code></td>
+</tr>
+<tr>
+<td>число → строка</td>
+<td><code>String.valueOf(число)</code></td>
+<td><code>String.valueOf(10)</code> → <code>"10"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Если строка не является числом, <code>parseInt</code> вызывает ошибку выполнения <code>NumberFormatException</code>.</p>
+<h2 id="notes-_4">Домашнее задание (часть Б)</h2>
+<ol>
+<li>Вопросы «Проверь себя» 11–24.</li>
+<li>Не запуская программу, записать в тетрадь результат каждого выражения, потом проверить запуском:
+<code>17 / 5</code>, <code>17 % 5</code>, <code>17 / 5.0</code>, <code>(int) 9.99</code>, <code>(double) 17 / 5</code>, <code>(double) (17 / 5)</code>, <code>"2" + 2 + 2</code>, <code>2 + 2 + "2"</code>, <code>10 &gt; 5 &amp;&amp; 10 &lt; 8</code>, <code>!(3 == 3) || 4 != 5</code>.</li>
+<li>Написать программу <code>Time</code>: в переменной <code>int totalSeconds = 7384;</code> перевести в часы, минуты и секунды и вывести в виде <code>2 ч 3 мин 4 с</code>.</li>
+</ol>
+<h2 id="notes-_5">Проверь себя</h2>
+<p><strong>Часть А</strong></p>
+<ol>
+<li>Что такое переменная? Из чего состоит её объявление?</li>
+<li>Чем объявление отличается от присваивания?</li>
+<li>Назовите восемь примитивных типов по группам.</li>
+<li>Какой тип выбрать для количества товаров, цены, признака «в наличии», населения Земли?</li>
+<li>Почему <code>float f = 3.14;</code> не компилируется? Как исправить?</li>
+<li>Почему <code>long big = 5000000000;</code> не компилируется?</li>
+<li>Что выведет <code>System.out.println(2147483647 + 1);</code> и почему?</li>
+<li>Почему <code>0.1 + 0.2</code> не равно <code>0.3</code>? Какие два правила из этого следуют?</li>
+<li>Чем <code>'A'</code> отличается от <code>"A"</code>?</li>
+<li>Чем примитивные типы отличаются от ссылочных?</li>
+</ol>
+<p><strong>Часть Б</strong></p>
+<ol start="11">
+<li>Чему равны <code>7 / 2</code>, <code>7 / 2.0</code>, <code>7 % 2</code>? Почему первые два различаются?</li>
+<li>Как проверить, что число чётное? Как получить последнюю цифру?</li>
+<li>Чему равны <code>1 / 2 * 10</code> и <code>10 * 1 / 2</code>?</li>
+<li>Что произойдёт при <code>5 / 0</code> и при <code>5.0 / 0</code>?</li>
+<li><code>int x = 5; int y = x++; int z = ++x;</code> — чему равны <code>x</code>, <code>y</code>, <code>z</code>?</li>
+<li>Чем <code>=</code> отличается от <code>==</code>?</li>
+<li>Почему строки нельзя сравнивать через <code>==</code>? Чем сравнивать?</li>
+<li>Запишите на Java условие «x от 1 до 10 включительно».</li>
+<li>Что такое сокращённое вычисление? Приведите пример, где оно спасает от ошибки.</li>
+<li>Какие преобразования типов Java выполняет автоматически, а какие нет?</li>
+<li>Чему равно <code>(int) 9.99</code>? А <code>Math.round(9.99)</code>?</li>
+<li><code>int sum = 7, count = 2; double avg = sum / count;</code> — что в <code>avg</code> и как исправить?</li>
+<li>Как превратить строку <code>"42"</code> в число и число <code>42</code> в строку? Почему нельзя написать <code>(int) "42"</code>?</li>
+<li>Почему <code>Integer.parseInt("25a")</code> компилируется, но не работает?</li>
+</ol></article></details><footer><a target="_top" href="../#java-first-program">← Первая программа на Java</a><a target="_top" href="../#java-bitwise">Поразрядные операции →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

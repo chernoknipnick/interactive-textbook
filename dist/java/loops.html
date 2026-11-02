@@ -1,0 +1,278 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Циклы · Java</title><link rel="stylesheet" href="lecture.css?v=3"></head><body><main><div class="eyebrow">JAVA / ТЕМА 07 ИЗ 12 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-114">1.1.4. Циклы — под запись</h1>
+<blockquote>
+<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. После тем «Циклы» и «Массивы» — практическая работа ПР02.</p>
+</blockquote>
+<h2 id="notes-1-while">1. Цикл <code>while</code></h2>
+<p><strong>Цикл</strong> — конструкция, которая многократно выполняет один и тот же блок кода.
+<strong>Тело цикла</strong> — блок кода, который повторяется.
+<strong>Итерация</strong> — одно выполнение тела цикла.</p>
+<p><strong>Цикл <code>while</code></strong> (с предусловием) повторяет тело, пока условие истинно:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">условие</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">тело</span><span class="w"> </span><span class="n">цикла</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Условие проверяется <strong>перед</strong> каждой итерацией. Если оно ложно с самого начала, тело не выполнится ни разу.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">money</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">money</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">50000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">money</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">8000</span><span class="p">;</span>
+<span class="w">    </span><span class="n">month</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Месяцев: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">month</span><span class="p">);</span><span class="w">     </span><span class="c1">// 7</span>
+</code></pre></div>
+
+<p><strong>Чтобы цикл завершился, нужны три вещи:</strong>
+1. <strong>начальное значение</strong> переменной, от которой зависит условие (до цикла);
+2. <strong>условие</strong> продолжения;
+3. <strong>изменение</strong> этой переменной в теле цикла.</p>
+<p><strong>Бесконечный цикл</strong> — цикл, условие которого никогда не становится ложным. Причины: переменная в условии не изменяется в теле; изменяется не в ту сторону; после условия стоит <code>;</code>.</p>
+<h2 id="notes-2-for">2. Цикл <code>for</code></h2>
+<p><strong>Цикл <code>for</code></strong> (со счётчиком):</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">инициализация</span><span class="p">;</span><span class="w"> </span><span class="n">условие</span><span class="p">;</span><span class="w"> </span><span class="n">изменение</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">тело</span><span class="w"> </span><span class="n">цикла</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ol>
+<li><strong>инициализация</strong> — выполняется один раз перед циклом;</li>
+<li><strong>условие</strong> — проверяется перед каждой итерацией;</li>
+<li><strong>изменение</strong> — выполняется после каждой итерации.</li>
+</ol>
+<p>Порядок выполнения: инициализация → (условие → тело → изменение) → (условие → тело → изменение) → … → условие ложно → выход.</p>
+<div class="codehilite"><pre><span></span><code>for ( int i = 1 ;  i &lt;= 5 ;  i++ ) {
+        ①            ②        ④
+    System.out.println(i);     ③
+}
+</code></pre></div>
+
+<p>Трассировка:</p>
+<table>
+<thead>
+<tr>
+<th>Шаг</th>
+<th><code>i</code></th>
+<th><code>i &lt;= 5</code></th>
+<th>Что выведено</th>
+<th>После <code>i++</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>true</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>true</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>true</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>true</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5</td>
+<td>true</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>6</td>
+<td>6</td>
+<td><strong>false</strong></td>
+<td>—</td>
+<td>выход</td>
+</tr>
+</tbody>
+</table>
+<p>Счётчик цикла обычно называют <code>i</code> (затем <code>j</code>, <code>k</code>). Переменная, объявленная в заголовке <code>for</code>, существует только внутри цикла.</p>
+<p><strong>Два стандартных заголовка для «повторить n раз»:</strong>
+- <code>for (int i = 0; i &lt; n; i++)</code> — счётчик от 0 до n−1 (основной вариант: так нумеруются элементы массивов и символы строк);
+- <code>for (int i = 1; i &lt;= n; i++)</code> — счётчик от 1 до n.</p>
+<p><strong>Ошибка на единицу</strong> — цикл выполняется на одну итерацию больше или меньше, чем нужно. Чаще всего из-за путаницы <code>&lt;</code> и <code>&lt;=</code> или начала с 0 вместо 1.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w">       </span><span class="c1">// 0 1 2 3 4     — 5 раз</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 1 2 3 4 5     — 5 раз</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 0 1 2 3 4 5   — 6 раз</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="c1">// 10 5 0        — обратный отсчёт</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">   </span><span class="c1">// 0 2 4 6 8     — с шагом 2</span>
+</code></pre></div>
+
+<h2 id="notes-3-do-while">3. Цикл <code>do-while</code></h2>
+<p><strong>Цикл <code>do-while</code></strong> (с постусловием):</p>
+<div class="codehilite"><pre><span></span><code><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">тело</span><span class="w"> </span><span class="n">цикла</span>
+<span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">условие</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Условие проверяется <strong>после</strong> каждой итерации, поэтому тело выполняется <strong>хотя бы один раз</strong>.
+После <code>while (условие)</code> ставится точка с запятой.
+Типичное применение — повторять ввод, пока данные некорректны.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span><span class="w">                       </span><span class="c1">// объявлена до цикла, чтобы её видело условие</span>
+<span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="s">&quot;Введите возраст (0-120): &quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scanner</span><span class="p">.</span><span class="na">nextInt</span><span class="p">();</span>
+<span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">120</span><span class="p">);</span>
+</code></pre></div>
+
+<h2 id="notes-4">4. Какой цикл выбрать</h2>
+<table>
+<thead>
+<tr>
+<th>Ситуация</th>
+<th>Цикл</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Число повторений известно заранее; нужен счётчик</td>
+<td><code>for</code></td>
+</tr>
+<tr>
+<td>Число повторений неизвестно; повторять, пока выполняется условие</td>
+<td><code>while</code></td>
+</tr>
+<tr>
+<td>То же, но тело должно выполниться хотя бы один раз</td>
+<td><code>do-while</code></td>
+</tr>
+</tbody>
+</table>
+<p>Любой цикл можно переписать через любой другой; выбирают тот, с которым код понятнее.</p>
+<h2 id="notes-5-break-continue">5. <code>break</code> и <code>continue</code></h2>
+<p><strong><code>break</code></strong> — немедленно завершает цикл; выполнение продолжается с инструкции после цикла.
+<strong><code>continue</code></strong> — завершает текущую итерацию и переходит к следующей (в <code>for</code> — к изменению счётчика).
+Во вложенных циклах <code>break</code> и <code>continue</code> действуют только на ближайший (внутренний) цикл.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w">              </span><span class="c1">// нечётные пропускаем</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// 2 4 6 8 10</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="notes-6">6. Типовые алгоритмы с циклом</h2>
+<ol>
+<li><strong>Накопление суммы:</strong> накопитель создаётся до цикла (<code>int sum = 0;</code>), изменяется в цикле (<code>sum += …;</code>), используется после цикла. Для произведения начальное значение — 1.</li>
+<li><strong>Подсчёт по условию:</strong> счётчик до цикла (<code>int count = 0;</code>), в цикле <code>if (условие) { count++; }</code>.</li>
+<li><strong>Разбор числа на цифры:</strong> <code>while (n &gt; 0) { цифра = n % 10; n /= 10; }</code>.</li>
+<li><strong>Поиск (флаг):</strong> <code>boolean found = false;</code> до цикла; в цикле при совпадении <code>found = true; break;</code>.</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                           </span><span class="c1">// сумма чисел от 1 до 100</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span><span class="w">                                      </span><span class="c1">// 5050</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                         </span><span class="c1">// сколько чисел от 1 до 100 кратно 7</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w">                                      </span><span class="c1">// 14</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="p">;</span><span class="w">                          </span><span class="c1">// сумма цифр числа</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">digitSum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">digitSum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span><span class="w">                                      </span><span class="c1">// 10</span>
+</code></pre></div>
+
+<p><strong>Обход строки:</strong> <code>for (int i = 0; i &lt; s.length(); i++) { char c = s.charAt(i); … }</code>
+<code>s.charAt(i)</code> — символ с номером <code>i</code>; номера идут от 0 до <code>s.length() - 1</code>.</p>
+<h2 id="notes-7">7. Вложенные циклы</h2>
+<p><strong>Вложенный цикл</strong> — цикл внутри тела другого цикла. На каждую итерацию внешнего цикла внутренний выполняется полностью.
+Общее число итераций = (итераций внешнего) × (итераций внутреннего).
+Счётчики вложенных циклов называют по-разному: <code>i</code> — внешний, <code>j</code> — внутренний.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;\t&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>1   2   3
+2   4   6
+3   6   9
+</code></pre></div>
+
+<h2 id="notes-8">8. Ошибки, которые компилятор не замечает</h2>
+<table>
+<thead>
+<tr>
+<th>Что написано</th>
+<th>Что происходит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>переменная условия не меняется в теле <code>while</code></td>
+<td>бесконечный цикл</td>
+</tr>
+<tr>
+<td><code>while (x &lt; 10);</code></td>
+<td>бесконечный цикл с пустым телом</td>
+</tr>
+<tr>
+<td><code>i--</code> вместо <code>i++</code></td>
+<td>цикл идёт не в ту сторону</td>
+</tr>
+<tr>
+<td><code>&lt;=</code> вместо <code>&lt;</code></td>
+<td>лишняя итерация</td>
+</tr>
+<tr>
+<td>накопитель произведения начинается с 0</td>
+<td>результат всегда 0</td>
+</tr>
+</tbody>
+</table>
+<p>Если непонятно, что делает цикл, — составить таблицу трассировки.</p>
+<h2 id="notes-_1">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>В тетради: таблица трассировки для цикла <code>for (int i = 10; i &gt; 0; i -= 3)</code> — значения <code>i</code>, результат проверки условия, сколько раз выполнится тело.</li>
+<li>Программы:
+   - <code>Factorial</code>: ввести число n (от 1 до 12) и вывести n! = 1 · 2 · … · n;
+   - <code>Vowels</code>: посчитать количество гласных букв в строке <code>"Программирование"</code>;
+   - <code>Guess</code>: программа «загадала» число 37; пользователь вводит числа, пока не угадает; после каждой попытки программа пишет «больше» или «меньше», в конце — число попыток.</li>
+</ol>
+<h2 id="notes-_2">Проверь себя</h2>
+<p>По этим вопросам — опрос в начале следующей пары.</p>
+<ol>
+<li>Что такое цикл, тело цикла, итерация?</li>
+<li>Какие три вещи нужны, чтобы цикл завершился?</li>
+<li>Назовите три части заголовка <code>for</code> и порядок их выполнения.</li>
+<li>Сколько раз выполнится тело: <code>for (int i = 0; i &lt; 5; i++)</code>, <code>for (int i = 1; i &lt;= 5; i++)</code>, <code>for (int i = 0; i &lt;= 5; i++)</code>?</li>
+<li>Чему равен счётчик после завершения <code>for (i = 1; i &lt;= 5; i++)</code>, если он объявлен до цикла?</li>
+<li>Чем <code>while</code> отличается от <code>do-while</code>?</li>
+<li>Назовите три причины бесконечного цикла.</li>
+<li>Что такое «ошибка на единицу»?</li>
+<li>Что делают <code>break</code> и <code>continue</code>?</li>
+<li>Где должна быть объявлена переменная-накопитель и почему?</li>
+<li>С какого значения начинают накопитель суммы? Произведения?</li>
+<li>Как получить последнюю цифру числа и отбросить её?</li>
+<li>Как пройти по всем символам строки? Какой номер у последнего символа?</li>
+<li>Внешний цикл выполняется 4 раза, внутренний — 5. Сколько раз выполнится тело внутреннего?</li>
+<li>Какой цикл выбрать, чтобы повторять ввод, пока пользователь не введёт корректное значение?</li>
+</ol></article><footer><a target="_top" href="../#java-conditions">← Условный оператор</a><a target="_top" href="../#java-arrays">Массивы →</a></footer></main><script src="lecture.js?v=3"></script></body></html>
