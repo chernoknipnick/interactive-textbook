@@ -1,0 +1,190 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Статические поля и методы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="oop-visuals.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 13 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-123">1.2.3 Статические поля и методы</h1><section class="oop-widget" data-oop="static" aria-label="Пошаговая модель: 1.2.3 Статические поля и методы">
+  <h2>Посмотри, как это работает</h2>
+  <p>Предскажи результат строки, затем нажми «Дальше». Можно включить проигрывание и остановиться на любом шаге.</p>
+  <code class="oop-code" data-oop-code></code>
+  <div class="oop-scroll"><svg class="oop-scene" viewBox="0 0 970 465" role="img" aria-label="Состояние переменных и объектов текущего шага"></svg></div>
+  <p class="oop-caption">Учебная модель Java, не исполнитель произвольного кода. На узком экране схему можно прокрутить горизонтально.</p>
+  <div class="oop-controls"><button type="button" data-oop-action="back">← Назад</button><span data-oop-step></span><button type="button" data-oop-action="next">Дальше →</button><button type="button" data-oop-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-oop-action="reset">Сначала</button></div>
+  <p class="oop-explanation" data-oop-explanation aria-live="polite"></p>
+</section>
+
+<h2 id="lecture-_1">Основные понятия</h2>
+<blockquote>
+<p><strong>Экземплярное поле</strong> — поле, отдельная переменная которого существует у каждого экземпляра класса.</p>
+<p><strong>Статическое поле (<code>static</code>)</strong> — поле класса, не создаваемое заново для каждого экземпляра. В наших примерах у одного загруженного класса одна такая общая переменная.</p>
+<p><strong>Статический метод (<code>static</code>)</strong> вызывается без текущего экземпляра. У него нет <code>this</code>, но он может работать с объектами, явно полученными или созданными в его коде.</p>
+<p><strong><code>final</code></strong> запрещает повторное присваивание переменной после её допустимой инициализации. Само по себе это не означает неизменяемости объекта, на который ведёт ссылка.</p>
+<p><strong><code>static final</code></strong> часто используют для констант класса; например, <code>static final int MAX_ENERGY = 100</code>.</p>
+</blockquote>
+<h2 id="lecture-1">1. Школьная доска и личные тетради</h2>
+<p>«У каждого ученика своя тетрадь с оценками. А название школы написано на общей доске. Исправили запись на доске — никто не переписывал отдельные тетради. Нам нужно явно отличать личные данные от общей записи».</p>
+<p>Энергия Анны — личная. Энергия Бориса — другая. Общее число успешно созданных объектов этого класса — общая характеристика. Аналогия с доской показывает общность, но не означает автоматическую синхронизацию по сети или между разными запусками программы.</p>
+<p><img class="lesson-diagram" loading="lazy" src="images/04 Static.png" alt="04 Static"></p>
+<h2 id="lecture-2">2. Самая опасная «починка» прошлого урока</h2>
+<p>Если сделать <code>energy</code> статическим, у студентов не будет отдельных переменных энергии. Изменение через одного студента повлияет на общее значение. Это ошибка модели, даже если программа компилируется.</p>
+<p>«Название группы делать static?» Только если по модели все объекты этого класса действительно относятся к одной общей группе. Если студенты из разных групп, поле должно быть экземплярным. <code>static</code> выбирают по смыслу, а не потому, что значения сегодня случайно совпали.</p>
+<p>На доске распределить карточки: имя, энергия — экземпляр; общее ограничение энергии — константа класса; число созданий — изменяемое поле класса. Обсудить, что свойство может быть общим, но изменяемым: <code>static</code> не равно <code>final</code>.</p>
+<h2 id="lecture-3">3. Счётчик созданий</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">createdCount</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Начальное значение статического поля <code>int</code> — 0. В основном конструкторе после успешной проверки данных и заполнения полей выполняется <code>createdCount++</code>.</p>
+<p>Первое успешное создание даёт 1, второе — 2. Присваивание <code>Student partner = anna</code> не вызывает конструктор и счётчик не увеличивает. Вызов короткого конструктора через <code>this(name, 100)</code> тоже не должен добавлять второе увеличение: увеличиваем в одном основном месте.</p>
+<p>Этот счётчик — число успешно завершённых созданий через наши конструкторы в данном запуске и учебном однопоточном сценарии. Он <strong>не</strong> показывает число живых объектов, посетителей сайта, зарегистрированных людей или существующих файлов. Если ссылка потерялась, счётчик не уменьшается. Сборщик мусора не ведёт этот учёт за нас. Для многопоточности обычного <code>++</code> недостаточно — это за рамками пары.</p>
+<h2 id="lecture-4">4. Метод класса: спросить о классе, не выбирая студента</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getCreatedCount</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">createdCount</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Вызов: <code>Student.getCreatedCount()</code>. Здесь имя класса слева от точки. Не нужно создавать фиктивного студента, чтобы узнать общее число созданий.</p>
+<p>Java позволяет многие статические вызовы записывать через ссылочную переменную, но мы так не пишем: <code>anna.getCreatedCount()</code> создаёт ложное впечатление, что спрашиваем об Анне. Общий член обозначаем через имя класса.</p>
+<h2 id="lecture-5-static-this">5. Почему в static нет this</h2>
+<p>В <code>anna.getEnergy()</code> получатель известен — Анна. В <code>Student.getCreatedCount()</code> никакой конкретный студент не выбран. Слово «этот» не к кому отнести, поэтому <code>this</code> недоступно.</p>
+<p>Статический метод не может просто написать <code>return energy;</code>, если <code>energy</code> — экземплярное поле: нужно указать, <strong>чья</strong> энергия. Однако статический метод вполне может принять <code>Student learner</code> и вызвать <code>learner.getEnergy()</code>. Неверное правило «static никогда не работает с объектами» заменяем точным «static не имеет неявного текущего экземпляра».</p>
+<p>В <code>main</code> уже были объекты <code>Scanner</code>, <code>Random</code>, массивы и студенты. Значит, запрета работать с объектами у статических методов никогда не было.</p>
+<h2 id="lecture-6-">6. Метод-проверка, которому нужен только аргумент</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isValidEnergy</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">energy</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">energy</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">MAX_ENERGY</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Чтобы проверить число 70, не требуется объект с именем и собственным состоянием. Поэтому <code>Student.isValidEnergy(70)</code> — разумный метод класса. Он похож на знакомый <code>Math.max</code> по форме вызова.</p>
+<p>Сначала определить требуемые данные, затем решить, нужен ли объект. Если метод использует личную энергию получателя, как <code>study()</code>, он остаётся экземплярным. Не превращать всю программу в набор <code>static</code> только потому, что это проще вызвать из <code>main</code>.</p>
+<h2 id="lecture-7-static-final">7. static и final отвечают на разные вопросы</h2>
+<p><code>static</code> — общая переменная класса или отдельная у экземпляра? <code>final</code> — разрешено ли повторное присваивание этой переменной?</p>
+<p>У <code>MAX_ENERGY</code> оба признака: одна общая граница, менять её значение нельзя. Имена констант обычно пишут большими буквами с подчёркиваниями.</p>
+<p>Таблица четырёх сочетаний: обычное поле — своё и изменяемое; <code>final</code> — своё без повторного присваивания; <code>static</code> — общее и изменяемое; <code>static final</code> — общее без повторного присваивания.</p>
+<p>Для ссылки <code>final int[] values = {1, 2}</code> запрещает <code>values = new int[]{3}</code>, но не запрещает <code>values[0] = 9</code>. Фиксируется ссылка в переменной, а не все данные объекта. Не объявлять, что любое <code>static final</code> поле автоматически является глубоко неизменяемой константой.</p>
+<h2 id="lecture-8-main">8. Разбираем main без перегруза</h2>
+<p>В привычном <code>public static void main(String[] args)</code>: <code>public</code> — доступность этой формы точки входа; <code>static</code> — запуск без заранее созданного экземпляра класса запуска; <code>void</code> — нет возвращаемого значения; <code>String[] args</code> — аргументы командной строки.</p>
+<p>Современные Java поддерживают и другие формы точки входа, но в курсе сохраняем эту распространённую форму. Не утверждаем, что она единственно возможна во всех версиях языка.</p>
+<h2 id="lecture-9">9. Прогноз перед запуском</h2>
+<p>До первого <code>new</code> число созданий 0. После Анны и Бориса — 2. После <code>partner = anna</code> — по-прежнему 2. Неверная энергия приводит к отказу до увеличения счётчика — остаётся 2. Проверки <code>isValidEnergy(100)</code> и <code>isValidEnergy(101)</code> дают <code>true</code> и <code>false</code>.</p>
+<p>Не просто назови ответ, а укажи строку, на которой меняется счётчик. Отличать «читаем значение» от «создаём объект» полезнее, чем запоминать результат примера.</p>
+<h2 id="lecture-_2">Разбираем по картинкам</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/10 Static и final четыре случая.png" alt="10 Static и final четыре случая"></p>
+<p>Для каждой карточки задайте два независимых вопроса: чья переменная и можно ли присвоить ей другое значение? Не объединяйте эти вопросы в один.</p>
+<h2 id="lecture-_3">Программа для самостоятельного запуска</h2>
+<p>Каждый пример запускается отдельно. Классы <code>Student</code> в разных темах — последовательные учебные версии: не собирать их вместе в одном пакете. В терминале из его папки: <code>javac -encoding UTF-8 StaticDemo.java</code>, затем <code>java StaticDemo</code>. JDK 17 или новее.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">StaticDemo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Student</span><span class="p">.</span><span class="na">getCreatedCount</span><span class="p">());</span>
+<span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">70</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">boris</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Борис&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">partner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">anna</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Student</span><span class="p">.</span><span class="na">getCreatedCount</span><span class="p">());</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">partner</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">anna</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">boris</span><span class="p">.</span><span class="na">getEnergy</span><span class="p">());</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Ошибка&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">101</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IllegalArgumentException</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Создание отклонено&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Student</span><span class="p">.</span><span class="na">getCreatedCount</span><span class="p">());</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Student</span><span class="p">.</span><span class="na">isValidEnergy</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Student</span><span class="p">.</span><span class="na">isValidEnergy</span><span class="p">(</span><span class="mi">101</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MAX_ENERGY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">createdCount</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isValidEnergy</span><span class="p">(</span><span class="n">energy</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">&quot;Недопустимая энергия&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
+<span class="w">        </span><span class="n">createdCount</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">MAX_ENERGY</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getEnergy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getCreatedCount</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">createdCount</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isValidEnergy</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">energy</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">energy</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">MAX_ENERGY</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Ожидаемый вывод:</p>
+<div class="codehilite"><pre><span></span><code>0
+2
+true
+100
+Создание отклонено
+2
+true
+false
+</code></pre></div>
+
+<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-123">1.2.3 Статические поля и методы — Под запись</h1>
+<h1 id="notes-java">java #ооп #конспект</h1>
+<h2 id="notes-_1">Определения</h2>
+<p><strong>Экземплярное поле</strong> — поле, отдельная переменная которого существует у каждого экземпляра класса.</p>
+<p><strong>Статическое поле (<code>static</code>)</strong> — поле класса, не создаваемое заново для каждого экземпляра. В наших примерах у одного загруженного класса одна такая общая переменная.</p>
+<p><strong>Статический метод (<code>static</code>)</strong> вызывается без текущего экземпляра. У него нет <code>this</code>, но он может работать с объектами, явно полученными или созданными в его коде.</p>
+<p><strong><code>final</code></strong> запрещает повторное присваивание переменной после её допустимой инициализации. Само по себе это не означает неизменяемости объекта, на который ведёт ссылка.</p>
+<p><strong><code>static final</code></strong> часто используют для констант класса; например, <code>static final int MAX_ENERGY = 100</code>.</p>
+<h2 id="notes-_2">Главная схема</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/04 Static.png" alt="04 Static"></p>
+<h2 id="notes-_3">Личное и общее</h2>
+<table>
+<thead>
+<tr>
+<th>Вопрос</th>
+<th>Экземпляр</th>
+<th>Класс</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Данные</td>
+<td><code>name</code>, <code>energy</code> каждого студента</td>
+<td>общий <code>static createdCount</code></td>
+</tr>
+<tr>
+<td>Вызов</td>
+<td><code>anna.getEnergy()</code></td>
+<td><code>Student.getCreatedCount()</code></td>
+</tr>
+<tr>
+<td>Нужен текущий объект</td>
+<td>Да</td>
+<td>Нет</td>
+</tr>
+<tr>
+<td>Есть <code>this</code></td>
+<td>В экземплярном коде</td>
+<td>В статическом методе нет</td>
+</tr>
+</tbody>
+</table>
+<p>Счётчик увеличиваем один раз в основном конструкторе после проверки. Вторая ссылка на уже существующий объект не увеличивает его. Число созданий не равно числу живых объектов.</p>
+<p><code>static</code> означает принадлежность классу, <code>final</code> — запрет повторного присваивания. <code>static final int MAX_ENERGY = 100</code> — общая числовая константа. <code>final</code>-ссылка не запрещает менять содержимое изменяемого объекта.</p>
+<p>Статический метод может работать с явно переданным объектом: у него отсутствует только неявный текущий экземпляр. Личную энергию студента не надо делать <code>static</code> ради удобства вызова.</p>
+<h3 id="notes-_4">Нарисуй и предскажи</h3>
+<p>Счётчик сначала 0. Создали двух студентов, затем написали <code>Student partner = anna</code>. Каков счётчик? Почему он не станет меньше, если выполнить <code>partner = null</code>?</p>
+<h2 id="notes-_5">Разбираем по картинкам</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/10 Static и final четыре случая.png" alt="10 Static и final четыре случая"></p>
+<p>Для каждой карточки задайте два независимых вопроса: чья переменная и можно ли присвоить ей другое значение? Не объединяйте эти вопросы в один.</p>
+<h2 id="notes-_6">Проверь себя</h2>
+<p>На каждый вопрос ответь своими словами и приведи пример:</p>
+<ol>
+<li>Чем экземплярное поле отличается от static?</li>
+<li>Чем static отличается от final?</li>
+<li>Почему в статическом методе нет this?</li>
+<li>Может ли статический метод получить объект параметром?</li>
+<li>Сколько раз увеличится счётчик при создании объекта и копировании ссылки?</li>
+<li>Показывает ли счётчик созданий число живых объектов?</li>
+<li>Как правильно обозначать вызовы статических и экземплярных методов?</li>
+</ol>
+<h2 id="notes-_7">Домашняя работа</h2>
+<p>Добавить в Phone константу <code>MAX_BATTERY = 100</code>, закрытый статический счётчик созданий и геттер для него. Сделать два конструктора, но увеличивать счётчик один раз на успешно созданный объект. Предсказать результат после двух созданий, присваивания второй ссылки и попытки создать телефон с зарядом 150. Отдельно объяснить, почему заряд телефона не должен быть static.</p></article></details><footer><a target="_top" href="../#java-constructors">← Конструкторы</a><a target="_top" href="../#java">К программе Java →</a></footer></main><script src="lecture.js?v=3"></script><script src="visuals.js?v=6"></script><script src="oop-visuals.js?v=1"></script></body></html>

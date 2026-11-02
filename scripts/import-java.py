@@ -31,9 +31,16 @@ topics = [
  ('references','1.1.7 Ссылки','Ссылки'),
  ('classes','1.2.1 Классы и объекты','Классы и объекты'),
  ('constructors','1.2.2 Конструкторы','Конструкторы'),
+ ('static','1.2.3 Статические поля и методы','Статические поля и методы'),
 ]
 if args.source:
     source=Path(args.source)
+    asset_source=source/'Схемы ООП'
+    if asset_source.is_dir():
+        asset_target=ROOT/'content/java-assets'
+        asset_target.mkdir(exist_ok=True)
+        for image in asset_source.glob('*.png'):
+            shutil.copyfile(image,asset_target/image.name)
     for slug,base,title in topics:
         for suffix,variant in [('', 'lecture'),(' — Под запись','notes')]:
             p=source/(base+suffix+'.md')
@@ -64,6 +71,9 @@ for slug,number,title,relative,related in works:
     aliases[Path(relative).stem]='work-'+slug
 
 unresolved=set()
+asset_source=ROOT/'content/java-assets'
+if asset_source.is_dir():
+    shutil.copytree(asset_source,OUT/'images',dirs_exist_ok=True)
 def render(text,prefix):
     # Vault tags and Obsidian links are presentation metadata, not instructions.
     text=re.sub(r'^#[^\s#]+(?:\s+#[^\s#]+)*\s*\n','',text,count=1)
@@ -75,6 +85,12 @@ def render(text,prefix):
             return '<a target="_top" href="../#java-'+aliases[name]+'">'+html.escape(label)+'</a>'
         unresolved.add(name)
         return html.escape(label)
+    def picture(match):
+        name=match.group(1).split('|')[0].split('/')[-1]
+        if not (asset_source/name).is_file():
+            raise FileNotFoundError('Missing lesson image: '+name)
+        return '<img class="lesson-diagram" loading="lazy" src="images/'+html.escape(name,quote=True)+'" alt="'+html.escape(Path(name).stem,quote=True)+'">'
+    text=re.sub(r'!\[\[([^\]]+)\]\]',picture,text)
     text=re.sub(r'\[\[([^\]]+)\]\]',wiki,text)
     body=markdown.markdown(text,extensions=['extra','toc','sane_lists','codehilite'],extension_configs={'toc':{'permalink':False},'codehilite':{'guess_lang':False}})
     return re.sub(r'(<h[1-6] id=")([^"]+)',lambda m:m[1]+prefix+'-'+m[2],body)
@@ -99,6 +115,8 @@ for i,(slug,base,title) in enumerate(topics):
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА {i+1:02d} ИЗ {len(topics)} · {versions[0][1].upper()}</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav>{sections}<footer>{prev}{nxt}</footer></main><script src="lecture.js?v=3"></script></body></html>'''
     if (ROOT/'content/java-visuals'/(slug+'.html')).is_file():
         page=page.replace('</head>','<link rel="stylesheet" href="visuals.css?v=6"></head>').replace('</body>','<script src="visuals.js?v=6"></script></body>')
+    if slug in {'references','classes','constructors','static'}:
+        page=page.replace('</head>','<link rel="stylesheet" href="oop-visuals.css?v=1"></head>').replace('</body>','<script src="oop-visuals.js?v=1"></script></body>')
     (OUT/(slug+'.html')).write_text(page,encoding='utf-8')
 
 (ROOT/'dist/java-lessons.js').write_text('window.javaLessons='+json.dumps(lessons,ensure_ascii=False)+';\n',encoding='utf-8')

@@ -1,153 +1,150 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ссылки · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА 10 ИЗ 12 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-117-java">1.1.7. Ссылки (указатели в Java) — под запись</h1>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ссылки · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="oop-visuals.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 10 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-117">1.1.7 Ссылки</h1><section class="oop-widget" data-oop="references" aria-label="Пошаговая модель: 1.1.7 Ссылки">
+  <h2>Посмотри, как это работает</h2>
+  <p>Предскажи результат строки, затем нажми «Дальше». Можно включить проигрывание и остановиться на любом шаге.</p>
+  <code class="oop-code" data-oop-code></code>
+  <div class="oop-scroll"><svg class="oop-scene" viewBox="0 0 970 465" role="img" aria-label="Состояние переменных и объектов текущего шага"></svg></div>
+  <p class="oop-caption">Учебная модель Java, не исполнитель произвольного кода. На узком экране схему можно прокрутить горизонтально.</p>
+  <div class="oop-controls"><button type="button" data-oop-action="back">← Назад</button><span data-oop-step></span><button type="button" data-oop-action="next">Дальше →</button><button type="button" data-oop-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-oop-action="reset">Сначала</button></div>
+  <p class="oop-explanation" data-oop-explanation aria-live="polite"></p>
+</section>
+
+<h2 id="lecture-_1">Основные понятия</h2>
 <blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. Схемы памяти нужно уметь рисовать.</p>
+<p><strong>Ссылка</strong> — значение, с помощью которого Java обращается к объекту. Ссылочная переменная хранит ссылку на объект или <code>null</code>.</p>
+<p><strong>Присваивание</strong> копирует значение правой части в переменную слева. Копирование ссылки само по себе не создаёт копию объекта.</p>
+<p><strong><code>null</code></strong> — специальное значение, означающее отсутствие ссылки на объект.</p>
+<p><strong>В Java аргументы передаются по значению:</strong> метод получает копию значения аргумента. Для ссылочного типа копируется значение ссылки.</p>
+<p><strong>Строка <code>String</code> неизменяема:</strong> содержимое существующего строкового объекта изменить нельзя.</p>
 </blockquote>
-<h2 id="notes-1">1. Две области памяти</h2>
-<p><strong>Стек</strong> — область памяти, где хранятся локальные переменные методов. Переменная существует, пока выполняется её метод.
-<strong>Куча</strong> — область памяти, где хранятся объекты: массивы, строки и всё, что создано через <code>new</code>.</p>
-<p><strong>Переменная примитивного типа</strong> хранит само значение.
-<strong>Переменная ссылочного типа</strong> хранит <strong>ссылку</strong> — адрес объекта в куче. Сам объект находится в куче.</p>
-<p><strong>Ссылка</strong> — значение, по которому программа находит объект в памяти.</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span>
-<span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">marks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
-<span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Анна&quot;</span><span class="p">;</span>
+<h2 id="lecture-1">1. Две записки к одному шкафчику</h2>
+<p>«У вас есть школьный шкафчик с вещами. На двух записках написано, как найти один и тот же шкафчик. Сделали вторую записку — вещей больше не стало. Изменили вещи через одну записку — человек с другой увидит изменения. Но если переписать одну записку на другой шкафчик, первая записка не изменится».</p>
+<p>У аналогии есть граница: Java-ссылка не является доступным программисту числовым адресом. Нельзя прибавить к ссылке единицу и перейти к «соседней ячейке». На схемах используем условные объекты А и Б, а не настоящие адреса.</p>
+<p><img class="lesson-diagram" loading="lazy" src="images/01 Ссылки.png" alt="01 Ссылки"></p>
+<p>Сначала одна коробка <code>first</code> и один массив. После <code>second = first</code> добавляем только коробку и стрелку. После <code>second[0] = 99</code> меняем клетку массива, а не стрелку.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">};</span>
+<span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">first</span><span class="p">;</span>
+<span class="n">second</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">99</span><span class="p">;</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">first</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code>        СТЕК                         КУЧА
- age   ┌──────┐
-       │  18  │
-       └──────┘                 ┌───┬───┬───┐
- marks ┌──────┐                 │ 5 │ 4 │ 3 │
-       │  ●───┼────────────────►└───┴───┴───┘
-       └──────┘                 ┌──────────┐
- name  ┌──────┐                 │ &quot;Анна&quot;   │
-       │  ●───┼────────────────►└──────────┘
-       └──────┘
+<p>Ответ — 99. Прочитать последовательно: создали массив; скопировали ссылку; нашли общий массив через <code>second</code>; поменяли элемент; прочитали его через <code>first</code>.</p>
+<p>«Сколько объектов-массивов создано?» Один. «Сколько ссылочных переменных?» Две. «Почему не два массива?» Вторая строка не создаёт объект, она присваивает существующее значение ссылки.</p>
+<h2 id="lecture-2">2. Изменить объект и переназначить переменную — разные действия</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="p">{</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">};</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">first</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">second</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
 </code></pre></div>
 
-<p>Восемь примитивных типов хранят значение; все остальные типы (их имена с большой буквы или с <code>[]</code>) хранят ссылку.</p>
-<p><code>System.out.println(marks)</code> выводит не элементы, а описание ссылки вида <code>[I@1b6d3586</code>.</p>
-<h2 id="notes-2">2. Присваивание ссылки</h2>
-<p><strong>Присваивание ссылки</strong> <code>b = a</code> копирует ссылку, а не объект. После него обе переменные указывают на <strong>один и тот же</strong> объект: изменение объекта через <code>b</code> видно через <code>a</code>.</p>
-<p>Чтобы получить независимую копию массива, нужно создать новый массив: <code>Arrays.copyOf(a, a.length)</code>.</p>
-<div class="codehilite"><pre><span></span><code>int[] b = a;
-
-a ┌───┐
-  │ ●─┼──┐    ┌─────┬───┬───┐
-  └───┘  ├──► │ 100 │ 2 │ 3 │
-b ┌───┐  │    └─────┴───┴───┘
-  │ ●─┼──┘
-  └───┘
+<p>Теперь результаты 99 и 7. <code>second</code> получила ссылку на другой массив. Старый массив по-прежнему доступен через <code>first</code>. В строке <code>second[0] = ...</code> слева элемент объекта; в строке <code>second = ...</code> слева сама переменная. Обведи эти разные левые части.</p>
+<p>В группе два человека могут редактировать один список. Если ожидается независимый список, одного присваивания мало. Для массива <code>int[]</code> можно использовать <code>first.clone()</code>: получится отдельный массив со скопированными числами. Для массива ссылок такая копия была бы поверхностной — это отдельная тема, не обещаем «полное клонирование всего».</p>
+<h2 id="lecture-3">3. Числа ведут себя иначе, потому что копируется другое значение</h2>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">firstScore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">secondScore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">firstScore</span><span class="p">;</span>
+<span class="n">secondScore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">99</span><span class="p">;</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">firstScore</span><span class="p">);</span>
 </code></pre></div>
 
-<table>
-<thead>
-<tr>
-<th>Запись</th>
-<th>Что меняется</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>b[0] = 100;</code></td>
-<td>объект, на который указывает <code>b</code> (это видно через все ссылки на него)</td>
-</tr>
-<tr>
-<td><code>b = new int[3];</code></td>
-<td>только переменная <code>b</code>: она начинает указывать на другой объект</td>
-</tr>
-</tbody>
-</table>
-<h2 id="notes-3">3. Строки неизменяемы</h2>
-<p><strong>Строки неизменяемы.</strong> Строку, созданную в памяти, изменить нельзя.
-- Операции и методы строк (<code>+</code>, <code>toUpperCase()</code>, <code>trim()</code>, <code>replace()</code>) создают <strong>новую</strong> строку и возвращают её.
-- Чтобы сохранить результат, его присваивают: <code>name = name.toUpperCase();</code>
-- Поэтому строки при присваивании ведут себя «как значения»: изменение <code>s1</code> не затрагивает <code>s2</code>.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;анна&quot;</span><span class="p">;</span>
-<span class="n">name</span><span class="p">.</span><span class="na">toUpperCase</span><span class="p">();</span><span class="w">              </span><span class="c1">// результат потерян, name = &quot;анна&quot;</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="na">toUpperCase</span><span class="p">();</span><span class="w">       </span><span class="c1">// name = &quot;АННА&quot;</span>
-</code></pre></div>
-
-<h2 id="notes-4">4. Сравнение</h2>
-<p><strong><code>==</code> для ссылочных типов сравнивает ссылки:</strong> <code>true</code>, только если обе переменные указывают на один и тот же объект.
-<strong><code>equals</code> сравнивает содержимое объектов.</strong> Для массивов — <code>Arrays.equals(a, b)</code>.</p>
-<p><strong>Пул строк</strong> — область памяти, где Java хранит строковые литералы без повторов. Поэтому <code>"да" == "да"</code> может дать <code>true</code>, но строки, полученные при работе программы (ввод, файл, сеть), в пул не попадают.
-<strong>Строки и любые объекты по содержимому сравнивают только через <code>equals</code>.</strong></p>
-<h2 id="notes-5-null-nullpointerexception">5. <code>null</code> и <code>NullPointerException</code></h2>
-<p><strong><code>null</code></strong> — значение ссылочной переменной, которая не указывает ни на какой объект.
-- Значение по умолчанию для элементов массивов строк и других ссылочных типов.
-- <code>null</code> можно присвоить, вывести, сравнить через <code>==</code>.</p>
-<p><strong><code>NullPointerException</code></strong> — ошибка выполнения: обращение через точку (вызов метода, поле) к ссылке, равной <code>null</code>.</p>
-<p><strong>Защита — проверка перед обращением:</strong>
-<code>if (name != null &amp;&amp; name.length() &gt; 0) { ... }</code>
-Порядок условий важен: при <code>name == null</code> вторая часть не вычисляется (сокращённое вычисление).</p>
-<div class="codehilite"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w">            </span><span class="c1">// null</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="na">length</span><span class="p">());</span><span class="w">   </span><span class="c1">// NullPointerException</span>
-</code></pre></div>
-
-<p><code>null</code> и пустая строка <code>""</code> — разные вещи: <code>""</code> — это объект, строка длины 0.</p>
-<h2 id="notes-6">6. Ссылки и методы</h2>
-<p><strong>В метод всегда передаётся копия значения переменной.</strong> Для ссылочного типа копируется ссылка.
-- Метод <strong>может изменить объект</strong>, на который указывает ссылка: <code>numbers[0] = 100;</code> — изменение видно в вызывающем методе.
-- Метод <strong>не может заменить объект</strong> вызывающего метода: <code>numbers = new int[3];</code> меняет только копию ссылки внутри метода.</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">numbers</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w">                 </span><span class="c1">// меняет общий массив — видно в main</span>
-<span class="p">}</span>
-
-<span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">replace</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">numbers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">};</span><span class="w">    </span><span class="c1">// меняет только свою копию ссылки — в main не видно</span>
+<p>Ответ — 10. Правило присваивания то же. Различается значение: здесь копировалось число, в предыдущем примере — ссылка. Неверно думать, что знак <code>=</code> для объектов «вдруг работает иначе».</p>
+<h2 id="lecture-4">4. Почему метод меняет массив, но не заменяет переменную вызывающего кода</h2>
+<p>В полном примере внизу есть два метода. <code>changeFirst(values)</code> выполняет <code>values[0] = 42</code>. Параметр и переменная <code>main</code> ведут к одному массиву, поэтому изменение видно снаружи.</p>
+<p><code>replace(values)</code> выполняет <code>values = new int[]{100, 200}</code>. Меняется только локальный параметр метода. Переменная <code>main</code> остаётся со своей прежней ссылкой.</p>
+<p>Рядом с коробкой <code>main: numbers</code> рисуем новую коробку <code>метод: values</code>. Сначала обе стрелки ведут к А. При переназначении стираем стрелку только у <code>values</code> и ведём к Б. У <code>numbers</code> стрелка к А остаётся.</p>
+<p>«Массив передали по ссылке?» Точная формулировка: передали значение ссылки по значению. Объект общий, переменные разные. Чтобы вернуть новый массив вызывающему коду, метод может сделать <code>return</code>, а вызывающий код — присвоить результат.</p>
+<h2 id="lecture-5-null">5. <code>null</code>: записка без маршрута</h2>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">missing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">missing</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">missing</span><span class="p">.</span><span class="na">length</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<h2 id="notes-7">7. Сборщик мусора, ссылки и указатели</h2>
-<p><strong>Сборщик мусора</strong> (garbage collector) — часть JVM, которая автоматически освобождает память объектов, на которые не осталось ни одной ссылки.</p>
-<p><strong>Указатель</strong> (в C, C++) — переменная с адресом памяти, с которым можно выполнять арифметику; память освобождает программист.
-<strong>Ссылка в Java</strong> — адрес объекта без арифметики и без ручного освобождения памяти. Это безопаснее: нельзя обратиться к чужой или освобождённой памяти.</p>
-<h2 id="notes-_1">Домашнее задание</h2>
-<ol>
-<li>Вопросы «Проверь себя».</li>
-<li>Для каждого фрагмента нарисовать схему памяти (стек и куча со стрелками) и записать, что будет выведено:</li>
-</ol>
-<div class="codehilite"><pre><span></span><code><span class="c1">// фрагмент 1</span>
-<span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">};</span>
-<span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
-<span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
-<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">};</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">);</span>
-
-<span class="c1">// фрагмент 2</span>
-<span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;кот&quot;</span><span class="p">;</span>
-<span class="n">String</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
-<span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;ик&quot;</span><span class="p">;</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="p">);</span>
-
-<span class="c1">// фрагмент 3</span>
-<span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">words</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="p">;</span>
-<span class="n">words</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Java&quot;</span><span class="p">;</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">words</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">.</span><span class="na">length</span><span class="p">());</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">words</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">.</span><span class="na">length</span><span class="p">());</span>
+<p>Массива здесь нет. Это не массив длиной ноль: у <code>new int[0]</code> объект есть и длина равна нулю. Попытка прочитать <code>missing.length</code> без проверки приведёт к <code>NullPointerException</code>. Проверка нужна <strong>до</strong> обращения.</p>
+<p>Массив <code>String[] names = new String[3]</code> существует, но каждый из трёх элементов сначала равен <code>null</code>. Поэтому <code>names.length</code> работает, а <code>names[0].length()</code> пока нет. Нельзя путать существование контейнера и существование объектов в его ячейках.</p>
+<h2 id="lecture-6">6. Строки: переменная меняется, текст старого объекта — нет</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">firstText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Кот&quot;</span><span class="p">;</span>
+<span class="n">String</span><span class="w"> </span><span class="n">secondText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">firstText</span><span class="p">;</span>
+<span class="n">firstText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">firstText</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;!&quot;</span><span class="p">;</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">secondText</span><span class="p">);</span>
 </code></pre></div>
 
-<ol start="3">
-<li>Написать метод <code>static void doubleAll(int[] numbers)</code>, который умножает каждый элемент массива на 2, и показать в <code>main</code>, что исходный массив изменился. Объяснить в комментарии, почему.</li>
-</ol>
-<h2 id="notes-_2">Проверь себя</h2>
-<p>По этим вопросам — опрос в начале следующей пары.</p>
+<p>Результат — «Кот». Выражение получает строковое значение «Кот!», а переменная <code>firstText</code> переназначается. <code>secondText</code> продолжает ссылаться на прежнюю строку. Это не означает, что переменную типа <code>String</code> запрещено менять.</p>
+<p>Для ссылок <code>==</code> проверяет, один ли это объект, либо обе ссылки <code>null</code>. Для текста у <code>String</code> используем <code>equals</code>: <code>"Кот".equals(secondText)</code>. Нельзя обобщать до «любой equals сравнивает содержимое»: класс сам определяет его поведение; у обычного нового класса без переопределения равенство остаётся по идентичности. У массивов <code>equals</code> также не сравнивает элементы; для них есть <code>Arrays.equals</code>.</p>
+<p>Литералы строк могут разделять объект из пула, поэтому случайно работающий <code>==</code> для одинаковых литералов — плохое доказательство правильности сравнения текста.</p>
+<h2 id="lecture-7">7. Немного о памяти без мифа о двух коробках</h2>
+<p>Для урока достаточно модели «переменные и объекты со стрелками». У JVM есть стек вызовов и куча объектов, но память программы не сводится только к ним. Ссылки могут храниться и в полях объектов, и в элементах массивов; правило «все ссылки в стеке» неверно. Оптимизации JVM тоже не нужно выдавать за устройство каждой картинки.</p>
+<p>Когда объект больше недостижим из работающей программы, сборщик мусора может освободить занятую им память. <code>variable = null</code> не команда немедленного уничтожения объекта: к нему могут оставаться другие пути. Не обещаем момент сборки и не используем <code>System.gc()</code> как учебный способ удаления.</p>
+<h2 id="lecture-_2">Разбираем по картинкам</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/05 Ссылки по шагам.png" alt="05 Ссылки по шагам"></p>
+<p>Сначала закройте следующий шаг. Спросите, что изменится: число, стрелка или количество объектов. Затем откройте следующий кадр.</p>
+<p><img class="lesson-diagram" loading="lazy" src="images/06 Ссылка и параметр метода.png" alt="06 Ссылка и параметр метода"></p>
+<p>Покажите две отдельные переменные: numbers у вызывающего кода и values у метода. Укажи, какую стрелку меняет присваивание внутри метода.</p>
+<h2 id="lecture-_3">Программа для самостоятельного запуска</h2>
+<p>Каждый пример запускается отдельно. Классы <code>Student</code> в разных темах — последовательные учебные версии: не собирать их вместе в одном пакете. В терминале из его папки: <code>javac -encoding UTF-8 ReferencesDemo.java</code>, затем <code>java ReferencesDemo</code>. JDK 17 или новее.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReferencesDemo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">};</span>
+<span class="w">        </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">first</span><span class="p">;</span>
+<span class="w">        </span><span class="n">second</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">99</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">first</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="w">        </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="p">{</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">};</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">first</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">second</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="w">        </span><span class="n">changeFirst</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
+<span class="w">        </span><span class="n">replace</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">first</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">firstText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Кот&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">secondText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">firstText</span><span class="p">;</span>
+<span class="w">        </span><span class="n">firstText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">firstText</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;!&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">secondText</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Кот&quot;</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">secondText</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">changeFirst</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">values</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">replace</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Ожидаемый вывод:</p>
+<div class="codehilite"><pre><span></span><code>99
+99
+7
+42
+Кот
+true
+</code></pre></div>
+
+<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-117">1.1.7 Ссылки — Под запись</h1>
+<h1 id="notes-java">java #ооп #конспект</h1>
+<h2 id="notes-_1">Определения</h2>
+<p><strong>Ссылка</strong> — значение, с помощью которого Java обращается к объекту. Ссылочная переменная хранит ссылку на объект или <code>null</code>.</p>
+<p><strong>Присваивание</strong> копирует значение правой части в переменную слева. Копирование ссылки само по себе не создаёт копию объекта.</p>
+<p><strong><code>null</code></strong> — специальное значение, означающее отсутствие ссылки на объект.</p>
+<p><strong>В Java аргументы передаются по значению:</strong> метод получает копию значения аргумента. Для ссылочного типа копируется значение ссылки.</p>
+<p><strong>Строка <code>String</code> неизменяема:</strong> содержимое существующего строкового объекта изменить нельзя.</p>
+<h2 id="notes-_2">Главная схема</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/01 Ссылки.png" alt="01 Ссылки"></p>
+<h2 id="notes-_3">Разберись на трёх строках</h2>
+<p><code>int[] first = {10, 20};</code> — создали массив. <code>int[] second = first;</code> — скопировали ссылку, массив по-прежнему один. <code>second[0] = 99;</code> — изменили общий массив, поэтому <code>first[0]</code> тоже 99.</p>
+<p><code>second = new int[]{7, 8};</code> перенаправляет только <code>second</code>. Через <code>first</code> остаётся прежний массив. Метод тоже получает отдельную переменную-параметр: изменение элементов общего массива видно вызывающему коду, а переназначение параметра — нет.</p>
+<p><code>null</code> не равен пустому массиву. Перед чтением <code>.length</code> у потенциально отсутствующего массива нужна проверка. У <code>String</code> сравниваем текст методом <code>equals</code>, а не <code>==</code>. Для других классов смысл <code>equals</code> зависит от реализации.</p>
+<h3 id="notes-_4">Нарисуй и предскажи</h3>
+<p>После <code>int[] first = {2, 4}; int[] second = first; second[1] = 9; second = new int[]{1};</code> чему равны <code>first[1]</code> и <code>second[0]</code>? Сколько массивов теперь?</p>
+<h2 id="notes-_5">Разбираем по картинкам</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/05 Ссылки по шагам.png" alt="05 Ссылки по шагам"></p>
+<p>Сначала закройте следующий шаг. Спросите, что изменится: число, стрелка или количество объектов. Затем откройте следующий кадр.</p>
+<p><img class="lesson-diagram" loading="lazy" src="images/06 Ссылка и параметр метода.png" alt="06 Ссылка и параметр метода"></p>
+<p>Покажите две отдельные переменные: numbers у вызывающего кода и values у метода. Попросите указать, какую стрелку меняет присваивание внутри метода.</p>
+<h2 id="notes-_6">Проверь себя</h2>
+<p>На каждый вопрос ответь своими словами и приведи пример:</p>
 <ol>
-<li>Чем переменная примитивного типа отличается от переменной ссылочного типа?</li>
-<li>Что хранится в стеке, что в куче?</li>
-<li>Что выводит <code>System.out.println(new int[3])</code> и почему не содержимое?</li>
-<li><code>int[] b = a; b[0] = 7;</code> — изменится ли <code>a[0]</code>? Почему?</li>
-<li><code>int[] b = a; b = new int[5];</code> — изменится ли <code>a</code>?</li>
-<li>Почему после <code>String s2 = s1; s1 = s1 + "!";</code> строка <code>s2</code> не изменилась?</li>
-<li>Почему <code>name.toUpperCase();</code> не меняет <code>name</code>? Как правильно?</li>
-<li>Что сравнивает <code>==</code> для строк? Почему <code>"да" == "да"</code> может дать <code>true</code>?</li>
-<li>Почему строку, введённую с клавиатуры, нельзя сравнивать через <code>==</code>?</li>
-<li>Что такое <code>null</code>? Где он появляется сам?</li>
-<li>Когда возникает <code>NullPointerException</code>? Как защититься?</li>
-<li>Почему в условии <code>s != null &amp;&amp; s.length() &gt; 0</code> нельзя поменять части местами?</li>
-<li>Метод получил массив и записал <code>numbers[0] = 100</code>. Видно ли это в <code>main</code>? А если бы он сделал <code>numbers = new int[3]</code>?</li>
-<li>Что делает сборщик мусора?</li>
-<li>Чем ссылка в Java отличается от указателя в C?</li>
-</ol></article><footer><a target="_top" href="../#java-methods">← Методы: процедуры и функции</a><a target="_top" href="../#java-classes">Классы и объекты →</a></footer></main><script src="lecture.js?v=3"></script></body></html>
+<li>Сколько массивов создаёт присваивание второй ссылки?</li>
+<li>Чем изменение элемента отличается от переназначения переменной?</li>
+<li>Что именно копируется при передаче массива в метод?</li>
+<li>Чем null отличается от пустого массива?</li>
+<li>Можно ли изменить переменную String и текст существующего объекта String?</li>
+<li>Как сравнивать текст строк и идентичность объектов?</li>
+</ol>
+<h2 id="notes-_7">Домашняя работа</h2>
+<p>Нарисовать три состояния массива: до присваивания ссылки, после изменения элемента, после переназначения второй переменной. Для каждого указать число массивов и ожидаемый вывод. Дополнительно проверить <code>clone()</code> на массиве целых чисел. На следующей паре эти же стрелки будут вести к объектам собственного класса.</p></article></details><footer><a target="_top" href="../#java-methods">← Методы: процедуры и функции</a><a target="_top" href="../#java-classes">Классы и объекты →</a></footer></main><script src="lecture.js?v=3"></script><script src="visuals.js?v=6"></script><script src="oop-visuals.js?v=1"></script></body></html>

@@ -1,193 +1,173 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Конструкторы · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА 12 ИЗ 12 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-122">1.2.2. Конструкторы и их перегрузка. Инкапсуляция — под запись</h1>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Конструкторы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="oop-visuals.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 12 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-122">1.2.2 Конструкторы</h1><section class="oop-widget" data-oop="constructors" aria-label="Пошаговая модель: 1.2.2 Конструкторы">
+  <h2>Посмотри, как это работает</h2>
+  <p>Предскажи результат строки, затем нажми «Дальше». Можно включить проигрывание и остановиться на любом шаге.</p>
+  <code class="oop-code" data-oop-code></code>
+  <div class="oop-scroll"><svg class="oop-scene" viewBox="0 0 970 465" role="img" aria-label="Состояние переменных и объектов текущего шага"></svg></div>
+  <p class="oop-caption">Учебная модель Java, не исполнитель произвольного кода. На узком экране схему можно прокрутить горизонтально.</p>
+  <div class="oop-controls"><button type="button" data-oop-action="back">← Назад</button><span data-oop-step></span><button type="button" data-oop-action="next">Дальше →</button><button type="button" data-oop-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-oop-action="reset">Сначала</button></div>
+  <p class="oop-explanation" data-oop-explanation aria-live="polite"></p>
+</section>
+
+<h2 id="lecture-_1">Основные понятия</h2>
 <blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары.</p>
+<p><strong>Конструктор</strong> — специальное объявление класса, задающее действия при инициализации нового экземпляра. Его имя совпадает с именем класса, тип результата не пишется.</p>
+<p><strong>Перегрузка конструкторов</strong> — несколько конструкторов одного класса с разными списками параметров.</p>
+<p><strong><code>this.field</code></strong> — обращение к полю текущего объекта; <strong><code>this(...)</code></strong> — вызов другого конструктора того же класса.</p>
+<p><strong>Конструктор по умолчанию</strong> предоставляется компилятором, если в обычном классе не объявлен ни один конструктор.</p>
+<p><strong><code>private</code></strong> ограничивает прямой доступ к члену класса; в наших отдельных учебных классах обращаться к закрытому полю можно из кода его собственного класса.</p>
+<p><strong>Геттер</strong> возвращает значение свойства. <strong>Сеттер</strong> предлагает изменить свойство; необходимость сеттера и проверки определяются правилами класса.</p>
 </blockquote>
-<h2 id="notes-1">1. Конструктор</h2>
-<p><strong>Конструктор</strong> — специальный блок кода в классе, который выполняется при создании объекта через <code>new</code> и задаёт начальные значения полей.</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
+<h2 id="lecture-1">1. Проблема незаполненной карточки</h2>
+<p>«Выдали пропуск, но забыли написать имя. Формально карточка есть, пользоваться ей неудобно. В программе произошло то же: объект создали, а одну из строк заполнения забыли. Пусть данные передаются сразу на вход при создании».</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="w"> </span><span class="n">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">70</span><span class="p">);</span>
+</code></pre></div>
 
-<span class="w">    </span><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">     </span><span class="c1">// конструктор</span>
-<span class="w">        </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="w">        </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<p>Имя и энергия — аргументы. Конструктор получает их в параметрах, проверяет и сохраняет в полях. Это не метод с типом результата <code>Student</code>: перед именем конструктора не пишется ни <code>Student</code>, ни <code>void</code>.</p>
+<p><img class="lesson-diagram" loading="lazy" src="images/03 Конструкторы.png" alt="03 Конструкторы"></p>
+<h2 id="lecture-2">2. Разбираем конструктор по словам</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Слева от <code>=</code> поле конкретного объекта, справа параметр текущего вызова. Оба могут называться <code>name</code>, но это разные переменные.</p>
+<p>Внешняя карточка объекта: поле <code>name = null</code>. Рядом карточка вызова: параметр <code>name = "Анна"</code>. Стрелка присваивания идёт от параметра к полю. <code>this</code> отвечает на вопрос «чьё поле?» — создаваемого объекта.</p>
+<p>Если написать <code>name = name</code>, параметр присвоится самому себе. Поле останется со своим прежним значением, например <code>null</code>. Программа может скомпилироваться, поэтому отсутствие красного подчёркивания не доказывает правильность.</p>
+<h2 id="lecture-3">3. Порядок создания без лишней магии</h2>
+<p>Для нашего простого класса без наследования и инициализаторов: выделяется память объекта, поля получают значения по умолчанию, выполняется необходимая инициализация и тело конструктора. При нормальном завершении выражение <code>new</code> даёт ссылку, которую можно сохранить в <code>anna</code>.</p>
+<p>Если проверка в конструкторе выбросила исключение, выражение <code>new</code> не завершилось обычным возвратом готовой ссылки и присваивание <code>anna</code> не выполняется. Конструктор не является обычной фабрикой, которой мы вручную пишем <code>return this</code>.</p>
+<p>«Можно ли вызвать конструктор на старом объекте, чтобы заново его заполнить?» Не как обычный метод <code>anna.Student(...)</code>. Для изменения состояния используем методы, а новое <code>new Student(...)</code> создаёт другой экземпляр.</p>
+<h2 id="lecture-4-new-student">4. Почему исчез new Student()</h2>
+<p>Когда конструкторов в исходнике не было, компилятор предоставлял конструктор по умолчанию. Когда написали хотя бы один собственный, такой конструктор уже не добавляется автоматически.</p>
+<p>Если объявлен только <code>Student(String name, int energy)</code>, вызов <code>new Student()</code> не подходит. Решения: передать нужные аргументы или сознательно написать ещё один конструктор. Нельзя «лечить» ошибку добавлением <code>void</code>: это превратит объявление в обычный метод с именем класса.</p>
+<h2 id="lecture-5">5. Два удобных способа создать один и тот же тип</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Один аргумент означает: имя задано, энергия по умолчанию 100. Этот конструктор вызывает основной, где сосредоточены проверки и присваивания. В результате одного <code>new Student("Борис")</code> создаётся один объект, а не два: цепочка конструкторов инициализирует тот же экземпляр.</p>
+<p>Для всех наших примеров ставим <code>this(...)</code> первой инструкцией. Это простой стиль, совместимый с Java 17/21. Не учить его как вечный запрет языка: начиная с Java 25 допускаются некоторые инструкции до явного вызова конструктора при специальных ограничениях. Нам эта возможность пока не нужна.</p>
+<h2 id="lecture-6">6. Проверка должна защищать и создание, и изменение</h2>
+<p>Энергия допустима от 0 до 100. В старом варианте сеттер мог напечатать ошибку и выйти; при вызове из конструктора объект всё равно создавался с полем 0. Это скрывает отказ. Здесь выберем явное поведение: недопустимое значение вызывает <code>IllegalArgumentException</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">energy</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">energy</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">&quot;Энергия должна быть от 0 до 100&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>«<code>throw</code> означает: продолжать как будто всё удалось нельзя. Мы сообщаем об ошибке входных данных. Это не возвращённое число и не обычная надпись в консоли». Полный курс исключений позже; сегодня достаточно видеть, что после неверных данных создание нормально не завершится.</p>
+<p>В итоговом классе проверку выносим в закрытый <code>static</code>-метод <code>checkEnergy</code>: ему требуется только переданное число, а не состояние конкретного студента. Смысл <code>static</code> подробнее на следующем занятии. Можно сначала дважды показать одно условие, затем вынести как уже знакомый собственный метод.</p>
+<p>Конструктор не вызывает переопределяемый публичный сеттер. Это избавляет от ненужной зависимости создания от поведения, которое позже может измениться в наследнике.</p>
+<h2 id="lecture-7">7. Закрытые поля и разумный интерфейс</h2>
+<p>В итоговом классе поля <code>private</code>. Попытка <code>anna.energy = -5</code> из другого класса не скомпилируется. При этом <code>getEnergy()</code> возвращает текущее значение, а <code>setEnergy(...)</code> проверяет новое перед присваиванием. При отказе старое значение остаётся прежним.</p>
+<p>У имени есть геттер, но нет сеттера: для этого учебного сценария переименование не предусмотрено. Это проектное решение, а не правило, что имена никогда не меняются. Отсутствие сеттера означает «через этот интерфейс изменение не предлагается», а не автоматически делает весь объект неизменяемым.</p>
+<p>Геттер и сеттер — обычные методы. Их названия облегчают чтение. Не создавать их бездумно для всех полей: например, у банковского счёта безопаснее операции пополнения и списания, чем произвольная установка баланса.</p>
+<h2 id="lecture-8">8. Как показать отказ, не превращая урок в лекцию об исключениях</h2>
+<p>В демонстрации <code>try</code> охватывает рискованный вызов, <code>catch (IllegalArgumentException error)</code> получает именно эту ошибку и позволяет вывести сообщение. Сначала провести положительный сценарий, затем неверный заряд. Не давать весь синтаксис обработки ошибок до понимания конструктора.</p>
+<p>Проверь значения 0, 100, −1 и 101. Первые два должны приниматься, последние два — отклоняться. Пограничные значения важнее десяти случайных запусков.</p>
+<h2 id="lecture-_2">Разбираем по картинкам</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/09 This поле и параметр.png" alt="09 This поле и параметр"></p>
+<p>Покажи левую и правую переменные в this.name = name. Затем объяснить, почему name = name компилируется, но не заполняет поле.</p>
+<h2 id="lecture-_3">Программа для самостоятельного запуска</h2>
+<p>Каждый пример запускается отдельно. Классы <code>Student</code> в разных темах — последовательные учебные версии: не собирать их вместе в одном пакете. В терминале из его папки: <code>javac -encoding UTF-8 ConstructorsDemo.java</code>, затем <code>java ConstructorsDemo</code>. JDK 17 или новее.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ConstructorsDemo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">70</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">boris</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Борис&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">anna</span><span class="p">.</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">anna</span><span class="p">.</span><span class="na">getEnergy</span><span class="p">());</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">boris</span><span class="p">.</span><span class="na">getEnergy</span><span class="p">());</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">anna</span><span class="p">.</span><span class="na">setEnergy</span><span class="p">(</span><span class="mi">150</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IllegalArgumentException</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Изменение отклонено&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">anna</span><span class="p">.</span><span class="na">getEnergy</span><span class="p">());</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Ошибка&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IllegalArgumentException</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Создание отклонено&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-
-<span class="n">Student</span><span class="w"> </span><span class="n">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">(</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">);</span><span class="w">    </span><span class="c1">// вызов конструктора</span>
-</code></pre></div>
-
-<p><strong>Отличия конструктора от метода:</strong>
-1. имя конструктора совпадает с именем класса;
-2. у конструктора <strong>нет типа возврата</strong>, даже <code>void</code>;
-3. конструктор вызывается только через <code>new</code>, один раз для каждого объекта.</p>
-<p>Порядок при <code>new</code>: память под объект → значения по умолчанию → тело конструктора → ссылка на объект.</p>
-<p>Если перед конструктором написать <code>void</code>, он станет обычным методом.</p>
-<h2 id="notes-2-this">2. <code>this</code></h2>
-<p><strong><code>this</code></strong> — ссылка на текущий объект: тот, который создаётся конструктором или у которого вызван метод.
-<code>this.name</code> — поле объекта; <code>name</code> — параметр (если параметр с таким именем есть).</p>
-<p>Стандартная форма конструктора: параметры называются как поля, присваивание — через <code>this</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><strong>Ошибка:</strong> <code>name = name;</code> без <code>this</code> присваивает параметр самому себе; поле не меняется, компилятор ошибку не показывает.</p>
-<h2 id="notes-3">3. Конструктор по умолчанию</h2>
-<p><strong>Конструктор по умолчанию</strong> — конструктор без параметров с пустым телом. Java добавляет его автоматически, <strong>только если в классе не объявлено ни одного конструктора</strong>.
-Как только в классе объявлен хотя бы один конструктор, конструктор по умолчанию не создаётся.</p>
-<h2 id="notes-4">4. Перегрузка конструкторов</h2>
-<p><strong>Перегрузка конструкторов</strong> — несколько конструкторов в одном классе с разными списками параметров. Java выбирает конструктор по аргументам в <code>new</code>.</p>
-<p><strong><code>this(...)</code></strong> — вызов другого конструктора того же класса. Должен быть <strong>первой инструкцией</strong> в конструкторе.
-Приём: один «главный» конструктор со всеми параметрами выполняет присваивания, остальные вызывают его через <code>this(...)</code> и подставляют значения по умолчанию.</p>
-<p><code>this.поле</code> — обращение к полю; <code>this(...)</code> — вызов конструктора.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">averageMark</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">    </span><span class="c1">// главный</span>
-<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
-<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">averageMark</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">averageMark</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">Student</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">this</span><span class="p">(</span><span class="s">&quot;Без имени&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<h2 id="notes-5">5. Инкапсуляция</h2>
-<p><strong>Инкапсуляция</strong> — сокрытие данных объекта: поля закрыты от прямого доступа извне класса, работа с ними идёт через методы класса, которые могут проверять значения.</p>
-<p><strong>Модификаторы доступа</strong></p>
-<table>
-<thead>
-<tr>
-<th>Модификатор</th>
-<th>Где доступно</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>private</code></td>
-<td>только внутри своего класса</td>
-</tr>
-<tr>
-<td>(без модификатора)</td>
-<td>внутри своего пакета</td>
-</tr>
-<tr>
-<td><code>protected</code></td>
-<td>внутри пакета и в классах-наследниках (тема 1.2.4)</td>
-</tr>
-<tr>
-<td><code>public</code></td>
-<td>везде</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Правило:</strong> поля — <code>private</code>, методы для работы с ними — <code>public</code>.</p>
-<p><strong>Геттер</strong> — метод, возвращающий значение поля: <code>public int getAge() { return age; }</code>
-<strong>Сеттер</strong> — метод, устанавливающий значение поля, обычно с проверкой:</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setAge</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">120</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Ошибка: недопустимый возраст&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="p">;</span><span class="w">                      </span><span class="c1">// поле не меняется</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Имена: <code>get</code> + имя поля с большой буквы; для <code>boolean</code> — <code>is</code>: <code>isActive()</code>. Сеттер: <code>set</code> + имя поля.
-Поле только для чтения: геттер есть, сеттера нет.
-Конструктор может вызывать сеттеры, чтобы проверка работала и при создании объекта.</p>
-<p><strong>Класс целиком:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
+<span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">checkEnergy</span><span class="p">(</span><span class="n">energy</span><span class="p">);</span>
 <span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-<span class="w">        </span><span class="n">setAge</span><span class="p">(</span><span class="n">age</span><span class="p">);</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-
+<span class="w">    </span><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getAge</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getEnergy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setAge</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">120</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Ошибка: недопустимый возраст &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="p">);</span>
-<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setEnergy</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">checkEnergy</span><span class="p">(</span><span class="n">energy</span><span class="p">);</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">checkEnergy</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">energy</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">energy</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">&quot;Энергия должна быть от 0 до 100&quot;</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<h2 id="notes-6">6. Сообщения об ошибках</h2>
-<table>
-<thead>
-<tr>
-<th>Сообщение</th>
-<th>Причина</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>constructor Student in class Student cannot be applied to given types</code></td>
-<td>нет конструктора с такими параметрами (или перед конструктором стоит <code>void</code>)</td>
-</tr>
-<tr>
-<td><code>call to this must be first statement in constructor</code></td>
-<td><code>this(...)</code> стоит не первой строкой</td>
-</tr>
-<tr>
-<td><code>age has private access in Student</code></td>
-<td>обращение к <code>private</code>-полю извне класса</td>
-</tr>
-<tr>
-<td><code>invalid method declaration; return type required</code></td>
-<td>имя конструктора не совпадает с именем класса</td>
-</tr>
-<tr>
-<td>(сообщения нет, поля пустые)</td>
-<td><code>name = name;</code> без <code>this</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="notes-_1">Домашнее задание</h2>
+<p>Ожидаемый вывод:</p>
+<div class="codehilite"><pre><span></span><code>Анна: 70
+100
+Изменение отклонено
+70
+Создание отклонено
+</code></pre></div>
+
+<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-122">1.2.2 Конструкторы — Под запись</h1>
+<h1 id="notes-java">java #ооп #конспект</h1>
+<h2 id="notes-_1">Определения</h2>
+<p><strong>Конструктор</strong> — специальное объявление класса, задающее действия при инициализации нового экземпляра. Его имя совпадает с именем класса, тип результата не пишется.</p>
+<p><strong>Перегрузка конструкторов</strong> — несколько конструкторов одного класса с разными списками параметров.</p>
+<p><strong><code>this.field</code></strong> — обращение к полю текущего объекта; <strong><code>this(...)</code></strong> — вызов другого конструктора того же класса.</p>
+<p><strong>Конструктор по умолчанию</strong> предоставляется компилятором, если в обычном классе не объявлен ни один конструктор.</p>
+<p><strong><code>private</code></strong> ограничивает прямой доступ к члену класса; в наших отдельных учебных классах обращаться к закрытому полю можно из кода его собственного класса.</p>
+<p><strong>Геттер</strong> возвращает значение свойства. <strong>Сеттер</strong> предлагает изменить свойство; необходимость сеттера и проверки определяются правилами класса.</p>
+<h2 id="notes-_2">Главная схема</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/03 Конструкторы.png" alt="03 Конструкторы"></p>
+<h2 id="notes-_3">Короткий образец</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Student</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>new Student("Анна")</code> передаёт имя конструктору. Слева в <code>this.name = name</code> поле, справа параметр. <code>name = name</code> не заполняет поле. <code>void Student(...)</code> был бы обычным методом.</p>
+<p>Свой конструктор отменяет автоматическое добавление конструктора по умолчанию. Дополнительный конструктор может вызвать основной через <code>this(...)</code>; в наших примерах такой вызов ставим первым. Современные версии Java имеют более гибкие правила, но для этого курса они не нужны.</p>
+<p>Недопустимые данные следует явно отклонять. В полном примере энергия вне 0–100 вызывает исключение. <code>private</code> запрещает прямое присваивание из другого отдельного класса; разрешённые действия задают методы. Не каждому полю нужен сеттер.</p>
+<h3 id="notes-_4">Нарисуй и предскажи</h3>
+<p>Есть только <code>Student(String name)</code>. Можно ли написать <code>new Student()</code>? Что меняется, если добавить конструктор без параметров, вызывающий <code>this("Без имени")</code>?</p>
+<h2 id="notes-_5">Разбираем по картинкам</h2>
+<p><img class="lesson-diagram" loading="lazy" src="images/09 This поле и параметр.png" alt="09 This поле и параметр"></p>
+<p>Попросите показать пальцем левую и правую переменные в this.name = name. Затем объяснить, почему name = name компилируется, но не заполняет поле.</p>
+<h2 id="notes-_6">Проверь себя</h2>
+<p>На каждый вопрос ответь своими словами и приведи пример:</p>
 <ol>
-<li>Вопросы «Проверь себя».</li>
-<li>Переделать класс <code>Phone</code> из прошлого домашнего задания:
-   - все поля <code>private</code>;
-   - конструкторы: <code>Phone(String model, int battery)</code> и <code>Phone(String model)</code> (заряд 100, через <code>this(...)</code>);
-   - геттеры для всех полей; сеттер <code>setBattery</code> с проверкой 0–100; у <code>model</code> сеттера нет;
-   - методы <code>charge</code>, <code>isLow</code>, <code>toString</code> из прошлого задания должны работать с закрытыми полями.
-   В <code>main</code> показать: создание двумя способами; попытку установить заряд 150 (отказ); что <code>phone.battery = 50</code> не компилируется (закомментировать строку и записать рядом сообщение компилятора).</li>
-<li>Класс <code>BankAccount</code>: <code>private</code> поля <code>owner</code> и <code>balance</code>; конструктор; методы <code>deposit(double amount)</code> (сумма должна быть положительной) и <code>withdraw(double amount)</code> (нельзя снять больше, чем есть); геттер для баланса, сеттера для баланса нет. Объяснить в комментарии, почему у баланса нет сеттера.</li>
+<li>Как узнать конструктор по объявлению?</li>
+<li>Что обозначают две части this.name = name?</li>
+<li>Когда компилятор предоставляет конструктор по умолчанию?</li>
+<li>Создаёт ли this(...) второй объект?</li>
+<li>Что происходит при недопустимой энергии в нашем конструкторе?</li>
+<li>От какого обхода правил защищает private?</li>
+<li>Обязательно ли каждому полю добавлять сеттер?</li>
 </ol>
-<h2 id="notes-_2">Проверь себя</h2>
-<p>По этим вопросам — опрос в начале следующей пары.</p>
-<ol>
-<li>Что такое конструктор? Когда он выполняется?</li>
-<li>Назовите три отличия конструктора от метода.</li>
-<li>В каком порядке происходит создание объекта при <code>new Student("Анна", 17)</code>?</li>
-<li>Перед конструктором случайно написали <code>void</code>. Что произойдёт?</li>
-<li>Что такое <code>this</code>?</li>
-<li>Почему <code>name = name;</code> в конструкторе не заполняет поле?</li>
-<li>Когда Java создаёт конструктор по умолчанию?</li>
-<li>В классе есть только <code>Student(String name)</code>. Скомпилируется ли <code>new Student()</code>?</li>
-<li>Что такое перегрузка конструкторов?</li>
-<li>Чем <code>this.name</code> отличается от <code>this(name)</code>?</li>
-<li>Где должен стоять вызов <code>this(...)</code>?</li>
-<li>Что такое инкапсуляция?</li>
-<li>Чем <code>private</code> отличается от <code>public</code>?</li>
-<li>Что такое геттер и сеттер? Как их называют?</li>
-<li>Как сделать поле доступным только для чтения?</li>
-<li>Зачем конструктору вызывать сеттеры, а не присваивать поля напрямую?</li>
-</ol></article><footer><a target="_top" href="../#java-classes">← Классы и объекты</a><a target="_top" href="../#java">К программе Java →</a></footer></main><script src="lecture.js?v=3"></script></body></html>
+<h2 id="notes-_7">Домашняя работа</h2>
+<p>Переделать Phone: закрытые поля, конструкторы <code>Phone(String model, int battery)</code> и <code>Phone(String model)</code> с зарядом 100; геттеры; проверяемый <code>setBattery</code>; операции <code>use</code> и <code>charge</code>. Показать 0, 100, −1, 101, сохранив прежнее значение после неудачного изменения. Объяснить, почему два конструктора не означают два объекта при одном <code>new</code>.</p></article></details><footer><a target="_top" href="../#java-classes">← Классы и объекты</a><a target="_top" href="../#java-static">Статические поля и методы →</a></footer></main><script src="lecture.js?v=3"></script><script src="visuals.js?v=6"></script><script src="oop-visuals.js?v=1"></script></body></html>
