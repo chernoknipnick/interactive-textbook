@@ -69,6 +69,7 @@ for slug,base,title in topics:
         aliases[base+suffix]=slug
 for slug,number,title,relative,related in works:
     aliases[Path(relative).stem]='work-'+slug
+aliases['Классы и объекты — Разбор каждой строки']='classes'
 
 unresolved=set()
 asset_source=ROOT/'content/java-assets'

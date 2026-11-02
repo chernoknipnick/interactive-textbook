@@ -67,7 +67,7 @@ function route(){
   document.getElementById('reader').hidden=!reader;
   if(reader){
     const topic=javaByKey[key];
-    const url=topic?'java/'+(topic.work?'work-':'')+topic.id+'.html?v=7':key==='practice'?'practice.html?v=5':key==='setup'?'lectures/setup.html?v=5':'lectures/course.html?v=5#'+key;
+    const url=topic?'java/'+(topic.work?'work-':'')+topic.id+'.html?v=8':key==='practice'?'practice.html?v=5':key==='setup'?'lectures/setup.html?v=5':'lectures/course.html?v=5#'+key;
     document.getElementById('frame').src=url;
     document.getElementById('external').href=url;
     document.getElementById('reader-name').textContent=javaByKey[key]?.title||titles[key];

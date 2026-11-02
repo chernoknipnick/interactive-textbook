@@ -161,7 +161,672 @@ true
 false
 </code></pre></div>
 
-<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-121">1.2.1 Классы и объекты — Под запись</h1>
+<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p>
+<h2 id="lecture-11">11. Словарь: не путать шесть разных вещей</h2>
+<table>
+<thead>
+<tr>
+<th>Слово</th>
+<th>Простое объяснение</th>
+<th>В нашей программе</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Тип</td>
+<td>Правило, какие значения допустимы и какие действия с ними можно делать</td>
+<td><code>int</code>, <code>String</code>, <code>Student</code></td>
+</tr>
+<tr>
+<td>Класс</td>
+<td>Описание нового ссылочного типа и поведения его экземпляров</td>
+<td>Объявление <code>class Student</code></td>
+</tr>
+<tr>
+<td>Объект</td>
+<td>Конкретный экземпляр, который существует во время работы программы</td>
+<td>Отдельный Student с именем «Анна»</td>
+</tr>
+<tr>
+<td>Переменная</td>
+<td>Именованное место для значения</td>
+<td><code>anna</code>, <code>index</code>, <code>partner</code></td>
+</tr>
+<tr>
+<td>Ссылка</td>
+<td>Значение, позволяющее обратиться к объекту</td>
+<td>Значение, сохранённое в <code>anna</code></td>
+</tr>
+<tr>
+<td>Поле</td>
+<td>Переменная, принадлежащая объекту или классу; здесь пока объекту</td>
+<td><code>name</code> и <code>energy</code> каждого Student</td>
+</tr>
+</tbody>
+</table>
+<p>Когда говорим «объект Анна», это удобное сокращение: речь об экземпляре Student, поле <code>name</code> которого равно строке «Анна». Слово <code>anna</code> в исходнике — имя переменной, а текст <code>"Анна"</code> — значение поля. Объект не обязан знать, как назвали ведущую к нему переменную. Если вторую ссылку назвать <code>partner</code>, имя в карточке само не превратится в «partner».</p>
+<p>У класса <code>Student</code> нет специального встроенного смысла «человек». Мы сами выбрали название и поля. Если написать <code>class Learner</code>, а затем везде согласованно заменить тип, модель останется такой же. В отличие от имён, слова <code>class</code>, <code>new</code>, <code>int</code>, <code>void</code>, <code>return</code> принадлежат языку Java: их нельзя произвольно переименовать.</p>
+<h3 id="lecture-_4">Зачем вообще связывать состояние и действия</h3>
+<p>Состояние отвечает на вопрос «что сейчас известно об объекте?»: имя — Анна, энергия — 70. Поведение отвечает на вопрос «что объекту можно поручить?»: учиться, отдыхать, проверить усталость. Метод может читать состояние, менять его, возвращать ответ или сочетать эти действия.</p>
+<p>Не каждый объект обязан изображать вещь из физического мира. Объектом может быть заявка, игровой сеанс, настройка, заказ или соединение. Мы начинаем со студента только потому, что его карточку легко представить.</p>
+<h2 id="lecture-12">12. Самый маленький класс: каждое слово и знак</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">class</span> <span class="nc">Student</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">energy</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Фрагмент</th>
+<th>Что именно означает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>class</code></td>
+<td>Начинаем объявление класса</td>
+</tr>
+<tr>
+<td><code>Student</code></td>
+<td>Имя объявляемого типа; регистр важен: <code>student</code> — другое имя</td>
+</tr>
+<tr>
+<td><code>{</code> после имени</td>
+<td>Здесь начинается тело класса</td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>Тип поля <code>name</code>; его значение — ссылка на строку либо <code>null</code></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>Выбранное нами имя поля</td>
+</tr>
+<tr>
+<td><code>;</code> после поля</td>
+<td>Конец этого объявления</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>Тип поля <code>energy</code>; хранится целое число</td>
+</tr>
+<tr>
+<td><code>energy</code></td>
+<td>Имя другого поля</td>
+</tr>
+<tr>
+<td>Последняя <code>}</code></td>
+<td>Тело класса закончилось</td>
+</tr>
+</tbody>
+</table>
+<p>Отступы делают вложенность видимой человеку. Java понимает блоки по фигурным скобкам, а не по числу пробелов. Поэтому исчезнувшая скобка — ошибка структуры, а случайно кривой отступ — повод проверить структуру, но сам по себе он не создаёт другой объект.</p>
+<p>У <code>name</code> и <code>energy</code> здесь нет слова <code>public</code>, но это не делает их <code>private</code>: в этом примере действует доступ внутри пакета. Два класса из нашего учебного файла находятся в одном пакете и могут обращаться к этим полям. Закроем их осознанно на следующей теме; пока открытое чтение нужно для наблюдения.</p>
+<h3 id="lecture-_5">Объявили класс — что уже произошло?</h3>
+<p>Мы описали устройство будущих экземпляров. Мы <strong>ещё не создали ни одного Student</strong>. Существование чертежа дома не означает, что дом построен. Для первого экземпляра в нашей программе понадобится выполнение выражения создания.</p>
+<h2 id="lecture-13-student">13. Создание: зачем Student написано два раза</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="w"> </span><span class="n">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span>
+</code></pre></div>
+
+<p>Левая и правая части выполняют разные роли:</p>
+<table>
+<thead>
+<tr>
+<th>Часть</th>
+<th>Вопрос</th>
+<th>Ответ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Student</code> слева</td>
+<td>Какого типа переменная?</td>
+<td>Она предназначена для ссылок, совместимых с Student</td>
+</tr>
+<tr>
+<td><code>anna</code></td>
+<td>Как к переменной обращаться дальше?</td>
+<td>По имени <code>anna</code></td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>Что сохранить в переменной?</td>
+<td>Значение выражения справа</td>
+</tr>
+<tr>
+<td><code>new</code></td>
+<td>Что делаем?</td>
+<td>Создаём новый экземпляр</td>
+</tr>
+<tr>
+<td><code>Student()</code> справа</td>
+<td>Какой экземпляр и каким конструктором инициализируем?</td>
+<td>Student, здесь конструктором без аргументов</td>
+</tr>
+<tr>
+<td><code>()</code></td>
+<td>Есть ли переданные аргументы?</td>
+<td>Сейчас нет</td>
+</tr>
+<tr>
+<td><code>;</code></td>
+<td>Где закончилась инструкция?</td>
+<td>Здесь</td>
+</tr>
+</tbody>
+</table>
+<p><code>Student</code> слева не является командой «создать студента». Это указание типа. Объект появляется из-за выполнения правой части. Если написать только <code>Student anna;</code> внутри метода, мы объявим локальную переменную, но не создадим экземпляр и не зададим ей значение для чтения.</p>
+<p>Эквивалентно по смыслу можно разбить действие на две инструкции:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="w"> </span><span class="n">anna</span><span class="p">;</span>
+<span class="n">anna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span>
+</code></pre></div>
+
+<p>После второй строки переменная готова к использованию. Если между строками попытаться прочитать <code>anna</code>, компилятор сообщит, что локальная переменная могла быть не инициализирована. Это не то же самое, что присвоить ей <code>null</code>: <code>null</code> — уже определённое значение, но объекта за ним нет.</p>
+<h3 id="lecture-_6">Порядок событий</h3>
+<ol>
+<li>Вычисляется выражение <code>new Student()</code> справа.</li>
+<li>Создаётся и инициализируется экземпляр. В нашем простом классе поля сначала получают <code>null</code> и 0; собственных присваиваний в конструкторе пока нет.</li>
+<li>Если создание успешно завершилось, выражение даёт ссылку на экземпляр.</li>
+<li>Эта ссылка сохраняется в переменной <code>anna</code>.</li>
+</ol>
+<p>Почему работают скобки, хотя мы не написали конструктор? В обычном классе без объявленных конструкторов компилятор предоставляет конструктор по умолчанию. На этой паре достаточно знать причину; отдельный подробный разбор будет в 1.2.2.</p>
+<h2 id="lecture-14">14. Точка, присваивание и кавычки</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">anna</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Анна&quot;</span><span class="p">;</span>
+<span class="n">anna</span><span class="p">.</span><span class="na">energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">70</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Первую строку читай целиком: «Найди объект по ссылке в <code>anna</code>, выбери его поле <code>name</code> и присвой этому полю ссылку на строку с текстом “Анна”». Для начала можно говорить короче: «Запиши имя в карточку Анны».</p>
+<p>Вторая строка: «У того же объекта сохрани число 70 в поле энергии». <code>70</code> без кавычек — целочисленное значение. <code>"70"</code> с кавычками — строка. В поле типа <code>int</code> строку напрямую присвоить нельзя. Тип нужен именно для того, чтобы такие несовместимые действия обнаруживались.</p>
+<p>Точка <code>.</code> выбирает член объекта, здесь поле или метод. Это не десятичная точка и не обозначение вложенного файла. Чтобы прочитать <code>anna.energy</code>, объект за ссылкой должен существовать. Если <code>anna == null</code>, попытка такого доступа к экземплярному полю завершится <code>NullPointerException</code>.</p>
+<h3 id="lecture-_7">Почему присваивание не означает математическое равенство</h3>
+<p><code>anna.energy = 70</code> выполняет действие — записывает новое значение. <code>anna.energy == 70</code> вычисляет ответ <code>true</code> или <code>false</code>, не меняя поле. Поэтому одна и две черты равенства не взаимозаменяемы.</p>
+<p>Имена и строки тоже различаются: <code>anna.name = name;</code> предполагает, что существует доступная переменная <code>name</code>; <code>anna.name = "name";</code> присваивает буквальный текст «name».</p>
+<h2 id="lecture-15-study">15. Метод study: разбираем вообще каждую строку</h2>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">study</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">energy</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: сначала нужен отдых&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">energy</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; учится. Энергия: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">energy</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="lecture-void-study">Заголовок void study()</h3>
+<p><code>void</code> — метод не возвращает вызывающему коду значение. Он при этом может выполнять действия: менять поле и печатать текст. <code>study</code> — выбранное имя действия. Пустые <code>()</code> означают, что явных аргументов при вызове здесь нет. Однако объект-получатель у экземплярного вызова есть: в <code>anna.study()</code> это объект по ссылке <code>anna</code>.</p>
+<p>Отсутствие аргументов не означает отсутствие данных. Метод использует поля своего текущего объекта. Открывающая <code>{</code> начинает тело метода. Последняя <code>}</code> заканчивает его. Внутренние скобки относятся к <code>if</code>, а не закрывают весь класс.</p>
+<h3 id="lecture-if-energy-10">Условие if (energy &lt; 10)</h3>
+<p><code>if</code> означает «выполни следующий блок, если условие истинно». В круглых скобках должно получиться <code>boolean</code>: <code>true</code> или <code>false</code>. Знак <code>&lt;</code> проверяет строгое неравенство.</p>
+<p>Если энергия 9, выражение <code>9 &lt; 10</code> истинно: заходим в блок отказа. Если 10, выражение <code>10 &lt; 10</code> ложно: отказ пропускается. Значит, ровно десяти единиц достаточно для занятия. Если по ошибке написать <code>&lt;=</code>, студент с энергией 10 тоже получит отказ — изменится правило программы.</p>
+<h3 id="lecture-_8">Вывод сообщения</h3>
+<p>В <code>System.out.println(...)</code> имя <code>System</code> обозначает стандартный класс, его статическое поле <code>out</code> даёт поток вывода, а <code>println</code> — метод этого потока. Круглые скобки содержат значение для вывода. После текста добавляется перевод строки.</p>
+<p>Знаки <code>+</code> в этом выражении соединяют текст. <code>name + " учится. Энергия: " + energy</code> собирает строковое представление сообщения. Например, имя «Анна» и число 60 дадут «Анна учится. Энергия: 60». Сам вывод <strong>не уменьшает энергию</strong> — за это отвечает отдельная инструкция перед ним.</p>
+<p>Не надо сейчас заучивать внутреннее устройство потока. Важно понимать цепочку обращения и не принимать <code>System.out.println</code> за одно волшебное слово.</p>
+<h3 id="lecture-return-void">return; внутри void</h3>
+<p><code>return;</code> немедленно завершает <strong>текущий вызов метода</strong>. В нашем случае после сообщения об отказе выполнение возвращается в <code>main</code> к строке после <code>anna.study()</code> или <code>boris.study()</code>.</p>
+<p><code>return;</code> не завершает всю программу и не закрывает все методы. Он также не «возвращает ноль»: у <code>void</code> нет результата-значения.</p>
+<p>Если убрать <code>return;</code>, студент с энергией 9 сначала услышит, что нужен отдых, а затем программа всё равно выполнит списание и получит −1. Условие лишь выбирает блок; именно выход не позволяет продолжить неудачное занятие.</p>
+<h3 id="lecture-energy-10">energy -= 10</h3>
+<p>Для нашего поля <code>int</code> и этого выражения смысл такой же, как <code>energy = energy - 10</code>: прочитать прежнее значение, вычесть десять, сохранить результат в то же поле. Если было 70, станет 60.</p>
+<p>Если написать <code>energy - 10</code> без присваивания, это не инструкция изменения поля и такой отдельный оператор Java здесь не допускает. Если вычислить <code>int remaining = energy - 10</code>, появится локальная переменная <code>remaining</code>, но поле само не изменится. Нужна запись в поле.</p>
+<h3 id="lecture-_9">Два пути исполнения</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Исходная энергия</th>
+<th>Условие <code>&lt; 10</code></th>
+<th>Действия</th>
+<th style="text-align: right;">Энергия после вызова</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">9</td>
+<td><code>true</code></td>
+<td>Сообщение об отдыхе → <code>return</code></td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td><code>false</code></td>
+<td>Вычесть 10 → сообщение об учёбе</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: right;">70</td>
+<td><code>false</code></td>
+<td>Вычесть 10 → сообщение об учёбе</td>
+<td style="text-align: right;">60</td>
+</tr>
+</tbody>
+</table>
+<p>Именно исходная энергия конкретного получателя определяет путь, а не то, в каком месте файла написан метод.</p>
+<h2 id="lecture-16-static-this">16. Почему у метода нет static и кто такой this</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">anna</span><span class="p">.</span><span class="na">study</span><span class="p">();</span>
+<span class="n">boris</span><span class="p">.</span><span class="na">study</span><span class="p">();</span>
+</code></pre></div>
+
+<p>Код <code>study</code> объявлен один раз в классе. Но у первого вызова получатель — Анна, у второго — Борис. Не нужно представлять, будто в каждую карточку копируется полный текст метода. Меняется текущий экземпляр, с которым работает вызов.</p>
+<p>Внутри нашего метода запись <code>energy</code> без затеняющей локальной переменной означает поле текущего экземпляра. Для наглядности можно написать <code>this.energy</code>. <code>this</code> не является строкой с именем студента и не является ссылкой на класс. Это ссылка на объект, для которого идёт данный экземплярный вызов.</p>
+<p>Если метод <code>study</code> сделать <code>static</code>, текущего экземпляра у него не будет. Чью энергию тогда читать по голому имени <code>energy</code>? Компилятор не может выбрать Анну или Бориса вместо программиста. Исправление — оставить метод экземплярным и вызвать его у нужного объекта, а не делать личные поля статическими.</p>
+<p><code>main</code> остаётся статическим и всё равно работает с объектами: <code>anna.study()</code> явно указывает получателя. Значит, правило не «из static нельзя вызвать обычный метод», а «нельзя неявно использовать отсутствующий текущий объект». Укажи объект — вызов допустим.</p>
+<h2 id="lecture-17-rest-istired">17. Методы rest и isTired: действия и ответы</h2>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">rest</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">energy</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">energy</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>energy += 20</code> увеличивает энергию текущего объекта на двадцать. Затем проверка ограничивает результат сверху. При исходных 70 получится 90. При 95 сначала получится 115, затем условие <code>115 &gt; 100</code> сработает и в поле запишется 100. В этой учебной модели максимум — 100.</p>
+<p>Ограничение выполняется <strong>после</strong> прибавления, потому что проверяем полученное состояние. Если сначала проверить только исходные 95 и затем прибавить 20, можно случайно оставить 115. Порядок инструкций — часть алгоритма.</p>
+<p>У <code>rest</code> нет вывода: отсутствие новой строки в консоли не означает, что он не выполнился. Изменённое состояние можно прочитать отдельно: <code>System.out.println(anna.energy);</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">boolean</span><span class="w"> </span><span class="nf">isTired</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">energy</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Перед именем стоит <code>boolean</code>: результат обязан быть логическим значением. <code>energy &lt; 30</code> уже вычисляет <code>true</code> или <code>false</code>; <code>return</code> передаёт этот ответ вызывающему коду. При энергии 29 результат <code>true</code>, при 30 — <code>false</code>. Проверка сама не уменьшает энергию.</p>
+<p>Можно использовать ответ напрямую:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">anna</span><span class="p">.</span><span class="na">isTired</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">anna</span><span class="p">.</span><span class="na">rest</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Сначала вызывается <code>isTired</code>, затем полученный <code>boolean</code> определяет вход в блок. Скобки <code>()</code> после имени означают вызов; запись <code>anna.isTired</code> не является чтением существующего поля и не заменяет вызов метода.</p>
+<h2 id="lecture-18-main">18. main: прочитать заголовок и понять границы файла</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ObjectsDemo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Часть</th>
+<th>Что нужно понять сейчас</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code> перед классом</td>
+<td>Класс объявлен публичным; в нашей файловой форме имя файла — <code>ObjectsDemo.java</code></td>
+</tr>
+<tr>
+<td><code>class ObjectsDemo</code></td>
+<td>Класс запуска сценария; это другой класс, не Student</td>
+</tr>
+<tr>
+<td><code>public</code> перед main</td>
+<td>Метод доступен для принятой здесь формы точки входа</td>
+</tr>
+<tr>
+<td><code>static</code></td>
+<td>Для запуска этого main не нужен заранее созданный ObjectsDemo</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td>main не возвращает значение вызывающему коду</td>
+</tr>
+<tr>
+<td><code>main</code></td>
+<td>Имя принятой в курсе точки входа</td>
+</tr>
+<tr>
+<td><code>String[]</code></td>
+<td>Тип массива строк</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td>Имя параметра для аргументов командной строки; это не ввод с клавиатуры через Scanner</td>
+</tr>
+<tr>
+<td>Круглые скобки</td>
+<td>Ограничивают список параметров метода</td>
+</tr>
+<tr>
+<td>Внутренняя пара <code>{ }</code></td>
+<td>Ограничивает тело main</td>
+</tr>
+<tr>
+<td>Внешняя пара <code>{ }</code></td>
+<td>Ограничивает тело ObjectsDemo</td>
+</tr>
+</tbody>
+</table>
+<p>При команде <code>java ObjectsDemo</code> запускаем этот класс. Не ищем «самую верхнюю исполняемую строку во всём файле». Объявление <code>Student</code> ниже <code>ObjectsDemo</code> не означает, что Java создаст студента после завершения main. Объявления описывают структуру, инструкции внутри выполняемых методов задают действия.</p>
+<p>В одном файле нашего примера два класса верхнего уровня, но только <code>ObjectsDemo</code> публичный. Если сделать ещё и <code>Student</code> публичным в этом же файле, компилятор потребует соответствующего файла для него. При разделении на два файла сохраняем <code>ObjectsDemo.java</code> и <code>Student.java</code> в одном учебном пакете и проекте.</p>
+<h2 id="lecture-19-70-40">19. Полная трассировка: куда делись 70 и 40</h2>
+<p>В таблице считаем только экземпляры <strong>Student</strong>. Строки и массивы тоже объекты Java, но не входят в этот отдельный счёт. «—» означает, что соответствующей переменной или объекта на этом этапе ещё нет.</p>
+<table>
+<thead>
+<tr>
+<th>Выполненная инструкция</th>
+<th style="text-align: right;">Энергия объекта Анна</th>
+<th style="text-align: right;">Энергия объекта Борис</th>
+<th>Что хранит partner</th>
+<th style="text-align: right;">Экземпляров Student</th>
+<th>Что попало в консоль</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Student anna = new Student();</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td style="text-align: right;">1</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>anna.name = "Анна";</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td style="text-align: right;">1</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>anna.energy = 70;</code></td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td style="text-align: right;">1</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>Student boris = new Student();</code></td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">0</td>
+<td>—</td>
+<td style="text-align: right;">2</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>boris.name = "Борис";</code></td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">0</td>
+<td>—</td>
+<td style="text-align: right;">2</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>boris.energy = 40;</code></td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">40</td>
+<td>—</td>
+<td style="text-align: right;">2</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>anna.study();</code></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">40</td>
+<td>—</td>
+<td style="text-align: right;">2</td>
+<td>Анна учится. Энергия: 60</td>
+</tr>
+<tr>
+<td><code>Student partner = anna;</code></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">40</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>partner.rest();</code></td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">40</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code>println(anna.energy)</code></td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">40</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>80</td>
+</tr>
+<tr>
+<td><code>println(boris.energy)</code></td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">40</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>40</td>
+</tr>
+<tr>
+<td><code>println(anna == partner)</code></td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">40</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>true</td>
+</tr>
+<tr>
+<td>Создали и заполнили group</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">40</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td>Первый проход цикла: <code>group[0].study()</code></td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">40</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>Анна учится. Энергия: 70</td>
+</tr>
+<tr>
+<td>Второй проход: <code>group[1].study()</code></td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">30</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>Борис учится. Энергия: 30</td>
+</tr>
+<tr>
+<td><code>println(boris.isTired())</code></td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">30</td>
+<td>Ссылку на Анну</td>
+<td style="text-align: right;">2</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p>Сокращение <code>println(...)</code> в таблице означает тот же <code>System.out.println(...)</code> в исходнике. Это обозначение для таблицы, а не новый готовый метод, который нужно вставить в программу.</p>
+<p>Почему последний ответ <code>false</code>, хотя Борис уже потратил энергию? Правило усталости — строго меньше 30. У него ровно 30. Бытовое ощущение «уже устал» не заменяет условие, записанное в коде.</p>
+<p>Почему у partner нет отдельной колонки энергии? Это переменная-ссылка на Анну. У одного объекта одно поле <code>energy</code>, даже если к нему ведут несколько переменных.</p>
+<h2 id="lecture-20">20. Вызов метода внутри метода: сначала разобрать выражение</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">boris</span><span class="p">.</span><span class="na">isTired</span><span class="p">());</span>
+</code></pre></div>
+
+<p>Не исполняем запись механически слева направо как набор независимых действий. Сначала нужно получить аргумент для <code>println</code>:</p>
+<ol>
+<li>По <code>boris</code> находим объект Бориса.</li>
+<li>Вызываем его <code>isTired()</code>.</li>
+<li>Внутри метода читаем 30 и вычисляем <code>30 &lt; 30</code> → <code>false</code>.</li>
+<li><code>return</code> передаёт <code>false</code> в место вызова.</li>
+<li><code>println</code> получает уже вычисленное значение и печатает <code>false</code>.</li>
+</ol>
+<p>Для понимания можно временно развернуть:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">boolean</span><span class="w"> </span><span class="n">tired</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">boris</span><span class="p">.</span><span class="na">isTired</span><span class="p">();</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">tired</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Результат тот же. Добавилась только локальная переменная с понятным именем. Это хороший способ разбирать вложенные вызовы, пока они непривычны.</p>
+<h2 id="lecture-21">21. Массив и цикл: каждое звено цепочки</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Student</span><span class="o">[]</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="p">;</span>
+<span class="n">group</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">anna</span><span class="p">;</span>
+<span class="n">group</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">boris</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">group</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">group</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="p">.</span><span class="na">study</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>Student[]</code> слева — тип «массив ссылок на Student». <code>group</code> — имя ссылочной переменной для самого массива. <code>new Student[2]</code> создаёт массив длины 2. Число в квадратных скобках — длина массива, а не аргумент конструктора Student.</p>
+<p>Сразу после создания: <code>group[0] == null</code>, <code>group[1] == null</code>. Две следующие инструкции сохраняют ссылки на уже созданных студентов. Сами студенты никуда физически не «переезжают в ячейки»: в ячейках находятся ссылки.</p>
+<p>Разбор <code>for</code>:</p>
+<ul>
+<li><code>int index = 0</code> — один раз создать счётчик с нулём.</li>
+<li><code>index &lt; group.length</code> — перед каждым проходом проверять допустимость продолжения; <code>length</code> массива равен 2.</li>
+<li><code>index++</code> — после тела увеличить счётчик на один.</li>
+<li>Тело — <code>group[index].study()</code>.</li>
+</ul>
+<p>Внутри тела сначала берётся элемент массива по индексу, затем полученная ссылка используется как получатель <code>study</code>. Это два последовательных поиска: переменная → массив → конкретный Student. При <code>index = 0</code> получатель Анна; при 1 — Борис. После увеличения до 2 условие <code>2 &lt; 2</code> ложно: третьего вызова нет.</p>
+<p>Если заменить <code>&lt;</code> на <code>&lt;=</code>, цикл попробует обратиться к <code>group[2]</code>. Это выход за границы массива, а не создание третьего студента. Если забыть заполнить <code>group[1]</code>, границы будут допустимы, но вызов у <code>null</code> завершится <code>NullPointerException</code>. Это две разные ошибки с разными причинами.</p>
+<h2 id="lecture-22">22. Объект как аргумент: теперь полностью, а не намёком</h2>
+<p>В класс запуска, рядом с main и снаружи его тела, можно добавить:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">help</span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">learner</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">learner</span><span class="p">.</span><span class="na">rest</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Вызов из main: <code>help(anna);</code>.</p>
+<p><code>Student</code> — тип параметра; <code>learner</code> — его локальное имя. При вызове в параметр копируется значение ссылки из <code>anna</code>. Затем <code>learner.rest()</code> вызывает отдых того же объекта. Поэтому энергия Анны увеличивается, хотя имя <code>anna</code> внутри <code>help</code> вообще не используется.</p>
+<p><code>static</code> нужен здесь для прямого вызова из статического main в классе запуска. Метод не имеет собственного текущего Student: он получает нужного студента явным параметром. <code>rest</code>, напротив, — экземплярный метод Student, которому нужен получатель.</p>
+<p>Если внутри help выполнить <code>learner = new Student()</code>, изменится только параметр. Переменная <code>anna</code> у вызывающего кода всё ещё ведёт к старому экземпляру. Чтобы заменить её значение, нужно явно получить новую ссылку и присвоить её снаружи.</p>
+<p>Пример <code>help</code> — дополнительный опыт. Вставка его вызова в исходный ObjectsDemo изменит дальнейшие значения энергии и ожидаемый вывод. Проверяй его отдельно или составь новую трассировку; не сравнивай изменённую программу со старым ответом.</p>
+<h2 id="lecture-23">23. Ошибка → причина → исправление</h2>
+<table>
+<thead>
+<tr>
+<th>Что написали или увидели</th>
+<th>Что произошло</th>
+<th>Как проверить и исправить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Student anna; anna.study();</code></td>
+<td>Локальная ссылка ещё не получила значения</td>
+<td>Создать объект и присвоить ссылку до обращения</td>
+</tr>
+<tr>
+<td><code>Student anna = null; anna.study();</code></td>
+<td>Значение есть, но объекта за ним нет</td>
+<td>Найти пропущенное создание; не подменять его бессмысленной проверкой</td>
+</tr>
+<tr>
+<td><code>Student.study();</code> при обычном study</td>
+<td>Не указан объект для экземплярного действия</td>
+<td>Вызвать <code>anna.study()</code> у нужного экземпляра</td>
+</tr>
+<tr>
+<td><code>anna.energy = "70";</code></td>
+<td>Полю int предложили строку</td>
+<td>Для этого примера использовать целое <code>70</code> без кавычек</td>
+</tr>
+<tr>
+<td><code>int result = anna.study();</code></td>
+<td>Метод void не даёт значения для присваивания</td>
+<td>Вызвать действие отдельно; для ответа нужен метод с типом результата</td>
+</tr>
+<tr>
+<td><code>anna.study;</code></td>
+<td>Нет корректного вызова метода</td>
+<td>Написать <code>anna.study();</code></td>
+</tr>
+<tr>
+<td>После <code>rest()</code> ничего не напечаталось</td>
+<td>В методе нет вывода, но поле изменилось</td>
+<td>Отдельно прочитать энергию, не объявлять метод неработающим</td>
+</tr>
+<tr>
+<td>После <code>partner = anna</code> отдых виден через anna</td>
+<td>Это ожидаемый эффект общей ссылки</td>
+<td>Если нужен независимый объект, создать его отдельно и заполнить поля</td>
+</tr>
+<tr>
+<td>У всех студентов меняется одна энергия</td>
+<td>Личное поле ошибочно сделано static</td>
+<td>Вернуть экземплярное поле и проверять конкретного получателя</td>
+</tr>
+<tr>
+<td><code>group[2]</code> при длине 2</td>
+<td>Допустимы только индексы 0 и 1</td>
+<td>Исправить границу цикла</td>
+</tr>
+<tr>
+<td><code>group[1].study()</code> при null в ячейке</td>
+<td>Массив существует, Student в этой ячейке — нет</td>
+<td>Заполнить ссылку до вызова или осознанно пропускать пустые ячейки</td>
+</tr>
+</tbody>
+</table>
+<p>Текст сообщения компилятора может различаться между версиями и средами. Важнее уметь назвать причину, чем запомнить английскую строку наизусть.</p>
+<h2 id="lecture-24">24. От образца к собственной программе: мостик без прыжка</h2>
+<p>Задача — телефон с моделью и зарядом. Здесь нужно перенести уже знакомую структуру, а не угадывать неизвестный способ решения.</p>
+<h3 id="lecture-_10">Шаг А. Сопоставить смысл</h3>
+<table>
+<thead>
+<tr>
+<th>Было Student</th>
+<th>Станет Phone</th>
+<th>Что сохраняется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>String name</code></td>
+<td><code>String model</code></td>
+<td>Текстовое поле</td>
+</tr>
+<tr>
+<td><code>int energy</code></td>
+<td><code>int battery</code></td>
+<td>Числовое поле состояния</td>
+</tr>
+<tr>
+<td><code>study()</code></td>
+<td><code>use()</code></td>
+<td>Проверка и уменьшение на 10</td>
+</tr>
+<tr>
+<td><code>rest()</code></td>
+<td><code>charge()</code></td>
+<td>Увеличение на 20 с ограничением 100</td>
+</tr>
+<tr>
+<td><code>isTired()</code></td>
+<td><code>isLow()</code></td>
+<td>Логический ответ; здесь порог 20</td>
+</tr>
+</tbody>
+</table>
+<p>Не менять сразу всё. Сначала объявить новый класс с двумя полями и добиться компиляции. Затем создать один объект и вывести его поля. Только после этого добавлять действия.</p>
+<h3 id="lecture-_11">Шаг Б. Первый запуск без методов</h3>
+<p>В своём классе запуска создать <code>Phone firstPhone = new Phone();</code>, присвоить <code>model = "Учебный телефон"</code>, <code>battery = 70</code>, вывести значения. Чтобы это заработало, объявление класса Phone с обоими полями уже должно находиться в проекте. Конструктор с параметрами на этой теме ещё не требуется.</p>
+<h3 id="lecture-_12">Шаг В. Один метод, одна проверка</h3>
+<p>Написать <code>void use()</code> по образцу <code>study</code>. До вызова батарея 70, после одного вызова 60. Затем проверить исходные 9 и 10: при 9 должен быть отказ без изменения; при 10 — заряд 0. Пока это не работает, не добавлять новые методы.</p>
+<h3 id="lecture-_13">Шаг Г. Отдых превращается в зарядку</h3>
+<p>Написать <code>charge()</code> по образцу <code>rest</code>. Проверить 70 → 90 и 95 → 100. Написать <code>isLow()</code> с порогом 20. Сравнить 19 → true и 20 → false. Здесь намеренно другие пороги: это проверяет понимание, а не точное копирование.</p>
+<h3 id="lecture-_14">Шаг Д. Второй объект и вторая ссылка — по отдельности</h3>
+<p>Создать второй Phone со своим зарядом 40. Вызов <code>firstPhone.use()</code> не должен менять второй телефон. Затем выполнить <code>Phone backup = firstPhone;</code> и вызвать <code>backup.charge()</code>: изменение должно быть видно через firstPhone. Объяснить оба результата стрелками.</p>
+<p>Не добавлять сюда конструкторы с параметрами, наследование, коллекции, Scanner или меню, пока не понятна основная модель. Они не являются условием выполнения этой задачи.</p>
+<h3 id="lecture-_15">Что считать доказательством понимания</h3>
+<p>Ты можешь показать две разные карточки объектов; назвать, у какой изменится поле; объяснить каждую часть вызова; предсказать результат без запуска; затем подтвердить его программой. Просто наличие похожего кода в редакторе этого ещё не доказывает.</p>
+<h2 id="lecture-25">25. Самостоятельная проверка перед следующей темой</h2>
+<ol>
+<li>Не запуская программу, напиши: сколько Student создают два new и три присваивания ссылок? Объясни, почему количество имён не равно количеству объектов.</li>
+<li>У Анны энергия 10. Какие строки study выполнятся? Что останется в поле? Повтори для энергии 9.</li>
+<li>Чем отличаются <code>anna.energy</code>, <code>anna.study()</code>, <code>Student anna</code> и <code>new Student()</code>? У каждой записи своя роль.</li>
+<li>Что сделает <code>return;</code> при отказе учиться? С какой строки main продолжится сценарий?</li>
+<li>При каком условии <code>group[index].study()</code> вызовет NullPointerException, а при каком — выход за границы массива?</li>
+<li>Почему <code>isTired</code> подходит в условие if, а <code>study</code> — нет?</li>
+<li>Что нужно сделать, чтобы изменить правило «устал при энергии меньше 30»? Укажи конкретный метод и сравнение.</li>
+</ol>
+<p>Если ответы пока не получаются, вернись к минимальному классу и таблице трассировки. Следующая тема о конструкторах опирается именно на эти различия, а не на способность воспроизвести длинный код по памяти.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-121">1.2.1 Классы и объекты — Под запись</h1>
 <h1 id="notes-java">java #ооп #конспект</h1>
 <h2 id="notes-_1">Определения</h2>
 <p><strong>Класс</strong> — описание типа объектов: какие данные они хранят и какие действия доступны для них.</p>
@@ -184,7 +849,45 @@ false
 <p>Прочитайте строку по ролям, а затем по порядку выполнения: сначала создание справа, потом присваивание ссылки слева.</p>
 <p><img class="lesson-diagram" loading="lazy" src="images/08 Массив ссылок на студентов.png" alt="08 Массив ссылок на студентов"></p>
 <p>Сколько массивов и сколько Student создано каждой строкой? После new Student[3] массив один, студентов ноль. Присваивания в ячейки используют уже существующие объекты.</p>
-<h2 id="notes-_6">Проверь себя</h2>
+<h2 id="notes-_6">Разобрать каждую строку</h2>
+<p>Подробные объяснения каждой записи, трассировка полного примера и пошаговый переход к Phone: <a target="_top" href="../#java-classes">Классы и объекты — Разбор каждой строки</a>. На сайте этот разбор включён в полную лекцию «Классы и объекты».</p>
+<table>
+<thead>
+<tr>
+<th>Запись</th>
+<th>Что происходит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Student anna;</code></td>
+<td>Объявляется локальная переменная, объект не создан</td>
+</tr>
+<tr>
+<td><code>anna = new Student();</code></td>
+<td>Создаётся экземпляр, полученная ссылка присваивается anna</td>
+</tr>
+<tr>
+<td><code>anna.energy = 70;</code></td>
+<td>Меняется поле конкретного объекта</td>
+</tr>
+<tr>
+<td><code>anna.study();</code></td>
+<td>Вызывается действие у этого объекта</td>
+</tr>
+<tr>
+<td><code>Student partner = anna;</code></td>
+<td>Копируется ссылка на прежний объект</td>
+</tr>
+<tr>
+<td><code>anna == partner</code></td>
+<td>Проверяется, один ли это объект</td>
+</tr>
+</tbody>
+</table>
+<p>Границы условий: study при энергии 9 отказывает и оставляет 9; при 10 допускает занятие и оставляет 0. isTired при 29 возвращает true, при 30 — false. rest при 95 оставляет 100, а не 115.</p>
+<p><code>return;</code> завершает текущий вызов, а не всю программу. Для void нет значения, которое можно присвоить. У <code>boolean isTired()</code> значение есть: его можно сохранить в переменную или передать в if.</p>
+<h2 id="notes-_7">Проверь себя</h2>
 <p>На каждый вопрос ответь своими словами и приведи пример:</p>
 <ol>
 <li>Чем класс отличается от объекта?</li>
@@ -196,5 +899,5 @@ false
 <li>Почему isTired подходит для if?</li>
 <li>Зачем управлять доступом к полям?</li>
 </ol>
-<h2 id="notes-_7">Домашняя работа</h2>
+<h2 id="notes-_8">Домашняя работа</h2>
 <p>Создать класс Phone с полями <code>model</code> и <code>battery</code>. Сделать два объекта. Методы: <code>use()</code> уменьшает заряд на 10, если заряда достаточно; <code>charge()</code> увеличивает на 20, не выше 100; <code>isLow()</code> возвращает <code>battery &lt; 20</code>. Создать вторую ссылку на первый телефон и объяснить эффект вызова через неё. Нарисовать все объекты и стрелки. Не добавлять <code>static</code> к заряду. На следующем уроке переделаем создание и закроем поля.</p></article></details><footer><a target="_top" href="../#java-references">← Ссылки</a><a target="_top" href="../#java-constructors">Конструкторы →</a></footer></main><script src="lecture.js?v=3"></script><script src="visuals.js?v=6"></script><script src="oop-visuals.js?v=1"></script></body></html>
