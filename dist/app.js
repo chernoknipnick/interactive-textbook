@@ -1,6 +1,10 @@
 const titles={'01':'Базовые понятия','02':'Связи между таблицами','03':'Нормализация','04':'SELECT и запросы','05':'Продвинутый SQL',setup:'Подготовка окружения',practice:'SQL-практикум'};
 const javaTopics=window.javaLessons||[];
-const javaByKey=Object.fromEntries(javaTopics.map(t=>['java-'+t.id,t]));
+const javaWorks=window.javaPractices||[];
+const javaByKey=Object.fromEntries([
+  ...javaTopics.map(t=>['java-'+t.id,t]),
+  ...javaWorks.map(t=>['java-work-'+t.id,{...t,work:true}])
+]);
 for(const topic of javaTopics){
   const link=document.createElement('a');link.href='#java-'+topic.id;
   const number=document.createElement('i');number.style.setProperty('--c','#ffb77c');number.textContent=topic.number;
@@ -13,11 +17,23 @@ for(const topic of javaTopics){
   const footer=document.createElement('footer');footer.textContent='Открыть материал →';
   card.append(top,title,detail,footer);document.getElementById('java-topic-cards').appendChild(card);
 }
+for(const work of javaWorks){
+  const link=document.createElement('a');link.href='#java-work-'+work.id;
+  const number=document.createElement('i');number.style.setProperty('--c','#ffb77c');number.textContent=work.number;
+  const label=document.createElement('span');label.textContent=work.title;
+  link.append(number,label);document.getElementById('java-work-links').appendChild(link);
+  const card=document.createElement('a');card.href=link.href;card.style.setProperty('--c','#ffb77c');
+  const top=document.createElement('div');top.className='card-top';top.textContent=work.number+' / '+(work.number.startsWith('ЛР')?'ЛАБОРАТОРНАЯ':'ПРАКТИЧЕСКАЯ');
+  const title=document.createElement('h3');title.textContent=work.title;
+  const detail=document.createElement('p');detail.textContent='Задание студенту · теория, варианты и примеры';
+  const footer=document.createElement('footer');footer.textContent='Перейти к заданиям →';
+  card.append(top,title,detail,footer);document.getElementById('java-work-cards').appendChild(card);
+}
 let lastSQL='home',lastJava='java';
 function route(){
   let key=location.hash.slice(1)||'home';
-  if(!titles[key]&&key!=='java'&&!javaByKey[key])key='home';
-  const java=key==='java'||Boolean(javaByKey[key]);
+  if(!titles[key]&&key!=='java'&&key!=='java-practice'&&!javaByKey[key])key='home';
+  const java=key==='java'||key==='java-practice'||Boolean(javaByKey[key]);
   if(!java)lastSQL=key;else lastJava=key;
   document.body.classList.toggle('java-course',java);
   document.getElementById('course-brand').textContent=java?'Java':'SQL';
@@ -33,18 +49,23 @@ function route(){
     else link.removeAttribute('aria-current');
   }
   document.getElementById('course-heading').textContent=java?'Программирование на Java':'ОП.08 / Базы данных и SQL';
-  document.getElementById('header-practice').hidden=java;
+  const practiceLink=document.getElementById('header-practice');
+  practiceLink.hidden=false;
+  practiceLink.href=java?'#java-practice':'#practice';
+  practiceLink.textContent=java?'Практические работы ↗':'Открыть песочницу ↗';
   document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.hash==='#'+key));
   document.getElementById('home').hidden=key!=='home';
   document.getElementById('java-home').hidden=key!=='java';
+  document.getElementById('java-practice-home').hidden=key!=='java-practice';
   const reader=Boolean(titles[key]||javaByKey[key]);
   document.getElementById('reader').hidden=!reader;
   if(reader){
-    const url=javaByKey[key]?'java/'+javaByKey[key].id+'.html?v=3':key==='practice'?'practice.html':key==='setup'?'lectures/setup.html':'lectures/course.html?v=2#'+key;
+    const topic=javaByKey[key];
+    const url=topic?'java/'+(topic.work?'work-':'')+topic.id+'.html?v=4':key==='practice'?'practice.html':key==='setup'?'lectures/setup.html':'lectures/course.html?v=2#'+key;
     document.getElementById('frame').src=url;
     document.getElementById('external').href=url;
     document.getElementById('reader-name').textContent=javaByKey[key]?.title||titles[key];
-    document.getElementById('reader-back').href=java?'#java':'#home';
+    document.getElementById('reader-back').href=topic?.work?'#java-practice':java?'#java':'#home';
   }
   window.scrollTo(0,0);
 }

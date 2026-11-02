@@ -1,0 +1,117 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ЛР02. Условный оператор и циклы · Java</title><link rel="stylesheet" href="lecture.css?v=4"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ЛР02 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-conditions">Условный оператор</a><a target="_top" href="../#java-loops">Циклы</a></div><article><h1>Условный оператор и циклы</h1><h2 id="work-lab02-_1">Что отрабатываем</h2>
+<ul>
+<li>
+<p><code>if</code>, <code>if-else</code>, <code>else if</code>, вложенные условия; типичные ошибки с <code>==</code>/<code>=</code> и границами диапазонов.</p>
+</li>
+<li>
+<p><code>switch</code> (в т.ч. объединение меток, <code>default</code>, <code>yield</code>/стрелочная форма для JDK 14+).</p>
+</li>
+<li>
+<p>Циклы <code>for</code>, <code>while</code>, <code>do-while</code>, вложенные циклы.</p>
+</li>
+<li>
+<p>Управление потоком: <code>break</code>, <code>continue</code>.</p>
+</li>
+<li>
+<p>Счётчики, суммы, минимум/максимум, работа со строками и массивами в циклах.</p>
+</li>
+</ul>
+<hr />
+<h2 id="work-lab02-1">Вариант 1 (студент)</h2>
+<ol>
+<li>
+<p><strong>If / диапазон</strong><br />
+    Ввести целое <code>x</code>. Вывести <code>"IN"</code> если <code>x</code> в диапазоне <code>[10; 20]</code> включительно, иначе <code>"OUT"</code>.</p>
+</li>
+<li>
+<p><strong>Каскад условий</strong><br />
+    Ввести <code>t</code> — температуру.<br />
+    Вывести: <code>&lt;0: "ICE"</code>, <code>0..24: "COLD"</code>, <code>25..35: "WARM"</code>, <code>&gt;35: "HOT"</code>.</p>
+</li>
+<li>
+<p><strong>Switch: дни недели</strong><br />
+    Ввести <code>d</code> (1..7). Вывести название дня: 1–Пн, …, 7–Вс; иначе <code>"ERROR"</code>.</p>
+</li>
+<li>
+<p><strong>for: сумма и количество</strong><br />
+    Для <code>n</code> (n≥1) посчитать сумму 1..n и количество чётных чисел на отрезке 1..n.</p>
+</li>
+<li>
+<p><strong>while: переворот числа</strong><br />
+    Ввести положительное <code>m</code>. Вывести число, записанное цифрами в обратном порядке (например, 1203 → 3021).</p>
+</li>
+</ol>
+<hr />
+<h2 id="work-lab02-2">Вариант 2 (студент)</h2>
+<ol>
+<li>
+<p><strong>If: знак числа</strong><br />
+    Ввести <code>x</code>. Вывести <code>"NEG"</code>, <code>"ZERO"</code> или <code>"POS"</code>.</p>
+</li>
+<li>
+<p><strong>Границы оценки</strong><br />
+    Ввести <code>score</code> 0..100. Вывести <code>"F" (&lt;60)</code>, <code>"D"(60..69)</code>, <code>"C"(70..79)</code>, <code>"B"(80..89)</code>, <code>"A"(90..100)</code>, иначе <code>"ERROR"</code>.</p>
+</li>
+<li>
+<p><strong>Switch: сезон</strong><br />
+    Ввести номер месяца <code>m</code> (1..12). Вывести <code>"WINTER" (12,1,2)</code>, <code>"SPRING" (3..5)</code>, <code>"SUMMER" (6..8)</code>, <code>"AUTUMN" (9..11)</code>.</p>
+</li>
+<li>
+<p><strong>for: факториал</strong><br />
+    Ввести <code>n</code> (0..12). Посчитать <code>n!</code>.</p>
+</li>
+<li>
+<p><strong>do-while: угадайка</strong><br />
+    Задано секретное число <code>s</code> (жёстко в коде, напр. 42). Считывать попытки до угадывания; подсказать <code>"LOW"</code>/<code>"HIGH"</code>.</p>
+</li>
+</ol>
+<hr />
+<h2 id="work-lab02-3">Вариант 3 (студент)</h2>
+<ol>
+<li>
+<p><strong>If: високосный год</strong><br />
+    Ввести <code>y</code>. Вывести <code>"LEAP"</code> если год високосный (делится на 4 и не на 100, или делится на 400), иначе <code>"COMMON"</code>.</p>
+</li>
+<li>
+<p><strong>Каскад: тариф</strong><br />
+    Ввести <code>age</code>.<br />
+<code>&lt;7 → "FREE"</code>, <code>7..17 → "KID"</code>, <code>18..59 → "ADULT"</code>, <code>≥60 → "SENIOR"</code>.</p>
+</li>
+<li>
+<p><strong>Switch: калькулятор</strong><br />
+    Ввести <code>a</code>, <code>b</code>, и символ операции <code>+,-,*,/</code>. Через <code>switch</code> вывести результат (для <code>/</code> — если <code>b==0</code>, вывести <code>"DIV BY ZERO"</code>).</p>
+</li>
+<li>
+<p><strong>for: сумма цифр</strong><br />
+    Ввести <code>n≥0</code>. Вычислить сумму цифр числа.</p>
+</li>
+<li>
+<p><strong>while + continue</strong><br />
+    Вывести все числа 1..<code>n</code>, кроме кратных 3 (пропускать <code>continue</code>).</p>
+</li>
+</ol>
+<hr />
+<h2 id="work-lab02-4">Вариант 4 (студент)</h2>
+<ol>
+<li>
+<p><strong>If: максимум из трёх</strong><br />
+    Ввести <code>a, b, c</code>. Вывести наибольшее.</p>
+</li>
+<li>
+<p><strong>Лестница <code>else if</code>: оценка по среднему</strong><br />
+    Ввести три балла <code>a,b,c</code> (0..100). Посчитать среднее и выдать категорию как в варианте 2 (A..F).</p>
+</li>
+<li>
+<p><strong>Switch: римские цифры I..X</strong><br />
+    Ввести <code>k</code> (1..10). Вывести римскую запись (I,V,X и комбинации), иначе <code>"ERROR"</code>.</p>
+</li>
+<li>
+<p><strong>Вложенные циклы: таблица умножения 1..n</strong><br />
+    Ввести <code>n</code> (1..9). Вывести аккуратную таблицу <code>i*j</code>.</p>
+</li>
+<li>
+<p><strong>do-while: меню</strong><br />
+    Печатать меню до выбора <code>"0. Exit"</code>. Пункты 1..3 печатают заглушки <code>"Action 1/2/3"</code>. По <code>0</code> — выход.</p>
+</li>
+</ol>
+<hr /></article><footer><a target="_top" href="../#java-work-lab01">← ЛР01</a><a target="_top" href="../#java-work-pr02">ПР02 →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

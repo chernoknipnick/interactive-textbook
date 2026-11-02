@@ -1,0 +1,269 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ПР03. Собственные методы · Java</title><link rel="stylesheet" href="lecture.css?v=4"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ПР03 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-methods">Методы: процедуры и функции</a><a target="_top" href="../#java-arrays">Массивы</a></div><article><h1 id="work-pr03-03">ПР03. Собственные методы</h1>
+<p>Продолжительность: 90 минут. Предыдущая работа — ПР02 «Циклы и массивы». Теоретическая основа — новая лекция «Методы (процедуры и функции) в Java».</p>
+<h2 id="work-pr03-_1">Цель</h2>
+<p>Научиться объявлять и вызывать собственные методы, передавать им данные и получать результат через <code>return</code>. Переработать программу из ПР02: вычисления останутся прежними, но каждое получит своё имя и отдельное место в программе.</p>
+<p>Понадобятся: работающая среда Java, исходник <code>ArrayWork</code> из ПР02, знание циклов, массивов и условий. Все методы сегодня — <code>static</code>, внутри одного класса. Классы объектов и <code>this</code> пока не нужны.</p>
+<h2 id="work-pr03-1-5">1. Подготовка — 5 минут</h2>
+<p>Создайте файл <code>MethodsWork.java</code> с классом <code>MethodsWork</code>. Прежний <code>ArrayWork.java</code> сохраните: в конце сравним две версии.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MethodsWork</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printTitle</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printTitle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Практическая работа: собственные методы&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Метод <code>printTitle</code> объявлен <strong>внутри класса, но снаружи <code>main</code></strong>. Закрывающая скобка <code>main</code> стоит перед его объявлением. В Java нельзя объявить обычный метод внутри другого метода.</p>
+<p><code>printTitle();</code> — вызов метода. При запуске Java начинает с <code>main</code>, встречает вызов, выполняет тело <code>printTitle</code>, затем возвращается в <code>main</code> к следующей инструкции. Если метод только объявлен, но нигде не вызван, его тело не выполнится.</p>
+<h2 id="work-pr03-2-15">2. Метод без возвращаемого значения — 15 минут</h2>
+<p>Ниже <code>printTitle</code>, перед последней скобкой класса, добавьте:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printSquare</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">number</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Квадрат числа &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Внутри <code>main</code>, после <code>printTitle();</code>, добавьте:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">printSquare</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="n">printSquare</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Разбор объявления:</p>
+<table>
+<thead>
+<tr>
+<th>Часть</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>Позволяет в этой работе вызывать метод из <code>main</code> без создания объекта</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td>Метод не возвращает вызывающему коду значение</td>
+</tr>
+<tr>
+<td><code>printSquare</code></td>
+<td>Имя метода</td>
+</tr>
+<tr>
+<td><code>int number</code></td>
+<td>Параметр: локальное имя входного целого числа</td>
+</tr>
+<tr>
+<td><code>result</code></td>
+<td>Локальная переменная, доступная только внутри этого метода</td>
+</tr>
+</tbody>
+</table>
+<p>В объявлении <code>number</code> называется <strong>параметром</strong>, а число <code>4</code> в вызове — <strong>аргументом</strong>. При первом вызове параметр получает 4, при втором — 7.</p>
+<p>Ожидаемые результаты: 16 и 49. Самостоятельно добавьте третий вызов с числом −3.</p>
+<p><code>void</code> не означает «ничего не делает»: метод выполняет действие — печатает. Но присвоить его результат переменной нельзя: значения для присваивания он не возвращает.</p>
+<h2 id="work-pr03-3-15">3. Та же задача с возвратом результата — 15 минут</h2>
+<p>Добавьте ещё один метод рядом с предыдущими:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">number</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>В <code>main</code> добавьте:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">savedSquare</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Сохранённый результат: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">savedSquare</span><span class="p">);</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Сумма квадратов: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="mi">4</span><span class="p">)));</span>
+</code></pre></div>
+
+<p><code>int</code> перед именем метода — тип результата. <code>return</code> завершает текущий вызов и передаёт значение туда, где метод вызвали. Поэтому <code>square(4)</code> можно использовать как число 16: сохранить, сравнить или сложить с другим значением.</p>
+<p>Важно: <code>System.out.println</code> показывает значение человеку, а <code>return</code> отдаёт его программе. Одно действие не заменяет другое.</p>
+<p>Самостоятельно:</p>
+<ol>
+<li>Предскажите сумму квадратов 3 и 4, затем запустите программу.</li>
+<li>Используйте <code>square(6)</code> внутри условия: если результат больше 30, выведите сообщение.</li>
+<li>Объясните, почему <code>int answer = printSquare(6);</code> не скомпилируется. В сдаваемом исходнике такой строки быть не должно.</li>
+</ol>
+<h2 id="work-pr03-4-35">4. Перенос обработки массива в методы — 35 минут</h2>
+<p>Оставьте свой вариант из ПР02. Формула по номеру в журнале: <code>((номер - 1) % 5) + 1</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Вариант</th>
+<th style="text-align: right;">Размер</th>
+<th>Диапазон включительно</th>
+<th>Условие для <code>countMatching</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align: right;">10</td>
+<td>от 1 до 20</td>
+<td>Чётные элементы</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align: right;">12</td>
+<td>от −10 до 10</td>
+<td>Положительные элементы</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align: right;">8</td>
+<td>от −20 до −1</td>
+<td>Элементы меньше −10</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align: right;">15</td>
+<td>от 0 до 30</td>
+<td>Кратные трём, включая ноль</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align: right;">10</td>
+<td>от −5 до 15</td>
+<td>Элементы от 0 до 10 включительно</td>
+</tr>
+</tbody>
+</table>
+<p>Таблица совпадает с ПР02: новая задача — разделить код на методы, а не заново разобраться с условием варианта.</p>
+<h3 id="work-pr03-41">4.1. Массив и вывод</h3>
+<p>Перенесите в <code>main</code> создание генератора, массива и цикл случайного заполнения из своей ПР02. В начале файла, <strong>перед объявлением класса</strong>, нужен <code>import java.util.Random;</code>.</p>
+<p>Вынесите вывод массива в метод:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printArray</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="n">values</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Вызов в <code>main</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="s">&quot;Массив: &quot;</span><span class="p">);</span>
+<span class="n">printArray</span><span class="p">(</span><span class="n">numbers</span><span class="p">);</span>
+</code></pre></div>
+
+<p><code>numbers</code> — имя переменной в <code>main</code>, <code>values</code> — имя параметра метода. Имена могут различаться. В этот вызов передаётся значение ссылки на тот же массив; копия всех элементов автоматически не создаётся. Наши методы только читают элементы и не изменяют их.</p>
+<h3 id="work-pr03-42">4.2. Сумма и среднее</h3>
+<p>Добавьте методы:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">values</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">total</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">average</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="na">length</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Здесь один ваш метод вызывает другой: <code>average</code> получает сумму через <code>sum</code>. Приведение <code>(double)</code> выполняется <strong>до деления</strong>, чтобы сохранить дробную часть.</p>
+<p>В <code>main</code> вызывайте так:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Сумма: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">));</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Среднее: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">average</span><span class="p">(</span><span class="n">numbers</span><span class="p">));</span>
+</code></pre></div>
+
+<p><code>total</code> существует внутри <code>sum</code>. Обращаться к нему из <code>main</code> нельзя. Передать результат наружу позволяет <code>return total;</code>.</p>
+<h3 id="work-pr03-43">4.3. Максимум — образец</h3>
+<div class="codehilite"><pre><span></span><code><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">findMax</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">maximum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">values</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">values</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">maximum</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">maximum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">values</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">maximum</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Поставьте <code>return</code> после цикла: сначала нужно просмотреть все элементы. Если вернуть значение на первой итерации, метод завершится раньше времени.</p>
+<h3 id="work-pr03-44">4.4. Два метода самостоятельно</h3>
+<p>Напишите методы по заготовкам. Замените многоточия своим кодом: в Java они здесь не являются готовыми командами.</p>
+<div class="codehilite"><pre><span></span><code>static int findMin(int[] values) {
+    ...
+}
+
+static int countMatching(int[] values) {
+    ...
+}
+</code></pre></div>
+
+<p>Для <code>findMin</code>: начальный минимум — первый элемент, обход с индекса 1, обновление при меньшем значении, возврат после цикла.</p>
+<p>Для <code>countMatching</code>: начальный счётчик — ноль, обход всех элементов, проверка <strong>своего</strong> условия из таблицы, увеличение счётчика, возврат после цикла.</p>
+<p>В <code>main</code> выведите результаты <code>findMax(numbers)</code>, <code>findMin(numbers)</code> и <code>countMatching(numbers)</code>. Укажите в подписи, какое условие считаете.</p>
+<p>Условие использования методов этой работы: массив не равен <code>null</code> и содержит хотя бы один элемент. Обработку пустого массива и исключения сегодня не добавляем.</p>
+<p>В итоговом <code>main</code> должны остаться вызовы методов, создание и заполнение массива. Старые циклы вычисления суммы, минимума и максимума из ПР02 удалите из новой программы: иначе задача разделения кода не выполнена.</p>
+<h2 id="work-pr03-5-20">5. Проверка и сдача — 20 минут</h2>
+<p>Временно замените создание массива и цикл его случайного заполнения фиксированными данными. Методы при этом не меняйте.</p>
+<table>
+<thead>
+<tr>
+<th>Массив</th>
+<th style="text-align: right;">Сумма</th>
+<th style="text-align: right;">Среднее</th>
+<th style="text-align: right;">Минимум</th>
+<th style="text-align: right;">Максимум</th>
+<th>Количество: варианты 1 / 2 / 3 / 4 / 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{-8, -3, -5, -2}</code></td>
+<td style="text-align: right;">−18</td>
+<td style="text-align: right;">−4.5</td>
+<td style="text-align: right;">−8</td>
+<td style="text-align: right;">−2</td>
+<td>2 / 0 / 0 / 1 / 0</td>
+</tr>
+<tr>
+<td><code>{0, 0, 0}</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>3 / 0 / 0 / 3 / 3</td>
+</tr>
+<tr>
+<td><code>{-10, -11, 0, 10, 11}</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">−11</td>
+<td style="text-align: right;">11</td>
+<td>3 / 2 / 1 / 1 / 2</td>
+</tr>
+</tbody>
+</table>
+<p>Например, объявление первого массива: <code>int[] numbers = {-8, -3, -5, -2};</code>. Оставшийся цикл случайного заполнения перезапишет данные — его нужно убрать на время проверки.</p>
+<p>После проверок восстановите случайное заполнение своего варианта.</p>
+<p>Сдайте <code>MethodsWork.java</code> и короткий отчёт: вариант, вывод программы и результаты проверок. Покажите запуск и объясните один вызов метода по выбору преподавателя.</p>
+<p>Чек-лист:</p>
+<ul>
+<li>Методы объявлены внутри класса, снаружи <code>main</code>.</li>
+<li>Есть <code>void</code>-методы и методы с результатом.</li>
+<li>Реализованы <code>printTitle</code>, <code>printSquare</code>, <code>square</code>, <code>printArray</code>, <code>sum</code>, <code>average</code>, <code>findMax</code>, <code>findMin</code>, <code>countMatching</code>.</li>
+<li>Вычисляющие методы возвращают значения, вывод результатов выполняется в <code>main</code>.</li>
+<li>Нет полей класса для передачи суммы или массива между методами.</li>
+<li>Все три фиксированные проверки пройдены, условия своего варианта сохранены.</li>
+</ul>
+<p>Вопросы для защиты:</p>
+<ol>
+<li>Чем отличаются параметр и аргумент?</li>
+<li>Почему <code>println</code> не заменяет <code>return</code>?</li>
+<li>Почему метод можно объявить ниже <code>main</code>, а вызвать выше?</li>
+<li>Что случится, если поставить <code>return</code> внутрь цикла поиска максимума?</li>
+<li>Почему <code>average</code> возвращает <code>double</code>, хотя элементы массива — <code>int</code>?</li>
+<li>Где доступна переменная <code>total</code> из метода <code>sum</code>?</li>
+</ol>
+<h2 id="work-pr03-_2">Дополнительно: перегрузка</h2>
+<p>Если обязательная часть закончена, создайте два метода с одинаковым именем:</p>
+<ul>
+<li><code>static String describe(int number)</code> — возвращает «чётное» или «нечётное».</li>
+<li><code>static String describe(int number, int divisor)</code> — возвращает сообщение о делимости на <code>divisor</code>. В этой задаче делитель всегда ненулевой.</li>
+</ul>
+<p>Вызовите <code>describe(7)</code> и <code>describe(7, 3)</code>, выведите возвращённые строки. Объясните, по чему Java выбирает нужный метод. Одного различия возвращаемых типов для перегрузки недостаточно.</p></article><footer><a target="_top" href="../#java-work-pr02">← ПР02</a><a target="_top" href="../#java-practice">Все практические работы →</a></footer></main><script src="lecture.js?v=3"></script></body></html>

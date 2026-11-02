@@ -5,7 +5,7 @@ Without an argument, rebuild from the tracked content/java copies.
 Requires Python Markdown and Pygments.
 """
 from pathlib import Path
-import sys, re, json, html, shutil
+import re, json, html, shutil, argparse
 import markdown
 from pygments.formatters import HtmlFormatter
 
@@ -14,6 +14,10 @@ CONTENT = ROOT / 'content/java'
 OUT = ROOT / 'dist/java'
 CONTENT.mkdir(parents=True, exist_ok=True)
 OUT.mkdir(parents=True, exist_ok=True)
+parser=argparse.ArgumentParser()
+parser.add_argument('source',nargs='?')
+parser.add_argument('--practice-source',help='Obsidian folder Лабораторные работы')
+args=parser.parse_args()
 topics = [
  ('languages','00 Обзор языков программирования','Обзор языков программирования'),
  ('intro','0 Введение в курс','Введение в курс'),
@@ -28,12 +32,27 @@ topics = [
  ('classes','1.2.1 Классы и объекты','Классы и объекты'),
  ('constructors','1.2.2 Конструкторы','Конструкторы'),
 ]
-if len(sys.argv)>1:
-    source=Path(sys.argv[1])
+if args.source:
+    source=Path(args.source)
     for slug,base,title in topics:
         for suffix,variant in [('', 'lecture'),(' — Под запись','notes')]:
             p=source/(base+suffix+'.md')
             if p.exists(): shutil.copyfile(p,CONTENT/(slug+'-'+variant+'.md'))
+
+works=[
+ ('lab01','ЛР01','Типы данных, логика и поразрядные операции','Блок 1/Лабы новые/Лаба 1 Блок 1/🧪 Лабораторная работа «Типы данных, логические выражения и поразрядные операции в Java».md',['first-program','types','bitwise']),
+ ('lab02','ЛР02','Условный оператор и циклы','Блок 1/Лабы новые/Лаба 2 Блок 1/🧪 ЛР «Условный оператор и циклы в Java».md',['conditions','loops']),
+ ('pr02','ПР02','Циклы, массивы и случайные числа','Блок 1/ПР02 Циклы и массивы — Задание студенту.md',['loops','arrays']),
+ ('pr03','ПР03','Собственные методы','Блок 1/ПР03 Собственные методы — Задание студенту.md',['methods','arrays']),
+]
+practice_content=ROOT/'content/java-practice'
+practice_content.mkdir(parents=True,exist_ok=True)
+if args.practice_source:
+    source=Path(args.practice_source)
+    for slug,number,title,relative,related in works:
+        p=source/relative
+        if not p.is_file():raise FileNotFoundError(p)
+        shutil.copyfile(p,practice_content/(slug+'.md'))
 
 aliases={}
 for slug,base,title in topics:
@@ -41,6 +60,8 @@ for slug,base,title in topics:
     aliases[re.sub(r'^[\d.]+\s+', '', base)]=slug
     for suffix in ['', ' — Под запись',' — Лекция преподавателю']:
         aliases[base+suffix]=slug
+for slug,number,title,relative,related in works:
+    aliases[Path(relative).stem]='work-'+slug
 
 unresolved=set()
 def render(text,prefix):
@@ -76,6 +97,20 @@ for i,(slug,base,title) in enumerate(topics):
     (OUT/(slug+'.html')).write_text(page,encoding='utf-8')
 
 (ROOT/'dist/java-lessons.js').write_text('window.javaLessons='+json.dumps(lessons,ensure_ascii=False)+';\n',encoding='utf-8')
+practice=[]
+for i,(slug,number,title,relative,related) in enumerate(works):
+    p=practice_content/(slug+'.md')
+    if not p.exists():continue
+    body=render(p.read_text(encoding='utf-8'),'work-'+slug)
+    if not re.search(r'<h1\b',body):body='<h1>'+html.escape(title)+'</h1>'+body
+    related_links=''.join('<a target="_top" href="../#java-'+t+'">'+html.escape(next(x[2] for x in topics if x[0]==t))+'</a>' for t in related)
+    previous=f'<a target="_top" href="../#java-work-{works[i-1][0]}">← {html.escape(works[i-1][1])}</a>' if i else '<a target="_top" href="../#java-practice">← Все практические работы</a>'
+    following=f'<a target="_top" href="../#java-work-{works[i+1][0]}">{html.escape(works[i+1][1])} →</a>' if i+1<len(works) else '<a target="_top" href="../#java-practice">Все практические работы →</a>'
+    page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{number}. {html.escape(title)} · Java</title><link rel="stylesheet" href="lecture.css?v=4"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / {number} · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong>{related_links}</div><article>{body}</article><footer>{previous}{following}</footer></main><script src="lecture.js?v=3"></script></body></html>'''
+    (OUT/('work-'+slug+'.html')).write_text(page,encoding='utf-8')
+    practice.append({'id':slug,'number':number,'title':title,'related':related})
+(ROOT/'dist/java-practices.js').write_text('window.javaPractices='+json.dumps(practice,ensure_ascii=False)+';\n',encoding='utf-8')
 (OUT/'highlight.css').write_text(HtmlFormatter(style='native').get_style_defs('.codehilite'),encoding='utf-8')
 print(f'Built {len(lessons)} topics, {sum(x["full"] for x in lessons)} full lectures plus notes.')
+print(f'Built {len(practice)} student practical/lab assignments.')
 print('References outside imported topics (rendered as text): '+', '.join(sorted(unresolved)))
