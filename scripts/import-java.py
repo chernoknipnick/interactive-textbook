@@ -89,11 +89,16 @@ for i,(slug,base,title) in enumerate(topics):
     lessons.append({'id':slug,'title':title,'number':f'{i+1:02d}','full':any(v[0]=='lecture' for v in versions)})
     sections=''
     for j,(variant,label,body) in enumerate(versions):
+        visual=ROOT/'content/java-visuals'/(slug+'.html')
+        if j==0 and visual.is_file():
+            body=re.sub(r'</h1>',lambda m:m[0]+visual.read_text(encoding='utf-8'),body,count=1)
         if j==0: sections+='<article>'+body+'</article>'
         else:sections+='<details class="notes"><summary>Конспект · Под запись</summary><article>'+body+'</article></details>'
     prev=f'<a target="_top" href="../#java-{topics[i-1][0]}">← {html.escape(topics[i-1][2])}</a>' if i else '<a target="_top" href="../#java">← К программе Java</a>'
     nxt=f'<a target="_top" href="../#java-{topics[i+1][0]}">{html.escape(topics[i+1][2])} →</a>' if i+1<len(topics) else '<a target="_top" href="../#java">К программе Java →</a>'
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА {i+1:02d} ИЗ {len(topics)} · {versions[0][1].upper()}</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav>{sections}<footer>{prev}{nxt}</footer></main><script src="lecture.js?v=3"></script></body></html>'''
+    if (ROOT/'content/java-visuals'/(slug+'.html')).is_file():
+        page=page.replace('</head>','<link rel="stylesheet" href="visuals.css?v=6"></head>').replace('</body>','<script src="visuals.js?v=6"></script></body>')
     (OUT/(slug+'.html')).write_text(page,encoding='utf-8')
 
 (ROOT/'dist/java-lessons.js').write_text('window.javaLessons='+json.dumps(lessons,ensure_ascii=False)+';\n',encoding='utf-8')

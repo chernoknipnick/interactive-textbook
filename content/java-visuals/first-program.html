@@ -1,0 +1,13 @@
+<section class="lesson-visual" data-visual="launch" aria-label="Как запускается программа Java">
+  <div class="visual-heading"><span>РАЗБЕРЁМ НА СХЕМЕ</span><strong>Из текста — в работающую программу</strong></div>
+  <div class="visual-pipeline">
+    <div data-node="0" class="visual-node active"><small>1 · ИСХОДНЫЙ КОД</small><b>Hello.java</b><code>println("Привет!")</code></div>
+    <span class="visual-arrow" aria-hidden="true">→</span>
+    <div data-node="1" class="visual-node"><small>2 · КОМПИЛЯЦИЯ · javac</small><b>Hello.class</b><span>Байт-код для JVM</span></div>
+    <span class="visual-arrow" aria-hidden="true">→</span>
+    <div data-node="2" class="visual-node"><small>3 · ЗАПУСК · java</small><b>JVM → выполнение</b><span>Вывод: Привет!</span></div>
+  </div>
+  <p class="visual-caption">Упрощённая схема запуска обычной Java-программы. Команды здесь показаны как учебная модель.</p>
+  <div class="visual-controls"><button data-action="back" disabled aria-label="Предыдущий этап запуска">← Назад</button><span data-step>Шаг 1 из 3</span><button data-action="next" aria-label="Следующий этап запуска">Дальше →</button><button data-action="reset">Сначала</button></div>
+  <p class="visual-explanation" data-explanation aria-live="polite">Сначала есть только текст в Hello.java. Это исходный код: JVM запускает не этот текст, а результат компиляции.</p>
+</section>

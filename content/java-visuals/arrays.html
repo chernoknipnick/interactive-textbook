@@ -1,0 +1,11 @@
+<section class="lesson-visual" data-visual="array" aria-label="Массивы и ссылки в памяти">
+  <div class="visual-heading"><span>РАЗБЕРЁМ НА СХЕМЕ</span><strong>Две переменные — один массив?</strong></div>
+  <code class="visual-code" data-array-code>int[] a = {5, 3, 4, 2, 5};</code>
+  <div class="memory-refs"><span><b>a</b> → массив A</span><span data-b-ref><b>b</b> — ещё не объявлена</span></div>
+  <div class="memory-block"><small>МАССИВ A · length = 5</small><div class="array-cells" data-array="a"><button data-index="0" aria-label="Элемент a с индексом 0"><small>[0]</small><b>5</b></button><button data-index="1" aria-label="Элемент a с индексом 1"><small>[1]</small><b>3</b></button><button data-index="2" aria-label="Элемент a с индексом 2"><small>[2]</small><b>4</b></button><button data-index="3" aria-label="Элемент a с индексом 3"><small>[3]</small><b>2</b></button><button data-index="4" aria-label="Элемент a с индексом 4"><small>[4]</small><b>5</b></button></div></div>
+  <div class="memory-block" data-copy hidden><small>МАССИВ B · ОТДЕЛЬНАЯ КОПИЯ</small><div class="array-cells" data-array="b"></div></div>
+  <p class="visual-caption">Нажми на ячейку, чтобы прочитать элемент по индексу. Это схема ссылок, без физических адресов памяти.</p>
+  <p class="array-readout" data-readout aria-live="polite">Индексы начинаются с 0. Последний индекс здесь — 4.</p>
+  <div class="visual-controls"><button data-action="back" disabled aria-label="Предыдущий шаг работы с массивом">← Назад</button><span data-step>Шаг 1 из 5</span><button data-action="next" aria-label="Следующий шаг работы с массивом">Дальше →</button><button data-action="reset">Сначала</button></div>
+  <p class="visual-explanation" data-explanation aria-live="polite">Создали массив из пяти чисел. Переменная a хранит ссылку на этот массив.</p>
+</section>

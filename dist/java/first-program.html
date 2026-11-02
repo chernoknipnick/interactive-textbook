@@ -1,4 +1,17 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Первая программа на Java · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА 03 ИЗ 12 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-java">Первая программа на Java: структура кода и как её запустить</h1>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Первая программа на Java · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="visuals.css?v=6"></head><body><main><div class="eyebrow">JAVA / ТЕМА 03 ИЗ 12 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-java">Первая программа на Java: структура кода и как её запустить</h1><section class="lesson-visual" data-visual="launch" aria-label="Как запускается программа Java">
+  <div class="visual-heading"><span>РАЗБЕРЁМ НА СХЕМЕ</span><strong>Из текста — в работающую программу</strong></div>
+  <div class="visual-pipeline">
+    <div data-node="0" class="visual-node active"><small>1 · ИСХОДНЫЙ КОД</small><b>Hello.java</b><code>println("Привет!")</code></div>
+    <span class="visual-arrow" aria-hidden="true">→</span>
+    <div data-node="1" class="visual-node"><small>2 · КОМПИЛЯЦИЯ · javac</small><b>Hello.class</b><span>Байт-код для JVM</span></div>
+    <span class="visual-arrow" aria-hidden="true">→</span>
+    <div data-node="2" class="visual-node"><small>3 · ЗАПУСК · java</small><b>JVM → выполнение</b><span>Вывод: Привет!</span></div>
+  </div>
+  <p class="visual-caption">Упрощённая схема запуска обычной Java-программы. Команды здесь показаны как учебная модель.</p>
+  <div class="visual-controls"><button data-action="back" disabled aria-label="Предыдущий этап запуска">← Назад</button><span data-step>Шаг 1 из 3</span><button data-action="next" aria-label="Следующий этап запуска">Дальше →</button><button data-action="reset">Сначала</button></div>
+  <p class="visual-explanation" data-explanation aria-live="polite">Сначала есть только текст в Hello.java. Это исходный код: JVM запускает не этот текст, а результат компиляции.</p>
+</section>
+
 <blockquote>
 <p>Дополнение между <a target="_top" href="../#java-intro">Введением в курс</a> и <a target="_top" href="../#java-types">1.1.1 Типы данных и операции</a>. В прошлой лекции уже был код с <code>public class</code> и <code>main</code>, но без объяснения, что каждое слово там значит и почему структура именно такая. Здесь — это объяснение, плюс разбор лабораторной работы 1 построчно.</p>
 </blockquote>
@@ -317,4 +330,4 @@
 <li>Компилятор пишет <code>reached end of file while parsing</code>. Что искать?</li>
 <li>Что выведут <code>"Итог: " + 2 + 2</code> и <code>"Итог: " + (2 + 2)</code>? Почему по-разному?</li>
 <li>Чем <code>print</code> отличается от <code>println</code>?</li>
-</ol></article></details><footer><a target="_top" href="../#java-intro">← Введение в курс</a><a target="_top" href="../#java-types">Типы данных и операции →</a></footer></main><script src="lecture.js?v=3"></script></body></html>
+</ol></article></details><footer><a target="_top" href="../#java-intro">← Введение в курс</a><a target="_top" href="../#java-types">Типы данных и операции →</a></footer></main><script src="lecture.js?v=3"></script><script src="visuals.js?v=6"></script></body></html>
