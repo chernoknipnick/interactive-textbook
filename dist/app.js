@@ -30,6 +30,10 @@ for(const work of javaWorks){
   card.append(top,title,detail,footer);document.getElementById('java-work-cards').appendChild(card);
 }
 let lastSQL='home',lastJava='java';
+document.getElementById('toggle-sidebar').addEventListener('click',e=>{
+  const collapsed=document.body.classList.toggle('focus-view');
+  e.currentTarget.setAttribute('aria-expanded',String(!collapsed));
+});
 function route(){
   let key=location.hash.slice(1)||'home';
   if(!titles[key]&&key!=='java'&&key!=='java-practice'&&!javaByKey[key])key='home';
@@ -58,10 +62,12 @@ function route(){
   document.getElementById('java-home').hidden=key!=='java';
   document.getElementById('java-practice-home').hidden=key!=='java-practice';
   const reader=Boolean(titles[key]||javaByKey[key]);
+  document.body.classList.toggle('reading',reader);
+  if(!reader){document.body.classList.remove('focus-view');document.getElementById('toggle-sidebar').setAttribute('aria-expanded','true');}
   document.getElementById('reader').hidden=!reader;
   if(reader){
     const topic=javaByKey[key];
-    const url=topic?'java/'+(topic.work?'work-':'')+topic.id+'.html?v=4':key==='practice'?'practice.html':key==='setup'?'lectures/setup.html':'lectures/course.html?v=2#'+key;
+    const url=topic?'java/'+(topic.work?'work-':'')+topic.id+'.html?v=5':key==='practice'?'practice.html?v=5':key==='setup'?'lectures/setup.html?v=5':'lectures/course.html?v=5#'+key;
     document.getElementById('frame').src=url;
     document.getElementById('external').href=url;
     document.getElementById('reader-name').textContent=javaByKey[key]?.title||titles[key];

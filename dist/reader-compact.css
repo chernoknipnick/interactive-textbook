@@ -1,0 +1,13 @@
+/* Compact spacing for the original SQL teaching materials. */
+.hero{padding:28px 30px 24px!important}
+.hero h1{font-size:clamp(26px,3vw,38px)!important;margin-bottom:12px!important}
+.hero-meta,.hero-badges{margin-top:16px!important;gap:12px!important}
+.content{max-width:1120px!important;padding:26px 30px!important}
+.card{padding:20px!important;margin-bottom:16px!important}
+.s-title{font-size:25px!important}.s-sub{margin-bottom:22px!important}
+.lecture-nav,.nav{padding-left:20px!important;padding-right:20px!important}
+.nav-btn{padding:11px 13px!important}
+.wrap{max-width:1280px!important;padding:24px 30px 45px!important}
+.flow-card{padding:20px!important;margin-top:0!important}
+.terminal{margin:20px auto!important;padding:20px!important}
+@media(max-width:650px){.hero,.content,.wrap{padding-left:18px!important;padding-right:18px!important}.card{padding:16px!important}}
