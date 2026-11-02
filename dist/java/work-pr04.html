@@ -1,0 +1,262 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ПР04. Классы, объекты и ссылки · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ПР04 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-classes">Классы и объекты</a><a target="_top" href="../#java-references">Ссылки</a><a target="_top" href="../#java-arrays">Массивы</a></div><article><h1 id="work-pr04-04">ПР04. Классы, объекты и ссылки</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="pr04" aria-label="Пошаговый разбор: Тренировка: две переменные видят одного робота">
+<h2>Тренировка: две переменные видят одного робота</h2>
+<p>Схема относится к готовому тренировочному примеру ниже. Сначала предскажи следующий шаг, затем проверь состояние.</p>
+<p class="diagram-code-caption">Код к текущему шагу</p>
+<pre><code data-trace-code>Robot first = new Robot();
+first.name = &quot;Альфа&quot;;
+first.energy = 80;</code></pre>
+<div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell>first → первый Robot</div><div data-trace-cell>Первый Robot: energy = 80</div><div data-trace-cell>Один Robot создан</div></div>
+<p class="trace-explanation" data-trace-explanation aria-live="polite">В этом мини-примере поля заполняются явно. Собственный вариант работы будет иметь другую предметную область.</p>
+<div class="trace-controls"><button type="button" data-trace-action="back" disabled>← Назад</button><span data-trace-step>Шаг 1 из 6</span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+<script type="application/json" data-trace-model>[{"code": "Robot first = new Robot();\nfirst.name = \"Альфа\";\nfirst.energy = 80;", "cells": ["first → первый Robot", "Первый Robot: energy = 80", "Один Robot создан"], "explanation": "В этом мини-примере поля заполняются явно. Собственный вариант работы будет иметь другую предметную область."}, {"code": "Robot second = new Robot();\nsecond.name = \"Бета\";\nsecond.energy = 40;", "cells": ["first → первый Robot: 80", "second → второй Robot: 40", "Два независимых Robot"], "explanation": "Одинаковое поле energy у разных экземпляров не является одним общим числом."}, {"code": "Robot alias = first;", "cells": ["first → первый Robot", "alias → тот же первый Robot", "Robot по-прежнему два"], "explanation": "Эта строка копирует ссылку. Создание нового экземпляра в ней отсутствует."}, {"code": "boolean done = alias.performAction();", "cells": ["Первый Robot: 80 → 70", "Второй Robot: по-прежнему 40", "done = true"], "explanation": "У получателя достаточно энергии. Метод вычитает 10 и возвращает успех, не печатая сам."}, {"code": "System.out.println(first.energy);\nSystem.out.println(second.energy);", "cells": ["Через first читаем 70", "Через second читаем 40", "После true выводятся 70 и 40"], "explanation": "Изменение через alias видно через first, потому что объект общий."}, {"code": "System.out.println(first == alias);\nSystem.out.println(first == second);", "cells": ["first == alias → true", "first == second → false", "Три ссылки, два Robot"], "explanation": "Сравниваем идентичность объектов. Основное задание затем просит проверить равные поля у разных экземпляров."}]</script>
+</section>
+
+<p>Ориентир: 90 минут. Это первая из трёх работ закрепления блока ООП. Предыдущая работа — ПР03 «Собственные методы». Дальше: ПР05 — правила создания и изменения объектов, ПР06 — итоговая обработка массива объектов.</p>
+<h2 id="work-pr04-_1">Что должно получиться</h2>
+<p>Ты создашь собственный класс, два независимых экземпляра и ещё одну ссылку на один из них. Программа должна показывать, <strong>какой <span class="term-object" title="Объект или ссылка на него">объект</span> изменился после действия</strong>, а не только печатать случайные сообщения.</p>
+<p>Понадобятся классы и объекты, методы, условия, ссылки и массивы. Повтори темы «Классы и объекты» и «Ссылки» по ссылкам вверху страницы. Полное решение своего варианта нужно написать самостоятельно; маленький пример ниже служит тренировкой.</p>
+<h2 id="work-pr04-1">1. Сначала попробуй готовый маленький пример</h2>
+<p>Создай отдельную папку <code>pr04-training</code>. Сохрани <strong>RobotReferenceDemo.java</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">RobotReferenceDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="p">();</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Альфа&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="p">();</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Бета&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">boolean</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">done</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">performAction</span></span><span class="p">();</span>
+
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">done</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">;</span>
+<span class="w">    </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt"><span class="term-type" title="Тип или класс">boolean</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">performAction</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="kc"><span class="term-language" title="Конструкция языка">false</span></span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="kc"><span class="term-language" title="Конструкция языка">true</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Запуск из папки файла:</p>
+<div class="codehilite"><pre><span></span><code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">RobotReferenceDemo</span>.java
+java <span class="term-type" title="Тип или класс">RobotReferenceDemo</span>
+</code></pre></div>
+
+<p>Ожидаемый вывод:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">true</span>
+70
+40
+<span class="term-language" title="Конструкция языка">true</span>
+<span class="term-language" title="Конструкция языка">false</span>
+</code></pre></div>
+
+<p>Почему так: <code><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span></code> ведут к одному Robot. Действие забрало у него 10 единиц энергии. У второго Robot осталось 40. Два вызова <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Robot</span>()</code> создали два экземпляра; строка <code><span class="term-type" title="Тип или класс">Robot</span> <span class="term-data" title="Данные: переменная, поле или параметр">alias</span> = <span class="term-data" title="Данные: переменная, поле или параметр">first</span></code> только скопировала значение ссылки.</p>
+<p><code><span class="term-method" title="Метод: действие или вычисление">performAction</span>()</code> возвращает boolean: получилось ли выполнить действие. При нехватке ресурса он возвращает false и сохраняет прежнее состояние. Печать и само действие разделены: результат выводится из <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>.</p>
+<p>Поля здесь пока доступны из соседнего класса того же пакета: у них нет <code><span class="term-language" title="Конструкция языка">private</span></code>, но это не делает их публичными для всех пакетов. Такое упрощение позволит отдельно проследить ссылки. В ПР05 доступ к данным нужно будет организовать через конструкторы и методы.</p>
+<h2 id="work-pr04-2">2. Выбери сквозной вариант</h2>
+<p>Формула по номеру в журнале: <strong><code>((номер - 1) % 5) + 1</code></strong>. Например, 1 и 6 дают вариант 1, а 5 и 10 — вариант 5. Сохраняй этот вариант в ПР04, ПР05 и ПР06.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Вариант</th>
+<th>Класс</th>
+<th>Поле ресурса</th>
+<th style="text-align: right;">Максимум M</th>
+<th style="text-align: right;">Расход C</th>
+<th style="text-align: right;">Пополнение R</th>
+<th style="text-align: right;">Низкий уровень L</th>
+<th style="text-align: right;">Старт A</th>
+<th style="text-align: right;">Старт B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td><code><span class="term-type" title="Тип или класс">Phone</span></code></td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></code> — заряд</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td><code>Player</code></td>
+<td><code>stamina</code> — выносливость</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td><code>Printer</code></td>
+<td><code>paper</code> — листы</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td><code>Car</code></td>
+<td><code>fuel</code> — условные единицы топлива</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td><code>Lamp</code></td>
+<td><code><span class="term-method" title="Метод: действие или вычисление">charge</span></code> — заряд</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+<p>Смысл действия: Phone отправляет сообщение, Player выполняет приём, Printer печатает пакет страниц, Car выполняет учебную поездку, Lamp отрабатывает один интервал свечения. Это упрощённые модели с целочисленным ресурсом, а не расчёт физических характеристик реальных устройств.</p>
+<p>В ПР04 понадобятся расход C и два начальных значения A/B. Остальные числа сохраняются для следующих работ. <strong>Низкий уровень всегда означает строго меньше L</strong>, а не меньше либо равно.</p>
+<p>Имена собственного класса и методов вообще выбирает программист. В этих трёх работах используй имена из задания: так проще сравнивать результат с проверками. <code><span class="term-data" title="Данные: переменная, поле или параметр">performAction</span></code> — наше выбранное имя, а <code><span class="term-language" title="Конструкция языка">class</span></code>, <code><span class="term-language" title="Конструкция языка">new</span></code>, <code><span class="term-language" title="Конструкция языка">return</span></code> — слова Java.</p>
+<h2 id="work-pr04-3">3. Собственный класс и два экземпляра</h2>
+<p>Создай другую папку <code>pr04-work</code>, файл <strong>ObjectsWork.java</strong>. В нём размести публичный класс запуска <code>ObjectsWork</code> и непубличный класс своего варианта. Класс <code><span class="term-type" title="Тип или класс">Robot</span></code> из тренировки в этот файл переносить не требуется.</p>
+<p>Общая форма, которую нужно заменить конкретными именами:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span> {
+    <span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">name</span>;
+    <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">полеРесурса</span>;
+
+    <span class="term-type" title="Тип или класс">boolean</span> <span class="term-method" title="Метод: действие или вычисление">performAction</span>() {
+        проверить, достаточно ли ресурса;
+        если недостаточно — вернуть <span class="term-language" title="Конструкция языка">false</span> без изменения поля;
+        иначе уменьшить поле на расход C и вернуть <span class="term-language" title="Конструкция языка">true</span>;
+    }
+}
+</code></pre></div>
+
+<p>Это план, а не готовый Java-код. Например, для варианта 4 вместо <code><span class="term-type" title="Тип или класс">ТипОбъекта</span></code> нужен <code>Car</code>, вместо <code><span class="term-data" title="Данные: переменная, поле или параметр">полеРесурса</span></code> — <code>fuel</code>, а расход равен 6.</p>
+<p>В <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>:</p>
+<ol>
+<li>Создай <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">second</span></code> двумя отдельными выражениями <code><span class="term-language" title="Конструкция языка">new</span></code>.</li>
+<li>Присвой имена <code>"A"</code> и <code>"B"</code>.</li>
+<li>Запиши в их поля ресурса значения из колонок «Старт A» и «Старт B».</li>
+<li>Выведи имя и ресурс каждого до действий. Одинаковый набор полей не означает общие значения.</li>
+</ol>
+<p>Пользовательский конструктор в этой работе не обязателен: если обычный класс вообще не объявляет конструкторов, компилятор предоставляет конструктор по умолчанию. Следующая работа изменит именно этот этап.</p>
+<h2 id="work-pr04-4">4. Проверь общую ссылку и независимый объект</h2>
+<p>Общий шаблон фрагмента внутри <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">ТипОбъекта</span> <span class="term-data" title="Данные: переменная, поле или параметр">alias</span> = <span class="term-data" title="Данные: переменная, поле или параметр">first</span>;
+<span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">firstResult</span> = <span class="term-data" title="Данные: переменная, поле или параметр">alias</span>.<span class="term-method" title="Метод: действие или вычисление">performAction</span>();
+<span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">secondResult</span> = <span class="term-data" title="Данные: переменная, поле или параметр">second</span>.<span class="term-method" title="Метод: действие или вычисление">performAction</span>();
+</code></pre></div>
+
+<p>Вызови действие <strong>ровно один раз через alias и ровно один раз через second</strong>. После этого выведи результаты и ресурс обоих объектов.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Вариант</th>
+<th>firstResult</th>
+<th style="text-align: right;">first после действия через alias</th>
+<th>secondResult</th>
+<th style="text-align: right;">second после своей попытки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>true</td>
+<td style="text-align: right;">60</td>
+<td>false</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>true</td>
+<td style="text-align: right;">60</td>
+<td>false</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>true</td>
+<td style="text-align: right;">45</td>
+<td>false</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>true</td>
+<td style="text-align: right;">36</td>
+<td>false</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>true</td>
+<td style="text-align: right;">56</td>
+<td>false</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+<p>Если B ушёл в минус, проверь расположение проверки: она должна выполняться до вычитания. Если A не изменился, проверь, не создал ли ты в <code><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></code> ещё один объект вместо копирования ссылки.</p>
+<p>Выведи отдельно <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span> == <span class="term-data" title="Данные: переменная, поле или параметр">alias</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span> == <span class="term-data" title="Данные: переменная, поле или параметр">second</span></code>. Ожидаются true и false. Сравнение здесь отвечает на вопрос об одном и том же объекте, а не об одинаковых числах в полях.</p>
+<h2 id="work-pr04-5">5. Одинаковые данные ещё не означают один объект</h2>
+<p>Создай третий экземпляр <code>third</code>. Перепиши в него имя и текущее значение ресурса <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span></code>. Это учебное копирование двух полей, а не универсальный способ копирования любых сложных объектов.</p>
+<p>Проверь <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span> == third</code>: получится false, хотя значения двух полей совпадают. В этой части существует уже три экземпляра твоего класса.</p>
+<p>Затем присвой <code><span class="term-data" title="Данные: переменная, поле или параметр">alias</span> = <span class="term-language" title="Конструкция языка">null</span></code>. Прочитай ресурс через <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span></code>: он сохранится. Присваивание null одной переменной не стирает объект, доступный через другую ссылку. Не вызывай <code><span class="term-data" title="Данные: переменная, поле или параметр">alias</span>.<span class="term-method" title="Метод: действие или вычисление">performAction</span>()</code> после этого присваивания: у alias больше нет получателя для экземплярного вызова.</p>
+<h2 id="work-pr04-6">6. Массив ссылок — отдельный опыт</h2>
+<p>Выполни его после предыдущих действий. Здесь снова используются <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">second</span></code>; новые экземпляры твоего класса не создаются.</p>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">group</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span>[3];
+<span class="term-data" title="Данные: переменная, поле или параметр">group</span>[0] = <span class="term-data" title="Данные: переменная, поле или параметр">first</span>;
+<span class="term-data" title="Данные: переменная, поле или параметр">group</span>[1] = <span class="term-data" title="Данные: переменная, поле или параметр">second</span>;
+<span class="term-data" title="Данные: переменная, поле или параметр">group</span>[2] = <span class="term-data" title="Данные: переменная, поле или параметр">first</span>;
+</code></pre></div>
+
+<p>Замени <code><span class="term-type" title="Тип или класс">ТипОбъекта</span></code> своим классом. Сразу после <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span>[3]</code> все три элемента равны null. После присваиваний первый и третий элементы ведут к одному объекту. Проверь <code><span class="term-data" title="Данные: переменная, поле или параметр">group</span>.length</code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">group</span>[0] == <span class="term-data" title="Данные: переменная, поле или параметр">group</span>[2]</code>: ожидаются 3 и true.</p>
+<p>Нарисуй три ячейки отдельно от двух объектов, на которые они ссылаются. Третий объект <code>third</code> из предыдущего раздела по-прежнему может существовать, но в этом массиве ссылки на него нет.</p>
+<p>Ответь до запуска: если выполнить <code><span class="term-data" title="Данные: переменная, поле или параметр">group</span>[2].<span class="term-method" title="Метод: действие или вычисление">performAction</span>()</code>, изменится ли значение, читаемое через <code><span class="term-data" title="Данные: переменная, поле или параметр">group</span>[0]</code>? Да: получатель у двух обращений общий. Этот дополнительный вызов делай уже после проверки таблицы раздела 4, чтобы не изменить её исходный сценарий.</p>
+<h2 id="work-pr04-7">7. Что представить для проверки</h2>
+<ul>
+<li><code>ObjectsWork.java</code> с выбранным классом и работающим <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>.</li>
+<li>Номер варианта и вывод до/после двух действий из раздела 4.</li>
+<li>Результаты трёх сравнений: first с alias, second и third. Сравнение с alias нужно сделать до <code><span class="term-data" title="Данные: переменная, поле или параметр">alias</span> = <span class="term-language" title="Конструкция языка">null</span></code>.</li>
+<li>Рисунок переменных и объектов для опыта с массивом.</li>
+<li>Короткое объяснение, какое присваивание копирует ссылку и какое создание даёт новый объект.</li>
+</ul>
+<p>Работа готова, когда значения совпадают с таблицей, неуспешное действие сохраняет ресурс, а рисунок соответствует коду. Скриншот запуска дополняет исходник: проверка должна позволять прочитать и запустить саму программу.</p>
+<h2 id="work-pr04-_2">Вопросы для самостоятельного ответа</h2>
+<ol>
+<li>Почему после <code><span class="term-data" title="Данные: переменная, поле или параметр">alias</span> = <span class="term-data" title="Данные: переменная, поле или параметр">first</span></code> объектов не становится больше?</li>
+<li>Какой объект становится текущим <code><span class="term-language" title="Конструкция языка">this</span></code> при вызове через alias?</li>
+<li>Почему два экземпляра с одинаковыми полями могут дать false при <code>==</code>?</li>
+<li>Чем создание массива из трёх ссылок отличается от создания трёх объектов?</li>
+<li>Что изменится в следующей работе, когда поля станут private?</li>
+</ol>
+<p>Далее — <a target="_top" href="../#java-work-pr05">ПР05: создание объектов с проверками</a>.</p></article><footer><a target="_top" href="../#java-work-pr03">← ПР03</a><a target="_top" href="../#java-work-pr05">ПР05 →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="course-traces.js?v=1"></script></body></html>

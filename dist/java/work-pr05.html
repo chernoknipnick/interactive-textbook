@@ -1,0 +1,381 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ПР05. Конструкторы, инкапсуляция и static · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ПР05 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-constructors">Конструкторы</a><a target="_top" href="../#java-static">Статические поля и методы</a><a target="_top" href="../#java-classes">Классы и объекты</a></div><article><h1 id="work-pr05-05-static">ПР05. Конструкторы, инкапсуляция и static</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="pr05" aria-label="Пошаговый разбор: Тренировка: два конструктора, один счётчик">
+<h2>Тренировка: два конструктора, один счётчик</h2>
+<p>Схема относится к готовому тренировочному примеру ниже. Сначала предскажи следующий шаг, затем проверь состояние.</p>
+<p class="diagram-code-caption">Код к текущему шагу</p>
+<pre><code data-trace-code>Robot first = new Robot(&quot;Альфа&quot;, 70);</code></pre>
+<div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell>Имя и энергия проверены</div><div data-trace-cell>Первый Robot: energy = 70</div><div data-trace-cell>createdCount = 1</div></div>
+<p class="trace-explanation" data-trace-explanation aria-live="polite">Основной конструктор сохраняет личные данные после проверок и увеличивает общее поле.</p>
+<div class="trace-controls"><button type="button" data-trace-action="back" disabled>← Назад</button><span data-trace-step>Шаг 1 из 6</span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+<script type="application/json" data-trace-model>[{"code": "Robot first = new Robot(\"Альфа\", 70);", "cells": ["Имя и энергия проверены", "Первый Robot: energy = 70", "createdCount = 1"], "explanation": "Основной конструктор сохраняет личные данные после проверок и увеличивает общее поле."}, {"code": "this(name, 100);", "cells": ["Внутри второго создания: name = Бета", "Делегирование даёт energy = 100", "createdCount после делегирования = 2"], "explanation": "Это строка конструктора Robot(String name), вызванного через new Robot(\"Бета\"). Делегирование инициализирует тот же второй Robot."}, {"code": "Robot alias = first;", "cells": ["alias → первый Robot", "Его энергия = 70", "createdCount остаётся 2"], "explanation": "Копирование ссылки не вызывает конструктор и не увеличивает счётчик."}, {"code": "System.out.println(alias.getEnergy());", "cells": ["Выбран первый Robot", "getEnergy() возвращает 70", "Консоль: 70"], "explanation": "Доступ к закрытой энергии организован через метод чтения."}, {"code": "System.out.println(second.getEnergy());", "cells": ["Выбран второй Robot", "getEnergy() возвращает 100", "Консоль дополнена: 100"], "explanation": "Одноимённые личные поля двух экземпляров содержат разные значения."}, {"code": "System.out.println(Robot.getCreatedCount());", "cells": ["Статический вызов через Robot", "Общий createdCount = 2", "Итоговый вывод: 70, 100, 2"], "explanation": "В собственном варианте добавь действия и граничные проверки. Личный ресурс и общая история созданий имеют разные роли."}]</script>
+</section>
+
+<p>Ориентир: 90 минут. Продолжаем свой вариант из ПР04. Теперь класс должен получать допустимое состояние при создании и сохранять его после разрешённых действий.</p>
+<h2 id="work-pr05-_1">Что должно получиться</h2>
+<p>В результате будут закрытые личные поля, два конструктора, действия с проверками, методы чтения и общий счётчик созданий. Методы класса возвращают данные, а <code><span class="term-method" title="Метод: действие или вычисление">main</span></code> показывает результаты человеку.</p>
+<p>Для этой работы нужны конструкторы, <code><span class="term-language" title="Конструкция языка">this</span></code>, методы, условия и <code><span class="term-language" title="Конструкция языка">static</span></code>. Первое знакомство с <code><span class="term-language" title="Конструкция языка">throw</span> <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">IllegalArgumentException</span>(...)</code> есть в лекциях о конструкторах и заключении ООП. Проверки неверных параметров ниже можно запускать отдельными опытами.</p>
+<h2 id="work-pr05-1">1. Подготовь отдельную версию проекта</h2>
+<p>Сохрани результат ПР04. Создай папку <code>pr05-work</code> и файл <strong>ConstructionWork.java</strong>: публичный класс запуска <code>ConstructionWork</code>, рядом непубличный класс выбранного варианта.</p>
+<p>Не складывай реализации одного и того же Phone, Player или другого класса из ПР04 и ПР05 в один пакет. Для этих отдельных учебных программ достаточно отдельных папок и запуска нужного файла из своей папки.</p>
+<h2 id="work-pr05-2">2. Числа своего варианта</h2>
+<p>Номер остаётся прежним: <code>((номер - 1) % 5) + 1</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Вариант</th>
+<th>Класс</th>
+<th>Личное поле ресурса</th>
+<th style="text-align: right;">MAX_LEVEL</th>
+<th style="text-align: right;">ACTION_COST</th>
+<th style="text-align: right;">REFILL_AMOUNT</th>
+<th style="text-align: right;">LOW_THRESHOLD</th>
+<th style="text-align: right;">Старт A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>Phone</td>
+<td>battery</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">70</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>Player</td>
+<td>stamina</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>Printer</td>
+<td>paper</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>Car</td>
+<td>fuel</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">42</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>Lamp</td>
+<td>charge</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">64</td>
+</tr>
+</tbody>
+</table>
+<p>MAX_LEVEL — верхняя граница; ACTION_COST — расход одного действия; REFILL_AMOUNT — размер одного пополнения; LOW_THRESHOLD — граница низкого уровня. Состояние считается низким <strong>при уровне строго меньше LOW_THRESHOLD</strong>.</p>
+<h2 id="work-pr05-3">3. Сначала изучи маленький образец</h2>
+<p>Это отдельный тренировочный пример: <strong>RobotConstructorDemo.java</strong> в папке <code>pr05-training</code>. Он показывает связь параметров, полей, делегирования конструкторов и счётчика; собственные действия своего класса допиши самостоятельно.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">RobotConstructorDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="p">(</span><span class="s">&quot;Альфа&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">70</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="p">(</span><span class="s">&quot;Бета&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getEnergy</span></span><span class="p">());</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getEnergy</span></span><span class="p">());</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Robot</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">;</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">;</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="p">;</span>
+
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">,</span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc"><span class="term-language" title="Конструкция языка">null</span></span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">isBlank</span></span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">throw</span></span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="p">(</span><span class="s">&quot;Нужно непустое имя&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">throw</span></span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="p">(</span><span class="s">&quot;Энергия вне диапазона&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Robot</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">getEnergy</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Запусти <code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">RobotConstructorDemo</span>.java</code>, затем <code>java <span class="term-type" title="Тип или класс">RobotConstructorDemo</span></code>. Ожидаемый вывод: 70, 100 и 2, каждое значение с новой строки.</p>
+<p><code><span class="term-data" title="Данные: переменная, поле или параметр">name</span>.<span class="term-method" title="Метод: действие или вычисление">isBlank</span>()</code> проверяет пустую строку или строку только из пробельных символов. <code>||</code> сначала проверяет <code><span class="term-data" title="Данные: переменная, поле или параметр">name</span> == <span class="term-language" title="Конструкция языка">null</span></code>: если это true, правый вызов вообще не вычисляется. Так метод не вызывается через null. В используемой для курса Java 17/21 этот библиотечный метод доступен.</p>
+<p><code><span class="term-language" title="Конструкция языка">this</span>.<span class="term-data" title="Данные: переменная, поле или параметр">name</span> = <span class="term-data" title="Данные: переменная, поле или параметр">name</span></code> сохраняет значение параметра в поле текущего объекта. <code><span class="term-language" title="Конструкция языка">this</span>(<span class="term-data" title="Данные: переменная, поле или параметр">name</span>, 100)</code> — другая запись: она вызывает второй конструктор того же класса для инициализации того же экземпляра. В этом образце делегирующий конструктор не увеличивает счётчик повторно.</p>
+<h2 id="work-pr05-4">4. Объяви данные своего класса</h2>
+<p>Общая форма, не готовый файл:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span> {
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">MAX_LEVEL</span> = число_варианта;
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">ACTION_COST</span> = число_варианта;
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">REFILL_AMOUNT</span> = число_варианта;
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">LOW_THRESHOLD</span> = число_варианта;
+
+    <span class="term-language" title="Конструкция языка">private</span> <span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">name</span>;
+    <span class="term-language" title="Конструкция языка">private</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">полеРесурса</span>;
+    <span class="term-language" title="Конструкция языка">private</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span>;
+}
+</code></pre></div>
+
+<p><code><span class="term-language" title="Конструкция языка">static</span></code> относит выбранные поля к классу; <code><span class="term-language" title="Конструкция языка">final</span></code> запрещает повторное присваивание после их допустимой инициализации. Здесь числа являются постоянными правилами варианта. Публичными остаются эти константы и предусмотренные методы; изменяемые личные данные и счётчик закрыты.</p>
+<p>Перенеси числа из своей строки таблицы. Используй их имена в методах, чтобы правила не приходилось угадывать по повторяющимся числам.</p>
+<h2 id="work-pr05-5">5. Реализуй два конструктора</h2>
+<table>
+<thead>
+<tr>
+<th>Объявление в общем виде</th>
+<th>Обязательное поведение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">ТипОбъекта</span>(<span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">name</span>, <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">level</span>)</code></td>
+<td>Проверить имя и уровень, записать их в поля, увеличить счётчик один раз</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">ТипОбъекта</span>(<span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">name</span>)</code></td>
+<td>Вызвать основной конструктор с MAX_LEVEL</td>
+</tr>
+</tbody>
+</table>
+<p>Это образцы сигнатур с заменяемым именем класса. Имя конструктора должно совпадать с выбранным классом. Тип результата и <code><span class="term-language" title="Конструкция языка">void</span></code> перед ним не пишутся.</p>
+<p>Правила:</p>
+<ol>
+<li>Имя не равно null и не состоит только из пробельных символов. Проверку можно построить по образцу Robot.</li>
+<li>Уровень от 0 до MAX_LEVEL включительно.</li>
+<li>При неверном параметре выбрасывается <code><span class="term-type" title="Тип или класс">IllegalArgumentException</span></code> с понятным сообщением.</li>
+<li>Счётчик увеличивается после проверок, в основном конструкторе. Копирование ссылки и вызовы методов его не увеличивают.</li>
+<li>В конструкторе с одним параметром используй <code><span class="term-language" title="Конструкция языка">this</span>(<span class="term-data" title="Данные: переменная, поле или параметр">name</span>, <span class="term-data" title="Данные: переменная, поле или параметр">MAX_LEVEL</span>)</code> первой инструкцией, как в учебном образце.</li>
+</ol>
+<p>Объект нельзя сначала создать с произвольными значениями, а потом «дозаполнить когда-нибудь». После нормального завершения конструктора нужные данные уже должны быть установлены.</p>
+<h2 id="work-pr05-6">6. Контракт методов</h2>
+<p>Контракт — договорённость о входных данных, результате и изменении состояния. Реализуй следующие методы с точными именами:</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Что возвращает</th>
+<th>Что изменяет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-type" title="Тип или класс">String</span> <span class="term-method" title="Метод: действие или вычисление">getName</span>()</code></td>
+<td>Сохранённое имя</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">getLevel</span>()</code></td>
+<td>Текущее значение своего поля ресурса</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-type" title="Тип или класс">boolean</span> <span class="term-method" title="Метод: действие или вычисление">performAction</span>()</code></td>
+<td>true при успехе, false при нехватке</td>
+<td>При успехе вычитает ACTION_COST; иначе сохраняет уровень</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">refill</span>()</code></td>
+<td>Значения нет</td>
+<td>Прибавляет REFILL_AMOUNT, ограничивая результат MAX_LEVEL</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-type" title="Тип или класс">boolean</span> <span class="term-method" title="Метод: действие или вычисление">isLow</span>()</code></td>
+<td><code><span class="term-method" title="Метод: действие или вычисление">getLevel</span>() &lt; <span class="term-data" title="Данные: переменная, поле или параметр">LOW_THRESHOLD</span></code> по смыслу</td>
+<td>Ничего</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">boolean</span> <span class="term-method" title="Метод: действие или вычисление">isValidLevel</span>(<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">level</span>)</code></td>
+<td>Допустим ли уровень от 0 до MAX_LEVEL</td>
+<td>Ничего; объекты не создаёт</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span>()</code></td>
+<td>Число нормальных созданий своего класса в этом запуске</td>
+<td>Ничего</td>
+</tr>
+</tbody>
+</table>
+<p>Используй isValidLevel в основном конструкторе. Тип int у параметра isValidLevel и тип boolean результата отвечают на разные вопросы: что получаем и что отдаём.</p>
+<p>Схема действия performAction:</p>
+<div class="codehilite"><pre><span></span><code>если ресурс меньше <span class="term-data" title="Данные: переменная, поле или параметр">ACTION_COST</span>:
+    вернуть <span class="term-language" title="Конструкция языка">false</span>, не меняя поле
+иначе:
+    вычесть <span class="term-data" title="Данные: переменная, поле или параметр">ACTION_COST</span>
+    вернуть <span class="term-language" title="Конструкция языка">true</span>
+</code></pre></div>
+
+<p>Схема refill:</p>
+<div class="codehilite"><pre><span></span><code>новыйУровень = прежнийУровень + <span class="term-data" title="Данные: переменная, поле или параметр">REFILL_AMOUNT</span>
+если новыйУровень больше <span class="term-data" title="Данные: переменная, поле или параметр">MAX_LEVEL</span>:
+    сохранить <span class="term-data" title="Данные: переменная, поле или параметр">MAX_LEVEL</span>
+иначе:
+    сохранить новыйУровень
+</code></pre></div>
+
+<p>Это алгоритмы, не готовый Java-код. В небольших числовых диапазонах наших вариантов сложение помещается в int. Обе схемы работают с полем конкретного экземпляра; этому полю не нужен static.</p>
+<p>Методы своего класса в этой работе не печатают результаты. Печать выполняет main: например, <code><span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">first</span>.<span class="term-method" title="Метод: действие или вычисление">getLevel</span>());</code>. Сеттер, разрешающий прямую произвольную замену уровня, для задачи не требуется.</p>
+<h2 id="work-pr05-7-main">7. Контрольный сценарий main</h2>
+<p>Сначала создай только два объекта: A с уровнем «Старт A», B через конструктор с одним именем. Сделай <code><span class="term-data" title="Данные: переменная, поле или параметр">alias</span> = <span class="term-data" title="Данные: переменная, поле или параметр">first</span></code>, выполни одно действие через alias и выведи:</p>
+<ul>
+<li>имя A и его уровень после действия;</li>
+<li>уровень B;</li>
+<li>результат действия;</li>
+<li><code><span class="term-data" title="Данные: переменная, поле или параметр">first</span> == <span class="term-data" title="Данные: переменная, поле или параметр">alias</span></code>;</li>
+<li><code><span class="term-type" title="Тип или класс">ТипОбъекта</span>.<span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span>()</code> с реальным именем класса.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Вариант</th>
+<th style="text-align: right;">A после действия</th>
+<th style="text-align: right;">B, созданный с одним именем</th>
+<th>Результат</th>
+<th>first == alias</th>
+<th style="text-align: right;">Счётчик на этом этапе</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">100</td>
+<td>true</td>
+<td>true</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">100</td>
+<td>true</td>
+<td>true</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">200</td>
+<td>true</td>
+<td>true</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">60</td>
+<td>true</td>
+<td>true</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">100</td>
+<td>true</td>
+<td>true</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+<p>Эта таблица относится к моменту, когда создано ровно два объекта. Дополнительные проверочные объекты ниже увеличат счётчик; это ожидаемое поведение, а не ошибка static.</p>
+<h2 id="work-pr05-8">8. Проверь границы, а не только удобный пример</h2>
+<p>Для каждой строки возьми новый объект с указанным начальным уровнем. Буквы C, R, L и M означают расход, пополнение, границу низкого уровня и максимум своего варианта.</p>
+<table>
+<thead>
+<tr>
+<th>Проверка</th>
+<th>Ожидаемый результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>performAction при 0</td>
+<td>false, остаётся 0</td>
+</tr>
+<tr>
+<td>performAction при C − 1</td>
+<td>false, уровень не меняется</td>
+</tr>
+<tr>
+<td>performAction при C</td>
+<td>true, остаётся 0</td>
+</tr>
+<tr>
+<td>refill при 0</td>
+<td>R</td>
+</tr>
+<tr>
+<td>refill при M − 1</td>
+<td>M, превышения нет</td>
+</tr>
+<tr>
+<td>refill при M</td>
+<td>По-прежнему M</td>
+</tr>
+<tr>
+<td>isLow при L − 1</td>
+<td>true</td>
+</tr>
+<tr>
+<td>isLow при L</td>
+<td>false</td>
+</tr>
+<tr>
+<td>isValidLevel при −1 и M + 1</td>
+<td>false</td>
+</tr>
+<tr>
+<td>isValidLevel при 0 и M</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<p>Затем отдельными запусками попробуй конструктор с уровнем −1, с M + 1, с null вместо имени и с <code>"   "</code>. Ожидается исключение. Необработанное исключение завершит текущий сценарий, поэтому четыре неверных создания подряд не проверятся сами собой: меняй один входной пример за запуск.</p>
+<p>Проверка isValidLevel не выбрасывает исключение и не создаёт объект. А конструктор использует её результат, чтобы решить, можно ли нормально завершить создание.</p>
+<h2 id="work-pr05-9">9. Что представить для проверки</h2>
+<ul>
+<li><code>ConstructionWork.java</code> со своим классом и двумя конструкторами.</li>
+<li>Контрольный вывод раздела 7 и таблицу граничных проверок раздела 8.</li>
+<li>По одному сообщению запуска для неверного числа и неверного имени.</li>
+<li>Объяснение, почему счётчик общий, ресурс личный, а alias не вызывает конструктор.</li>
+</ul>
+<p>Работа готова, когда личные поля закрыты, методы сохраняют диапазон ресурса, обе формы конструктора работают, а общий счётчик совпадает с числом успешных созданий в рассматриваемом сценарии.</p>
+<h2 id="work-pr05-_2">Вопросы для самостоятельного ответа</h2>
+<ol>
+<li>Чем <code><span class="term-language" title="Конструкция языка">this</span>.<span class="term-data" title="Данные: переменная, поле или параметр">name</span> = <span class="term-data" title="Данные: переменная, поле или параметр">name</span></code> отличается от <code><span class="term-language" title="Конструкция языка">this</span>(<span class="term-data" title="Данные: переменная, поле или параметр">name</span>, <span class="term-data" title="Данные: переменная, поле или параметр">MAX_LEVEL</span>)</code>?</li>
+<li>Почему после собственного конструктора выражение <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span>()</code> больше не обязано подходить?</li>
+<li>Почему у getCreatedCount есть static, а у performAction нет?</li>
+<li>Почему только private недостаточно, чтобы запретить отрицательный ресурс внутри класса?</li>
+<li>Почему при низком уровне L проверка использует <code>&lt;</code>, а не <code>&lt;=</code>?</li>
+</ol>
+<p>Далее — <a target="_top" href="../#java-work-pr06">ПР06: итоговая мини-система</a>.</p></article><footer><a target="_top" href="../#java-work-pr04">← ПР04</a><a target="_top" href="../#java-work-pr06">ПР06 →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="course-traces.js?v=1"></script></body></html>

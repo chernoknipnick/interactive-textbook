@@ -61,6 +61,9 @@ works=[
  ('lab02','ЛР02','Условный оператор и циклы','Блок 1/Лабы новые/Лаба 2 Блок 1/🧪 ЛР «Условный оператор и циклы в Java».md',['conditions','loops']),
  ('pr02','ПР02','Циклы, массивы и случайные числа','Блок 1/ПР02 Циклы и массивы — Задание студенту.md',['loops','arrays']),
  ('pr03','ПР03','Собственные методы','Блок 1/ПР03 Собственные методы — Задание студенту.md',['methods','arrays']),
+ ('pr04','ПР04','Классы, объекты и ссылки','Блок 1/ПР04 Классы объекты и ссылки — Задание студенту.md',['classes','references','arrays']),
+ ('pr05','ПР05','Конструкторы, инкапсуляция и static','Блок 1/ПР05 Конструкторы инкапсуляция и static — Задание студенту.md',['constructors','static','classes']),
+ ('pr06','ПР06','Итоговая система объектов','Блок 1/ПР06 Итоговая система объектов — Задание студенту.md',['oop-summary','arrays','methods','static']),
 ]
 practice_content=ROOT/'content/java-practice'
 practice_content.mkdir(parents=True,exist_ok=True)
@@ -144,12 +147,17 @@ for i,(slug,number,title,relative,related) in enumerate(works):
     if not p.exists():continue
     body=render(p.read_text(encoding='utf-8'),'work-'+slug)
     if not re.search(r'<h1\b',body):body='<h1>'+html.escape(title)+'</h1>'+body
+    practice_visual=ROOT/'content/java-practice-visuals'/(slug+'.html')
+    if practice_visual.is_file():
+        body=re.sub(r'</h1>',lambda match:match[0]+practice_visual.read_text(encoding='utf-8'),body,count=1)
     body=re.sub(r'</h1>',lambda match:match[0]+legend(),body,count=1)
     related_links=''.join('<a target="_top" href="../#java-'+t+'">'+html.escape(next(x[2] for x in topics if x[0]==t))+'</a>' for t in related)
     previous=f'<a target="_top" href="../#java-work-{works[i-1][0]}">← {html.escape(works[i-1][1])}</a>' if i else '<a target="_top" href="../#java-practice">← Все практические работы</a>'
     following=f'<a target="_top" href="../#java-work-{works[i+1][0]}">{html.escape(works[i+1][1])} →</a>' if i+1<len(works) else '<a target="_top" href="../#java-practice">Все практические работы →</a>'
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{number}. {html.escape(title)} · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / {number} · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong>{related_links}</div><article>{body}</article><footer>{previous}{following}</footer></main><script src="lecture.js?v=3"></script></body></html>'''
     page=page.replace('</head>','<link rel="stylesheet" href="lesson-semantics.css?v=1"></head>')
+    if practice_visual.is_file():
+        page=page.replace('</head>','<link rel="stylesheet" href="course-traces.css?v=1"></head>').replace('</body>','<script src="lesson-semantics.js?v=2"></script><script src="course-traces.js?v=1"></script></body>')
     (OUT/('work-'+slug+'.html')).write_text(page,encoding='utf-8')
     practice.append({'id':slug,'number':number,'title':title,'related':related})
 (ROOT/'dist/java-practices.js').write_text('window.javaPractices='+json.dumps(practice,ensure_ascii=False)+';\n',encoding='utf-8')

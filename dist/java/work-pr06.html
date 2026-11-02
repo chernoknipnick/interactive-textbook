@@ -1,0 +1,359 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ПР06. Итоговая система объектов · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ПР06 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-oop-summary">Основы ООП — заключение</a><a target="_top" href="../#java-arrays">Массивы</a><a target="_top" href="../#java-methods">Методы: процедуры и функции</a><a target="_top" href="../#java-static">Статические поля и методы</a></div><article><h1 id="work-pr06-06">ПР06. Итоговая система объектов</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="pr06" aria-label="Пошаговый разбор: Тренировка: пересчёт суммы после изменения объекта">
+<h2>Тренировка: пересчёт суммы после изменения объекта</h2>
+<p>Схема относится к готовому тренировочному примеру ниже. Сначала предскажи следующий шаг, затем проверь состояние.</p>
+<p class="diagram-code-caption">Код к текущему шагу</p>
+<pre><code data-trace-code>Counter[] counters = {new Counter(2), new Counter(5)};</code></pre>
+<div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell>counters[0] → Counter: 2</div><div data-trace-cell>counters[1] → Counter: 5</div><div data-trace-cell>Созданы массив и два Counter</div></div>
+<p class="trace-explanation" data-trace-explanation aria-live="polite">Это отдельный маленький пример перед итоговой системой из четырёх объектов своего варианта.</p>
+<div class="trace-controls"><button type="button" data-trace-action="back" disabled>← Назад</button><span data-trace-step>Шаг 1 из 6</span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+<script type="application/json" data-trace-model>[{"code": "Counter[] counters = {new Counter(2), new Counter(5)};", "cells": ["counters[0] → Counter: 2", "counters[1] → Counter: 5", "Созданы массив и два Counter"], "explanation": "Это отдельный маленький пример перед итоговой системой из четырёх объектов своего варианта."}, {"code": "total += item.getValue();", "cells": ["Первая итерация sumValues", "item → первый Counter: 2", "total: 0 → 2"], "explanation": "Цикл получает значение ссылки из массива, затем читает состояние выбранного экземпляра."}, {"code": "total += item.getValue();", "cells": ["Вторая итерация sumValues", "item → второй Counter: 5", "total: 2 → 7"], "explanation": "Накопитель живёт внутри вызова метода и сохраняет сумму между проходами цикла."}, {"code": "return total;", "cells": ["Метод возвращает 7", "Поля Counter не изменились", "Первый println печатает 7"], "explanation": "Возвращённое число и объекты — разные вещи. Подсчёт не создаёт новых Counter."}, {"code": "counters[0].reduce();", "cells": ["Первый Counter: 2 → 1", "Второй Counter: по-прежнему 5", "Ссылки массива остались прежними"], "explanation": "Изменилось поле существующего объекта. Сумму нужно вычислить заново."}, {"code": "System.out.println(sumValues(counters));", "cells": ["Новый вызов: total снова начинается с 0", "Сумма текущих значений: 1 + 5 = 6", "В консоль добавлена строка 6"], "explanation": "Тот же метод и тот же массив дают новый результат, потому что изменилось состояние объекта."}]</script>
+</section>
+
+<p>Ориентир: две пары по 90 минут. Это завершающая работа начального блока: свой класс из ПР05 соединяется с массивом, циклами, методами и проверяемыми результатами.</p>
+<h2 id="work-pr06-_1">Результат работы</h2>
+<p>Создай консольную мини-систему учёта объектов своего варианта. Она показывает состояние группы, вычисляет статистику, выполняет по одному действию и пополняет ресурс там, где он низкий. Итог должен объясняться по шагам и воспроизводиться на фиксированных данных.</p>
+<p>Обязательная часть опирается на уже изученную базу: классы, ссылки, конструкторы, инкапсуляцию, static, массивы, условия и методы. Отдельные разновидности объектов и общий контракт через наследование можно разбирать в следующем блоке.</p>
+<h2 id="work-pr06-1">1. Подготовка</h2>
+<p>Создай папку <code>pr06-work</code>, файл <strong>OopBlockWork.java</strong>. Публичный класс запуска — <code>OopBlockWork</code>. Перенеси в него рядом непубличный класс своего варианта из ПР05 и проверь его методы.</p>
+<p>Тренировочные классы и старые версии Phone/Player/Printer/Car/Lamp оставь в их отдельных папках. В одной учебной программе не должно оказаться двух объявлений класса с одинаковым именем в одном пакете.</p>
+<p>Вариант сохраняется: <code>((номер - 1) % 5) + 1</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Вариант</th>
+<th>Система</th>
+<th>Класс</th>
+<th>Поле ресурса</th>
+<th style="text-align: right;">M — максимум</th>
+<th style="text-align: right;">C — расход</th>
+<th style="text-align: right;">R — пополнение</th>
+<th style="text-align: right;">L — низкий уровень</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>Парк учебных телефонов</td>
+<td>Phone</td>
+<td>battery</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>Команда игроков</td>
+<td>Player</td>
+<td>stamina</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>Очередь принтеров</td>
+<td>Printer</td>
+<td>paper</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>Учебный автопарк</td>
+<td>Car</td>
+<td>fuel</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>Группа автономных ламп</td>
+<td>Lamp</td>
+<td>charge</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">16</td>
+</tr>
+</tbody>
+</table>
+<p>Уровень считается низким строго при значении меньше L. Состояние каждого объекта остаётся от 0 до M включительно.</p>
+<h2 id="work-pr06-2">2. Короткая тренировка: метод читает объекты через ссылки</h2>
+<p>Отдельный пример <strong>CounterArrayDemo.java</strong> в папке <code>pr06-training</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">CounterArrayDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Counter</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">counters</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Counter</span></span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Counter</span></span><span class="p">(</span><span class="mi">5</span><span class="p">)};</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">sumValues</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">counters</span></span><span class="p">));</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">counters</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">reduce</span></span><span class="p">();</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">sumValues</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">counters</span></span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">sumValues</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Counter</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">values</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">total</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Counter</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">item</span></span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">values</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">total</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">item</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getValue</span></span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">total</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Counter</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">value</span></span><span class="p">;</span>
+
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Counter</span></span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">value</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">value</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">value</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">getValue</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">value</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">reduce</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">value</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">value</span></span><span class="o">--</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Запусти <code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">CounterArrayDemo</span>.java</code>, затем <code>java <span class="term-type" title="Тип или класс">CounterArrayDemo</span></code>. Вывод — 7, затем 6. Первый Counter изменился с 2 на 1; второй остался 5. Метод суммы создал локальный total, прочитал состояния существующих объектов и вернул число. Новых Counter при подсчёте суммы он не создавал.</p>
+<p>Это только тренировка суммирования. Требования к полноценной модели и её проверкам заданы твоим классом из ПР05.</p>
+<h2 id="work-pr06-3">3. Создай исходную группу</h2>
+<p>В основной программе должен быть массив из <strong>четырёх разных экземпляров</strong> с именами A, B, C, D. Все создания выполняются один раз в main. Первый этап нужен для точной проверки алгоритмов: фиксированные данные важнее случайного заполнения.</p>
+<table>
+<thead>
+<tr>
+<th>Имя</th>
+<th style="text-align: right;">Начальный уровень</th>
+<th>Назначение проверки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">0</td>
+<td>Полностью пустой ресурс</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">ACTION_COST − 1</td>
+<td>Не хватает одной единицы до действия</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">ACTION_COST</td>
+<td>Ровно хватает на одно действие</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align: right;">MAX_LEVEL</td>
+<td>Верхняя граница</td>
+</tr>
+</tbody>
+</table>
+<p>Общая форма создания массива внутри main; это шаблон с заменяемым типом:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">items</span> = {
+    <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span>(&quot;A&quot;, 0),
+    <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span>(&quot;B&quot;, <span class="term-type" title="Тип или класс">ТипОбъекта</span>.ACTION_COST - 1),
+    <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span>(&quot;C&quot;, <span class="term-type" title="Тип или класс">ТипОбъекта</span>.ACTION_COST),
+    <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span>(&quot;D&quot;, <span class="term-type" title="Тип или класс">ТипОбъекта</span>.MAX_LEVEL)
+};
+</code></pre></div>
+
+<p>Здесь создаются массив и четыре экземпляра твоего класса. Его собственный createdCount должен показывать 4. Он не считает массив, строки и локальные переменные. Ссылки на четыре объекта различны; в исходном массиве нет null и повторных ссылок.</p>
+<h2 id="work-pr06-4">4. Раздели обработку на методы</h2>
+<p>Вычисляющие и управляющие методы объяви как static в <code>OopBlockWork</code>, снаружи main. Каждый получает массив явно. Личные действия остаются обычными методами объектов своего класса.</p>
+<p>В таблице <code><span class="term-type" title="Тип или класс">ТипОбъекта</span></code> — выбранный класс, а <code><span class="term-data" title="Данные: переменная, поле или параметр">values</span></code> — выбранное имя параметра. Вместо шаблона нужно написать настоящее объявление.</p>
+<table>
+<thead>
+<tr>
+<th>Общая форма метода</th>
+<th>Требование</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">printAll</span>(<span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code></td>
+<td>Напечатать имя и текущий уровень каждого; значения не менять</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">sumLevel</span>(<span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code></td>
+<td>Вернуть сумму уровней, без печати и создания новых объектов</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">double</span> <span class="term-method" title="Метод: действие или вычисление">averageLevel</span>(<span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code></td>
+<td>Вернуть средний уровень с дробной частью</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">countLow</span>(<span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code></td>
+<td>Посчитать элементы, у которых isLow() возвращает true</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">ТипОбъекта</span> <span class="term-method" title="Метод: действие или вычисление">findMax</span>(<span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code></td>
+<td>Вернуть ссылку на существующий объект с максимальным уровнем; при равенстве выбрать первый</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">performAll</span>(<span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code></td>
+<td>Вызвать performAction() ровно один раз для каждого и вернуть количество успешных действий</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">refillLow</span>(<span class="term-type" title="Тип или класс">ТипОбъекта</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code></td>
+<td>При обходе один раз проверить каждый объект и один раз вызвать refill(), только если его уровень низкий</td>
+</tr>
+</tbody>
+</table>
+<p>Контракт этих методов в обязательной части: массив не равен null, непустой, каждый элемент содержит ссылку на объект. Тестовый массив раздела 3 удовлетворяет этому условию.</p>
+<h3 id="work-pr06-sumlevel-averagelevel">Как рассуждать о sumLevel и averageLevel</h3>
+<p>Накопитель начинается с 0. Цикл читает <code><span class="term-data" title="Данные: переменная, поле или параметр">item</span>.<span class="term-method" title="Метод: действие или вычисление">getLevel</span>()</code> у каждого получателя и прибавляет число. Итоговый return ставится после обхода.</p>
+<p>Для среднего сначала получи сумму, затем выполни <code>(<span class="term-type" title="Тип или класс">double</span>) сумма / длина</code>. Если вычислить целочисленное деление до приведения, дробная часть уже потеряется.</p>
+<h3 id="work-pr06-findmax">Как рассуждать о findMax</h3>
+<p>Первый элемент — начальный кандидат. При просмотре остальных меняй ссылку на кандидата только при <strong>строго большем</strong> уровне. Тогда при равенстве останется первый встретившийся объект.</p>
+<p>Не создавай новый объект ради результата поиска. Метод должен вернуть одну из ссылок, уже находящихся в массиве. Иначе потеряется идентичность, а счётчик созданий изменится.</p>
+<h3 id="work-pr06-performall-refilllow">Как рассуждать о performAll и refillLow</h3>
+<p>performAction возвращает результат попытки. Увеличивай счётчик успехов только при true, а не при каждом посещённом элементе.</p>
+<p>refillLow делает <strong>один проход и не более одного пополнения на <span class="term-object" title="Объект или ссылка на него">объект</span></strong>. Если после одного пополнения уровень всё ещё низкий, он таким и остаётся до следующего отдельно заданного прохода. Здесь не нужен цикл «пополнять до нормального уровня».</p>
+<h2 id="work-pr06-5">5. Выполни три этапа в точном порядке</h2>
+<ol>
+<li><strong>До действий:</strong> выведи группу, сумму, среднее, количество низких уровней, имя максимального и createdCount.</li>
+<li><strong>После действий:</strong> один раз вызови performAll, выведи число успехов и снова состояние со статистикой.</li>
+<li><strong>После пополнения:</strong> один раз вызови refillLow и снова выведи состояние со статистикой.</li>
+</ol>
+<p>Методы статистики при повторном вызове должны пересчитывать текущее состояние. Переменная с однажды вычисленной суммой сама по себе не изменится после действий объектов.</p>
+<h2 id="work-pr06-6">6. Ожидаемые результаты своего варианта</h2>
+<p>В скобках перечислены уровни <strong>A, B, C, D в этом порядке</strong>. Среднее ниже относится к четырём элементам. Два действия должны оказаться успешными во всех вариантах, максимальным на каждом из трёх этапов будет D.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Вариант</th>
+<th>До действий: уровни; сумма; среднее</th>
+<th>После одного performAll: уровни; сумма; среднее</th>
+<th>После одного refillLow: уровни; сумма; среднее</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>(0, 9, 10, 100); 119; 29.75</td>
+<td>(0, 9, 0, 90); 99; 24.75</td>
+<td>(20, 29, 20, 90); 159; 39.75</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>(0, 14, 15, 100); 129; 32.25</td>
+<td>(0, 14, 0, 85); 99; 24.75</td>
+<td>(25, 39, 25, 85); 174; 43.5</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>(0, 4, 5, 200); 209; 52.25</td>
+<td>(0, 4, 0, 195); 199; 49.75</td>
+<td>(30, 34, 30, 195); 289; 72.25</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>(0, 5, 6, 60); 71; 17.75</td>
+<td>(0, 5, 0, 54); 59; 14.75</td>
+<td>(12, 17, 12, 54); 95; 23.75</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>(0, 7, 8, 100); 115; 28.75</td>
+<td>(0, 7, 0, 92); 99; 24.75</td>
+<td>(16, 23, 16, 92); 147; 36.75</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Вариант</th>
+<th style="text-align: right;">Низких до действий</th>
+<th style="text-align: right;">Низких после действий</th>
+<th style="text-align: right;">Низких после пополнения</th>
+<th style="text-align: right;">Создано объектов своего класса</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+<p>Во втором варианте A и C после пополнения имеют 25, что всё ещё меньше 30. Поэтому ответ 2 верен. Если программа получила 0, возможно, ты повторял пополнение до достижения границы вместо одного вызова.</p>
+<p>Формат подписей можешь выбрать сам, но каждое число должно быть понятно: этап, имя, уровень, сумма, среднее, количество низких, максимум и счётчик. Дробная точка в примерах соответствует обычному выводу double через println.</p>
+<h2 id="work-pr06-7">7. Проверь идентичность и отсутствие лишних созданий</h2>
+<p>До действий сохрани <code>alias = <span class="term-data" title="Данные: переменная, поле или параметр">items</span>[3]</code> с типом своего класса. Убедись, что <code>alias == <span class="term-data" title="Данные: переменная, поле или параметр">items</span>[3]</code> даёт true, а createdCount остаётся 4.</p>
+<p>Вызови findMax на каждом из трёх этапов и проверь, что результат <code>== <span class="term-data" title="Данные: переменная, поле или параметр">items</span>[3]</code>. Создание копии с таким же именем не проходит эту проверку. Читающие методы sumLevel, averageLevel, countLow и findMax не должны менять уровни и счётчик.</p>
+<p>Отдельная диагностика после контрольного сценария: создай два разных объекта с одинаковым уровнем, помести их в новый массив и проверь, что findMax вернул ссылку на первый. Эти дополнительные создания закономерно увеличат createdCount. Таблицы раздела 6 проверяются раньше, на исходных четырёх объектах.</p>
+<h2 id="work-pr06-8">8. Дополнительные задания по желанию</h2>
+<p>После обязательных проверок можно добавить поиск по имени, вывод только низких уровней или ввод пользовательских значений. Новое действие должно сохранять правила класса и не ломать воспроизводимый контрольный сценарий.</p>
+<p>Ещё один опыт со ссылками: помести один объект в массив дважды и вызови performAll. Действие будет вызвано для каждой позиции, поэтому общий объект может измениться дважды. Различай число элементов массива и число разных экземпляров. Основной вариант работы использует четыре разных экземпляра.</p>
+<h2 id="work-pr06-9">9. Что представить для проверки</h2>
+<ul>
+<li><code>OopBlockWork.java</code> с main, семью методами обработки и классом своего варианта.</li>
+<li>Номер варианта, вывод трёх этапов и сверку с обеими таблицами.</li>
+<li>Результат проверки findMax по идентичности, проверки равного максимума и отсутствия лишних созданий.</li>
+<li>Схему массива из четырёх ссылок на четыре объекта и пояснение роли alias.</li>
+<li>Краткое объяснение, какие методы читают данные, а какие меняют состояние.</li>
+</ul>
+<h2 id="work-pr06-_2">Когда начальный блок можно считать закреплённым</h2>
+<p>Работа готова, если выполняются все условия:</p>
+<ul>
+<li>Класс создаёт допустимый объект через конструктор; личные поля закрыты.</li>
+<li>performAction, refill и isLow соблюдают контракт своего варианта.</li>
+<li>Личный ресурс не объявлен static, общий счётчик не размножен по объектам.</li>
+<li>Все семь методов обработки имеют понятную задачу и получают массив явно.</li>
+<li>Значения трёх этапов совпадают с таблицами, включая дробное среднее и строгую границу L.</li>
+<li>findMax возвращает существующий объект и выбирает первый при равенстве.</li>
+<li>Программа повторно запускается с теми же проверяемыми результатами.</li>
+<li>Ты можешь объяснить выбранный вызов от параметра до изменения поля и возвращаемого результата.</li>
+</ul>
+<h2 id="work-pr06-_3">Вопросы перед переходом к следующему блоку</h2>
+<ol>
+<li>Где хранится ссылка на объект, а где — его личный уровень?</li>
+<li>Почему один и тот же массив после действий даёт другую сумму?</li>
+<li>Зачем системе и static-методы обработки массива, и обычные методы объектов?</li>
+<li>Почему поиск максимального не должен создавать новый экземпляр?</li>
+<li>Что произойдёт при повторной ссылке на один объект в двух ячейках?</li>
+<li>Какие правила защищают модель от отрицательных значений и превышения максимума?</li>
+<li>Как связаны классы, конструкторы, ссылки, инкапсуляция и static в твоём решении?</li>
+</ol>
+<p>После этих проверок база блока собрана в одной программе. Дальнейшие темы смогут расширять эту модель новыми видами объектов, контрактами и структурами данных.</p></article><footer><a target="_top" href="../#java-work-pr05">← ПР05</a><a target="_top" href="../#java-practice">Все практические работы →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="course-traces.js?v=1"></script></body></html>
