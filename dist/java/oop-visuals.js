@@ -77,6 +77,7 @@
     function draw(animate = true) {
       const [code, labels, links, active, explanation] = frames[step];
       find('[data-oop-code]').textContent = code;
+      window.highlightJavaTerms?.(find('[data-oop-code]'));
       find('[data-oop-step]').textContent = `Шаг ${step + 1} из ${frames.length}`;
       find('[data-oop-explanation]').textContent = explanation;
       find('[data-oop-action=back]').disabled = step === 0;

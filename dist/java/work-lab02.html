@@ -1,13 +1,13 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ЛР02. Условный оператор и циклы · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ЛР02 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-conditions">Условный оператор</a><a target="_top" href="../#java-loops">Циклы</a></div><article><h1>Условный оператор и циклы</h1><h2 id="work-lab02-_1">Что отрабатываем</h2>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ЛР02. Условный оператор и циклы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ЛР02 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-conditions">Условный оператор</a><a target="_top" href="../#java-loops">Циклы</a></div><article><h1>Условный оператор и циклы</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><h2 id="work-lab02-_1">Что отрабатываем</h2>
 <ul>
 <li>
-<p><code>if</code>, <code>if-else</code>, <code>else if</code>, вложенные условия; типичные ошибки с <code>==</code>/<code>=</code> и границами диапазонов.</p>
+<p><code><span class="term-language" title="Конструкция языка">if</span></code>, <code><span class="term-language" title="Конструкция языка">if</span>-<span class="term-language" title="Конструкция языка">else</span></code>, <code><span class="term-language" title="Конструкция языка">else</span> <span class="term-language" title="Конструкция языка">if</span></code>, вложенные условия; типичные ошибки с <code>==</code>/<code>=</code> и границами диапазонов.</p>
 </li>
 <li>
-<p><code>switch</code> (в т.ч. объединение меток, <code>default</code>, <code>yield</code>/стрелочная форма для JDK 14+).</p>
+<p><code><span class="term-method" title="Метод: действие или вычисление">switch</span></code> (в т.ч. объединение меток, <code>default</code>, <code>yield</code>/стрелочная форма для JDK 14+).</p>
 </li>
 <li>
-<p>Циклы <code>for</code>, <code>while</code>, <code>do-while</code>, вложенные циклы.</p>
+<p>Циклы <code><span class="term-language" title="Конструкция языка">for</span></code>, <code><span class="term-language" title="Конструкция языка">while</span></code>, <code>do-<span class="term-language" title="Конструкция языка">while</span></code>, вложенные циклы.</p>
 </li>
 <li>
 <p>Управление потоком: <code>break</code>, <code>continue</code>.</p>
@@ -30,15 +30,15 @@
 </li>
 <li>
 <p><strong>Switch: дни недели</strong><br />
-    Ввести <code>d</code> (1..7). Вывести название дня: 1–Пн, …, 7–Вс; иначе <code>"ERROR"</code>.</p>
+    Ввести <code><span class="term-method" title="Метод: действие или вычисление">d</span></code> (1..7). Вывести название дня: 1–Пн, …, 7–Вс; иначе <code>"ERROR"</code>.</p>
 </li>
 <li>
 <p><strong>for: сумма и количество</strong><br />
-    Для <code>n</code> (n≥1) посчитать сумму 1..n и количество чётных чисел на отрезке 1..n.</p>
+    Для <code><span class="term-method" title="Метод: действие или вычисление">n</span></code> (n≥1) посчитать сумму 1..n и количество чётных чисел на отрезке 1..n.</p>
 </li>
 <li>
 <p><strong>while: переворот числа</strong><br />
-    Ввести положительное <code>m</code>. Вывести число, записанное цифрами в обратном порядке (например, 1203 → 3021).</p>
+    Ввести положительное <code><span class="term-method" title="Метод: действие или вычисление">m</span></code>. Вывести число, записанное цифрами в обратном порядке (например, 1203 → 3021).</p>
 </li>
 </ol>
 <hr />
@@ -54,15 +54,15 @@
 </li>
 <li>
 <p><strong>Switch: сезон</strong><br />
-    Ввести номер месяца <code>m</code> (1..12). Вывести <code>"WINTER" (12,1,2)</code>, <code>"SPRING" (3..5)</code>, <code>"SUMMER" (6..8)</code>, <code>"AUTUMN" (9..11)</code>.</p>
+    Ввести номер месяца <code><span class="term-method" title="Метод: действие или вычисление">m</span></code> (1..12). Вывести <code>"WINTER" (12,1,2)</code>, <code>"SPRING" (3..5)</code>, <code>"SUMMER" (6..8)</code>, <code>"AUTUMN" (9..11)</code>.</p>
 </li>
 <li>
 <p><strong>for: факториал</strong><br />
-    Ввести <code>n</code> (0..12). Посчитать <code>n!</code>.</p>
+    Ввести <code><span class="term-method" title="Метод: действие или вычисление">n</span></code> (0..12). Посчитать <code><span class="term-method" title="Метод: действие или вычисление">n</span>!</code>.</p>
 </li>
 <li>
 <p><strong>do-while: угадайка</strong><br />
-    Задано секретное число <code>s</code> (жёстко в коде, напр. 42). Считывать попытки до угадывания; подсказать <code>"LOW"</code>/<code>"HIGH"</code>.</p>
+    Задано секретное число <code><span class="term-method" title="Метод: действие или вычисление">s</span></code> (жёстко в коде, напр. 42). Считывать попытки до угадывания; подсказать <code>"LOW"</code>/<code>"HIGH"</code>.</p>
 </li>
 </ol>
 <hr />
@@ -79,15 +79,15 @@
 </li>
 <li>
 <p><strong>Switch: калькулятор</strong><br />
-    Ввести <code>a</code>, <code>b</code>, и символ операции <code>+,-,*,/</code>. Через <code>switch</code> вывести результат (для <code>/</code> — если <code>b==0</code>, вывести <code>"DIV BY ZERO"</code>).</p>
+    Ввести <code>a</code>, <code>b</code>, и символ операции <code>+,-,*,/</code>. Через <code><span class="term-method" title="Метод: действие или вычисление">switch</span></code> вывести результат (для <code>/</code> — если <code>b==0</code>, вывести <code>"DIV BY ZERO"</code>).</p>
 </li>
 <li>
 <p><strong>for: сумма цифр</strong><br />
-    Ввести <code>n≥0</code>. Вычислить сумму цифр числа.</p>
+    Ввести <code><span class="term-method" title="Метод: действие или вычисление">n</span>≥0</code>. Вычислить сумму цифр числа.</p>
 </li>
 <li>
 <p><strong>while + continue</strong><br />
-    Вывести все числа 1..<code>n</code>, кроме кратных 3 (пропускать <code>continue</code>).</p>
+    Вывести все числа 1..<code><span class="term-method" title="Метод: действие или вычисление">n</span></code>, кроме кратных 3 (пропускать <code>continue</code>).</p>
 </li>
 </ol>
 <hr />
@@ -95,19 +95,19 @@
 <ol>
 <li>
 <p><strong>If: максимум из трёх</strong><br />
-    Ввести <code>a, b, c</code>. Вывести наибольшее.</p>
+    Ввести <code>a, b, <span class="term-method" title="Метод: действие или вычисление">c</span></code>. Вывести наибольшее.</p>
 </li>
 <li>
-<p><strong>Лестница <code>else if</code>: оценка по среднему</strong><br />
-    Ввести три балла <code>a,b,c</code> (0..100). Посчитать среднее и выдать категорию как в варианте 2 (A..F).</p>
+<p><strong>Лестница <code><span class="term-language" title="Конструкция языка">else</span> <span class="term-language" title="Конструкция языка">if</span></code>: оценка по среднему</strong><br />
+    Ввести три балла <code>a,b,<span class="term-method" title="Метод: действие или вычисление">c</span></code> (0..100). Посчитать среднее и выдать категорию как в варианте 2 (A..F).</p>
 </li>
 <li>
 <p><strong>Switch: римские цифры I..X</strong><br />
-    Ввести <code>k</code> (1..10). Вывести римскую запись (I,V,X и комбинации), иначе <code>"ERROR"</code>.</p>
+    Ввести <code><span class="term-method" title="Метод: действие или вычисление">k</span></code> (1..10). Вывести римскую запись (I,V,X и комбинации), иначе <code>"ERROR"</code>.</p>
 </li>
 <li>
 <p><strong>Вложенные циклы: таблица умножения 1..n</strong><br />
-    Ввести <code>n</code> (1..9). Вывести аккуратную таблицу <code>i*j</code>.</p>
+    Ввести <code><span class="term-method" title="Метод: действие или вычисление">n</span></code> (1..9). Вывести аккуратную таблицу <code>i*j</code>.</p>
 </li>
 <li>
 <p><strong>do-while: меню</strong><br />

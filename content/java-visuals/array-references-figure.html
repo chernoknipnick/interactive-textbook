@@ -1,0 +1,17 @@
+<figure class="array-lesson-figure" aria-label="Массив из трёх ссылок на Student: два заполненных элемента и null">
+  <figcaption>Один массив, две ссылки на студентов, одна свободная ячейка</figcaption>
+  <p><code>new Student[3]</code> создаёт массив с тремя ячейками. Он не создаёт три объекта Student.</p>
+  <h4>1. Сразу после создания массива</h4>
+  <div class="array-slot-grid">
+    <div class="array-slot"><strong>group[0]</strong><code>null</code><span>Ссылки на студента пока нет</span></div>
+    <div class="array-slot"><strong>group[1]</strong><code>null</code><span>Ссылки на студента пока нет</span></div>
+    <div class="array-slot"><strong>group[2]</strong><code>null</code><span>Ссылки на студента пока нет</span></div>
+  </div>
+  <h4>2. После group[0] = anna; и group[1] = boris;</h4>
+  <div class="array-slot-grid">
+    <div class="array-slot-path"><div class="array-slot"><strong>group[0]</strong><span>Ссылка на Анну</span></div><span class="array-down" aria-hidden="true">↓</span><div class="array-student"><strong>Объект Анна</strong><code>name = "Анна"</code><code>energy = 70</code></div></div>
+    <div class="array-slot-path"><div class="array-slot"><strong>group[1]</strong><span>Ссылка на Бориса</span></div><span class="array-down" aria-hidden="true">↓</span><div class="array-student"><strong>Объект Борис</strong><code>name = "Борис"</code><code>energy = 40</code></div></div>
+    <div class="array-slot-path"><div class="array-slot"><strong>group[2]</strong><code>null</code></div><div class="array-empty">Объекта за этой ячейкой пока нет. Вызов <code>group[2].study()</code> приведёт к NullPointerException.</div></div>
+  </div>
+  <p class="array-figure-result"><code>group[0].study()</code> и <code>anna.study()</code> обращаются к одному экземпляру. На схеме показано состояние до этих вызовов: каждый выполненный вызов изменит Анну.</p>
+</figure>

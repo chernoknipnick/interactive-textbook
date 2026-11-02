@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обзор языков программирования · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА 01 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Обзор языков программирования: какие бывают и для чего каждый нужен</h1>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обзор языков программирования · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 01 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Обзор языков программирования: какие бывают и для чего каждый нужен</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details>
 <blockquote>
 <p>Предшествует <a target="_top" href="../#java-intro">Введению в курс</a>. Цель — до того, как мы погрузимся в Java и Kotlin, увидеть картину целиком: почему языков программирования сотни, чем они отличаются друг от друга и почему для мобильной разработки выбраны именно эти два.</p>
 </blockquote>
@@ -84,7 +84,7 @@
 </table>
 <h2 id="lecture-6-java-kotlin">6. Место Java и Kotlin в этой картине</h2>
 <p>Java появилась в 1995 году как язык «write once, run anywhere» — благодаря JVM один и тот же байт-код работает на любой платформе, для которой есть виртуальная машина (подробная история — в лекции «История создания языка»). Android изначально строился именно на Java — виртуальная машина Android (сначала Dalvik, затем ART) выполняет тот же байт-код по той же логике.</p>
-<p>Kotlin появился в 2011 году как язык от JetBrains, тоже компилируется в JVM-байт-код и <strong>полностью совместим с Java</strong> — можно в одном проекте использовать оба языка одновременно, вызывать Java-код из Kotlin и наоборот. В 2019 году Google объявила Kotlin приоритетным (<code>Kotlin-first</code>) языком для новой Android-разработки. Поэтому у нас не «два курса в одном», а один: тот же байт-код, та же платформа, та же JVM — просто два синтаксиса для описания одной и той же логики, и оба вам пригодятся на практике.</p>
+<p>Kotlin появился в 2011 году как язык от JetBrains, тоже компилируется в JVM-байт-код и <strong>полностью совместим с Java</strong> — можно в одном проекте использовать оба языка одновременно, вызывать Java-код из Kotlin и наоборот. В 2019 году Google объявила Kotlin приоритетным (<code>Kotlin-<span class="term-data" title="Данные: переменная, поле или параметр">first</span></code>) языком для новой Android-разработки. Поэтому у нас не «два курса в одном», а один: тот же байт-код, та же платформа, та же JVM — просто два синтаксиса для описания одной и той же логики, и оба вам пригодятся на практике.</p>
 <h2 id="lecture-7">7. Дальше</h2>
 <p>Теперь, когда понятно, где именно на карте языков программирования находится наш курс, переходим к <a target="_top" href="../#java-intro">организационному введению</a> — что именно будем изучать, в каком порядке и какими инструментами пользоваться.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-00">00. Обзор языков программирования — под запись</h1>
 <blockquote>
@@ -122,11 +122,11 @@
 </tbody>
 </table>
 <h2 id="notes-2">2. Три пути от текста к работающей программе</h2>
-<div class="codehilite"><pre><span></span><code>1) текст программы ──[компилятор]──► машинный код ──► процессор
+<div class="codehilite"><pre><span></span><code>1) текст программы ──[компилятор]──► машинный <span class="term-method" title="Метод: действие или вычисление">код</span> ──► процессор
 
 2) текст программы ──[интерпретатор]──► процессор
 
-3) текст программы ──[компилятор]──► байт-код ──[виртуальная машина]──► процессор
+3) текст программы ──[компилятор]──► байт-<span class="term-method" title="Метод: действие или вычисление">код</span> ──[виртуальная машина]──► процессор
 </code></pre></div>
 
 <p><strong>Компилятор</strong> — программа, которая переводит весь текст программы в машинный код заранее, до запуска. Результат — исполняемый файл.
@@ -138,7 +138,7 @@
 <p><strong>Байт-код</strong> — промежуточный код, не привязанный к конкретному процессору. Процессор его не понимает; его выполняет виртуальная машина.</p>
 <p><strong>Виртуальная машина</strong> — программа, которая выполняет байт-код на конкретном устройстве. Виртуальная машина Java называется <strong>JVM</strong> (Java Virtual Machine).</p>
 <p>Путь программы на Java:</p>
-<div class="codehilite"><pre><span></span><code>файл .java ──[javac]──► файл .class (байт-код) ──► JVM ──► процессор
+<div class="codehilite"><pre><span></span><code>файл .java ──[javac]──► файл .<span class="term-language" title="Конструкция языка">class</span> (байт-<span class="term-method" title="Метод: действие или вычисление">код</span>) ──► <span class="term-method" title="Метод: действие или вычисление">JVM</span> ──► процессор
 </code></pre></div>
 
 <p>Так работают Java, Kotlin, C#.</p>
@@ -215,11 +215,11 @@
 </tbody>
 </table>
 <p>Примеры с пары:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;восемнадцать&quot;</span><span class="p">;</span><span class="w">   </span><span class="c1">// Java: программа не запустится вообще</span>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;восемнадцать&quot;</span><span class="p">;</span><span class="w">   </span><span class="c1">// Java: программа не запустится вообще</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="n">age</span> <span class="o">=</span> <span class="s2">&quot;восемнадцать&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>              <span class="c1"># Python: запустится и упадёт на этой строке</span>
+<div class="codehilite"><pre><span></span><code><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span> <span class="o">=</span> <span class="s2">&quot;восемнадцать&quot;</span>
+<span class="nb"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>              <span class="c1"># Python: запустится и упадёт на этой строке</span>
 </code></pre></div>
 
 <div class="codehilite"><pre><span></span><code><span class="s2">&quot;5&quot;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="s2">&quot;2&quot;</span><span class="w">   </span><span class="c1">// 10     JavaScript: молча преобразует типы</span>
@@ -292,7 +292,7 @@
 <p><strong>2019 год</strong> — Google объявила Kotlin приоритетным языком разработки под Android.</p>
 <p>Оба языка: байт-код + виртуальная машина; статическая строгая типизация; основная парадигма — ООП.</p>
 <div class="codehilite"><pre><span></span><code>Main.java ──[javac]────┐
-                       ├──► байт-код (.class) ──► виртуальная машина
+                       ├──► байт-<span class="term-method" title="Метод: действие или вычисление">код</span> (.<span class="term-language" title="Конструкция языка">class</span>) ──► виртуальная машина
 Main.kt   ──[kotlinc]──┘
 </code></pre></div>
 
@@ -311,4 +311,4 @@ Main.kt   ──[kotlinc]──┘
 <li>Назовите четыре парадигмы программирования и по одному языку на каждую.</li>
 <li>Почему для прошивки микроконтроллера выбирают C, а для анализа данных — Python?</li>
 <li>Почему в одном Android-проекте можно использовать и Java, и Kotlin?</li>
-</ol></article></details><footer><a target="_top" href="../#java">← К программе Java</a><a target="_top" href="../#java-intro">Введение в курс →</a></footer></main><script src="lecture.js?v=3"></script></body></html>
+</ol></article></details><footer><a target="_top" href="../#java">← К программе Java</a><a target="_top" href="../#java-intro">Введение в курс →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script></body></html>

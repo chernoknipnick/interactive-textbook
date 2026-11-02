@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Поразрядные операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА 05 ИЗ 13 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-112">1.1.2. Поразрядные операции — под запись</h1>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Поразрядные операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 05 ИЗ 13 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-112">1.1.2. Поразрядные операции — под запись</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details>
 <blockquote>
 <p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары.</p>
 </blockquote>
@@ -21,7 +21,7 @@
                                → 10110
 </code></pre></div>
 
-<p><code>Integer.toBinaryString(n)</code> — двоичная запись числа в виде строки.
+<p><code>Integer.<span class="term-method" title="Метод: действие или вычисление">toBinaryString</span>(n)</code> — двоичная запись числа в виде строки.
 Литералы: <code>0b1101</code> — двоичный, <code>0xFF</code> — шестнадцатеричный (одна шестнадцатеричная цифра = 4 бита, <code>0xFF</code> = <code>1111 1111</code> = 255).</p>
 <h2 id="notes-2">2. Поразрядные операции</h2>
 <p><strong>Поразрядные (побитовые) операции</strong> выполняются над каждым битом целого числа отдельно. Работают только с целыми типами.</p>
@@ -162,24 +162,24 @@
 <ol>
 <li><strong>Флаги</strong> — несколько признаков «да/нет» в одном числе, по биту на признак:
    включить — <code>flags | FLAG</code>; проверить — <code>(flags &amp; FLAG) != 0</code>; выключить — <code>flags &amp; ~FLAG</code>; переключить — <code>flags ^ FLAG</code>.</li>
-<li><strong>Упаковка нескольких значений в одно число</strong> (например, цвет ARGB в <code>int</code>):
-   извлечь байт — <code>(color &gt;&gt; сдвиг) &amp; 0xFF</code>.</li>
+<li><strong>Упаковка нескольких значений в одно число</strong> (например, цвет ARGB в <code><span class="term-type" title="Тип или класс">int</span></code>):
+   извлечь байт — <code>(<span class="term-data" title="Данные: переменная, поле или параметр">color</span> &gt;&gt; сдвиг) &amp; 0xFF</code>.</li>
 <li><strong>Шифрование:</strong> <code>(x ^ key) ^ key</code> = <code>x</code> — повторное применение XOR с тем же ключом возвращает исходное значение.</li>
 <li><strong>Быстрые вычисления:</strong> <code>n &amp; 1</code> — проверка чётности; <code>x &lt;&lt; n</code> — умножение на 2ⁿ.</li>
 </ol>
-<div class="codehilite"><pre><span></span><code><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">READ</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 001</span>
-<span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">WRITE</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 010</span>
-<span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">EXECUTE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">   </span><span class="c1">// 100</span>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">READ</span></span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 001</span>
+<span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 010</span>
+<span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">EXECUTE</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">   </span><span class="c1">// 100</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="n">permissions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">READ</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">WRITE</span><span class="p">;</span><span class="w">                     </span><span class="c1">// 011 = 3</span>
-<span class="kt">boolean</span><span class="w"> </span><span class="n">canWrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">permissions</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">WRITE</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">      </span><span class="c1">// true</span>
-<span class="n">permissions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">permissions</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="n">WRITE</span><span class="p">;</span><span class="w">                 </span><span class="c1">// 001 = 1</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">READ</span></span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">;</span><span class="w">                     </span><span class="c1">// 011 = 3</span>
+<span class="kt"><span class="term-type" title="Тип или класс">boolean</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">canWrite</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">      </span><span class="c1">// true</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">;</span><span class="w">                 </span><span class="c1">// 001 = 1</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFF3366CC</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">red</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">    </span><span class="c1">// 51</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">     </span><span class="c1">// 102</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">blue</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">            </span><span class="c1">// 204</span>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFF3366CC</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">red</span></span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">    </span><span class="c1">// 51</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">green</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">     </span><span class="c1">// 102</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">blue</span></span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">            </span><span class="c1">// 204</span>
 </code></pre></div>
 
 <h2 id="notes-6">6. <code>&amp;</code> и <code>&amp;&amp;</code>. Приоритет операций</h2>
@@ -194,8 +194,8 @@
 <tbody>
 <tr>
 <td>С какими типами</td>
-<td>только <code>boolean</code></td>
-<td>целые числа и <code>boolean</code></td>
+<td>только <code><span class="term-type" title="Тип или класс">boolean</span></code></td>
+<td>целые числа и <code><span class="term-type" title="Тип или класс">boolean</span></code></td>
 </tr>
 <tr>
 <td>Сокращённое вычисление</td>
@@ -209,7 +209,7 @@
 </tr>
 </tbody>
 </table>
-<p>В условиях используют <code>&amp;&amp;</code> и <code>||</code>. Исключение — <code>^</code> для <code>boolean</code>: «истинно ровно одно из двух».</p>
+<p>В условиях используют <code>&amp;&amp;</code> и <code>||</code>. Исключение — <code>^</code> для <code><span class="term-type" title="Тип или класс">boolean</span></code>: «истинно ровно одно из двух».</p>
 <p><strong>Приоритет операций</strong> (от высшего к низшему)</p>
 <table>
 <thead>
@@ -283,7 +283,7 @@
 <ol>
 <li>Вопросы «Проверь себя».</li>
 <li>В тетради, в столбик, без компьютера: перевести в двоичную систему 9, 25, 100; перевести в десятичную <code>10011</code>, <code>111000</code>; вычислить <code>9 &amp; 5</code>, <code>9 | 5</code>, <code>9 ^ 5</code>, <code>3 &lt;&lt; 3</code>, <code>40 &gt;&gt; 2</code>. Проверить запуском.</li>
-<li>Программа <code>Rights</code>: константы <code>READ = 1</code>, <code>WRITE = 2</code>, <code>EXECUTE = 4</code>, <code>DELETE = 8</code>. Создать переменную с правами «чтение и удаление», вывести её значение, проверить каждое из четырёх прав и вывести <code>true</code>/<code>false</code>, затем добавить право записи и убрать право удаления.</li>
+<li>Программа <code>Rights</code>: константы <code><span class="term-data" title="Данные: переменная, поле или параметр">READ</span> = 1</code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span> = 2</code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">EXECUTE</span> = 4</code>, <code>DELETE = 8</code>. Создать переменную с правами «чтение и удаление», вывести её значение, проверить каждое из четырёх прав и вывести <code><span class="term-language" title="Конструкция языка">true</span></code>/<code><span class="term-language" title="Конструкция языка">false</span></code>, затем добавить право записи и убрать право удаления.</li>
 </ol>
 <h2 id="notes-_2">Проверь себя</h2>
 <p>По этим вопросам — опрос в начале следующей пары.</p>
@@ -300,6 +300,6 @@
 <li>Как включить флаг, проверить флаг и выключить флаг?</li>
 <li>Цвет хранится как <code>0xFF3366CC</code>. Как получить значение зелёного канала?</li>
 <li>Чем <code>&amp;</code> отличается от <code>&amp;&amp;</code>?</li>
-<li>Почему <code>if (flags &amp; WRITE != 0)</code> не компилируется?</li>
+<li>Почему <code><span class="term-language" title="Конструкция языка">if</span> (flags &amp; <span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span> != 0)</code> не компилируется?</li>
 <li>Почему двойное применение XOR с одним ключом возвращает исходное число?</li>
-</ol></article><footer><a target="_top" href="../#java-types">← Типы данных и операции</a><a target="_top" href="../#java-conditions">Условный оператор →</a></footer></main><script src="lecture.js?v=3"></script></body></html>
+</ol></article><footer><a target="_top" href="../#java-types">← Типы данных и операции</a><a target="_top" href="../#java-conditions">Условный оператор →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script></body></html>

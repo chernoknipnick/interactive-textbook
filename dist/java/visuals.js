@@ -42,6 +42,7 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
     }
     if(kind==='array'){
       find('[data-array-code]').textContent=codes[step];
+      window.highlightJavaTerms?.(find('[data-array-code]'));
       find('[data-b-ref]').textContent=step===0?'b — ещё не объявлена':step<3?'b → массив A (тот же объект)':'b → массив B (отдельная копия)';
       find('[data-copy]').hidden=step<3;
       if(!find('[data-array=b]').children.length){

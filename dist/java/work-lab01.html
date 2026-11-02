@@ -1,8 +1,8 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ЛР01. Типы данных, логика и поразрядные операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ЛР01 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-first-program">Первая программа на Java</a><a target="_top" href="../#java-types">Типы данных и операции</a><a target="_top" href="../#java-bitwise">Поразрядные операции</a></div><article><h1>Типы данных, логика и поразрядные операции</h1><h2 id="work-lab01-1">Вариант 1 (студент)</h2>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ЛР01. Типы данных, логика и поразрядные операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ПРАКТИКА / ЛР01 · ЗАДАНИЕ СТУДЕНТУ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание работы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание работы"></nav><div class="related"><strong>Повторить перед работой</strong><a target="_top" href="../#java-first-program">Первая программа на Java</a><a target="_top" href="../#java-types">Типы данных и операции</a><a target="_top" href="../#java-bitwise">Поразрядные операции</a></div><article><h1>Типы данных, логика и поразрядные операции</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><h2 id="work-lab01-1">Вариант 1 (студент)</h2>
 <h3 id="work-lab01-1_1">Задание 1. Примитивные типы</h3>
 <ol>
 <li>
-<p>Объявите переменные всех типов: <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>boolean</code>.</p>
+<p>Объявите переменные всех типов: <code><span class="term-type" title="Тип или класс">byte</span></code>, <code><span class="term-type" title="Тип или класс">short</span></code>, <code><span class="term-type" title="Тип или класс">int</span></code>, <code><span class="term-type" title="Тип или класс">long</span></code>, <code><span class="term-type" title="Тип или класс">float</span></code>, <code><span class="term-type" title="Тип или класс">double</span></code>, <code><span class="term-type" title="Тип или класс">char</span></code>, <code><span class="term-type" title="Тип или класс">boolean</span></code>.</p>
 </li>
 <li>
 <p>Присвойте им произвольные значения.</p>
@@ -42,10 +42,10 @@
 <li>
 <p>Вычислите:</p>
 <p><code>java
-int a = 45, b = 12;
-System.out.println(a &amp; b);
-System.out.println(a | b);
-System.out.println(a ^ b);</code></p>
+<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">a</span> = 45, b = 12;
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> &amp; b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> | b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> ^ b);</code></p>
 </li>
 <li>
 <p>Сдвиньте число <code>13</code> влево на 3 позиции. Объясните результат.</p>
@@ -58,13 +58,13 @@ System.out.println(a ^ b);</code></p>
 <h3 id="work-lab01-1_2">Задание 1. Примитивные типы</h3>
 <ol>
 <li>
-<p>Объявите переменные: <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>boolean</code>.</p>
+<p>Объявите переменные: <code><span class="term-type" title="Тип или класс">short</span></code>, <code><span class="term-type" title="Тип или класс">int</span></code>, <code><span class="term-type" title="Тип или класс">long</span></code>, <code><span class="term-type" title="Тип или класс">float</span></code>, <code><span class="term-type" title="Тип или класс">double</span></code>, <code><span class="term-type" title="Тип или класс">char</span></code>, <code><span class="term-type" title="Тип или класс">boolean</span></code>.</p>
 </li>
 <li>
 <p>Инициализируйте их.</p>
 </li>
 <li>
-<p>Выведите значения и их типы (<code>getClass()</code> для обёрток).</p>
+<p>Выведите значения и их типы (<code><span class="term-method" title="Метод: действие или вычисление">getClass</span>()</code> для обёрток).</p>
 </li>
 </ol>
 <h3 id="work-lab01-2_2">Задание 2. Арифметика</h3>
@@ -90,10 +90,10 @@ System.out.println(a ^ b);</code></p>
 <li>
 <p>Вычислите:</p>
 <p><code>java
-int a = 100, b = 55;
-System.out.println(a &amp; b);
-System.out.println(a | b);
-System.out.println(a ^ b);</code></p>
+<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">a</span> = 100, b = 55;
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> &amp; b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> | b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> ^ b);</code></p>
 </li>
 <li>
 <p>Реализуйте программу: проверка, является ли число степенью двойки (с помощью побитовой операции).</p>
@@ -106,13 +106,13 @@ System.out.println(a ^ b);</code></p>
 <h3 id="work-lab01-1_3">Задание 1. Примитивные типы</h3>
 <ol>
 <li>
-<p>Объявите переменные: <code>byte</code>, <code>int</code>, <code>long</code>, <code>double</code>, <code>char</code>, <code>boolean</code>.</p>
+<p>Объявите переменные: <code><span class="term-type" title="Тип или класс">byte</span></code>, <code><span class="term-type" title="Тип или класс">int</span></code>, <code><span class="term-type" title="Тип или класс">long</span></code>, <code><span class="term-type" title="Тип или класс">double</span></code>, <code><span class="term-type" title="Тип или класс">char</span></code>, <code><span class="term-type" title="Тип или класс">boolean</span></code>.</p>
 </li>
 <li>
 <p>Инициализируйте их.</p>
 </li>
 <li>
-<p>Продемонстрируйте явное и неявное преобразование типов (<code>int → double</code>, <code>double → int</code>).</p>
+<p>Продемонстрируйте явное и неявное преобразование типов (<code><span class="term-type" title="Тип или класс">int</span> → <span class="term-type" title="Тип или класс">double</span></code>, <code><span class="term-type" title="Тип или класс">double</span> → <span class="term-type" title="Тип или класс">int</span></code>).</p>
 </li>
 </ol>
 <h3 id="work-lab01-2_3">Задание 2. Арифметика</h3>
@@ -138,10 +138,10 @@ System.out.println(a ^ b);</code></p>
 <li>
 <p>Вычислите:</p>
 <p><code>java
-int a = 75, b = 25;
-System.out.println(a &amp; b);
-System.out.println(a | b);
-System.out.println(a ^ b);</code></p>
+<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">a</span> = 75, b = 25;
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> &amp; b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> | b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> ^ b);</code></p>
 </li>
 <li>
 <p>Сдвиньте число <code>64</code> вправо на 2 позиции. Объясните результат.</p>
@@ -154,7 +154,7 @@ System.out.println(a ^ b);</code></p>
 <h3 id="work-lab01-1_4">Задание 1. Примитивные типы</h3>
 <ol>
 <li>
-<p>Объявите переменные: <code>short</code>, <code>long</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>boolean</code>.</p>
+<p>Объявите переменные: <code><span class="term-type" title="Тип или класс">short</span></code>, <code><span class="term-type" title="Тип или класс">long</span></code>, <code><span class="term-type" title="Тип или класс">float</span></code>, <code><span class="term-type" title="Тип или класс">double</span></code>, <code><span class="term-type" title="Тип или класс">char</span></code>, <code><span class="term-type" title="Тип или класс">boolean</span></code>.</p>
 </li>
 <li>
 <p>Инициализируйте их и выведите значения.</p>
@@ -172,7 +172,7 @@ System.out.println(a ^ b);</code></p>
 <h3 id="work-lab01-3_4">Задание 3. Логика</h3>
 <ol>
 <li>
-<p>Проверьте выражение <code>(a &gt; b) &amp;&amp; (b &gt; 0)</code> для <code>a = 12, b = 7</code>.</p>
+<p>Проверьте выражение <code>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> &gt; b) &amp;&amp; (b &gt; 0)</code> для <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> = 12, b = 7</code>.</p>
 </li>
 <li>
 <p>Составьте выражение: «год високосный, если он делится на 4, но не делится на 100, или делится на 400».</p>
@@ -183,10 +183,10 @@ System.out.println(a ^ b);</code></p>
 <li>
 <p>Вычислите:</p>
 <p><code>java
-int a = 200, b = 150;
-System.out.println(a &amp; b);
-System.out.println(a | b);
-System.out.println(a ^ b);</code></p>
+<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">a</span> = 200, b = 150;
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> &amp; b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> | b);
+<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span> ^ b);</code></p>
 </li>
 <li>
 <p>Сдвиньте число <code>256</code> вправо на 4 позиции. Объясните результат.</p>
@@ -195,10 +195,10 @@ System.out.println(a ^ b);</code></p>
 <h3 id="work-lab01-5_3">Задание 5. Применение</h3>
 <p>Реализуйте программу: шифрование числа XOR-ключом.<br />
 Например:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">99</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">decrypted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">key</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">99</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">encrypted</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">key</span></span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">decrypted</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">encrypted</span></span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">key</span></span><span class="p">;</span>
 </code></pre></div>
 
 <hr /></article><footer><a target="_top" href="../#java-practice">← Все практические работы</a><a target="_top" href="../#java-work-lab02">ЛР02 →</a></footer></main><script src="lecture.js?v=3"></script></body></html>
