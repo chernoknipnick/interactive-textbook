@@ -18,6 +18,12 @@ parser=argparse.ArgumentParser()
 parser.add_argument('source',nargs='?')
 parser.add_argument('--practice-source',help='Obsidian folder Лабораторные работы')
 args=parser.parse_args()
+
+def validate_student_copy(text):
+    prose=re.sub(r'^```[^\n]*\n.*?^```\s*$', '', text, flags=re.M|re.S)
+    directive=re.search(r'\[(?:ГОВОРЮ|ВОПРОС В ЗАЛ|НА ДОСКУ)\]|Попросите|Спросите у (?:группы|студентов)|На доске (?:написать|распределить)|Не (?:учить|требовать|давать весь синтаксис)|^## Организация занятия', prose, flags=re.I|re.M)
+    if directive:
+        raise ValueError('Student copy contains a teacher instruction: '+directive.group(0))
 topics = [
  ('languages','00 Обзор языков программирования','Обзор языков программирования'),
  ('intro','0 Введение в курс','Введение в курс'),
@@ -44,7 +50,9 @@ if args.source:
     for slug,base,title in topics:
         for suffix,variant in [('', 'lecture'),(' — Под запись','notes')]:
             p=source/(base+suffix+'.md')
-            if p.exists(): shutil.copyfile(p,CONTENT/(slug+'-'+variant+'.md'))
+            if p.exists():
+                validate_student_copy(p.read_text(encoding='utf-8'))
+                shutil.copyfile(p,CONTENT/(slug+'-'+variant+'.md'))
 
 works=[
  ('lab01','ЛР01','Типы данных, логика и поразрядные операции','Блок 1/Лабы новые/Лаба 1 Блок 1/🧪 Лабораторная работа «Типы данных, логические выражения и поразрядные операции в Java».md',['first-program','types','bitwise']),
@@ -76,6 +84,7 @@ asset_source=ROOT/'content/java-assets'
 if asset_source.is_dir():
     shutil.copytree(asset_source,OUT/'images',dirs_exist_ok=True)
 def render(text,prefix):
+    validate_student_copy(text)
     # Vault tags and Obsidian links are presentation metadata, not instructions.
     text=re.sub(r'^#[^\s#]+(?:\s+#[^\s#]+)*\s*\n','',text,count=1)
     def wiki(m):
