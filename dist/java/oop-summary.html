@@ -1,0 +1,782 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Основы ООП — заключение · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="course-traces.css?v=1"><link rel="stylesheet" href="oop-summary.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 14 ИЗ 14 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Основы ООП — собираем всё вместе</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="oop-foundation" aria-label="Пошаговый разбор: Класс, объекты, ссылки и static в одном опыте">
+<h2>Класс, объекты, ссылки и static в одном опыте</h2>
+<p>Сначала прочитай код, затем проследи изменение состояния. Это пошаговая учебная модель программы из лекции.</p>
+<p class="diagram-code-caption">Код к текущему шагу</p>
+<pre><code data-trace-code>Phone anna = new Phone(&quot;Анна&quot;, 80);</code></pre>
+<div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell>Первый Phone: заряд 80</div><div data-trace-cell>anna → первый Phone</div><div data-trace-cell>createdCount = 1</div></div>
+<p class="trace-explanation" data-trace-explanation aria-live="polite">new создаёт Phone, конструктор сохраняет его начальные данные. Переменная получает ссылку.</p>
+<div class="trace-controls"><button type="button" data-trace-action="back" disabled>← Назад</button><span data-trace-step>Шаг 1 из 6</span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+<script type="application/json" data-trace-model>[{"code": "Phone anna = new Phone(\"Анна\", 80);", "cells": ["Первый Phone: заряд 80", "anna → первый Phone", "createdCount = 1"], "explanation": "new создаёт Phone, конструктор сохраняет его начальные данные. Переменная получает ссылку."}, {"code": "Phone boris = new Phone(\"Борис\", 50);", "cells": ["Первый Phone: заряд 80", "Второй Phone: заряд 50", "createdCount = 2"], "explanation": "У нового Phone свои личные поля. Общее поле счётчика стало равно двум."}, {"code": "Phone partner = anna;", "cells": ["anna → первый Phone", "partner → тот же первый Phone", "Два Phone; createdCount = 2"], "explanation": "Копируется значение ссылки. Дополнительного new нет, поэтому третьего Phone не появляется."}, {"code": "partner.use();", "cells": ["Первый Phone: 80 → 70", "Второй Phone: по-прежнему 50", "Консоль: Анна: заряд 70"], "explanation": "Получатель выбран через partner. Это тот же Phone, к которому ведёт anna."}, {"code": "System.out.println(anna.getBattery());\nSystem.out.println(boris.getBattery());", "cells": ["anna.getBattery() → 70", "boris.getBattery() → 50", "В консоль добавлены 70 и 50"], "explanation": "Методы возвращают личные значения двух объектов, а println печатает их."}, {"code": "System.out.println(anna == partner);\nSystem.out.println(Phone.getCreatedCount());", "cells": ["Обе ссылки ведут к одному Phone", "Консоль дополнена true и 2", "Ссылок Phone три; объектов Phone два"], "explanation": "== проверяет идентичность, а статический метод возвращает общий счётчик созданий этого класса в опыте."}]</script>
+</section>
+
+<h2 id="lecture-1">1. Что теперь должно сложиться в одну картину</h2>
+<p>До этой темы мы рассматривали отдельные части: <strong><span class="term-type" title="Тип или класс">класс</span></strong>, <strong><span class="term-object" title="Объект или ссылка на него">объект</span></strong>, <strong>ссылку</strong>, <strong><span class="term-data" title="Данные: переменная, поле или параметр">поле</span></strong>, <strong><span class="term-method" title="Метод: действие или вычисление">метод</span></strong>, <strong><span class="term-method" title="Метод: действие или вычисление">конструктор</span></strong> и <code><span class="term-language" title="Конструкция языка">static</span></code>. Теперь нужно увидеть, как они работают вместе и зачем вообще организовывать программу через объекты.</p>
+<p><strong>Объектно-ориентированное программирование</strong>, или <strong>ООП</strong>, — подход, при котором решение организуют через объекты с состоянием и доступными действиями. Например, у конкретного телефона есть заряд, а его действие <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code> расходует этот заряд. У второго телефона своё состояние: использование первого само по себе не разряжает второй.</p>
+<p>Главный вопрос при чтении такой программы: <strong>какой именно <span class="term-object" title="Объект или ссылка на него">объект</span> сейчас получает действие и какие данные меняются?</strong> Одного знания слова <code><span class="term-language" title="Конструкция языка">class</span></code> для ответа недостаточно: нужно следить за ссылками и вызовами.</p>
+<p>Эта лекция завершает начальный блок и даёт карту следующих тем. Инкапсуляцию мы уже применяли; наследование, абстракцию и полиморфизм сначала рассмотрим на понятной модели. Их подробные правила и более сложные случаи можно изучать дальше по отдельности.</p>
+<h2 id="lecture-2">2. Словарь: у каждого понятия своя работа</h2>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Простое объяснение</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><span class="term-type" title="Тип или класс">Класс</span></strong></td>
+<td>Описание устройства экземпляров и доступных действий</td>
+<td><code><span class="term-type" title="Тип или класс">Phone</span></code></td>
+</tr>
+<tr>
+<td><strong><span class="term-object" title="Объект или ссылка на него">Объект</span></strong>, или <strong><span class="term-object" title="Объект или ссылка на него">экземпляр</span></strong></td>
+<td>Конкретный созданный экземпляр класса</td>
+<td>Телефон Анны с зарядом 80</td>
+</tr>
+<tr>
+<td><strong><span class="term-data" title="Данные: переменная, поле или параметр">Поле</span></strong></td>
+<td>Переменная, объявленная в классе; может относиться к экземпляру или классу</td>
+<td>Личный <code><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></code>, общий <code><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></code></td>
+</tr>
+<tr>
+<td><strong><span class="term-method" title="Метод: действие или вычисление">Метод</span></strong></td>
+<td>Объявленное действие или вычисление</td>
+<td><code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code>, <code><span class="term-method" title="Метод: действие или вычисление">getBattery</span>()</code></td>
+</tr>
+<tr>
+<td><strong><span class="term-method" title="Метод: действие или вычисление">Конструктор</span></strong></td>
+<td>Часть инициализации нового экземпляра</td>
+<td><code><span class="term-type" title="Тип или класс">Phone</span>("Анна", 80)</code> после <code><span class="term-language" title="Конструкция языка">new</span></code></td>
+</tr>
+<tr>
+<td><strong><span class="term-object" title="Объект или ссылка на него">Ссылка</span></strong></td>
+<td>Значение, через которое можно обратиться к объекту</td>
+<td>Значение переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></code></td>
+</tr>
+<tr>
+<td><strong><span class="term-data" title="Данные: переменная, поле или параметр">Параметр</span></strong></td>
+<td>Переменная, принимающая значение при вызове</td>
+<td><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">battery</span></code> в конструкторе</td>
+</tr>
+<tr>
+<td><strong><span class="term-data" title="Данные: переменная, поле или параметр">Аргумент</span></strong></td>
+<td>Конкретное значение или выражение в вызове</td>
+<td><code>80</code> в <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Phone</span>("Анна", 80)</code></td>
+</tr>
+<tr>
+<td><strong>Инкапсуляция</strong></td>
+<td>Организация доступа к состоянию через предусмотренные действия и правила</td>
+<td>Закрытый заряд и метод его расходования</td>
+</tr>
+</tbody>
+</table>
+<p>Телефон из магазина — аналогия. Программный объект не обязан изображать физическую вещь: объектами могут быть заказ, сообщение, игровой ход или результат проверки.</p>
+<h2 id="lecture-3">3. Общая форма: где описание, а где использование</h2>
+<p>Это шаблон, а не готовая программа. Слова с русскими именами нужно заменить реальными объявлениями и выражениями:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">ИмяКласса</span> {
+    <span class="term-language" title="Конструкция языка">private</span> Тип <span class="term-data" title="Данные: переменная, поле или параметр">имяПоля</span>;
+
+    <span class="term-type" title="Тип или класс">ИмяКласса</span>(Тип <span class="term-data" title="Данные: переменная, поле или параметр">имяПараметра</span>) {
+        <span class="term-language" title="Конструкция языка">this</span>.<span class="term-data" title="Данные: переменная, поле или параметр">имяПоля</span> = <span class="term-data" title="Данные: переменная, поле или параметр">имяПараметра</span>;
+    }
+
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">имяДействия</span>() {
+        инструкции;
+    }
+}
+
+<span class="term-type" title="Тип или класс">ИмяКласса</span> <span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ИмяКласса</span>(аргумент);
+<span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span>.<span class="term-method" title="Метод: действие или вычисление">имяДействия</span>();
+</code></pre></div>
+
+<p>Имя собственного класса, поля, параметра, переменной и метода выбирает программист. После выбора имена в объявлениях и обращениях должны быть согласованы. Можно назвать действие <code><span class="term-method" title="Метод: действие или вычисление">use</span></code>, <code>sendMessage</code> или иначе, если это подходящее допустимое имя и объявлен соответствующий метод.</p>
+<p>Но <code><span class="term-language" title="Конструкция языка">class</span></code>, <code><span class="term-language" title="Конструкция языка">private</span></code>, <code><span class="term-language" title="Конструкция языка">public</span></code>, <code><span class="term-language" title="Конструкция языка">void</span></code>, <code><span class="term-language" title="Конструкция языка">this</span></code> и <code><span class="term-language" title="Конструкция языка">new</span></code> — слова языка. Их нельзя заменить любимыми словами. Имя конструктора обязано совпадать с именем класса. Имя готового библиотечного метода, например <code><span class="term-data" title="Данные: переменная, поле или параметр">println</span></code>, также нельзя произвольно менять в вызове.</p>
+<p>Последние две строки шаблона — инструкции использования. В наших обычных примерах они находятся внутри <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>, а не свободно между объявлениями классов.</p>
+<h2 id="lecture-4">4. Первый опыт целиком: два телефона и три ссылки</h2>
+<p>Сохрани следующий самостоятельный пример в <strong>OopSummaryDemo.java</strong>. Здесь один публичный класс запуска и отдельный непубличный класс <code><span class="term-type" title="Тип или класс">Phone</span></code>. Это один исходный файл. Классы с одинаковыми именами из других лекций в эту папку добавлять не нужно.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">OopSummaryDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">boris</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Борис&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="p">;</span>
+
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">use</span></span><span class="p">();</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getBattery</span></span><span class="p">());</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">boris</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getBattery</span></span><span class="p">());</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">;</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="p">;</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="p">;</span>
+
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">,</span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">throw</span></span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="p">(</span><span class="s">&quot;Заряд должен быть от 0 до 100&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">use</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: недостаточно заряда&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: заряд &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">getBattery</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Из папки файла можно выполнить:</p>
+<div class="codehilite"><pre><span></span><code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">OopSummaryDemo</span>.java
+java <span class="term-type" title="Тип или класс">OopSummaryDemo</span>
+</code></pre></div>
+
+<p>Ожидаемый вывод при отдельном запуске:</p>
+<div class="codehilite"><pre><span></span><code>Анна: <span class="term-data" title="Данные: переменная, поле или параметр">заряд</span> 70
+70
+50
+<span class="term-language" title="Конструкция языка">true</span>
+2
+</code></pre></div>
+
+<h3 id="lecture-_2">Почему именно такие строки</h3>
+<table>
+<thead>
+<tr>
+<th>Инструкция</th>
+<th>Что происходит</th>
+<th>Что важно не перепутать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Phone</span>("Анна", 80)</code></td>
+<td>Создаётся первый Phone; конструктор сохраняет данные</td>
+<td>Переменная <code><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></code> получает ссылку, а не сам текст класса</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Phone</span>("Борис", 50)</code></td>
+<td>Создаётся второй Phone со своим зарядом</td>
+<td>Одинаковое имя поля не делает заряд общим</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">Phone</span> <span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-data" title="Данные: переменная, поле или параметр">anna</span>;</code></td>
+<td>Копируется значение ссылки</td>
+<td>Третий Phone не создаётся</td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span>.<span class="term-method" title="Метод: действие или вычисление">use</span>();</code></td>
+<td>Вызывается метод первого Phone; заряд 80 превращается в 70</td>
+<td>Объект выбирается по ссылке перед точкой</td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">anna</span>.<span class="term-method" title="Метод: действие или вычисление">getBattery</span>()</code></td>
+<td>Возвращается заряд того же первого Phone</td>
+<td>Поэтому ответ 70, хотя действие вызывалось через <code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></code></td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">boris</span>.<span class="term-method" title="Метод: действие или вычисление">getBattery</span>()</code></td>
+<td>Возвращается заряд второго Phone</td>
+<td>Он остался 50</td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">anna</span> == <span class="term-data" title="Данные: переменная, поле или параметр">partner</span></code></td>
+<td>Проверяется, ведут ли ссылки к одному объекту</td>
+<td>Это не сравнение всех полей по содержимому</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">Phone</span>.<span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span>()</code></td>
+<td>Читается общее поле класса</td>
+<td>Выполнены два создания Phone, а не три</td>
+</tr>
+</tbody>
+</table>
+<p>Вызов <code><span class="term-method" title="Метод: действие или вычисление">getBattery</span>()</code> возвращает число, а внешний <code><span class="term-method" title="Метод: действие или вычисление">println</span>(...)</code> печатает его. У <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code> другая ответственность: в этом учебном варианте он меняет состояние и сам сообщает результат. Метод не обязан одновременно делать все три вещи — менять, возвращать и печатать.</p>
+<h3 id="lecture-_3">Читаем тело класса по ролям</h3>
+<p><code><span class="term-language" title="Конструкция языка">private</span> <span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">model</span></code> и <code><span class="term-language" title="Конструкция языка">private</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">battery</span></code> описывают личные поля экземпляров. У каждого из двух Phone своя пара значений. Имя <code><span class="term-data" title="Данные: переменная, поле или параметр">model</span></code> здесь условное: в примере оно хранит подпись владельца. Его можно согласованно переименовать в <code>ownerLabel</code>, чтобы точнее передать смысл.</p>
+<p><code><span class="term-language" title="Конструкция языка">private</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></code> — общее поле этого загруженного класса. В этом однопоточном опыте оно увеличивается после проверки параметров при каждом нормальном создании Phone. Начальное значение int-поля — 0. Поле не подсчитывает все существующие объекты JVM, строки или массивы.</p>
+<p>В <code><span class="term-type" title="Тип или класс">Phone</span>(<span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">model</span>, <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">battery</span>)</code> объявлены параметры конструктора. В <code><span class="term-language" title="Конструкция языка">this</span>.<span class="term-data" title="Данные: переменная, поле или параметр">battery</span> = <span class="term-data" title="Данные: переменная, поле или параметр">battery</span></code> слева выбран заряд текущего экземпляра, а справа прочитано значение параметра. <code><span class="term-language" title="Конструкция языка">this</span></code> не является именем, которое придумал программист: так Java обозначает текущий экземпляр в этом контексте.</p>
+<p>У <code><span class="term-language" title="Конструкция языка">public</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">getBattery</span>()</code> тип результата — int, поэтому обычное завершение метода в этом примере передаёт число через <code><span class="term-language" title="Конструкция языка">return</span> <span class="term-data" title="Данные: переменная, поле или параметр">battery</span>;</code>. У <code><span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">use</span>()</code> результата-значения нет; <code><span class="term-language" title="Конструкция языка">return</span>;</code> без числа досрочно завершает только текущий вызов метода.</p>
+<p><code><span class="term-language" title="Конструкция языка">public</span></code> делает метод доступным с учётом доступности самого класса и других правил доступа. В одном учебном файле <code><span class="term-method" title="Метод: действие или вычисление">main</span></code> может обращаться к непубличному Phone. Для отдельной публичной библиотеки понадобилось бы также продумать доступность класса и его конструктора.</p>
+<h3 id="lecture-_4">Где здесь состояние, а где поведение</h3>
+<p>Перед следующей схемой прочитай именно этот фрагмент из <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">);</span>
+<span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">boris</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Борис&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">);</span>
+<span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="p">;</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">use</span></span><span class="p">();</span>
+</code></pre></div>
+
+<figure class="oop-recap-figure" aria-label="Три ссылки ведут к двум телефонам">
+<div class="oop-recap-grid">
+<div class="oop-recap-card"><strong class="term-object">anna и partner</strong><p>Две переменные хранят ссылки на один Phone.</p><div class="oop-recap-arrow" aria-hidden="true">↓</div><strong class="term-type">Первый Phone</strong><p><span class="term-data">model</span> = «Анна»<br><span class="term-data">battery</span>: 80 → 70</p><span class="term-method">use()</span> меняет этот экземпляр.</div>
+<div class="oop-recap-card"><strong class="term-object">boris</strong><p>Ссылка ведёт к другому Phone.</p><div class="oop-recap-arrow" aria-hidden="true">↓</div><strong class="term-type">Второй Phone</strong><p><span class="term-data">model</span> = «Борис»<br><span class="term-data">battery</span> = 50</p>Его состояние не изменилось.</div>
+<div class="oop-recap-card"><strong class="term-type"><span class="term-type" title="Тип или класс">Класс</span> Phone</strong><p>Общее поле <span class="term-data">createdCount</span> = 2.</p><p>Описание действий <span class="term-method">use()</span> и <span class="term-method">getBattery()</span>.</p>Ссылок три, созданий Phone два.</div>
+</div>
+<figcaption>Стрелки обозначают доступ к объектам, а не доступные программе физические адреса памяти.</figcaption>
+</figure>
+
+<h2 id="lecture-5-main">5. Зачем ООП, если можно написать всё в main</h2>
+<p>Для одной короткой формулы отдельный объект может не понадобиться. Польза организации через объекты становится заметнее, когда у программы несколько сущностей и правила их изменения нужно поддерживать во многих местах.</p>
+<p>Представь три несвязанных массива: <code>names</code>, <code>batteries</code>, <code>prices</code>. Чтобы описать один телефон, нужно помнить, что одинаковый индекс во всех трёх массивах относится к нему. При ошибочной перестановке одного массива можно связать чужое имя с чужим зарядом.</p>
+<p>Класс позволяет хранить связанные данные вместе и дать им подходящие действия. Но само слово <code><span class="term-language" title="Конструкция языка">class</span></code> не гарантирует хорошую программу: можно создать класс с сотней несвязанных полей и всё равно получить путаницу.</p>
+<p>Сначала выясни, какие данные относятся к одной сущности, какие операции с ними разрешены и какие состояния недопустимы. Потом выбирай поля и методы. Например: «заряд не выходит за 0–100, использование расходует 10, при недостаточном заряде состояние сохраняется».</p>
+<h2 id="lecture-6">6. Инкапсуляция: у состояния есть правила доступа</h2>
+<p><strong>Инкапсуляция</strong> связывает состояние с предусмотренными способами работы с ним и позволяет скрыть детали реализации. В нашем примере внешний код не присваивает закрытому <code><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></code> произвольное число; создание и изменение проходят через код класса.</p>
+<p>Обрати внимание на две отдельные проверки из первого примера:</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">throw</span></span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="p">(</span><span class="s">&quot;Заряд должен быть от 0 до 100&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Этот фрагмент находится в конструкторе. Он проверяет входное значение. <code>||</code> означает «хотя бы одно условие истинно». При неверном значении <code><span class="term-language" title="Конструкция языка">throw</span></code> выбрасывает исключение: нормальная инициализация по этому пути не заканчивается. Выражение <code><span class="term-language" title="Конструкция языка">new</span></code> не возвращает обычный успешно созданный результат для присваивания. Если исключение не обработано, текущий сценарий прерывается.</p>
+<p>Второй фрагмент — начало метода <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: недостаточно заряда&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">battery</span></span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Здесь уже используется состояние существующего объекта. Если заряда меньше 10, метод сообщает об этом и выходит до вычитания. Если заряда ровно 10, вычитание допустимо и оставит 0. Поэтому отрицательный заряд от этого действия не появляется.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Начальный заряд</th>
+<th style="text-align: right;">Результат одного use()</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">70</td>
+<td>Для действия достаточно заряда</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td>Граница включена: 10 достаточно</td>
+</tr>
+<tr>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">9</td>
+<td>Метод завершился до вычитания</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>Нет достаточного заряда</td>
+</tr>
+</tbody>
+</table>
+<p>Условие <code>0 &lt;= <span class="term-data" title="Данные: переменная, поле или параметр">battery</span> &amp;&amp; <span class="term-data" title="Данные: переменная, поле или параметр">battery</span> &lt;= 100</code>, которое класс стремится сохранять после завершения разрешённых операций, можно назвать <strong>инвариантом</strong>: правилом допустимого состояния.</p>
+<p><code><span class="term-language" title="Конструкция языка">private</span></code> само по себе не проверяет числа. Если внутри класса написать неправильное вычитание, ошибка останется. И наоборот, геттер и сеттер для каждого поля не являются обязательной целью. Сеттер, разрешающий любой заряд без проверки, легко разрушит нужное правило.</p>
+<p>Инкапсуляция — не шифрование и не защита от любого внешнего вмешательства. Здесь обсуждается устройство программного интерфейса и обычные правила доступа Java.</p>
+<h2 id="lecture-7">7. Абстракция: выбираем существенное для задачи</h2>
+<p><strong>Абстракция</strong> помогает работать с важными для текущей задачи свойствами, не раскрывая каждый внутренний шаг. Когда вызываешь <code>phone.<span class="term-method" title="Метод: действие или вычисление">use</span>()</code>, можно знать правило расхода заряда, не повторяя этот код в каждом месте программы.</p>
+<p>В учебной модели мы учитываем подпись и заряд. Мы не моделируем температуру процессора, каждую микросхему и движение электронов: для обсуждаемой задачи они не нужны. Для другой задачи, например расчёта перегрева, модель потребовала бы других данных.</p>
+<p>Абстракция и инкапсуляция связаны, но задают разные вопросы. Абстракция: <strong>что нужно показать пользователю этого класса?</strong> Инкапсуляция: <strong>через какие действия разрешён доступ к состоянию и какие детали скрыты?</strong></p>
+<p><strong>Контракт</strong> — договорённость о том, как пользоваться классом или методом: какие данные он принимает, что обещает сделать или вернуть и какие ограничения нужно соблюдать. Например, общий контракт <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> позволяет вызвать действие без аргументов и без возвращаемого значения, а содержательное назначение действия нужно описать дополнительно. Один заголовок не объясняет все правила задачи.</p>
+<p>И ещё одно различие: идея абстракции шире слова <code><span class="term-language" title="Конструкция языка">abstract</span></code>. Даже обычный небольшой класс может давать полезную абстракцию. Ключевое слово <code><span class="term-language" title="Конструкция языка">abstract</span></code> — конкретный инструмент Java, который появится в следующем примере.</p>
+<h2 id="lecture-8">8. Наследование: отношение «является разновидностью»</h2>
+<p>Представь более общую категорию <strong>Device</strong>, то есть «устройство». Phone является разновидностью Device, Laptop тоже является разновидностью Device. У них можно выделить общий способ получить подпись, но действие <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> у каждого будет своим.</p>
+<p>Общая форма объявления:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">ИмяПотомка</span> <span class="term-language" title="Конструкция языка">extends</span> ИмяРодителя {
+    объявления особенностей потомка;
+}
+</code></pre></div>
+
+<p><code><span class="term-language" title="Конструкция языка">extends</span></code> — слово языка, а оба имени классов выбирает программист. <strong>Родитель</strong>, или <strong>суперкласс</strong>, задаёт общую часть. <strong>Потомок</strong>, или <strong>подкласс</strong>, уточняет её. В рассматриваемой форме класс Java имеет один непосредственный родительский класс. Реализация нескольких интерфейсов — отдельная возможность.</p>
+<p>Наследование не означает, что при создании Phone нужно вручную создать ещё один самостоятельный Device и хранить его рядом. Инициализируются части одного экземпляра Phone. Вызов <code><span class="term-language" title="Конструкция языка">super</span>(...)</code> передаёт инициализацию конструктору родителя; он не является вторым <code><span class="term-language" title="Конструкция языка">new</span></code>.</p>
+<p>Конструкторы не наследуются как обычные методы. В нашем примере Phone объявляет свой конструктор и вызывает подходящий конструктор Device. Закрытое поле родителя также нельзя прямо использовать в отдельном классе потомка: для чтения подписи будет доступный метод <code><span class="term-method" title="Метод: действие или вычисление">getModel</span>()</code>.</p>
+<h2 id="lecture-9">9. Полиморфизм: общее обращение, поведение конкретного объекта</h2>
+<p>Сначала общая форма записи, а затем разберём её на настоящих классах:</p>
+<div class="codehilite"><pre><span></span><code>Родитель имяСсылки = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Потомок</span>(<span class="term-data" title="Данные: переменная, поле или параметр">аргументы</span>);
+имяСсылки.<span class="term-method" title="Метод: действие или вычисление">общийМетод</span>();
+</code></pre></div>
+
+<p>В левой части указан тип переменной, а справа создаётся экземпляр конкретного потомка. Присваивание не превращает Phone в самостоятельный объект Device и не удаляет его особенности. Оно позволяет обращаться к Phone через общий тип.</p>
+<p><strong>Полиморфизм</strong> в этом примере означает, что общий вызов экземплярного метода <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> приводит к реализации, соответствующей фактическому объекту: телефон отправляет сообщение, ноутбук открывает проект.</p>
+<p>До запуска компилятор проверяет, что такой вызов разрешён для объявленного типа. Во время выполнения для переопределённого экземплярного метода выбирается реализация по фактическому объекту. Эти два этапа не нужно смешивать.</p>
+<h2 id="lecture-10">10. Второй опыт целиком: один цикл работает с разными устройствами</h2>
+<p>Это <strong>отдельная программа в другой папке</strong>, файл <strong>PolymorphismDemo.java</strong>. Класс Phone здесь имеет другую учебную реализацию. Не объединяй этот файл и первый опыт с ещё одним Phone в одном пакете: имена классов столкнутся.</p>
+<p>Во втором опыте мы специально убрали заряд и счётчик. Теперь сосредоточимся на общей категории и разных реализациях одного действия. Результаты первого опыта от этого не меняются.</p>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">PolymorphismDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Device</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">devices</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Телефон&quot;</span><span class="p">),</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Laptop</span></span><span class="p">(</span><span class="s">&quot;Ноутбук&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Device</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">device</span></span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">devices</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">device</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">work</span></span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd"><span class="term-language" title="Конструкция языка">abstract</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Device</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">;</span>
+
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Device</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">getModel</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">abstract</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">work</span></span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">extends</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Device</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd"><span class="term-language" title="Конструкция языка">super</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">work</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">getModel</span></span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: отправлено сообщение&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Laptop</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">extends</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Device</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Laptop</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd"><span class="term-language" title="Конструкция языка">super</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">model</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">work</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">getModel</span></span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: открыт проект&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Команды из папки второго опыта:</p>
+<div class="codehilite"><pre><span></span><code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">PolymorphismDemo</span>.java
+java <span class="term-type" title="Тип или класс">PolymorphismDemo</span>
+</code></pre></div>
+
+<p>Ожидаемый вывод:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">Телефон</span>: отправлено сообщение
+Ноутбук: открыт проект
+</code></pre></div>
+
+<h3 id="lecture-_5">Что означает каждое новое обозначение</h3>
+<table>
+<thead>
+<tr>
+<th>Запись</th>
+<th>Объяснение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">abstract</span> <span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">Device</span></code></td>
+<td>Общий абстрактный класс. Непосредственное <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Device</span>(...)</code> запрещено</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">private</span> <span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">model</span></code></td>
+<td>Поле состояния; оно есть в каждом из созданных экземпляров с родительской частью Device</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">Device</span>(<span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">model</span>)</code></td>
+<td>Конструктор общей части экземпляра; абстрактный класс может иметь конструктор</td>
+</tr>
+<tr>
+<td><code><span class="term-method" title="Метод: действие или вычисление">getModel</span>()</code></td>
+<td>Обычный метод с готовым телом; возвращает подпись</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">abstract</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">work</span>();</code></td>
+<td>Объявление действия без тела. Здесь стоит <code>;</code>, а не пустой блок <code>{}</code></td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">extends</span> <span class="term-type" title="Тип или класс">Device</span></code></td>
+<td>Объявление отношения наследования</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">super</span>(<span class="term-data" title="Данные: переменная, поле или параметр">model</span>)</code></td>
+<td>Передача аргумента конструктору родителя; сохраняется подпись этого экземпляра</td>
+</tr>
+<tr>
+<td><code>@Override</code></td>
+<td>Аннотация, то есть специальная пометка в коде: просим компилятор проверить, что метод действительно переопределяет подходящее объявление</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">work</span>() { ... }</code> в Phone</td>
+<td>Конкретная реализация действия телефона</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">Device</span>[]</code></td>
+<td>Массив ссылок, допускающий в этом примере Phone и Laptop как разновидности Device</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">Device</span> <span class="term-data" title="Данные: переменная, поле или параметр">device</span></code> в for-each</td>
+<td>Переменная очередной итерации с общей ссылкой, а не создание нового устройства</td>
+</tr>
+</tbody>
+</table>
+<p><code><span class="term-language" title="Конструкция языка">abstract</span></code> и <code><span class="term-language" title="Конструкция языка">extends</span></code> нельзя переименовать. Имя <code><span class="term-type" title="Тип или класс">Device</span></code>, имя <code><span class="term-method" title="Метод: действие или вычисление">work</span></code> и имя параметра <code><span class="term-data" title="Данные: переменная, поле или параметр">model</span></code> выбирает автор, но связанные объявления и вызовы нужно менять согласованно. <code>@Override</code> — существующая аннотация Java, её название тоже не заменяют придуманным словом.</p>
+<p>В наших примерах <code><span class="term-language" title="Конструкция языка">super</span>(...)</code> стоит первой инструкцией конструктора: такой вариант подходит и для Java 17/21. Более новые версии допускают дополнительные формы тел конструкторов; для этого опыта они не нужны.</p>
+<p>У абстрактного класса могут быть поля, конструктор, обычные методы и абстрактные методы. Он не является «классом вообще без кода». Конкретный неабстрактный подкласс должен предоставить нужные реализации или унаследовать подходящие готовые реализации.</p>
+<h3 id="lecture-_6">Код перед схемой: как читается общий вызов</h3>
+
+
+<section class="course-trace" data-course-trace="oop-dispatch" aria-label="Пошаговый разбор: Один вызов — две реализации">
+<h2>Один вызов — две реализации</h2>
+<p>Сначала прочитай код, затем проследи изменение состояния. Это пошаговая учебная модель программы из лекции.</p>
+<p class="diagram-code-caption">Код к текущему шагу</p>
+<pre><code data-trace-code><span class="term-type" title="Тип или класс">Device</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">devices</span> = {
+    <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Phone</span>(&quot;<span class="term-type" title="Тип или класс">Телефон</span>&quot;),
+    <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Laptop</span>(&quot;Ноутбук&quot;)
+};</code></pre>
+<div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell>devices[0] → объект Phone</div><div data-trace-cell>devices[1] → объект Laptop</div><div data-trace-cell>Созданы массив и два устройства</div></div>
+<p class="trace-explanation" data-trace-explanation aria-live="polite">Тип массива допускает ссылки на оба вида устройств. Объекты не становятся одинаковыми от общего типа элементов.</p>
+<div class="trace-controls"><button type="button" data-trace-action="back" disabled>← Назад</button><span data-trace-step>Шаг 1 из 6</span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+<script type="application/json" data-trace-model>[{"code": "Device[] devices = {\n    new Phone(\"Телефон\"),\n    new Laptop(\"Ноутбук\")\n};", "cells": ["devices[0] → объект Phone", "devices[1] → объект Laptop", "Созданы массив и два устройства"], "explanation": "Тип массива допускает ссылки на оба вида устройств. Объекты не становятся одинаковыми от общего типа элементов."}, {"code": "for (Device device : devices) {\n    device.work();\n}", "cells": ["Первая итерация: тип переменной Device", "Фактический объект — Phone", "Выбирается Phone.work()"], "explanation": "Компилятор разрешает work по общему объявлению. Переопределённое тело выбирается по объекту."}, {"code": "System.out.println(getModel() + \": отправлено сообщение\");", "cells": ["Сейчас выполняется Phone.work()", "getModel() возвращает Телефон", "Консоль: Телефон: отправлено сообщение"], "explanation": "Это тело метода телефона. Оно отрабатывает и возвращает управление в цикл."}, {"code": "device.work();", "cells": ["Вторая итерация: тип переменной Device", "Фактический объект — Laptop", "Выбирается Laptop.work()"], "explanation": "Очередная ссылка ведёт к другому объекту. Текст вызова в цикле остался прежним."}, {"code": "System.out.println(getModel() + \": открыт проект\");", "cells": ["Сейчас выполняется Laptop.work()", "getModel() возвращает Ноутбук", "Консоль дополнена: Ноутбук: открыт проект"], "explanation": "Получается другая реализация общего действия. Вызов не создаёт дополнительного ноутбука."}, {"code": "for (Device device : devices) {\n    device.work();\n}", "cells": ["Все два элемента обработаны", "Цикл завершён; устройства не копировались", "Итог: две строки вывода"], "explanation": "Одинаковое обращение применялось к двум объектам. Это рассматриваемый пример полиморфизма."}]</script>
+</section>
+
+
+
+<p>Следующий фрагмент уже есть в полном втором примере:</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Device</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">device</span></span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">devices</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">device</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">work</span></span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<figure class="oop-recap-figure" aria-label="Одинаковый вызов work выбирает реализацию по объекту">
+<div class="oop-recap-grid">
+<div class="oop-recap-card"><strong class="term-type">Тип переменной: Device</strong><p>Компилятор видит объявление <span class="term-method">work()</span> в общем типе и разрешает вызов.</p><p><span class="term-object">device</span> получает очередную ссылку из массива.</p></div>
+<div class="oop-recap-card"><strong class="term-type"><span class="term-object" title="Объект или ссылка на него">Объект</span> Phone</strong><p><span class="term-method">device.work()</span></p><div class="oop-recap-arrow" aria-hidden="true">↓</div><p>Вызывается тело <span class="term-method">Phone.work()</span>.</p>Телефон: отправлено сообщение</div>
+<div class="oop-recap-card"><strong class="term-type"><span class="term-object" title="Объект или ссылка на него">Объект</span> Laptop</strong><p><span class="term-method">device.work()</span></p><div class="oop-recap-arrow" aria-hidden="true">↓</div><p>Вызывается тело <span class="term-method">Laptop.work()</span>.</p>Ноутбук: открыт проект</div>
+</div>
+<figcaption>Вызов в теле цикла один и тот же. Меняется ссылка на очередной объект, а вместе с ней — выбранная реализация.</figcaption>
+</figure>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Итерация</th>
+<th>Фактический объект</th>
+<th>Выбранное тело</th>
+<th>Новое устройство создаётся в теле цикла?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>Phone</td>
+<td><code><span class="term-type" title="Тип или класс">Phone</span>.<span class="term-method" title="Метод: действие или вычисление">work</span>()</code></td>
+<td>Нет</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>Laptop</td>
+<td><code><span class="term-type" title="Тип или класс">Laptop</span>.<span class="term-method" title="Метод: действие или вычисление">work</span>()</code></td>
+<td>Нет</td>
+</tr>
+</tbody>
+</table>
+<p>Если следующим шагом создать класс Tablet с подходящим <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> и добавить его экземпляр в массив, тело этого цикла менять не понадобится. Но это обещание относится к действиям общего контракта, а не к любому будущему поведению программы.</p>
+<h3 id="lecture-_7">Тип переменной ограничивает доступные обращения</h3>
+<p>Для фрагмента внутри <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n"><span class="term-type" title="Тип или класс">Device</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">device</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Учебный&quot;</span><span class="p">);</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">device</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">work</span></span><span class="p">();</span>
+</code></pre></div>
+
+<p>Фактический объект — Phone, а тип переменной — Device. Если позднее только в Phone появится метод <code><span class="term-method" title="Метод: действие или вычисление">call</span>()</code>, запись <code><span class="term-data" title="Данные: переменная, поле или параметр">device</span>.<span class="term-method" title="Метод: действие или вычисление">call</span>()</code> сама по себе не станет допустимой: у объявленного типа Device такого метода нет. Общий тип позволяет пользоваться общей частью контракта.</p>
+<p>Обычный вызов <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> не требует вручную проверять каждый вариант через цепочку <code><span class="term-language" title="Конструкция языка">if</span> (это <span class="term-type" title="Тип или класс">Phone</span>) ... <span class="term-language" title="Конструкция языка">else</span> <span class="term-language" title="Конструкция языка">if</span> (это <span class="term-type" title="Тип или класс">Laptop</span>) ...</code>. Выбор подходящей переопределённой реализации уже выполняет механизм вызова экземплярного метода.</p>
+<p>В эту модель не следует автоматически переносить поля, конструкторы, перегрузку и статические методы. Для них действуют другие правила; в частности, <code><span class="term-language" title="Конструкция языка">static</span></code>-методы не переопределяются как экземплярный <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code>.</p>
+<h2 id="lecture-11">11. Четыре идеи ООП рядом</h2>
+<table>
+<thead>
+<tr>
+<th>Идея</th>
+<th>На какой вопрос отвечает</th>
+<th>Где видно в опытах</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Инкапсуляция</strong></td>
+<td>Как сохранять допустимое состояние и управлять доступом?</td>
+<td>Закрытый заряд и проверенное действие <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code></td>
+</tr>
+<tr>
+<td><strong>Абстракция</strong></td>
+<td>Что существенно и какой общий контракт нужен?</td>
+<td>Работать с устройством через понятное действие <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code></td>
+</tr>
+<tr>
+<td><strong>Наследование</strong></td>
+<td>Является ли один тип разновидностью другого?</td>
+<td><code><span class="term-type" title="Тип или класс">Phone</span> <span class="term-language" title="Конструкция языка">extends</span> <span class="term-type" title="Тип или класс">Device</span></code>, <code><span class="term-type" title="Тип или класс">Laptop</span> <span class="term-language" title="Конструкция языка">extends</span> <span class="term-type" title="Тип или класс">Device</span></code></td>
+</tr>
+<tr>
+<td><strong>Полиморфизм</strong></td>
+<td>Как одинаковое обращение работает с разными реализациями?</td>
+<td>Один цикл вызывает разный <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> по фактическим объектам</td>
+</tr>
+</tbody>
+</table>
+<p>Такой набор часто называют четырьмя основными идеями ООП. Это удобная учебная карта, а не требование использовать все четыре механизма в каждом маленьком классе. Хороший первый Phone уже полезен без наследования и абстрактного класса.</p>
+<p>Интерфейс — ещё один инструмент задания общего контракта. Через него тоже можно организовать полиморфные вызовы. Но абстракция не сводится только к интерфейсам, а полиморфизм не требует именно абстрактного родителя. Здесь выбран один понятный вариант для первого знакомства.</p>
+<h2 id="lecture-12">12. Не путай похожие слова и записи</h2>
+<table>
+<thead>
+<tr>
+<th>Похоже внешне</th>
+<th>Различие по смыслу</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">Phone</span> <span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-data" title="Данные: переменная, поле или параметр">anna</span></code> и <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Phone</span>(...)</code></td>
+<td>Первое копирует ссылку, второе создаёт новый экземпляр Phone</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">private</span></code> и проверка диапазона</td>
+<td>Первое управляет доступом, второе проверяет данные</td>
+</tr>
+<tr>
+<td>Абстракция и <code><span class="term-language" title="Конструкция языка">abstract</span></code></td>
+<td>Первое — идея проектирования, второе — конкретное слово Java</td>
+</tr>
+<tr>
+<td>Перегрузка и переопределение</td>
+<td>Перегрузка различает варианты метода по параметрам; переопределение меняет реализацию унаследованного экземплярного метода с подходящей сигнатурой</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">return</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">println</span></code></td>
+<td>Первое отдаёт результат или завершает вызов; второе выводит текст</td>
+</tr>
+<tr>
+<td>Поле экземпляра и <code><span class="term-language" title="Конструкция языка">static</span></code>-поле</td>
+<td>Первое относится к конкретному экземпляру; второе общее для соответствующего загруженного класса</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">this</span></code> и <code><span class="term-language" title="Конструкция языка">super</span>(...)</code></td>
+<td>В примерах первое обращается к текущему экземпляру, второе вызывает конструктор родителя</td>
+</tr>
+<tr>
+<td>Наследование и копирование кода</td>
+<td>Наследование задаёт отношение типов и правила доступа; это не просто вставка текста одного файла в другой</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-13">13. «Является» и «содержит»: не всё нужно наследовать</h2>
+<p>Телефон <strong>является устройством</strong>, но телефон <strong>содержит аккумулятор</strong>. Из фразы «телефон имеет аккумулятор» не следует <code><span class="term-type" title="Тип или класс">Phone</span> <span class="term-language" title="Конструкция языка">extends</span> Battery</code>: телефон не является разновидностью аккумулятора.</p>
+<p><strong>Композиция</strong> — организация объекта через связанные части. В обычном широком обсуждении так называют подход «содержит»; в строгой UML-модели композицией называют более сильную связь владения и жизненного цикла. UML — язык схем для описания программных моделей. Точные правила такой связи заданы в <a href="https://www.omg.org/spec/UML/2.5.1/PDF">спецификации UML</a>. Одного поля-ссылки недостаточно, чтобы доказать такую строгую связь.</p>
+<p>Общая идея поля-компонента выглядит так; это набросок структуры, а не новая готовая программа:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">Телефон</span> {
+    <span class="term-language" title="Конструкция языка">private</span> Аккумулятор аккумулятор;
+}
+</code></pre></div>
+
+<p>Нужно ещё объявить класс компонента, создать или передать его экземпляр и решить, кто им владеет. Значение <code><span class="term-language" title="Конструкция языка">null</span></code> в поле само по себе не создаст аккумулятор.</p>
+<p>Выбирая наследование, спроси: «Можно ли в этой задаче использовать потомка там, где ожидают родителя, сохраняя обещанное поведение?» Сходства двух полей или желания сократить несколько строк недостаточно. Если связь описывается словами «использует» или «содержит», сначала рассмотри отдельный компонент.</p>
+<h2 id="lecture-14">14. Как прочитать незнакомую программу с объектами</h2>
+<ol>
+<li>Найди точку входа: откуда начинается рассматриваемый сценарий.</li>
+<li>Отдельно выпиши объявления классов. Само положение метода ниже в файле не задаёт очередь его исполнения.</li>
+<li>Найди выражения <code><span class="term-language" title="Конструкция языка">new</span></code> и отметь создания нужных экземпляров. Укажи их типы и начальные данные.</li>
+<li>Рисуй переменные отдельно от объектов. Присваивание ссылки меняет значение переменной, а не создаёт копию объекта.</li>
+<li>Перед каждым экземплярным вызовом определи получателя: что стоит перед точкой и к какому объекту ведёт эта ссылка.</li>
+<li>Для переопределённого метода различай тип переменной и фактический класс объекта.</li>
+<li>Отмечай изменение конкретных полей, возвращаемое значение и вывод отдельно.</li>
+<li>Для <code><span class="term-language" title="Конструкция языка">static</span></code>-поля отдельно веди общее значение, не дублируй его по всем объектам на рисунке.</li>
+</ol>
+<p>Потеря последней достижимой ссылки может сделать объект доступным для сборки мусора; немедленное уничтожение в этот момент не гарантируется. Счётчик созданий из первого опыта автоматически не уменьшается. Java передаёт аргументы по значению, включая копии значений ссылок: появление параметра не создаёт особого режима «передачи объекта по ссылке».</p>
+<h2 id="lecture-15">15. Проверь понимание на изменениях</h2>
+<h3 id="lecture-_8">Задание А. Ссылки и состояние</h3>
+<p>В первом опыте замени <code><span class="term-type" title="Тип или класс">Phone</span> <span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-data" title="Данные: переменная, поле или параметр">anna</span>;</code> на <code><span class="term-type" title="Тип или класс">Phone</span> <span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-data" title="Данные: переменная, поле или параметр">boris</span>;</code>. Не меняй остальные строки. Сначала предскажи вывод, затем проверь.</p>
+<p>Ожидается: сообщение о заряде Бориса 40, затем числа 80 и 40, затем <code><span class="term-language" title="Конструкция языка">false</span></code>, затем 2. Если получился другой результат, покажи на рисунке, к какому объекту ведёт <code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></code> именно перед <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code>.</p>
+<h3 id="lecture-_9">Задание Б. Граница допустимого действия</h3>
+<p>Проверь первый Phone с зарядом 10, затем 9. В первом случае один <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code> оставит 0, во втором сохранит 9. Затем проверь -1 и 101: конструктор должен выбросить исключение. Каждый опыт запускай отдельно или явно обрабатывай исключение; иначе первое необработанное исключение прервёт последующие шаги.</p>
+<h3 id="lecture-_10">Задание В. Новая реализация общего действия</h3>
+<p>Во втором опыте добавь <code><span class="term-type" title="Тип или класс">Tablet</span> <span class="term-language" title="Конструкция языка">extends</span> <span class="term-type" title="Тип или класс">Device</span></code>. Его <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> должен печатать подпись и текст «открыта книга». Добавь <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Tablet</span>("Планшет")</code> третьим элементом массива. Сам цикл оставь тем же: должна появиться третья строка вывода.</p>
+<p>Если компилятор говорит, что метод не переопределяется, сравни имя, параметры и доступность. Метод <code><span class="term-method" title="Метод: действие или вычисление">work</span>(<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">minutes</span>)</code> — другая перегрузка, он не заменяет требуемый <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code> без параметров.</p>
+<h3 id="lecture-_11">Вопросы для ответа своими словами</h3>
+<ol>
+<li>Почему в первом опыте три переменные Phone, но только два созданных Phone?</li>
+<li>Почему изменение через <code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></code> видно через <code><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></code>?</li>
+<li>Почему счётчик созданий общий, а заряд личный?</li>
+<li>Какая часть первого класса сохраняет допустимый диапазон заряда?</li>
+<li>Почему отсутствие сеттера не мешает использовать объект?</li>
+<li>Чем идея абстракции отличается от слова <code><span class="term-language" title="Конструкция языка">abstract</span></code>?</li>
+<li>Почему абстрактный Device имеет конструктор, хотя <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Device</span>(...)</code> запрещён?</li>
+<li>Почему переменная типа Device может ссылаться на Phone?</li>
+<li>Что выбирается по типу переменной, а что — по фактическому объекту при вызове <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code>?</li>
+<li>Почему <code><span class="term-method" title="Метод: действие или вычисление">work</span>(<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">minutes</span>)</code> не заменяет <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code>?</li>
+<li>Почему аккумулятор разумнее рассмотреть как компонент телефона, чем как родителя Phone?</li>
+<li>Какая часть первого опыта уже была ООП до знакомства с <code><span class="term-language" title="Конструкция языка">extends</span></code>?</li>
+</ol>
+<h2 id="lecture-16">16. Что означает «основы усвоены»</h2>
+<p>Базовый результат — уметь придумать простой класс, обосновать его поля и действия, создать два независимых экземпляра, объяснить копирование ссылки, использовать конструктор и выбрать между личными и общими данными. После этой лекции к этому добавляется начальное понимание общего типа и разных реализаций действия.</p>
+<p>Дальнейший маршрут: подробнее изучить наследование и правила доступа, переопределение и <code><span class="term-language" title="Конструкция языка">super</span></code>, интерфейсы и абстрактные классы, работу с исключениями, коллекциями и контрактами <code><span class="term-method" title="Метод: действие или вычисление">equals</span></code>/<code>hashCode</code>. Эти темы расширяют модель, а не отменяют правила ссылок и состояния.</p>
+<p>Главный навык — объяснять, <strong>какие объекты существуют, кто может к ним обратиться, какие действия разрешены и что именно изменяется после вызова</strong>. Если это получается на небольшом примере без угадывания, основа для следующих тем готова.</p>
+<h2 id="lecture-_12">Официальные материалы для уточнения</h2>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/concepts/index.html">Понятия ООП: объекты, классы, инкапсуляция и наследование</a>.</li>
+<li><a href="https://dev.java/learn/language/oop/inheritance/">Наследование в Java: обзор тем</a>.</li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html">Полиморфизм и вызов переопределённых методов</a>.</li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html">Абстрактные классы и методы</a>.</li>
+</ul>
+<p>Материалы Java Tutorials относятся к более ранней версии Java; здесь из них используются базовые понятия. Расширенные возможности новых выпусков не меняют сценарии двух учебных программ.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-_1">Основы ООП — заключение под запись</h1>
+<p><strong>ООП</strong> — организация решения через объекты с состоянием и доступными действиями. Главный вопрос: какой объект получает действие и что в нём меняется?</p>
+<h2 id="notes-_2">Из чего складывается модель</h2>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Назначение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><span class="term-type" title="Тип или класс">Класс</span></strong></td>
+<td>Описание экземпляров и действий</td>
+</tr>
+<tr>
+<td><strong><span class="term-object" title="Объект или ссылка на него">Объект</span></strong>, <strong><span class="term-object" title="Объект или ссылка на него">экземпляр</span></strong></td>
+<td>Конкретный созданный экземпляр класса</td>
+</tr>
+<tr>
+<td><strong><span class="term-data" title="Данные: переменная, поле или параметр">Поле</span></strong></td>
+<td>Переменная класса; бывает личной или общей <code><span class="term-language" title="Конструкция языка">static</span></code></td>
+</tr>
+<tr>
+<td><strong><span class="term-method" title="Метод: действие или вычисление">Метод</span></strong></td>
+<td>Действие или вычисление</td>
+</tr>
+<tr>
+<td><strong><span class="term-method" title="Метод: действие или вычисление">Конструктор</span></strong></td>
+<td>Инициализация нового экземпляра; имя совпадает с классом</td>
+</tr>
+<tr>
+<td><strong><span class="term-object" title="Объект или ссылка на него">Ссылка</span></strong></td>
+<td>Значение доступа к объекту либо <code><span class="term-language" title="Конструкция языка">null</span></code></td>
+</tr>
+<tr>
+<td><strong><span class="term-data" title="Данные: переменная, поле или параметр">Параметр</span></strong></td>
+<td>Переменная объявления метода или конструктора</td>
+</tr>
+<tr>
+<td><strong><span class="term-data" title="Данные: переменная, поле или параметр">Аргумент</span></strong></td>
+<td>Переданное при вызове значение или выражение</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes-_3">Общая форма</h2>
+<p>Шаблон, а не готовый файл:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">ИмяКласса</span> {
+    <span class="term-language" title="Конструкция языка">private</span> Тип <span class="term-data" title="Данные: переменная, поле или параметр">имяПоля</span>;
+    <span class="term-type" title="Тип или класс">ИмяКласса</span>(Тип <span class="term-data" title="Данные: переменная, поле или параметр">имяПараметра</span>) {
+        <span class="term-language" title="Конструкция языка">this</span>.<span class="term-data" title="Данные: переменная, поле или параметр">имяПоля</span> = <span class="term-data" title="Данные: переменная, поле или параметр">имяПараметра</span>;
+    }
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">имяДействия</span>() {
+        инструкции;
+    }
+}
+
+<span class="term-type" title="Тип или класс">ИмяКласса</span> <span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ИмяКласса</span>(аргумент);
+<span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span>.<span class="term-method" title="Метод: действие или вычисление">имяДействия</span>();
+</code></pre></div>
+
+<p>Собственные имена выбирает программист и согласует объявления с обращениями. <code><span class="term-language" title="Конструкция языка">class</span></code>, <code><span class="term-language" title="Конструкция языка">private</span></code>, <code><span class="term-language" title="Конструкция языка">this</span></code>, <code><span class="term-language" title="Конструкция языка">new</span></code> и другие слова языка не переименовываются. Инструкции создания и вызова в наших примерах помещаются в <code><span class="term-method" title="Метод: действие или вычисление">main</span></code>.</p>
+<h2 id="notes-_4">Два объекта и три ссылки</h2>
+<p>Фрагмент из первой полной программы лекции; класс Phone объявлен там же:</p>
+<div class="codehilite"><pre><span></span><code><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Анна&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">);</span>
+<span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">boris</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="p">(</span><span class="s">&quot;Борис&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">);</span>
+<span class="n"><span class="term-type" title="Тип или класс">Phone</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="p">;</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">use</span></span><span class="p">();</span>
+</code></pre></div>
+
+<p>Создано два Phone. <code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></code> ведут к одному объекту. После действия его заряд 70; заряд Бориса остаётся 50. <code><span class="term-data" title="Данные: переменная, поле или параметр">anna</span> == <span class="term-data" title="Данные: переменная, поле или параметр">partner</span></code> даёт true. Общее поле <code><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></code> равно 2.</p>
+<p>Присваивание копирует значение ссылки, а не клонирует объект. Java передаёт аргументы по значению, в том числе копируя значения ссылок.</p>
+<h2 id="notes-_5">Четыре идеи</h2>
+<table>
+<thead>
+<tr>
+<th>Идея</th>
+<th>Основной вопрос</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Инкапсуляция</strong></td>
+<td>Как сохранить допустимое состояние и управлять доступом?</td>
+<td>Закрытый заряд, проверки и <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code></td>
+</tr>
+<tr>
+<td><strong>Абстракция</strong></td>
+<td>Что существенно и какой контракт нужен?</td>
+<td>Действие устройства <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code></td>
+</tr>
+<tr>
+<td><strong>Наследование</strong></td>
+<td>Является ли тип разновидностью другого?</td>
+<td><code><span class="term-type" title="Тип или класс">Phone</span> <span class="term-language" title="Конструкция языка">extends</span> Device</code></td>
+</tr>
+<tr>
+<td><strong>Полиморфизм</strong></td>
+<td>Как общее обращение выбирает разное поведение?</td>
+<td>Один <code>device.<span class="term-method" title="Метод: действие или вычисление">work</span>()</code> вызывает реализацию фактического объекта</td>
+</tr>
+</tbody>
+</table>
+<p>Абстракция — идея, <code><span class="term-language" title="Конструкция языка">abstract</span></code> — инструмент языка. <code><span class="term-language" title="Конструкция языка">private</span></code> управляет доступом, но не заменяет проверки значений. Геттер и сеттер каждому полю не обязательны.</p>
+<p>В учебном Phone допустим заряд от 0 до 100. При заряде меньше 10 <code><span class="term-method" title="Метод: действие или вычисление">use</span>()</code> выходит без вычитания; при 10 оставляет 0. Сохраняемое правило допустимого состояния — <strong>инвариант</strong>.</p>
+<h2 id="notes-_6">Общий тип и конкретная реализация</h2>
+<p>Шаблон:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">abstract</span> <span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">Родитель</span> {
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">abstract</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">действие</span>();
+}
+<span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">Потомок</span> <span class="term-language" title="Конструкция языка">extends</span> <span class="term-type" title="Тип или класс">Родитель</span> {
+    @Override
+    <span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">действие</span>() {
+        конкретные инструкции;
+    }
+}
+<span class="term-type" title="Тип или класс">Родитель</span> <span class="term-data" title="Данные: переменная, поле или параметр">имяСсылки</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Потомок</span>();
+<span class="term-data" title="Данные: переменная, поле или параметр">имяСсылки</span>.<span class="term-method" title="Метод: действие или вычисление">действие</span>();
+</code></pre></div>
+
+<p>Имена заменяются согласованно. Конкретное тело зависит от задачи. <code><span class="term-language" title="Конструкция языка">abstract</span></code>, <code><span class="term-language" title="Конструкция языка">extends</span></code> и существующая аннотация <code>@Override</code> не заменяются произвольными словами.</p>
+<p>Тип переменной определяет доступные обращения при проверке компилятором. Для переопределённого экземплярного метода реализация выбирается по фактическому объекту во время выполнения. Это правило нельзя автоматически переносить на поля, конструкторы и статические методы.</p>
+<p>Абстрактный класс может иметь поля, конструктор и готовые методы. Напрямую создавать его экземпляр через <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Родитель</span>()</code> нельзя. <code><span class="term-language" title="Конструкция языка">super</span>(...)</code> вызывает конструктор родителя при инициализации одного экземпляра потомка, а не создаёт второй самостоятельный объект.</p>
+<h2 id="notes-_7">Не путать</h2>
+<ul>
+<li><strong>Перегрузка</strong>: варианты метода различаются параметрами. <strong>Переопределение</strong>: своя реализация унаследованного экземплярного метода с подходящей сигнатурой.</li>
+<li><code><span class="term-language" title="Конструкция языка">static</span></code> относится к классу; обычное личное поле — к экземпляру. Счётчик созданий не равен автоматически числу живых объектов.</li>
+<li>Наследование описывает «является разновидностью». Связь «содержит компонент» рассматривается отдельно: телефон содержит аккумулятор, но не является аккумулятором.</li>
+<li>Поле-ссылка само по себе не доказывает строгую композицию UML с общим жизненным циклом.</li>
+<li><code><span class="term-language" title="Конструкция языка">return</span></code> и вывод в консоль — разные действия.</li>
+</ul>
+<h2 id="notes-_8">Проверка понимания</h2>
+<ol>
+<li>Нарисуй три ссылки и два объекта из первого опыта.</li>
+<li>Объясни, почему <code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-data" title="Данные: переменная, поле или параметр">boris</span></code> меняет получателя следующего действия.</li>
+<li>Назови конкретные проверки, сохраняющие диапазон заряда.</li>
+<li>Объясни, почему <code>Device device = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Phone</span>(...)</code> допустимо во втором опыте.</li>
+<li>Добавь третий вид устройства с <code><span class="term-method" title="Метод: действие или вычисление">work</span>()</code>, сохранив тело общего цикла.</li>
+<li>Различи тип переменной, класс объекта, состояние, действие и результат вызова.</li>
+</ol>
+<p>Полные работающие программы, их вывод и подробный разбор находятся в основной лекции. Опыты с двумя разными реализациями Phone запускаются в отдельных папках.</p></article></details><footer><a target="_top" href="../#java-static">← Статические поля и методы</a><a target="_top" href="../#java">К программе Java →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="course-traces.js?v=1"></script></body></html>

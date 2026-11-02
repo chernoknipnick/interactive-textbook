@@ -39,6 +39,7 @@ topics = [
  ('classes','1.2.1 Классы и объекты','Классы и объекты'),
  ('constructors','1.2.2 Конструкторы','Конструкторы'),
  ('static','1.2.3 Статические поля и методы','Статические поля и методы'),
+ ('oop-summary','Основы ООП — заключение','Основы ООП — заключение'),
 ]
 if args.source:
     source=Path(args.source)
@@ -132,6 +133,8 @@ for i,(slug,base,title) in enumerate(topics):
         page=page.replace('</head>','<link rel="stylesheet" href="oop-visuals.css?v=1"></head>').replace('</body>','<script src="oop-visuals.js?v=2"></script></body>')
     if 'data-course-trace=' in page:
         page=page.replace('</head>','<link rel="stylesheet" href="course-traces.css?v=1"></head>').replace('</body>','<script src="course-traces.js?v=1"></script></body>')
+    if slug == 'oop-summary':
+        page=page.replace('</head>','<link rel="stylesheet" href="oop-summary.css?v=1"></head>')
     (OUT/(slug+'.html')).write_text(page,encoding='utf-8')
 
 (ROOT/'dist/java-lessons.js').write_text('window.javaLessons='+json.dumps(lessons,ensure_ascii=False)+';\n',encoding='utf-8')
