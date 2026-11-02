@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ссылки · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="oop-visuals.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 10 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-117">1.1.7 Ссылки</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="oop-widget" data-oop="references" aria-label="Пошаговая модель: 1.1.7 Ссылки">
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ссылки · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="oop-visuals.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 10 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Ссылки</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="oop-widget" data-oop="references" aria-label="Пошаговая модель: 1.1.7 Ссылки">
   <h2>Посмотри, как это работает</h2>
   <p>Предскажи результат строки, затем нажми «Дальше». Можно включить проигрывание и остановиться на любом шаге.</p>
   <code class="oop-code" data-oop-code></code>
@@ -8,7 +8,91 @@
   <p class="oop-explanation" data-oop-explanation aria-live="polite"></p>
 </section>
 
-<h2 id="lecture-_1">Основные понятия</h2>
+<h2 id="lecture-_2">Начни с одного правила: присваивание копирует значение</h2>
+<p>Для int значением является число. Для ссылочной переменной — ссылка на объект либо null. Поэтому один и тот же знак <code>=</code> может копировать число или ссылку. Объект за ссылкой от одного такого присваивания не клонируется.</p>
+<p>Представь две записки с маршрутом к одной комнате. Сделали вторую записку — комнаты не стало две. Переставили мебель в комнате — человек с любой запиской увидит изменения. Переписали только одну записку на другую комнату — другая записка осталась прежней.</p>
+<p>Это аналогия доступа, а не обещание настоящего числового адреса в Java. У ссылок нет доступной обычному коду арифметики «прибавить один и попасть в соседнюю ячейку».</p>
+<h2 id="lecture-_3">Общая форма</h2>
+<div class="codehilite"><pre><span></span><code>СсылочныйТип первоеИмя = выражениеСозданияОбъекта;
+СсылочныйТип второеИмя = первоеИмя;
+второеИмя = другаяСсылка;
+</code></pre></div>
+
+<p>СсылочныйТип может быть int[], String или твоим классом. Имена выбираешь ты. Вторая строка копирует значение ссылки, а третья переназначает только указанную переменную. Чтобы изменить элемент массива, нужна другая левая часть: <code>имяМассива[индекс]</code>.</p>
+<h2 id="lecture-_4">Полный опыт с числами, массивом и переназначением</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">ReferenceReviewDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numberCopy</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numberCopy</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">};</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">};</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Файл ReferenceReviewDemo.java. Вывод: <strong>5, 9, 9, 1</strong>, каждое число с новой строки.</p>
+<h2 id="lecture-_5">Каждая строка меняет определённую вещь</h2>
+<p><code><span class="term-data" title="Данные: переменная, поле или параметр">numberCopy</span> = 9</code> записывает новое число только в numberCopy. <code><span class="term-data" title="Данные: переменная, поле или параметр">second</span>[0] = 9</code> идёт по ссылке second и меняет <strong>элемент общего массива</strong>. <code><span class="term-data" title="Данные: переменная, поле или параметр">second</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[]{1, 2}</code> меняет уже саму переменную second и создаёт отдельный массив.</p>
+<table>
+<thead>
+<tr>
+<th>Этап</th>
+<th>first</th>
+<th>second</th>
+<th style="text-align: right;">Число массивов, созданных нашим кодом</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Создали first</td>
+<td>Ссылка на А: [5, 7]</td>
+<td>Ещё нет</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>second = first</td>
+<td>Ссылка на А</td>
+<td>Та же ссылка на А</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>second[0] = 9</td>
+<td>А теперь [9, 7]</td>
+<td>Тот же А</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>second = new ...</td>
+<td>Прежний А: [9, 7]</td>
+<td>Б: [1, 2]</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+<p>Имя А — условная метка на схеме, не адрес, который нужно искать в выводе программы.</p>
+<h2 id="lecture-_6">Что именно получает параметр метода</h2>
+<p>При <code><span class="term-method" title="Метод: действие или вычисление">change</span>(<span class="term-data" title="Данные: переменная, поле или параметр">first</span>)</code> параметр получает <strong>копию значения ссылки</strong>. Если метод пишет в элемент общего массива, изменение видно вызывающему коду. Если он присваивает параметру ссылку на другой массив, меняется только локальная переменная-параметр.</p>
+<p>Это не два разных режима передачи. Java всегда передаёт аргументы по значению. Чтобы заменить переменную вызывающего кода новым массивом, можно вернуть ссылку методом и явно присвоить результат снаружи.</p>
+<h2 id="lecture-null">null, пустой массив и строка — не одно и то же</h2>
+<p><code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">values</span> = <span class="term-language" title="Конструкция языка">null</span></code> — объекта массива за этой переменной нет. <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[0]</code> — объект существует, просто элементов ноль. <code><span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">text</span> = ""</code> — существует пустая строка, а не null.</p>
+<p>Поэтому значения нельзя подменять друг другом без изменения смысла. Длина пустого массива доступна и равна 0. Чтение длины через null приводит к ошибке. В массиве String[3] сам массив есть, но его элементы первоначально null.</p>
+<h2 id="lecture-_7">Сравнить один объект или одинаковое содержимое</h2>
+<p>Для ссылок <code>==</code> проверяет, ведут ли они к одному объекту, либо обе равны null. У String метод equals сравнивает текст. У нового собственного класса без переопределения equals не появляется автоматическое сравнение всех полей. У массива его обычный equals тоже не сравнивает элементы.</p>
+<p>Совпадающие литералы строк могут разделять один объект. Поэтому успешно сработавший <code>==</code> на двух одинаковых литералах не доказывает, что так правильно сравнивать произвольный текст.</p>
+<p>String неизменяем: операция соединения текста не переписывает символы старого объекта. Но строковую переменную можно переназначить другому строковому значению.</p>
+<h2 id="lecture-_8">Как перейти к собственной проверке</h2>
+<p>Сначала используй массив из двух целых. Нарисуй отдельно переменные и массивы. После каждой строки меняй <strong>либо содержимое объекта, либо стрелку</strong>. Затем добавь clone для int[] и предскажи, какие изменения станут независимыми.</p>
+<p>Не делай из clone обещание полного копирования дерева объектов: у массива ссылок копируются элементы-ссылки, а связанные объекты могут остаться общими.</p>
+<p>Проверь себя: что станет с first, если second присвоить null после копирования ссылки? first сохранит прежнюю ссылку. null в одной переменной не является командой немедленно уничтожить общий объект.</p>
+<h2 id="lecture-_9">Справочник и дополнительные упражнения по теме</h2>
+<h2 id="lecture-_10">Основные понятия</h2>
 <blockquote>
 <p><strong><span class="term-object" title="Объект или ссылка на него">Ссылка</span></strong> — значение, с помощью которого Java обращается к объекту. Ссылочная переменная хранит ссылку на объект или <code><span class="term-language" title="Конструкция языка">null</span></code>.</p>
 <p><strong>Присваивание</strong> копирует значение правой части в переменную слева. Копирование ссылки само по себе не создаёт копию объекта.</p>
@@ -58,7 +142,7 @@
 <h2 id="lecture-4">4. Почему метод меняет массив, но не заменяет переменную вызывающего кода</h2>
 <p>В полном примере внизу есть два метода. <code><span class="term-method" title="Метод: действие или вычисление">changeFirst</span>(<span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code> выполняет <code><span class="term-data" title="Данные: переменная, поле или параметр">values</span>[0] = 42</code>. Параметр и переменная <code><span class="term-method" title="Метод: действие или вычисление">main</span></code> ведут к одному массиву, поэтому изменение видно снаружи.</p>
 <p><code><span class="term-method" title="Метод: действие или вычисление">replace</span>(<span class="term-data" title="Данные: переменная, поле или параметр">values</span>)</code> выполняет <code><span class="term-data" title="Данные: переменная, поле или параметр">values</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[]{100, 200}</code>. Меняется только локальный параметр метода. Переменная <code><span class="term-method" title="Метод: действие или вычисление">main</span></code> остаётся со своей прежней ссылкой.</p>
-<p>Добавь к своей схеме отдельную переменную-параметр <code>метод: <span class="term-data" title="Данные: переменная, поле или параметр">values</span></code> рядом с <code><span class="term-method" title="Метод: действие или вычисление">main</span>: <span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></code>. Сначала обе стрелки ведут к А. При переназначении измени стрелку только у values, направив её к Б. У numbers стрелка к А остаётся: это другая переменная.</p>
+<p>Добавь к своей схеме отдельную переменную-параметр <code><span class="term-data" title="Данные: переменная, поле или параметр">метод</span>: <span class="term-data" title="Данные: переменная, поле или параметр">values</span></code> рядом с <code><span class="term-method" title="Метод: действие или вычисление">main</span>: <span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></code>. Сначала обе стрелки ведут к А. При переназначении измени стрелку только у values, направив её к Б. У numbers стрелка к А остаётся: это другая переменная.</p>
 <p>«Массив передали по ссылке?» Точная формулировка: передали значение ссылки по значению. Объект общий, переменные разные. Чтобы вернуть новый массив вызывающему коду, метод может сделать <code><span class="term-language" title="Конструкция языка">return</span></code>, а вызывающий код — присвоить результат.</p>
 <h2 id="lecture-5-null">5. <code><span class="term-language" title="Конструкция языка">null</span></code>: записка без маршрута</h2>
 <div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">missing</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc"><span class="term-language" title="Конструкция языка">null</span></span><span class="p">;</span>
@@ -82,7 +166,7 @@
 <h2 id="lecture-7">7. Немного о памяти без мифа о двух коробках</h2>
 <p>Для урока достаточно модели «переменные и объекты со стрелками». У JVM есть стек вызовов и куча объектов, но память программы не сводится только к ним. Ссылки могут храниться и в полях объектов, и в элементах массивов; правило «все ссылки в стеке» неверно. Оптимизации JVM тоже не нужно выдавать за устройство каждой картинки.</p>
 <p>Когда объект больше недостижим из работающей программы, сборщик мусора может освободить занятую им память. <code>variable = <span class="term-language" title="Конструкция языка">null</span></code> не команда немедленного уничтожения объекта: к нему могут оставаться другие пути. Не обещаем момент сборки и не используем <code><span class="term-type" title="Тип или класс">System</span>.<span class="term-method" title="Метод: действие или вычисление">gc</span>()</code> как учебный способ удаления.</p>
-<h2 id="lecture-_2">Разбираем по картинкам</h2>
+<h2 id="lecture-_11">Разбираем по картинкам</h2>
 <p class="diagram-code-caption">Код к следующей схеме</p>
 
 <p>Строки выполняются сверху вниз. Перед каждым следующим шагом предскажи: изменится объект или только стрелка к нему?</p>
@@ -114,7 +198,7 @@
 <figure class="lesson-diagram-frame"><img class="lesson-diagram" loading="lazy" src="images/06 Ссылка и параметр метода.png" alt="06 Ссылка и параметр метода"><figcaption><a href="images/06 Ссылка и параметр метода.png" target="_blank" rel="noopener">Открыть схему целиком ↗</a></figcaption></figure>
 
 <p>Найди на схеме две отдельные переменные: numbers у вызывающего кода и values у метода. Укажи, какую стрелку меняет присваивание внутри метода, а какая остаётся прежней.</p>
-<h2 id="lecture-_3">Программа для самостоятельного запуска</h2>
+<h2 id="lecture-_12">Программа для самостоятельного запуска</h2>
 <p>Каждый пример запускается отдельно. Классы <code><span class="term-type" title="Тип или класс">Student</span></code> в разных темах — последовательные учебные версии: не собирать их вместе в одном пакете. В терминале из его папки: <code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">ReferencesDemo</span>.java</code>, затем <code>java <span class="term-type" title="Тип или класс">ReferencesDemo</span></code>. JDK 17 или новее.</p>
 <div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">ReferencesDemo</span></span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -152,15 +236,24 @@
 <span class="term-language" title="Конструкция языка">true</span>
 </code></pre></div>
 
-<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-117">1.1.7 Ссылки — Под запись</h1>
+<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p>
+<h2 id="lecture-_13">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-117">1.1.7 Ссылки — Под запись</h1>
 <h1 id="notes-java">java #ооп #конспект</h1>
-<h2 id="notes-_1">Определения</h2>
+<h2 id="notes-_1">Обобщение: подставь свои имена</h2>
+<div class="codehilite"><pre><span></span><code>СсылочныйТип первоеИмя = выражениеСозданияОбъекта;
+СсылочныйТип второеИмя = первоеИмя;
+второеИмя = другаяСсылка;
+</code></pre></div>
+
+<p>СсылочныйТип может быть int[], String или твоим классом. Имена выбираешь ты. Вторая строка копирует значение ссылки, а третья переназначает только указанную переменную. Чтобы изменить элемент массива, нужна другая левая часть: <code>имяМассива[индекс]</code>.</p>
+<h2 id="notes-_2">Определения</h2>
 <p><strong><span class="term-object" title="Объект или ссылка на него">Ссылка</span></strong> — значение, с помощью которого Java обращается к объекту. Ссылочная переменная хранит ссылку на объект или <code><span class="term-language" title="Конструкция языка">null</span></code>.</p>
 <p><strong>Присваивание</strong> копирует значение правой части в переменную слева. Копирование ссылки само по себе не создаёт копию объекта.</p>
 <p><strong><code><span class="term-language" title="Конструкция языка">null</span></code></strong> — специальное значение, означающее отсутствие ссылки на объект.</p>
 <p><strong>В Java аргументы передаются по значению:</strong> метод получает копию значения аргумента. Для ссылочного типа копируется значение ссылки.</p>
 <p><strong>Строка <code><span class="term-type" title="Тип или класс">String</span></code> неизменяема:</strong> содержимое существующего строкового объекта изменить нельзя.</p>
-<h2 id="notes-_2">Главная схема</h2>
+<h2 id="notes-_3">Главная схема</h2>
 <p class="diagram-code-caption">Код к следующей схеме</p>
 
 <p>Проследи четыре действия: создание, копирование ссылки, изменение элемента и переназначение ссылки.</p>
@@ -172,13 +265,13 @@
 
 <figure class="lesson-diagram-frame"><img class="lesson-diagram" loading="lazy" src="images/01 Ссылки.png" alt="01 Ссылки"><figcaption><a href="images/01 Ссылки.png" target="_blank" rel="noopener">Открыть схему целиком ↗</a></figcaption></figure>
 
-<h2 id="notes-_3">Разберись на трёх строках</h2>
+<h2 id="notes-_4">Разберись на трёх строках</h2>
 <p><code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">first</span> = {10, 20};</code> — создали массив. <code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">second</span> = <span class="term-data" title="Данные: переменная, поле или параметр">first</span>;</code> — скопировали ссылку, массив по-прежнему один. <code><span class="term-data" title="Данные: переменная, поле или параметр">second</span>[0] = 99;</code> — изменили общий массив, поэтому <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span>[0]</code> тоже 99.</p>
 <p><code><span class="term-data" title="Данные: переменная, поле или параметр">second</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[]{7, 8};</code> перенаправляет только <code><span class="term-data" title="Данные: переменная, поле или параметр">second</span></code>. Через <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span></code> остаётся прежний массив. Метод тоже получает отдельную переменную-параметр: изменение элементов общего массива видно вызывающему коду, а переназначение параметра — нет.</p>
 <p><code><span class="term-language" title="Конструкция языка">null</span></code> не равен пустому массиву. Перед чтением <code>.length</code> у потенциально отсутствующего массива нужна проверка. У <code><span class="term-type" title="Тип или класс">String</span></code> сравниваем текст методом <code><span class="term-method" title="Метод: действие или вычисление">equals</span></code>, а не <code>==</code>. Для других классов смысл <code><span class="term-method" title="Метод: действие или вычисление">equals</span></code> зависит от реализации.</p>
-<h3 id="notes-_4">Нарисуй и предскажи</h3>
+<h3 id="notes-_5">Нарисуй и предскажи</h3>
 <p>После <code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">first</span> = {2, 4}; <span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">second</span> = <span class="term-data" title="Данные: переменная, поле или параметр">first</span>; <span class="term-data" title="Данные: переменная, поле или параметр">second</span>[1] = 9; <span class="term-data" title="Данные: переменная, поле или параметр">second</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[]{1};</code> чему равны <code><span class="term-data" title="Данные: переменная, поле или параметр">first</span>[1]</code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">second</span>[0]</code>? Сколько массивов теперь?</p>
-<h2 id="notes-_5">Разбираем по картинкам</h2>
+<h2 id="notes-_6">Разбираем по картинкам</h2>
 <p class="diagram-code-caption">Код к следующей схеме</p>
 
 <p>Строки выполняются сверху вниз. Перед каждым следующим шагом предскажи: изменится объект или только стрелка к нему?</p>
@@ -210,7 +303,7 @@
 <figure class="lesson-diagram-frame"><img class="lesson-diagram" loading="lazy" src="images/06 Ссылка и параметр метода.png" alt="06 Ссылка и параметр метода"><figcaption><a href="images/06 Ссылка и параметр метода.png" target="_blank" rel="noopener">Открыть схему целиком ↗</a></figcaption></figure>
 
 <p>Найди на схеме две отдельные переменные: numbers у вызывающего кода и values у метода. Укажи, какую стрелку меняет присваивание внутри метода, а какая остаётся прежней.</p>
-<h2 id="notes-_6">Проверь себя</h2>
+<h2 id="notes-_7">Проверь себя</h2>
 <p>На каждый вопрос ответь своими словами и приведи пример:</p>
 <ol>
 <li>Сколько массивов создаёт присваивание второй ссылки?</li>
@@ -220,5 +313,5 @@
 <li>Можно ли изменить переменную String и текст существующего объекта String?</li>
 <li>Как сравнивать текст строк и идентичность объектов?</li>
 </ol>
-<h2 id="notes-_7">Домашняя работа</h2>
-<p>Нарисовать три состояния массива: до присваивания ссылки, после изменения элемента, после переназначения второй переменной. Для каждого указать число массивов и ожидаемый вывод. Дополнительно проверить <code><span class="term-method" title="Метод: действие или вычисление">clone</span>()</code> на массиве целых чисел. На следующей паре эти же стрелки будут вести к объектам собственного класса.</p></article></details><footer><a target="_top" href="../#java-methods">← Методы: процедуры и функции</a><a target="_top" href="../#java-classes">Классы и объекты →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script><script src="visuals.js?v=7"></script><script src="oop-visuals.js?v=2"></script></body></html>
+<h2 id="notes-_8">Домашняя работа</h2>
+<p>Нарисовать три состояния массива: до присваивания ссылки, после изменения элемента, после переназначения второй переменной. Для каждого указать число массивов и ожидаемый вывод. Дополнительно проверить <code><span class="term-method" title="Метод: действие или вычисление">clone</span>()</code> на массиве целых чисел. На следующей паре эти же стрелки будут вести к объектам собственного класса.</p></article></details><footer><a target="_top" href="../#java-methods">← Методы: процедуры и функции</a><a target="_top" href="../#java-classes">Классы и объекты →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="oop-visuals.js?v=2"></script></body></html>

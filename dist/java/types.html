@@ -1,324 +1,665 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Типы данных и операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 04 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><p><strong>1/21</strong> · <a target="_top" href="../#java-intro">⟵ Введение</a> · Навигатор · <a target="_top" href="../#java-bitwise">Поразрядные операции ⟶</a></p>
-<h1 id="lecture-_1">Типы данных</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details>
-<ol>
-<li>
-<p>Примитивные типы данных: int, double, boolean, char и другие. Они представляют базовые значения, такие как числа, символы и логические значения.
-- Целочисленные данные:
-    int age = 25;
-    int count = 10;
-- Дробные числа:
-    double average = 7.5;
-    float price = 19.99f;
-- Символьные данные:
-    char grade = 'A';
-    char initial = 'J';
-- Логические значения:
-    boolean isFull = false;
-    boolean hasPassed = true;</p>
-</li>
-<li>
-<p>Ссылочные типы данных: классы и интерфейсы, которые представляют сложные структуры данных и абстракции.
-- Строковые данные:
-    String name = "John Smith";
-    String message = "Hello, World!";
-- Массивы:
-    int[] numbers = {1, 2, 3, 4, 5};
-    String[] names = {"Alice", "Bob", "Charlie"};
-- Списки:
-    List numbersList = new ArrayList&lt;&gt;();
-    numbersList.add(1);
-    numbersList.add(2);
-    numbersList.add(3);
-- Карты:
-    Map<String, Integer> scores = new HashMap&lt;&gt;();
-    scores.put("Alice", 85);
-    scores.put("Bob", 95);
-- Другие пользовательские типы данных:
-    class Person {
-    String name;
-    int age;
-    }
-    Person person1 = new Person();
-    person1.name = "Alice";
-    person1.age = 30;</p>
-</li>
-</ol>
-<p>Классы и объекты
-    В Java все данные и функциональность организуются в классах. Класс описывает атрибуты (переменные) и методы (функции) объекта. Например:</p>
-<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">class</span> <span class="term-type" title="Тип или класс">Car</span> {
-<span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">brand</span>;
-<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">year</span>;
-blic <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">drive</span>() {
-<span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(&quot;The car is driving&quot;);
-    }
-<span class="term-language" title="Конструкция языка">public</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">void</span> <span class="term-method" title="Метод: действие или вычисление">main</span>(<span class="term-type" title="Тип или класс">String</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">args</span>){
-<span class="term-type" title="Тип или класс">Car</span> <span class="term-data" title="Данные: переменная, поле или параметр">myCar</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">Car</span>();
-<span class="term-data" title="Данные: переменная, поле или параметр">myCar</span>.<span class="term-data" title="Данные: переменная, поле или параметр">brand</span> = &quot;Toyota&quot;;
-<span class="term-data" title="Данные: переменная, поле или параметр">myCar</span>.<span class="term-data" title="Данные: переменная, поле или параметр">year</span> = 2020; <span class="term-data" title="Данные: переменная, поле или параметр">myCar</span>.<span class="term-method" title="Метод: действие или вычисление">drive</span>();
-    }
-}
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Типы данных и операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 04 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Типы данных и операции</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="types" aria-label="Пошаговый разбор: Значение, выражение и присваивание">
+  <h2>Значение, выражение и присваивание</h2>
+  <p>Сначала прочитай строку кода и предскажи состояние. Затем перейди к следующему шагу. Схема показывает выбранный учебный сценарий, а не запускает произвольную Java-программу.</p>
+  <p class="diagram-code-caption">Код к текущему шагу</p>
+  <pre><code data-trace-code></code></pre>
+  <div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell></div><div data-trace-cell></div><div data-trace-cell></div></div>
+  <p class="trace-explanation" data-trace-explanation aria-live="polite"></p>
+  <div class="trace-controls"><button type="button" data-trace-action="back">← Назад</button><span data-trace-step></span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+  <script type="application/json" data-trace-model>[{"code": "int price = 120;\nint count = 3;", "cells": ["price = 120", "count = 3", "total ещё не объявлена"], "explanation": "Типы указаны при объявлении. Числа без кавычек — не строковые значения."}, {"code": "int total = price * count;", "cells": ["price = 120", "count = 3", "total = 360"], "explanation": "В total сохраняется результат вычисления, а не постоянно действующая формула."}, {"code": "double average = (double) 7 / 2;", "cells": ["7 становится 7.0", "Деление вещественное", "average = 3.5"], "explanation": "Приведение выполнено до деления. При (double) (7 / 2) дробная часть потерялась бы раньше."}, {"code": "count = count + 1;", "cells": ["count было 3", "count стало 4", "total пока равно 360"], "explanation": "Изменение количества не запускает старую формулу заново. Для новой стоимости нужно повторное вычисление."}, {"code": "total = price * count;", "cells": ["price = 120", "count = 4", "total стало 480"], "explanation": "Дополнительная инструкция после исходного примера явно пересчитывает результат."}]</script>
+</section>
+
+<h2 id="lecture-_2">Что ты должен различать до первого вычисления</h2>
+<p><strong>Тип</strong> задаёт допустимые значения и операции. <strong><span class="term-data" title="Данные: переменная, поле или параметр">Переменная</span></strong> хранит значение и имеет имя. <strong>Литерал</strong> — значение, записанное прямо в исходнике. <strong>Выражение</strong> вычисляет значение. <strong>Присваивание</strong> сохраняет вычисленный результат в указанной переменной.</p>
+<p>В <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 3;</code> int — тип, count — выбранное имя, 3 — литерал, а вся запись объявляет локальную переменную и задаёт ей начальное значение. Эти роли не меняются, если вместо count назвать переменную quantity.</p>
+<h2 id="lecture-_3">Общая форма объявления и изменения</h2>
+<p>Это шаблон, где подписи заменяются настоящими типами, именами и выражениями:</p>
+<div class="codehilite"><pre><span></span><code>Тип <span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span> = начальноеЗначение;
+<span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span> = новоеВыражение;
 </code></pre></div>
 
-<p>В этом примере у нас есть класс Car, который имеет два атрибута brand и year, а также метод drive. Мы создаем объект myCar класса Car и вызываем метод drive.</p>
-<p>Используя классы и объекты, можно создавать сложные структуры данных и функциональность, необходимую для мобильных приложений. Java обладает богатым набором библиотек и инструментов для разработки мобильных приложений, что делает его привлекательным выбором для разработчиков.</p>
-<h1 id="lecture-_2"><strong>ОПЕРАЦИИ НАД ПРИМЕТИВНЫМИ ТИПАМИ ДАННЫХ</strong></h1>
-<h2 id="lecture-_3">Операция присваивания</h2>
-<p>Присвоение переменной значения константы, другой переменной или выражения (переменных и/или констант, разделенных знаками операций), называется <strong>операцией присваивания</strong> и обозначается знаком "<strong>=</strong>", например:</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 3; <span class="term-data" title="Данные: переменная, поле или параметр">y</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span>; <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span>;</code></p>
-<p>В Java допустимо многократное использование операции присваивания в одном выражении, например:</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">x1</span> = <span class="term-method" title="Метод: действие или вычисление">x2</span> = <span class="term-method" title="Метод: действие или вычисление">x3</span> = 0;</code></p>
-<p>Эта операция выполняется справа налево, т.е. сначала переменной <code><span class="term-method" title="Метод: действие или вычисление">x3</span></code> присваивается значение <code>0</code>, затем переменной <code><span class="term-method" title="Метод: действие или вычисление">x2</span></code> присваивается значение переменной <code><span class="term-method" title="Метод: действие или вычисление">x3</span></code> (<code>0</code>), и, наконец, переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">x1</span></code> присваивается значение переменной <code><span class="term-method" title="Метод: действие или вычисление">x2</span></code> (<code>0</code>). Знаки операций, аргументами которых являются числа, разделяются на две категории: <em>унарные</em> (unary) знаки операций с одним аргументом и <em>бинарные</em> (binary) с двумя аргументами.</p>
-<h2 id="lecture-_4">Унарные операции</h2>
-<p>В Java определены следующие <code><span class="term-method" title="Метод: действие или вычисление">унарные</span> <span class="term-method" title="Метод: действие или вычисление">операции</span></code>:</p>
-<ul>
-<li>унарный минус "<code>-</code>" – меняет знак числа или выражения на противоположный;</li>
-<li>унарный плюс "<code>+</code>" – не выполняет никаких действий над числом или выражением;</li>
-<li>побитовое дополнение "<code>~</code>" (только для целых) – инвертирует все биты поля числа (меняет 0 на 1 и 1 на 0);</li>
-<li>инкремент "<code>++</code>" (только для целых) – увеличивает значение переменной на 1;</li>
-<li>декремент "<code>--</code>" (только для целых) – уменьшает значение переменной на 1.</li>
-</ul>
-<p>Примеры унарных операций "<code>+</code>" и "<code>-</code>":</p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 3, j, k; j= -<span class="term-data" title="Данные: переменная, поле или параметр">i</span>; // j = -3 k = +<span class="term-data" title="Данные: переменная, поле или параметр">i</span>; // k = 3</code></p>
-<p>Пример операции побитового дополнения:</p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">a</span> = 15;</code>int b; b = ~a;
-<code>// <span class="term-data" title="Данные: переменная, поле или параметр">b</span> = -16</code></p>
-<p>Числа <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> являются числами типа <code><span class="term-type" title="Тип или класс">int</span></code>, т.е. представляются внутри компьютера как двоичные целые числа со знаком длиной 32 бита, поэтому двоичное представление чисел <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> будет выглядеть следующим образом:</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> = 00000000 00000000 00000000 00001111</code>
-<code><span class="term-data" title="Данные: переменная, поле или параметр">b</span> = 11111111 11111111 11111111 11110000</code></p>
-<p>Как видно из этого представления, все нулевые биты в числе a изменены на единичные биты в числе <code><span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>, а единичные биты в a изменены на нулевые биты. Десятичным представлением числа <code><span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> будет <code>–16</code>. Знаки операции инкремента и декремента могут размещаться как до, так и после переменной. Эти варианты называются соответственно <strong>префиксной</strong> и <strong>постфиксной</strong> записью этих операции. Знак операции в префиксной записи возвращает значение своего операнда <em>после</em> вычисления выражения. При постфиксной записи знак операции <em>сначала</em> воз­вращает значение своего операнда и только после этого вычисляет инкремент или декремент, например:</p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 1, <span class="term-data" title="Данные: переменная, поле или параметр">y</span>, <span class="term-data" title="Данные: переменная, поле или параметр">z</span>; <span class="term-data" title="Данные: переменная, поле или параметр">y</span> = ++<span class="term-data" title="Данные: переменная, поле или параметр">x</span>; <span class="term-data" title="Данные: переменная, поле или параметр">z</span>=<span class="term-data" title="Данные: переменная, поле или параметр">x</span>++;</code></p>
-<p>Переменная <code><span class="term-data" title="Данные: переменная, поле или параметр">y</span></code> будет присвоено значение <code>2</code>, поскольку сначала значение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code> будет увеличено на <code>1</code>, а затем результат будет присвоен переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">y</span></code>. Переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">z</span></code> будет присвоено значение <code>1</code>, поскольку сначала переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">z</span></code> будет присвоено значение, а затем значение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code> будет увеличено на <code>1</code>. В обоих случаях новое значение переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code> будет равно <code>2</code>. Следует отметить, что в Java, в отличие от языка C, операции декремента и инкремента могут применяться и к вещественным переменным (типа <code><span class="term-type" title="Тип или класс">float</span></code> и <code><span class="term-type" title="Тип или класс">double</span></code>). <strong>Бинарные знаки операций</strong> подразделяются на операции с числовым результатом и операции сравнения, результатом которых является булевское значение.</p>
-<h2 id="lecture-_5">Арифметические бинарные операции</h2>
-<p>В Java определены следующие <strong>арифметические бинарные операции</strong>:</p>
-<ul>
-<li>сложение "<code>+</code>";</li>
-<li>вычитание "<code>-</code>";</li>
-<li>умножение "<code>*</code>";</li>
-<li>деление "<code>/</code>";</li>
-<li>вычисление остатка от деления целых чисел "<code>%</code>" (возвращает остаток от деления первого числа на второе, причем результат будет иметь тот же знак, что и делимое), например, результат операции <code>5%3</code> будет равен <code>2</code>, а результат операции (-7)%(-4) будет равен <code>-3</code>. В Java операция может использоваться и для вещественных переменных (типа <code><span class="term-type" title="Тип или класс">float</span></code> или <code><span class="term-type" title="Тип или класс">double</span></code>).</li>
-</ul>
-<p><strong>Примеры бинарных арифметических операций:</strong></p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 7, <span class="term-data" title="Данные: переменная, поле или параметр">x1</span>, <span class="term-method" title="Метод: действие или вычисление">x2</span>, <span class="term-method" title="Метод: действие или вычисление">x3</span>, x4, x5;  <span class="term-data" title="Данные: переменная, поле или параметр">x1</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> +10; // <span class="term-data" title="Данные: переменная, поле или параметр">x1</span> = 17  <span class="term-method" title="Метод: действие или вычисление">x2</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> – 8; // <span class="term-method" title="Метод: действие или вычисление">x2</span> = -1  <span class="term-method" title="Метод: действие или вычисление">x3</span> = <span class="term-method" title="Метод: действие или вычисление">x2</span> * <span class="term-data" title="Данные: переменная, поле или параметр">x</span>; // <span class="term-method" title="Метод: действие или вычисление">x3</span> = -7</code></p>
-<p><code>x4 = <span class="term-data" title="Данные: переменная, поле или параметр">x</span>/4; // x4 = 1 (при делении целых чисел  // дробная часть отбрасывается)  x5 = <span class="term-data" title="Данные: переменная, поле или параметр">x</span>%4 // x5 = 3 (остаток от деления  // 7 на 4)</code></p>
-<h2 id="lecture-_6">Побитовые операции</h2>
-<ul>
-<li><code>Побитовые <span class="term-method" title="Метод: действие или вычисление">операции</span></code> рассматривают исходные числовые значения как поля битов и выполняют над ними следующие действия:</li>
-<li>установка бита в <em>i</em>-ой позиции поля результата в <code>1</code>, если оба бита в <em>i</em>-ых позициях операндов равны <code>1</code>, или в <code>0</code> в противном случае – <code>побитовое <span class="term-method" title="Метод: действие или вычисление">И</span></code> ("<code>&amp;</code>");</li>
-<li>установка бита в <em>i</em>-ой позиции поля результата в <code>1</code>, если хотя бы один бит в <em>i</em>-ых позициях операндов равен <code>1</code>, или в <code>0</code> в противном случае – <code>побитовое <span class="term-method" title="Метод: действие или вычисление">ИЛИ</span></code> ("<code>|</code>");</li>
-<li>установка бита в <em>i</em>-ой позиции поля результата в <code>1</code>, если биты в <em>i</em>-ых позициях операндов не равны друг другу, или в <code>0</code> в противном случае – <code>побитовое исключающее <span class="term-method" title="Метод: действие или вычисление">ИЛИ</span></code> ("<code>^</code>");</li>
-<li>сдвиг влево битов поля первого операнда на количество битов, определяемое вторым операндом (бит знака числа при этом не меняется) – <code>побитовый сдвиг влево с учетом знака</code> "<code>&lt;&lt;</code>";</li>
-<li>сдвиг вправо битов поля первого операнда на количество битов, определяемое вторым операндом (бит знака числа при этом не меняется) – <code>побитовый сдвиг вправо с учетом знака</code> "<code>&gt;&gt;</code>";</li>
-<li>сдвиг вправо битов поля первого операнда на количество битов, определяемое вторым операндом (бит знака числа при этом также сдвигается) – <code>побитовый сдвиг вправо без учета знака</code> "<code>&gt;&gt;&gt;</code>".</li>
-</ul>
-<p><strong>Примеры побитовых операций:</strong></p>
-<ol>
-<li>
-<p><strong>Побитовое И</strong></p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 112; // <span class="term-data" title="Данные: переменная, поле или параметр">x</span>: 00000000 00000000 00000000 01110000 <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">y</span> = 94; // <span class="term-data" title="Данные: переменная, поле или параметр">y</span>: 00000000 00000000 00000000 01011110 <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">z</span>; <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &amp; <span class="term-data" title="Данные: переменная, поле или параметр">y</span>; // <span class="term-data" title="Данные: переменная, поле или параметр">z</span>=80: 00000000 00000000 00000000 01010000</code></p>
-</li>
-<li>
-<p><strong>Побитовое ИЛИ</strong></p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 112; // <span class="term-data" title="Данные: переменная, поле или параметр">x</span>: 00000000 00000000 00000000 01110000 <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">y</span> = 94; // <span class="term-data" title="Данные: переменная, поле или параметр">y</span>: 00000000 00000000 00000000 01011110 <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">z</span>; <span class="term-data" title="Данные: переменная, поле или параметр">z</span> =<span class="term-data" title="Данные: переменная, поле или параметр">x</span> | <span class="term-data" title="Данные: переменная, поле или параметр">y</span>; // <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = 126: 00000000 00000000 00000000 01111110</code></p>
-</li>
-<li>
-<p><strong>Побитовое исключающее ИЛИ</strong></p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 112; // <span class="term-data" title="Данные: переменная, поле или параметр">x</span>: 00000000 00000000 00000000 01110000 <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">y</span> = 94; // <span class="term-data" title="Данные: переменная, поле или параметр">y</span>: 00000000 00000000 00000000 01011110 <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">z</span>; <span class="term-data" title="Данные: переменная, поле или параметр">z</span> =<span class="term-data" title="Данные: переменная, поле или параметр">x</span> ^ <span class="term-data" title="Данные: переменная, поле или параметр">y</span>; // <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = 46: 00000000 00000000 00000000 00101110</code></p>
-</li>
-<li>
-<p><strong>Сдвиг влево с учетом знака</strong></p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 31, <span class="term-data" title="Данные: переменная, поле или параметр">z</span>; // <span class="term-data" title="Данные: переменная, поле или параметр">x</span>: 00000000 00000000 00000000 00011111 <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &lt;&lt; 2; // <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = 124: 00000000 00000000 00000000 01111100</code></p>
-</li>
-<li>
-<p><strong>Сдвиг вправо с учетом знака</strong></p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = -17, <span class="term-data" title="Данные: переменная, поле или параметр">z</span>; // <span class="term-data" title="Данные: переменная, поле или параметр">x</span>: 11111111 11111111 11111111 11101111 <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt;&gt; 2; // <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = -5: 11111111 11111111 11111111 11111011</code></p>
-</li>
-<li>
-<p><strong>Сдвиг вправо без учета знака</strong></p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = -17, <span class="term-data" title="Данные: переменная, поле или параметр">z</span>; // <span class="term-data" title="Данные: переменная, поле или параметр">x</span>: 11111111 11111111 11111111 11101111 <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt;&gt;&gt; 2; // <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = 1073741819 // <span class="term-data" title="Данные: переменная, поле или параметр">z</span>: 00111111 11111111 11111111 11111011</code></p>
-</li>
-</ol>
-<h2 id="lecture-_7">Комбинированные операции</h2>
-<p>В Java для бинарных арифметических операций можно использовать <strong>комбинированные</strong> (составные) знаки операций: <code>идентификатор операция = выражение</code> Это эквивалентно следующей операции: <code>идентификатор = идентификатор операция выражение</code> Примеры:</p>
-<ol>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> += <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> + <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> -= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> - <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> *= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> * <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> /= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> / <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> %= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> % <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> &amp;= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &amp; <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> |= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> | <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> ^= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> ^ <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> &lt;&lt;= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &lt;&lt; <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt;&gt;= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt;&gt; <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-<li>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt;&gt;&gt;= <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> означает <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt;&gt;&gt; <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code>.</li>
-</ol>
-<h2 id="lecture-_8">Операции сравнения</h2>
-<p>В Java определены следующие операции сравнения:</p>
-<ul>
-<li>"<code>==</code>" (равно), "<code>!=</code>" (не равно),</li>
-<li>"<code>&gt;</code>" (больше), "<code>&gt;=</code>" (больше или равно),</li>
-<li>"<code>&lt;</code>" (меньше) "<code>&lt;=</code>" (меньше или равно)</li>
-</ul>
-<p>имеют два операнда и возвращают булевское значение, соответствующее результату сравнения (<strong>false</strong> или <strong>true</strong>). Следует обратить внимание, что при сравнении двух величин на равенство в Java, как и в C и в C++, используются символы "<strong>==</strong>" (два идущих без пробела друг за другом знака равенства), в отличие от оператора присваивания, в котором используется символ "<strong>=</strong>". Использование символа "<code>=</code>" при сравнении двух величин либо вызывает ошибку при компиляции, либо приводит к неверному результату. <strong>Примеры операций сравнения:</strong></p>
-<p><code><span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">isEqual</span>, isNonEqual, isGreater, isGreaterOrEqual, isLess, isLessOrEqual; <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x1</span> = 5, <span class="term-method" title="Метод: действие или вычисление">x2</span> = 5, <span class="term-method" title="Метод: действие или вычисление">x3</span> = 3, x4 = 7; <span class="term-data" title="Данные: переменная, поле или параметр">isEqual</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x1</span> == <span class="term-method" title="Метод: действие или вычисление">x2</span>; // <span class="term-data" title="Данные: переменная, поле или параметр">isEqual</span> = <span class="term-language" title="Конструкция языка">true</span> isNonEqual = <span class="term-data" title="Данные: переменная, поле или параметр">x1</span> != <span class="term-method" title="Метод: действие или вычисление">x2</span>; // isNonEqual = <span class="term-language" title="Конструкция языка">false</span> isGreater = <span class="term-data" title="Данные: переменная, поле или параметр">x1</span> &gt; <span class="term-method" title="Метод: действие или вычисление">x3</span>; // isGreater = <span class="term-language" title="Конструкция языка">true</span> // isGreaterOrEqual = <span class="term-language" title="Конструкция языка">true</span> isGreaterOrEqual = <span class="term-method" title="Метод: действие или вычисление">x2</span> &gt;= <span class="term-method" title="Метод: действие или вычисление">x3</span>; isLess = <span class="term-method" title="Метод: действие или вычисление">x3</span> &lt; <span class="term-data" title="Данные: переменная, поле или параметр">x1</span>; // isLess = <span class="term-language" title="Конструкция языка">true</span> isLessOrEqual = <span class="term-data" title="Данные: переменная, поле или параметр">x1</span> &lt;= <span class="term-method" title="Метод: действие или вычисление">x3</span>; // isLessOrEqual = <span class="term-language" title="Конструкция языка">false</span></code></p>
-<h2 id="lecture-_9">Булевские операции</h2>
-<p><strong>Булевские операции</strong> выполняются над булевскими переменными и их результатом также является значение типа <strong>boolean</strong>. В Java определены следующие булевские операции:</p>
-<ul>
-<li>отрицание <code>"!"</code> – замена <code><span class="term-language" title="Конструкция языка">false</span></code> на <code><span class="term-language" title="Конструкция языка">true</span></code>, или наоборот;</li>
-<li>операция <code><span class="term-method" title="Метод: действие или вычисление">И</span></code> <code>"&amp;"</code> – результат равен <code><span class="term-language" title="Конструкция языка">true</span></code>, только, если оба операнда равны <code><span class="term-language" title="Конструкция языка">true</span></code>, иначе результат – <code><span class="term-language" title="Конструкция языка">false</span></code>;</li>
-<li>операция <code><span class="term-method" title="Метод: действие или вычисление">ИЛИ</span></code> "<code>|</code>" – результат равен <code><span class="term-language" title="Конструкция языка">true</span></code>, только, если хотя бы один из операндов равен <code><span class="term-language" title="Конструкция языка">true</span></code>, иначе результат – <code><span class="term-language" title="Конструкция языка">false</span></code>.</li>
-<li>операция исключающее <code><span class="term-method" title="Метод: действие или вычисление">ИЛИ</span></code> "<code>^</code>" – результат равен <code><span class="term-language" title="Конструкция языка">true</span></code>, только, если операнды не равны друг другу, иначе результат – <code><span class="term-language" title="Конструкция языка">false</span></code>.</li>
-</ul>
-<p>Операции "<code>&amp;</code>", "<code>|</code>" и "<code>^</code>" можно, также как и соответствующие побитовые операции использовать в составных операциях присваивания: "<code>&amp;=</code>", "<code>|=</code>" и "<code>^=</code>" Кроме того, к булевским операндам применимы операции "<code>==</code>" (равно) и "<code>!=</code>" (не равно). Как видно из определения операций ИЛИ и И, операция ИЛИ приводит к результату <code><span class="term-language" title="Конструкция языка">true</span></code>, когда первый операнд равен <code><span class="term-language" title="Конструкция языка">true</span></code>, незави­симо от значения второго операнда, а операция И приводит к результату <code><span class="term-language" title="Конструкция языка">false</span></code>, когда первый операнд равен <code><span class="term-language" title="Конструкция языка">false</span></code>, независимо от значения второго операнда. В Java определены еще две булевские операции: вторые версии булевских операций И и ИЛИ, известные как укороченные (short-circuit) логические операции: укороченное И "<code>&amp;&amp;</code>" и укороченное ИЛИ "<code>||</code>". При использовании этих операций второй операнд вообще не будет вычисляться, что полезно в тех случаях, когда правильное функционирование правого операнда зависит от того, имеет ли левый операнд значение <code><span class="term-language" title="Конструкция языка">true</span></code> или <code><span class="term-language" title="Конструкция языка">false</span></code>. <strong>Примеры булевских операций:</strong></p>
-<p><code><span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">isInRange</span>, isValid, isNotValid, <span class="term-data" title="Данные: переменная, поле или параметр">isEqual</span>, isNotEqual; <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 8; <span class="term-data" title="Данные: переменная, поле или параметр">isInRange</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt; 0 &amp;&amp; <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &lt; 5; // <span class="term-data" title="Данные: переменная, поле или параметр">isInRange</span> = <span class="term-language" title="Конструкция языка">false</span> isValid = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt; 0 || <span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt; 5; // isValid = <span class="term-language" title="Конструкция языка">true</span> isNotValid = !isValid; // isNotValid = <span class="term-language" title="Конструкция языка">false</span> <span class="term-data" title="Данные: переменная, поле или параметр">isEqual</span> = <span class="term-data" title="Данные: переменная, поле или параметр">isInRange</span> == isValid; // <span class="term-data" title="Данные: переменная, поле или параметр">isEqual</span> = <span class="term-language" title="Конструкция языка">false</span> // isNotEqual = <span class="term-language" title="Конструкция языка">true</span> isNotEqual = <span class="term-data" title="Данные: переменная, поле или параметр">isInRange</span> != isValid</code></p>
-<h2 id="lecture-_10">Условная операция</h2>
-<p>Условная операция записывается в форме <code>выражение-1?выражение-2:выражение-3</code>. При этом сначала вычисляется выражение <code>выражение-1</code>, которое должно дать булевское значение, а затем, если <code>выражение-1</code> имеет значение <code><span class="term-language" title="Конструкция языка">true</span></code>, вычисляется и возвращается <code>выражение-2</code> как результат выполнения операции, либо (если <code>выражение-1</code> имеет значение <code><span class="term-language" title="Конструкция языка">false</span></code>), вычисляется и, как результат выполнения операции, возвращается <code>выражение-3</code>. <strong>Пример условной операции:</strong></p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span>=n&gt;1?0:1;</code></p>
-<p>Переменной x будет присвоено значение <code>0</code>, если <code>n&gt;1</code> (выражение <code>n&gt;1</code> имеет значение <code><span class="term-language" title="Конструкция языка">true</span></code>) или <code>1</code>, если <code>n≤1</code> (выражение <code>n&gt;1</code> имеет значение <code><span class="term-language" title="Конструкция языка">false</span></code>).</p>
-<h2 id="lecture-_11">Старшинство операций</h2>
-<p>Операции в выражениях выполняются слева направо, однако, в соответствии со своим приоритетом. Так операции умножения в выражении</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">y</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> +<span class="term-data" title="Данные: переменная, поле или параметр">z</span>*5;</code></p>
-<p>будет выполнена раньше, чем операция сложения, поскольку приоритет операции умножения выше, чем приоритет операции сложения. Круглые скобки повышают старшинство операций, которые находятся внутри них. Так, если в приведенное выше выражение вставить скобки:</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">y</span> = (<span class="term-data" title="Данные: переменная, поле или параметр">x</span> +<span class="term-data" title="Данные: переменная, поле или параметр">z</span>)*5;</code></p>
-<p>то сначала будет выполнена операция сложения, а затем операция умножения. Иногда скобки используют просто для того, чтобы сделать выражение более читаемым, например:</p>
-<p><code>(<span class="term-data" title="Данные: переменная, поле или параметр">x</span> &gt; 1) &amp;&amp; (<span class="term-data" title="Данные: переменная, поле или параметр">x</span> &lt;= 5);</code></p>
-<h2 id="lecture-_12">Преобразование и приведение типов при выполнении операций</h2>
-<p>В операции присваивания и арифметических выражениях могут использоваться литералы, переменные и выражения разных типов, например:</p>
-<p><code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">y</span>; <span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span>; <span class="term-data" title="Данные: переменная, поле или параметр">y</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> + 5;</code></p>
-<p>В этом примере выполняется операция сложения переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code> типа <code><span class="term-type" title="Тип или класс">byte</span></code> и литерала <code>5</code> (типа <code><span class="term-type" title="Тип или класс">int</span></code>) и результат присваивается переменной <code><span class="term-data" title="Данные: переменная, поле или параметр">y</span></code> типа <code><span class="term-type" title="Тип или класс">double</span></code>. В Java, как и в языке C, преобразования типов при вычислении выражений могут выполняться автоматически, либо с помощью оператора приведения типа. Однако правила приведения типов несколько отличаются от правил языка C, и в целом являются более строгими, чем в языке C. При выполнении операции присваивания преобразование типов происходит автоматически, если происходит <em>расширяющее преобразование</em> (widening conversion) и <em>два типа совместимы</em>. Расширяющими преобразованиями являются преобразования <strong>byte</strong>®<strong>short</strong>®<strong>int</strong>®<strong>long</strong>®<strong>float</strong>®<strong>double</strong>. Для расширяющих преобразований числовые типы, включая целый и с пла­вающей точкой, являются совместимыми друг с другом. Однако числовые типы не совместимы с типами <code><span class="term-type" title="Тип или класс">char</span></code> и <code><span class="term-type" title="Тип или класс">boolean</span></code>. Типы <code><span class="term-type" title="Тип или класс">char</span></code> и <code><span class="term-type" title="Тип или класс">boolean</span></code> не совмес­тимы также и друг с другом. В языке Java выполняется автоматическое преобразование типов также и при сохранении литеральной целочисленной константы (которая имеет по умолчанию тип <code><span class="term-type" title="Тип или класс">int</span></code>) в перемен­ных типа <code><span class="term-type" title="Тип или класс">byte</span></code>, <code><span class="term-type" title="Тип или класс">short</span></code> или <code><span class="term-type" title="Тип или класс">long</span></code> (однако если литерал имеет значение вне диапазона допустимых значений для данного типа, выдается сообщение об ошибке: возможная потеря точности). Если преобразование является сужающим (narrowing conversion), т. е. выполняется преобразование <code><span class="term-type" title="Тип или класс">byte</span></code>¬<code><span class="term-type" title="Тип или класс">short</span></code>¬<code><span class="term-type" title="Тип или класс">char</span></code>¬<code><span class="term-type" title="Тип или класс">int</span></code>¬<code><span class="term-type" title="Тип или класс">long</span></code>¬<code><span class="term-type" title="Тип или класс">float</span></code>¬<code><span class="term-type" title="Тип или класс">double</span></code>, то такое преобразование может привести к потере точности числа или к его искажению. Поэтому при сужающих преобразованиях при компиляции программы выводится диагностическое сообщение о несовместимости типов и файлы классов не создаются. Такое сообщение будет выдано и при попытке преобразование выражений типа <code><span class="term-type" title="Тип или класс">byte</span></code> или <code><span class="term-type" title="Тип или класс">short</span></code> в переменную типа <code><span class="term-type" title="Тип или класс">char</span></code>. Если все же необходимо выполнить такие преобразования, используется операция приведения (cast) типа, которая имеет следующий формат: (<em>тип-преобразования</em>) <em>значение</em>, где <em>тип-преобразования</em> определяет тип, в который необходимо преобразовать заданное <em>значение</em>, например, в результате выполнения операторов:</p>
-<p><code><span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 71; <span class="term-type" title="Тип или класс">char</span> <span class="term-data" title="Данные: переменная, поле или параметр">symbol</span> = (<span class="term-type" title="Тип или класс">char</span>) <span class="term-data" title="Данные: переменная, поле или параметр">x</span>;</code></p>
-<p>переменная <code><span class="term-data" title="Данные: переменная, поле или параметр">symbol</span></code> получит значение '<code>G</code>'. Если значение с плавающей точкой присваивается целому типу, то (если значение с плавающей точкой имеет дробную часть) при явном преобразовании типа происходит также <strong>усечение</strong> (truncation) числа. Так, в результате выполнения оператора</p>
-<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = (<span class="term-type" title="Тип или класс">int</span>) 77.85;</code></p>
-<p>переменная x получит значение <code>77</code>. Если же присваиваемое значение лежит вне диапазона <em>типа-преобразования</em>, то результатом преобразования будет остаток от деления значения на модуль диапазона присваиваемого типа (для чисел типа <code><span class="term-type" title="Тип или класс">byte</span></code> модуль диапазона будет равен <code>256</code>, для <code><span class="term-type" title="Тип или класс">short</span> – 65536</code>, для <code><span class="term-type" title="Тип или класс">int</span> – 4294967296</code> и для <code><span class="term-type" title="Тип или класс">long</span> – 18446744073709551616</code>). Например, в результате выполнения оператора</p>
-<p><code><span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = (<span class="term-type" title="Тип или класс">byte</span>) 514;</code></p>
-<p>переменная x получит значение <code>2</code>. При преобразовании целых или вещественных чисел в данные типа <code><span class="term-type" title="Тип или класс">char</span></code>, преобразование в символ происходит, если исходное число лежит в диапазоне от 0 до 127, иначе символ получает значение '<code>?</code>'. При выполнении арифметических и побитовых преобразований все значения <code><span class="term-type" title="Тип или класс">byte</span></code> и <code><span class="term-type" title="Тип или класс">short</span></code>, а также <code><span class="term-type" title="Тип или класс">char</span></code> расширяются до <code><span class="term-type" title="Тип или класс">int</span></code>, (при этом в вычислениях для <code><span class="term-type" title="Тип или класс">char</span></code> используется числовое значение кода символа) затем, если хотя бы один операнд имеет тип <code><span class="term-type" title="Тип или класс">long</span></code>, тип целого выражения расширяется до <code><span class="term-type" title="Тип или класс">long</span></code>. Если один из операндов имеет тип <code><span class="term-type" title="Тип или класс">float</span></code>, то тип полного вы­ражения расширяется до <code><span class="term-type" title="Тип или класс">float</span></code>, а если один из операндов имеет тип <code><span class="term-type" title="Тип или класс">double</span></code>, то тип результата будет <code><span class="term-type" title="Тип или класс">double</span></code>. Так, если объявлены переменные</p>
-<p><code><span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">a</span>, c; <span class="term-type" title="Тип или класс">short</span> <span class="term-data" title="Данные: переменная, поле или параметр">b</span>;</code></p>
-<p>то в выражении</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> + <span class="term-data" title="Данные: переменная, поле или параметр">b</span>*c – 15L + 1.5F + 1.08 - 10;</code></p>
-<p>сначала, перед вычислением <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> + <span class="term-data" title="Данные: переменная, поле или параметр">b</span>*c</code> значения переменных будут расширены до <code><span class="term-type" title="Тип или класс">int</span></code>, затем, поскольку константа <code>15</code> имеет тип <code><span class="term-type" title="Тип или класс">long</span></code>, перед вычитанием результат вычисления будет увеличен до <code><span class="term-type" title="Тип или класс">long</span></code>. После этого, поскольку литерал <code>1.5</code> имеет тип <code><span class="term-type" title="Тип или класс">float</span></code> перед сложением с этим литералом результат вычисления <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> + <span class="term-data" title="Данные: переменная, поле или параметр">b</span>*c – 15L</code> будет расширен до <code><span class="term-type" title="Тип или класс">float</span></code>. Перед выполнением сложения с числом <code>1.08</code> результат предыдущих вычислений будет расширен до <code><span class="term-type" title="Тип или класс">double</span></code> (поскольку вещественные константы по умолчанию имеют тип <code><span class="term-type" title="Тип или класс">double</span></code>) и, наконец, перед выполнением последнего сложения литерал 10 (по умолчанию <code><span class="term-type" title="Тип или класс">int</span></code>) будет расширен до <code><span class="term-type" title="Тип или класс">double</span></code>. Таким образом, результат вычисления выражения будет иметь тип <code><span class="term-type" title="Тип или класс">double</span></code>. Автоматические расширения типов (особенно расширения <code><span class="term-type" title="Тип или класс">short</span></code> и <code><span class="term-type" title="Тип или класс">byte</span></code> до <code><span class="term-type" title="Тип или класс">int</span></code>) могут вызывать плохо распознаваемые ошибки во время компиляции. Например, в операторах:</p>
-<p><code><span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 30, <span class="term-data" title="Данные: переменная, поле или параметр">y</span> =5; <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> + <span class="term-data" title="Данные: переменная, поле или параметр">y</span>;</code></p>
-<p>перед выполнением сложения значение переменных <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">y</span></code> будет расширено до <code><span class="term-type" title="Тип или класс">int</span></code>, а затем при выполнении попытки присвоения результата вычисления типа <code><span class="term-type" title="Тип или класс">int</span></code> переменной типа <code><span class="term-type" title="Тип или класс">byte</span></code> будет выдано сообщение об ошибке. Чтобы этого избежать надо использовать во втором операторе явное преобразование типов:</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = (<span class="term-type" title="Тип или класс">byte</span>) (<span class="term-data" title="Данные: переменная, поле или параметр">x</span> + <span class="term-data" title="Данные: переменная, поле или параметр">y</span>);</code></p>
-<p>Выражение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> + <span class="term-data" title="Данные: переменная, поле или параметр">y</span></code> необходимо заключит в скобки потому, что приоритет операции приведения типа, заключенной в скобки, выше, чем приоритет операции сложения. Кстати, если записать второй оператор в виде:</p>
-<p><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> += <span class="term-data" title="Данные: переменная, поле или параметр">y</span>;</code></p>
-<p>то сообщения об ошибке не будет.</p>
-<hr />
-<h1 id="lecture-kotlin">Kotlin: те же типы и операции</h1>
-<p>Синтаксис короче, но модель данных та же — Kotlin компилируется в тот же байт-код JVM, что и Java, поэтому все числовые типы (<code>Int</code>, <code>Long</code>, <code>Double</code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">Float</span></code>, <code>Byte</code>, <code>Short</code>, <code>Char</code>, <code>Boolean</code>) занимают ровно те же биты, что и их Java-аналоги.</p>
-<h2 id="lecture-valvar">Объявление переменных: <code>val</code>/<code>var</code> вместо явного типа</h2>
-<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="w">      </span><span class="c1">// val — неизменяемая переменная (аналог final в Java)</span>
-<span class="kd">var</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="w">          </span><span class="c1">// var — изменяемая; тип Int выведен компилятором автоматически</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">19.99</span><span class="w">       </span><span class="c1">// Double по умолчанию (не Float, как f-литерал в Java)</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">grade</span></span><span class="p">:</span><span class="w"> </span><span class="kt">Char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;A&#39;</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">hasPassed</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc"><span class="term-language" title="Конструкция языка">true</span></span><span class="w">    </span><span class="c1">// Boolean</span>
-</code></pre></div>
-
-<p><strong>Важное отличие от Java</strong>: <code>val</code> — это не «переменная с типом по умолчанию неизменяемая», а явный выбор архитектуры кода. В Kotlin принято объявлять <code>val</code>, если значение не должно меняться после инициализации, и использовать <code>var</code> только тогда, когда переприсваивание действительно нужно — это снижает число ошибок, связанных со случайным изменением состояния.</p>
-<h2 id="lecture-_13">Строки, массивы, списки, карты</h2>
-<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;John Smith&quot;</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">intArrayOf</span></span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w">          </span><span class="c1">// примитивный массив, как int[] в Java</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">names</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">arrayOf</span></span><span class="p">(</span><span class="s">&quot;Alice&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Charlie&quot;</span><span class="p">)</span><span class="w">     </span><span class="c1">// массив ссылочного типа</span>
-
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">numbersList</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mutableListOf</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span><span class="w">             </span><span class="c1">// аналог ArrayList</span>
-<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbersList</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">add</span></span><span class="p">(</span><span class="m">1</span><span class="p">);</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbersList</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">add</span></span><span class="p">(</span><span class="m">2</span><span class="p">);</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbersList</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">add</span></span><span class="p">(</span><span class="m">3</span><span class="p">)</span>
-
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">scores</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mutableMapOf</span><span class="o">&lt;</span><span class="kt"><span class="term-type" title="Тип или класс">String</span></span><span class="p">,</span><span class="w"> </span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span><span class="w">            </span><span class="c1">// аналог HashMap</span>
-<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">scores</span></span><span class="o">[</span><span class="s">&quot;Alice&quot;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">85</span><span class="w">   </span><span class="c1">// оператор [] вместо .put() — короче и читабельнее</span>
-<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">scores</span></span><span class="o">[</span><span class="s">&quot;Bob&quot;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">95</span>
-</code></pre></div>
-
-<h2 id="lecture-_14">Классы — короче за счёт первичного конструктора</h2>
-<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span><span class="w"> </span><span class="nc"><span class="term-type" title="Тип или класс">Car</span></span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">brand</span></span><span class="p">:</span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">String</span></span><span class="p">,</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">year</span></span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">drive</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="s">&quot;The car is driving&quot;</span><span class="p">)</span>
+<p>Тип повторно не пишется при обычном изменении существующей переменной. <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 3; <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 4;</code> в той же области — повторное объявление, а не обновление значения.</p>
+<p>В учебных именах используй понятные слова. Java различает регистр. Одиночное подчёркивание нельзя использовать как обычное имя переменной в современных версиях Java; более широкие правила идентификаторов не означают, что любое сочетание знаков допустимо.</p>
+<h2 id="lecture-_4">Рабочий пример: цена, количество, среднее</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">TypesDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">total</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">average</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="p">)</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">label</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Стоимость: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">total</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">label</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">average</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-
-<span class="kd">fun</span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">myCar</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Car</span></span><span class="p">(</span><span class="s">&quot;Toyota&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">2020</span><span class="p">)</span><span class="w">   </span><span class="c1">// поля заполняются прямо при создании — конструктор не пишется отдельно</span>
-<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">myCar</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">drive</span></span><span class="p">()</span>
-<span class="p">}</span>
 </code></pre></div>
 
-<p>То же самое на Java требовало отдельного конструктора и явного <code><span class="term-language" title="Конструкция языка">new</span></code> — в Kotlin поля класса объявляются прямо в скобках после имени класса (это называется <em>primary constructor</em>), а <code><span class="term-language" title="Конструкция языка">new</span></code> не нужен вовсе.</p>
-<h2 id="lecture-_15">Арифметические, побитовые и логические операции</h2>
-<p>Арифметика (<code>+ - * / %</code>), сравнение (<code>== != &gt; &gt;= &lt; &lt;=</code>) и составные присваивания (<code>+= -= *= /= %=</code>) — синтаксически идентичны Java. Разница — в двух местах:</p>
-<p><strong>1. Побитовые операции — не символы, а именованные inline-функции:</strong></p>
+<p>Файл — TypesDemo.java. Вывод:</p>
+<div class="codehilite"><pre><span></span><code>Стоимость: 360
+3.5
+4
+</code></pre></div>
+
 <table>
 <thead>
 <tr>
-<th>Java</th>
-<th>Kotlin</th>
-<th>Значение</th>
+<th>Инструкция</th>
+<th>Действия по порядку</th>
+<th>Сохранённый результат</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> &amp; <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code></td>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> and <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code></td>
-<td>побитовое И</td>
+<td><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">total</span> = <span class="term-data" title="Данные: переменная, поле или параметр">price</span> * <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code></td>
+<td>Прочитать 120 и 3 → умножить → сохранить</td>
+<td>total = 360</td>
 </tr>
 <tr>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> \| <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code></td>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> or <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code></td>
-<td>побитовое ИЛИ</td>
+<td><code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">average</span> = (<span class="term-type" title="Тип или класс">double</span>) 7 / 2;</code></td>
+<td>Преобразовать 7 в double → разделить</td>
+<td>average = 3.5</td>
 </tr>
 <tr>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> ^ <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code></td>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> xor <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code></td>
-<td>побитовое исключающее ИЛИ</td>
+<td><code><span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">label</span> = "Стоимость: " + <span class="term-data" title="Данные: переменная, поле или параметр">total</span>;</code></td>
+<td>Прочитать total → получить текстовое представление → соединить</td>
+<td>Строковое значение</td>
 </tr>
 <tr>
-<td><code>~<span class="term-data" title="Данные: переменная, поле или параметр">a</span></code></td>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span>.<span class="term-method" title="Метод: действие или вычисление">inv</span>()</code></td>
-<td>побитовое дополнение</td>
-</tr>
-<tr>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> &lt;&lt; n</code></td>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> shl n</code></td>
-<td>сдвиг влево</td>
-</tr>
-<tr>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> &gt;&gt; n</code></td>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> shr n</code></td>
-<td>сдвиг вправо с учётом знака</td>
-</tr>
-<tr>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> &gt;&gt;&gt; n</code></td>
-<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> ushr n</code></td>
-<td>сдвиг вправо без учёта знака</td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">count</span> = <span class="term-data" title="Данные: переменная, поле или параметр">count</span> + 1;</code></td>
+<td>Прочитать старое 3 → прибавить 1 → записать обратно</td>
+<td>count = 4</td>
 </tr>
 </tbody>
 </table>
-<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">112</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">y</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">94</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv">z1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">y</span></span><span class="w">   </span><span class="c1">// побитовое И</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv">z2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">y</span></span><span class="w">    </span><span class="c1">// побитовое ИЛИ</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv">z3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="w"> </span><span class="n">shl</span><span class="w"> </span><span class="m">2</span><span class="w">   </span><span class="c1">// сдвиг влево на 2</span>
+<p>total после изменения count сам не пересчитывается: это сохранённое ранее число, а не постоянно действующая формула электронной таблицы. Чтобы получить новую стоимость, снова выполни вычисление и присваивание.</p>
+<h2 id="lecture-_5">Зачем восемь примитивных типов</h2>
+<p>Целые byte, short, int и long различаются диапазонами. float и double хранят приближённые двоичные значения с плавающей точкой. boolean принимает true или false. char хранит одну 16-битную кодовую единицу UTF-16, а не обязательно целый видимый символ: для некоторых символов, включая многие эмодзи, нужны две единицы.</p>
+<p>String не является девятым примитивом. Это ссылочный тип. На этой теме достаточно отличать текст от числа; устройство ссылок изучается позже.</p>
+<table>
+<thead>
+<tr>
+<th>Задача</th>
+<th>Подходящий начальный выбор</th>
+<th>Что помнить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Число товаров</td>
+<td>int</td>
+<td>Диапазон ограничен</td>
+</tr>
+<tr>
+<td>Очень большой целый счётчик</td>
+<td>long</td>
+<td>Для большого литерала обычно нужен L</td>
+</tr>
+<tr>
+<td>Дробное учебное измерение</td>
+<td>double</td>
+<td>Представление может быть неточным</td>
+</tr>
+<tr>
+<td>Да/нет</td>
+<td>boolean</td>
+<td>"true" в кавычках — уже строка</td>
+</tr>
+<tr>
+<td>Текст имени</td>
+<td>String</td>
+<td>Двойные кавычки</td>
+</tr>
+<tr>
+<td>Одна кодовая единица</td>
+<td>char</td>
+<td>Одинарные кавычки</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-_6">Деление: тип результата не исправляет выполненную операцию</h2>
+<p><code>7 / 2</code> даёт 3: оба операнда int, выполняется целочисленное деление. При <code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">result</span> = 7 / 2;</code> сначала получится 3, затем оно преобразуется в 3.0. Присваивание в double не возвращает потерянную дробную часть.</p>
+<p><code>(<span class="term-type" title="Тип или класс">double</span>) 7 / 2</code> даёт 3.5, потому что преобразование выполнено <strong>до</strong> деления. А <code>(<span class="term-type" title="Тип или класс">double</span>) (7 / 2)</code> даст 3.0: скобки заставили сначала выполнить целочисленное деление.</p>
+<p>При целочисленном делении отрицательных чисел дробная часть отбрасывается по направлению к нулю: <code>-7 / 2</code> равно -3. Это понадобится, чтобы не спутать деление со знаковым сдвигом.</p>
+<p>Остаток <code>%</code> помогает разложить 7384 секунды на часы, минуты и секунды. Целые часы: <code>7384 / 3600</code> → 2; оставшаяся часть: <code>7384 % 3600</code> → 184; минуты: <code>184 / 60</code> → 3; секунды: <code>184 % 60</code> → 4.</p>
+<h2 id="lecture-_7">Сравнение и логические операции</h2>
+<p><code>=</code> сохраняет значение, а <code>==</code> сравнивает значения в рамках правил их типов. Сравнения чисел дают boolean. <code><span class="term-data" title="Данные: переменная, поле или параметр">count</span> &gt; 0 &amp;&amp; <span class="term-data" title="Данные: переменная, поле или параметр">count</span> &lt;= 10</code> означает, что обе проверки должны быть истинными. <code>||</code> требует хотя бы одну истинную проверку, а <code>!</code> меняет логический ответ на противоположный.</p>
+<p>У <code>&amp;&amp;</code> и <code>||</code> действует сокращённое вычисление: ненужная правая часть не вычисляется. Это важно не только для скорости, но и для безопасности проверки <code>text != <span class="term-language" title="Конструкция языка">null</span> &amp;&amp; text.<span class="term-method" title="Метод: действие или вычисление">length</span>() &gt; 0</code>: при null до вызова length дело не дойдёт.</p>
+<p>Не подменяй <code>&amp;&amp;</code> побитовым <code>&amp;</code>: для boolean результат может совпасть, но вычисление правой части будет другим. Подробности — в теме о побитовых операциях.</p>
+<h2 id="lecture-_8">Преобразования: разрешение не равно сохранению точности</h2>
+<p><code><span class="term-type" title="Тип или класс">int</span> → <span class="term-type" title="Тип или класс">long</span></code> сохраняет значения int. Некоторые другие расширения, например <code><span class="term-type" title="Тип или класс">long</span> → <span class="term-type" title="Тип или класс">double</span></code>, допускаются без явного приведения, но могут потерять точность. Значит, «автоматически разрешено» не означает «всегда без потерь».</p>
+<p><code>(<span class="term-type" title="Тип или класс">int</span>) 9.9</code> даёт 9, а <code>(<span class="term-type" title="Тип или класс">int</span>) -9.9</code> — -9: это не округление к ближайшему целому. Для выхода за диапазоны и специальных значений действуют дополнительные правила, которые не нужно подменять интуицией «отрежем лишние цифры».</p>
+<p><code>Integer.<span class="term-method" title="Метод: действие или вычисление">parseInt</span>("25")</code> разбирает текст, а <code>(<span class="term-type" title="Тип или класс">int</span>)</code> — приведение числового значения. Строку нельзя превратить в int записью <code>(<span class="term-type" title="Тип или класс">int</span>) "25"</code>. Если текст "двадцать пять", обычный parseInt не понимает русские слова и сообщает об ошибке формата.</p>
+<h2 id="lecture-_9">Три ловушки, которые полезно увидеть самому</h2>
+<ol>
+<li><code>"2" + 2 + 2</code> даёт "222", а <code>2 + 2 + "2"</code> — "42": сложение идёт слева направо, и вначале типы операндов разные.</li>
+<li><code><span class="term-type" title="Тип или класс">int</span></code> имеет конечный диапазон. После переполнения обычное целочисленное сложение не обязано бросать исключение; неверный результат нужно предотвращать выбором представления и проверками.</li>
+<li><code>0.1 + 0.2</code> может отличаться от 0.3 из-за двоичного представления. Для денег часто выбирают целые минимальные единицы или специальное десятичное представление, а не обещают точность double.</li>
+</ol>
+<p>Операции <code>++</code> и <code>--</code> применимы не только к целым: например, допустима double-переменная. Но побитовые сдвиги не применяются к double. Не переносить ограничения одной операции на все остальные.</p>
+<h2 id="lecture-_10">Как перейти к своей задаче</h2>
+<p>Сначала назови данные словами и выбери типы. Затем запиши формулу на бумаге с маленькими числами. После этого объяви переменные, выполни одну операцию и выведи её результат. Только когда она проверена, добавляй следующее вычисление.</p>
+<p>Задача для проверки: четыре предмета по 75 условных единиц. Получи 300, затем увеличь count на один и объясни, почему старый total пока равен 300. Пересчитай total и получи 375. Если можешь предсказать оба результата, различие значения и выражения понятно.</p>
+<h2 id="lecture-_11">Справочник и дополнительные упражнения по теме</h2>
+<h2 id="lecture-_12">Часть А. Переменные и типы</h2>
+<h2 id="lecture-1">1. Переменная</h2>
+<p><strong><span class="term-data" title="Данные: переменная, поле или параметр">Переменная</span></strong> — именованная область памяти, в которой хранится значение определённого типа.
+У переменной есть <strong>тип</strong>, <strong>имя</strong> и <strong>значение</strong>.</p>
+<p><strong>Объявление</strong> — создание переменной: <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">age</span>;</code>
+<strong>Присваивание</strong> — запись значения в переменную: <code><span class="term-data" title="Данные: переменная, поле или параметр">age</span> = 18;</code>
+<strong>Инициализация</strong> — объявление вместе с первым присваиванием: <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">age</span> = 18;</code></p>
+<p>Общий вид: <code>тип <span class="term-method" title="Метод: действие или вычисление">имя</span> = <span class="term-data" title="Данные: переменная, поле или параметр">значение</span>;</code></p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span><span class="w">                            </span><span class="c1">// создать и положить 18</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="p">);</span><span class="w">                 </span><span class="c1">// 18</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">;</span><span class="w">                                </span><span class="c1">// изменить (тип второй раз не пишется)</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="s">&quot;Возраст: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="p">);</span><span class="w">   </span><span class="c1">// Возраст: 19</span>
 </code></pre></div>
 
-<p>Символы <code>&amp;</code>, <code>|</code>, <code>^</code> в Kotlin зарезервированы <strong>только</strong> за логическими (булевыми) операциями и работают исключительно через короткое замыкание — <code>&amp;&amp;</code> и <code>||</code>, отдельных «нескороткозамкнутых» версий <code>&amp;</code>/<code>|</code> для <code>Boolean</code>, в отличие от Java, в Kotlin нет.</p>
-<p><strong>2. Нет автоматического расширения/сужения типов.</strong> Это самое важное отличие от Java для этой темы: там, где Java молча расширяет <code><span class="term-type" title="Тип или класс">byte</span></code> до <code><span class="term-type" title="Тип или класс">int</span></code> или требует явного <code>(<span class="term-type" title="Тип или класс">byte</span>)</code>-приведения при сужении, Kotlin требует явного вызова функции преобразования <strong>всегда</strong>, даже при расширении:</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">b</span></span><span class="p">:</span><span class="w"> </span><span class="kt">Byte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">71</span>
-<span class="c1">// val x: Int = b       // ОШИБКА КОМПИЛЯЦИИ — неявного расширения нет!</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">b</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">toInt</span></span><span class="p">()</span><span class="w">   </span><span class="c1">// так — правильно</span>
-
-<span class="kd">val</span><span class="w"> </span><span class="nv">f</span><span class="p">:</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">77.85</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">toInt</span></span><span class="p">()</span><span class="w">   </span><span class="c1">// усечение до 77, как и в Java, но только через явный вызов</span>
+<p>Знак <code>=</code> — команда «положить значение справа в переменную слева», а не математическое равенство.</p>
+<p><strong>Правила имён переменных:</strong>
+1. состоят из букв, цифр, знаков <code>_</code> и <code>$</code>; не начинаются с цифры;
+2. не совпадают с ключевыми словами (<code><span class="term-type" title="Тип или класс">int</span></code>, <code><span class="term-language" title="Конструкция языка">class</span></code>, <code><span class="term-language" title="Конструкция языка">public</span></code> и т. д.);
+3. регистр важен: <code><span class="term-data" title="Данные: переменная, поле или параметр">age</span></code> и <code>Age</code> — разные переменные.</p>
+<p><strong>Соглашение:</strong> имя переменной пишут с маленькой буквы, каждое следующее слово — с большой, без пробелов и подчёркиваний: <code>studentAge</code>, <code>totalPrice</code>. Имя должно говорить, что хранится: <code><span class="term-data" title="Данные: переменная, поле или параметр">price</span></code>, а не <code>a</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Сообщение компилятора</th>
+<th>Причина</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable <span class="term-data" title="Данные: переменная, поле или параметр">x</span> might not have been initialized</code></td>
+<td>переменную читают до первого присваивания</td>
+</tr>
+<tr>
+<td><code>variable <span class="term-data" title="Данные: переменная, поле или параметр">x</span> is already defined</code></td>
+<td>переменную объявили второй раз</td>
+</tr>
+<tr>
+<td><code>incompatible types: possible lossy conversion from <span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">to</span> <span class="term-type" title="Тип или класс">int</span></code></td>
+<td>значение не подходит по типу</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-2">2. Примитивные типы</h2>
+<p><strong>Примитивные типы</strong> — восемь базовых типов, встроенных в язык: <code><span class="term-type" title="Тип или класс">byte</span></code>, <code><span class="term-type" title="Тип или класс">short</span></code>, <code><span class="term-type" title="Тип или класс">int</span></code>, <code><span class="term-type" title="Тип или класс">long</span></code> (целые); <code><span class="term-type" title="Тип или класс">float</span></code>, <code><span class="term-type" title="Тип или класс">double</span></code> (дробные); <code><span class="term-type" title="Тип или класс">char</span></code> (символ); <code><span class="term-type" title="Тип или класс">boolean</span></code> (логический).</p>
+<table>
+<thead>
+<tr>
+<th>Тип</th>
+<th>Что хранит</th>
+<th>Размер</th>
+<th>Диапазон</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">byte</span></code></td>
+<td>целое</td>
+<td>1 байт</td>
+<td>−128 … 127</td>
+<td><code><span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">level</span> = 5;</code></td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">short</span></code></td>
+<td>целое</td>
+<td>2 байта</td>
+<td>−32 768 … 32 767</td>
+<td><code><span class="term-type" title="Тип или класс">short</span> <span class="term-data" title="Данные: переменная, поле или параметр">year</span> = 2026;</code></td>
+</tr>
+<tr>
+<td><strong><code><span class="term-type" title="Тип или класс">int</span></code></strong></td>
+<td>целое</td>
+<td>4 байта</td>
+<td>≈ ±2,1 миллиарда</td>
+<td><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">age</span> = 18;</code></td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">long</span></code></td>
+<td>целое</td>
+<td>8 байт</td>
+<td>≈ ±9,2 · 10¹⁸</td>
+<td><code><span class="term-type" title="Тип или класс">long</span> <span class="term-data" title="Данные: переменная, поле или параметр">views</span> = 5000000000L;</code></td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">float</span></code></td>
+<td>дробное</td>
+<td>4 байта</td>
+<td>≈ 7 значащих цифр</td>
+<td><code><span class="term-type" title="Тип или класс">float</span> <span class="term-data" title="Данные: переменная, поле или параметр">weight</span> = 72.5<span class="term-data" title="Данные: переменная, поле или параметр">f</span>;</code></td>
+</tr>
+<tr>
+<td><strong><code><span class="term-type" title="Тип или класс">double</span></code></strong></td>
+<td>дробное</td>
+<td>8 байт</td>
+<td>≈ 15 значащих цифр</td>
+<td><code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">price</span> = 19.99;</code></td>
+</tr>
+<tr>
+<td><strong><code><span class="term-type" title="Тип или класс">char</span></code></strong></td>
+<td>одна кодовая единица UTF-16</td>
+<td>2 байта</td>
+<td>0 … 65 535</td>
+<td><code><span class="term-type" title="Тип или класс">char</span> <span class="term-data" title="Данные: переменная, поле или параметр">grade</span> = 'A';</code></td>
+</tr>
+<tr>
+<td><strong><code><span class="term-type" title="Тип или класс">boolean</span></code></strong></td>
+<td>логическое</td>
+<td>—</td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code> или <code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">isReady</span> = <span class="term-language" title="Конструкция языка">true</span>;</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Что использовать по умолчанию:</strong>
+- целое число → <code><span class="term-type" title="Тип или класс">int</span></code>;
+- дробное число → <code><span class="term-type" title="Тип или класс">double</span></code>;
+- да/нет → <code><span class="term-type" title="Тип или класс">boolean</span></code>;
+- одна кодовая единица UTF-16, например буква A → <code><span class="term-type" title="Тип или класс">char</span></code>; для произвольного текста — String;
+- целое больше двух миллиардов → <code><span class="term-type" title="Тип или класс">long</span></code>.</p>
+<p><code><span class="term-type" title="Тип или класс">byte</span></code>, <code><span class="term-type" title="Тип или класс">short</span></code>, <code><span class="term-type" title="Тип или класс">float</span></code> применяют редко: когда нужно экономить память в больших массивах.</p>
+<h2 id="lecture-3">3. Литералы</h2>
+<p><strong>Литерал</strong> — значение, записанное прямо в коде программы.</p>
+<table>
+<thead>
+<tr>
+<th>Запись</th>
+<th>Тип</th>
+<th>Примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>18</code></td>
+<td><code><span class="term-type" title="Тип или класс">int</span></code></td>
+<td>любое целое без суффикса</td>
+</tr>
+<tr>
+<td><code>5000000000L</code></td>
+<td><code><span class="term-type" title="Тип или класс">long</span></code></td>
+<td>суффикс <code>L</code></td>
+</tr>
+<tr>
+<td><code>19.99</code></td>
+<td><code><span class="term-type" title="Тип или класс">double</span></code></td>
+<td>любое число с точкой</td>
+</tr>
+<tr>
+<td><code>72.5<span class="term-data" title="Данные: переменная, поле или параметр">f</span></code></td>
+<td><code><span class="term-type" title="Тип или класс">float</span></code></td>
+<td>суффикс <code><span class="term-data" title="Данные: переменная, поле или параметр">f</span></code></td>
+</tr>
+<tr>
+<td><code>'A'</code></td>
+<td><code><span class="term-type" title="Тип или класс">char</span></code></td>
+<td>одинарные кавычки, одна кодовая единица UTF-16</td>
+</tr>
+<tr>
+<td><code>"A"</code></td>
+<td><code><span class="term-type" title="Тип или класс">String</span></code></td>
+<td>двойные кавычки, сколько угодно символов</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code>, <code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-type" title="Тип или класс">boolean</span></code></td>
+<td>без кавычек</td>
+</tr>
+</tbody>
+</table>
+<p>В длинных числах для удобства можно ставить подчёркивание: <code>1_000_000</code>.
+Дробная часть отделяется точкой, а не запятой: <code>3.14</code>.</p>
+<h2 id="lecture-4">4. Переполнение и точность</h2>
+<p><strong>Переполнение</strong> — выход результата за границы диапазона типа. Java не сообщает о переполнении: результат «перескакивает» на другой край диапазона.
+<code>2147483647 + 1</code> → <code>-2147483648</code>.
+Если результат может превысить два миллиарда, используют <code><span class="term-type" title="Тип или класс">long</span></code>.</p>
+<p><strong>Дробные числа хранятся приближённо.</strong> <code>0.1 + 0.2</code> → <code>0.30000000000000004</code>.
+1. Дробные числа не сравнивают через <code>==</code>.
+2. Деньги не хранят в <code><span class="term-type" title="Тип или класс">double</span></code>: суммы считают в копейках в типе <code><span class="term-type" title="Тип или класс">long</span></code> или в специальном классе <code>BigDecimal</code>.</p>
+<h2 id="lecture-5">5. Символ и строка</h2>
+<p><strong><code><span class="term-type" title="Тип или класс">char</span></code></strong> — одна кодовая единица UTF-16 в одинарных кавычках: <code>'A'</code>. Хранится как 16-битное беззнаковое значение; для A оно совпадает с кодом Unicode (<code>'A'</code> = 65).
+<strong><code><span class="term-type" title="Тип или класс">String</span></code></strong> — строка, последовательность символов в двойных кавычках: <code>"Анна"</code>. Это не примитивный тип, а класс; у строки есть методы, например <code><span class="term-data" title="Данные: переменная, поле или параметр">name</span>.<span class="term-method" title="Метод: действие или вычисление">length</span>()</code> — длина строки.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">char</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">letter</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">;</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">((</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="p">)</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">letter</span></span><span class="p">);</span><span class="w">          </span><span class="c1">// 65</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">((</span><span class="kt"><span class="term-type" title="Тип или класс">char</span></span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">letter</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span><span class="w">   </span><span class="c1">// B</span>
 </code></pre></div>
 
-<p>Доступные функции преобразования: <code><span class="term-method" title="Метод: действие или вычисление">toByte</span>()</code>, <code><span class="term-method" title="Метод: действие или вычисление">toShort</span>()</code>, <code><span class="term-method" title="Метод: действие или вычисление">toInt</span>()</code>, <code><span class="term-method" title="Метод: действие или вычисление">toLong</span>()</code>, <code><span class="term-method" title="Метод: действие или вычисление">toFloat</span>()</code>, <code><span class="term-method" title="Метод: действие или вычисление">toDouble</span>()</code>, <code><span class="term-method" title="Метод: действие или вычисление">toChar</span>()</code>. Это осознанное решение авторов языка: Kotlin считает, что незаметные преобразования типов — частый источник трудноуловимых ошибок (в том числе тех самых, что разбираются в конце этой лекции на примере Java), поэтому все они в Kotlin <strong>видны в коде явно</strong>.</p>
-<h2 id="lecture-if">Тернарный оператор — его нет, вместо него <code><span class="term-language" title="Конструкция языка">if</span></code> как выражение</h2>
-<p>В Java: <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = n &gt; 1 ? 0 : 1;</code>. В Kotlin отдельного тернарного оператора <code>?:</code> (символ <code>?:</code> в Kotlin занят под другую конструкцию — Elvis-оператор, подстановку значения по умолчанию для <code><span class="term-language" title="Конструкция языка">null</span></code>) не существует — вместо него <code><span class="term-language" title="Конструкция языка">if</span></code> сам по себе является выражением и возвращает значение:</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">else</span></span><span class="w"> </span><span class="m">1</span>
+<p><strong>Примитивные типы</strong> хранят само значение. Их восемь, имена пишутся с маленькой буквы.
+<strong>Ссылочные типы</strong> хранят ссылку на объект в памяти. К ним относятся <code><span class="term-type" title="Тип или класс">String</span></code>, массивы и все классы; имена пишутся с большой буквы.</p>
+<h2 id="lecture-6">6. Константы</h2>
+<p><strong>Константа</strong> — переменная, значение которой нельзя изменить после инициализации. Объявляется словом <code><span class="term-language" title="Конструкция языка">final</span></code>:
+<code><span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">PI</span> = 3.14159;</code>
+Имена констант пишут заглавными буквами через подчёркивание: <code>MAX_SCORE</code>.</p>
+<h2 id="lecture-_13">Домашнее задание (часть А)</h2>
+<ol>
+<li>Выучить таблицу типов: для <code><span class="term-type" title="Тип или класс">int</span></code>, <code><span class="term-type" title="Тип или класс">double</span></code>, <code><span class="term-type" title="Тип или класс">char</span></code>, <code><span class="term-type" title="Тип или класс">boolean</span></code> — что хранит, размер, пример.</li>
+<li>Вопросы «Проверь себя» 1–10.</li>
+<li>Написать программу <code>Anketa</code>: объявить переменные для своих данных — имя (<code><span class="term-type" title="Тип или класс">String</span></code>), возраст (<code><span class="term-type" title="Тип или класс">int</span></code>), рост в метрах (<code><span class="term-type" title="Тип или класс">double</span></code>), первая буква фамилии (<code><span class="term-type" title="Тип или класс">char</span></code>), есть ли водительские права (<code><span class="term-type" title="Тип или класс">boolean</span></code>) — и вывести каждую с подписью.</li>
+</ol>
+<hr />
+<h2 id="lecture-_14">Часть Б. Операции и преобразование типов</h2>
+<h2 id="lecture-7">7. Арифметические операции</h2>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Операция</th>
+<th>Пример</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>сложение</td>
+<td><code>7 + 2</code></td>
+<td><code>9</code></td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>вычитание</td>
+<td><code>7 - 2</code></td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>умножение</td>
+<td><code>7 * 2</code></td>
+<td><code>14</code></td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>деление</td>
+<td><code>7 / 2</code></td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>остаток от деления</td>
+<td><code>7 % 2</code></td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Целочисленное деление:</strong> если оба операнда целые, результат деления — целое число, дробная часть отбрасывается: <code>7 / 2</code> → <code>3</code>. Если хотя бы один операнд дробный, результат дробный: <code>7 / 2.0</code> → <code>3.5</code>.</p>
+<p><strong>Остаток от деления <code>%</code>:</strong> <code>7 % 2</code> → <code>1</code>.
+Применение:
+- проверка чётности: <code>n % 2</code> равно 0 → число чётное;
+- последняя цифра числа: <code>1234 % 10</code> → <code>4</code>; число без последней цифры: <code>1234 / 10</code> → <code>123</code>;
+- перевод единиц: <code>135 / 60</code> → 2 часа, <code>135 % 60</code> → 15 минут.</p>
+<p><strong>Порядок действий:</strong> сначала <code>*</code>, <code>/</code>, <code>%</code>, потом <code>+</code>, <code>-</code>; операции одного приоритета — слева направо; скобки меняют порядок.
+<code>2 + 3 * 4</code> → <code>14</code>; <code>(2 + 3) * 4</code> → <code>20</code>.</p>
+<p>Деление целого числа на ноль — ошибка выполнения <code>ArithmeticException: / by zero</code>.</p>
+<h2 id="lecture-8">8. Присваивание, инкремент, декремент</h2>
+<p><strong>Составные операции присваивания</strong></p>
+<table>
+<thead>
+<tr>
+<th>Короткая запись</th>
+<th>Полная запись</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> += 5</code></td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> + 5</code></td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> -= 5</code></td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> - 5</code></td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> *= 5</code></td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> * 5</code></td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> /= 5</code></td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> / 5</code></td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> %= 5</code></td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span> % 5</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Инкремент</strong> <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span>++</code> — увеличить на 1. <strong>Декремент</strong> <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span>--</code> — уменьшить на 1.</p>
+<p><code><span class="term-data" title="Данные: переменная, поле или параметр">y</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span>++;</code> — постфиксная форма: сначала значение <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code> используется, потом увеличивается.
+<code><span class="term-data" title="Данные: переменная, поле или параметр">y</span> = ++<span class="term-data" title="Данные: переменная, поле или параметр">x</span>;</code> — префиксная форма: сначала <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code> увеличивается, потом используется.
+Если <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span>++</code> стоит отдельной инструкцией, разницы нет.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">y</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="o">++</span><span class="p">;</span><span class="w">   </span><span class="c1">// y = 5, x = 6</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">z</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">++</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">x</span></span><span class="p">;</span><span class="w">   </span><span class="c1">// x = 7, z = 7</span>
 </code></pre></div>
 
-<h2 id="lecture-_16">Итог сравнения</h2>
-<p>Модель памяти, приоритеты операций, побитовая арифметика по смыслу — те же, что в Java (и то же самое будет верно для любого JVM-языка). Разница почти everywhere синтаксическая: короче объявления, символьные побитовые операции заменены именованными функциями, а неявные преобразования типов, которые в Java являются источником ошибок «на слух» (см. раздел о них), в Kotlin просто отключены на уровне компилятора.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-111">1.1.1. Типы данных и операции — под запись</h1>
-<blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Тема на две пары. Это то, что должно быть в тетради. После темы — практическая работа ПР00.</p>
-</blockquote>
+<h2 id="lecture-9">9. Операции сравнения</h2>
+<p>Результат — значение типа <code><span class="term-type" title="Тип или класс">boolean</span></code>.</p>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Значение</th>
+<th>Пример</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>==</code></td>
+<td>равно</td>
+<td><code>5 == 5</code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>не равно</td>
+<td><code>5 != 5</code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>больше</td>
+<td><code>5 &gt; 3</code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>меньше</td>
+<td><code>5 &lt; 3</code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>больше или равно</td>
+<td><code>5 &gt;= 5</code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>меньше или равно</td>
+<td><code>5 &lt;= 3</code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+</tr>
+</tbody>
+</table>
+<p><code>=</code> — присваивание («положить»). <code>==</code> — сравнение («равны ли?»).</p>
+<p><strong>Строки сравнивают методом <code><span class="term-method" title="Метод: действие или вычисление">equals</span></code>, а не знаком <code>==</code>:</strong>
+<code>a.<span class="term-method" title="Метод: действие или вычисление">equals</span>(b)</code> — <code><span class="term-language" title="Конструкция языка">true</span></code>, если текст строк совпадает.
+<code>==</code> для строк сравнивает идентичность объектов, а не текст.</p>
+<h2 id="lecture-10">10. Логические операции</h2>
+<p>Работают со значениями <code><span class="term-type" title="Тип или класс">boolean</span></code>, результат — <code><span class="term-type" title="Тип или класс">boolean</span></code>.</p>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Название</th>
+<th>Когда <code><span class="term-language" title="Конструкция языка">true</span></code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>И</td>
+<td>оба операнда <code><span class="term-language" title="Конструкция языка">true</span></code></td>
+</tr>
+<tr>
+<td><code>\|\|</code></td>
+<td>ИЛИ</td>
+<td>хотя бы один операнд <code><span class="term-language" title="Конструкция языка">true</span></code></td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>НЕ</td>
+<td>операнд <code><span class="term-language" title="Конструкция языка">false</span></code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><code>a</code></th>
+<th><code>b</code></th>
+<th><code>a &amp;&amp; b</code></th>
+<th><code>a \|\| b</code></th>
+<th><code>!a</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">false</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">true</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>Двойное неравенство записывают двумя сравнениями: <code><span class="term-data" title="Данные: переменная, поле или параметр">age</span> &gt;= 14 &amp;&amp; <span class="term-data" title="Данные: переменная, поле или параметр">age</span> &lt; 18</code>.</p>
+<p><strong>Сокращённое вычисление:</strong> если результат ясен по первому операнду, второй не вычисляется. Для <code>&amp;&amp;</code>: первый <code><span class="term-language" title="Конструкция языка">false</span></code> → результат <code><span class="term-language" title="Конструкция языка">false</span></code>. Для <code>||</code>: первый <code><span class="term-language" title="Конструкция языка">true</span></code> → результат <code><span class="term-language" title="Конструкция языка">true</span></code>.</p>
+<p><strong>Приоритет:</strong> <code>!</code> → арифметика → сравнения → <code>&amp;&amp;</code> → <code>||</code>. В сложных условиях ставят скобки.</p>
+<h2 id="lecture-11">11. Преобразование типов</h2>
+<div class="codehilite"><pre><span></span><code>          расширение: <span class="term-data" title="Данные: переменная, поле или параметр">обычно</span> <span class="term-data" title="Данные: переменная, поле или параметр">без</span> явного приведения; точность <span class="term-data" title="Данные: переменная, поле или параметр">может</span> теряться ──────►
+<span class="term-type" title="Тип или класс">byte</span> → <span class="term-type" title="Тип или класс">short</span> → <span class="term-type" title="Тип или класс">int</span> → <span class="term-type" title="Тип или класс">long</span> → <span class="term-type" title="Тип или класс">float</span> → <span class="term-type" title="Тип или класс">double</span>
+          ◄────── сужение: <span class="term-data" title="Данные: переменная, поле или параметр">обычно</span> явно, возможна потеря
+</code></pre></div>
+
+<p><strong>Расширяющее преобразование</strong> обычно разрешено без явного приведения. В цепочке ниже не все целые значения сохраняют точность при переходе к float или double: например, long → double может округлить число. Автоматическое преобразование не обещает отсутствия потерь точности.</p>
+<p><strong>Сужающее преобразование</strong> может терять данные; в обычном выражении его явно задают приведением <code>(тип) <span class="term-data" title="Данные: переменная, поле или параметр">значение</span></code>. Для некоторых константных присваиваний действуют специальные разрешения, например <code><span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">level</span> = 5</code>.
+<code>(<span class="term-type" title="Тип или класс">int</span>) 10.9</code> → <code>10</code> (дробная часть отбрасывается, а не округляется).
+Округление по правилам математики: <code><span class="term-type" title="Тип или класс">Math</span>.<span class="term-method" title="Метод: действие или вычисление">round</span>(10.9)</code> → <code>11</code>.</p>
+<p><strong>Тип результата обычной бинарной числовой арифметики</strong> определяется числовым продвижением. byte, short и char обычно сначала становятся int; далее учитываются long, float и double. Например:
+<code><span class="term-type" title="Тип или класс">int</span></code> и <code><span class="term-type" title="Тип или класс">int</span></code> → <code><span class="term-type" title="Тип или класс">int</span></code>; <code><span class="term-type" title="Тип или класс">int</span></code> и <code><span class="term-type" title="Тип или класс">double</span></code> → <code><span class="term-type" title="Тип или класс">double</span></code>; <code><span class="term-type" title="Тип или класс">int</span></code> и <code><span class="term-type" title="Тип или класс">long</span></code> → <code><span class="term-type" title="Тип или класс">long</span></code>.</p>
+<p><strong>Ловушка среднего значения:</strong>
+<code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">average</span> = <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code> при целых <code><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">count</span></code> даёт целый результат (<code>3.0</code>).
+Правильно: <code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">average</span> = (<span class="term-type" title="Тип или класс">double</span>) <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code></p>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">average</span> = <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;
+                 └────┬────┘
+              1) <span class="term-type" title="Тип или класс">int</span> / <span class="term-type" title="Тип или класс">int</span> = 3
+└──────┬──────┘
+ 2) 3 → 3.0
+</code></pre></div>
+
+<h2 id="lecture-12">12. Строка ↔ число</h2>
+<p><strong>Преобразование между строкой и числом</strong> выполняется методами, а не приведением типа.</p>
+<table>
+<thead>
+<tr>
+<th>Что нужно</th>
+<th>Как</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>строка → целое</td>
+<td><code>Integer.<span class="term-method" title="Метод: действие или вычисление">parseInt</span>(строка)</code></td>
+<td><code>Integer.<span class="term-method" title="Метод: действие или вычисление">parseInt</span>("25")</code> → <code>25</code></td>
+</tr>
+<tr>
+<td>строка → дробное</td>
+<td><code>Double.<span class="term-method" title="Метод: действие или вычисление">parseDouble</span>(строка)</code></td>
+<td><code>Double.<span class="term-method" title="Метод: действие или вычисление">parseDouble</span>("3.5")</code> → <code>3.5</code></td>
+</tr>
+<tr>
+<td>число → строка</td>
+<td><code><span class="term-type" title="Тип или класс">String</span>.<span class="term-method" title="Метод: действие или вычисление">valueOf</span>(число)</code></td>
+<td><code><span class="term-type" title="Тип или класс">String</span>.<span class="term-method" title="Метод: действие или вычисление">valueOf</span>(10)</code> → <code>"10"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Если строка не является числом, <code><span class="term-method" title="Метод: действие или вычисление">parseInt</span></code> вызывает ошибку выполнения <code>NumberFormatException</code>.</p>
+<h2 id="lecture-_15">Домашнее задание (часть Б)</h2>
+<ol>
+<li>Вопросы «Проверь себя» 11–24.</li>
+<li>Не запуская программу, записать в тетрадь результат каждого выражения, потом проверить запуском:
+<code>17 / 5</code>, <code>17 % 5</code>, <code>17 / 5.0</code>, <code>(<span class="term-type" title="Тип или класс">int</span>) 9.99</code>, <code>(<span class="term-type" title="Тип или класс">double</span>) 17 / 5</code>, <code>(<span class="term-type" title="Тип или класс">double</span>) (17 / 5)</code>, <code>"2" + 2 + 2</code>, <code>2 + 2 + "2"</code>, <code>10 &gt; 5 &amp;&amp; 10 &lt; 8</code>, <code>!(3 == 3) || 4 != 5</code>.</li>
+<li>Написать программу <code>Time</code>: в переменной <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">totalSeconds</span> = 7384;</code> перевести в часы, минуты и секунды и вывести в виде <code>2 ч 3 мин 4 с</code>.</li>
+</ol>
+<h2 id="lecture-_16">Проверь себя</h2>
+<p><strong>Часть А</strong></p>
+<ol>
+<li>Что такое переменная? Из чего состоит её объявление?</li>
+<li>Чем объявление отличается от присваивания?</li>
+<li>Назовите восемь примитивных типов по группам.</li>
+<li>Какой тип выбрать для количества товаров, цены, признака «в наличии», населения Земли?</li>
+<li>Почему <code><span class="term-type" title="Тип или класс">float</span> <span class="term-data" title="Данные: переменная, поле или параметр">f</span> = 3.14;</code> не компилируется? Как исправить?</li>
+<li>Почему <code><span class="term-type" title="Тип или класс">long</span> <span class="term-data" title="Данные: переменная, поле или параметр">big</span> = 5000000000;</code> не компилируется?</li>
+<li>Что выведет <code><span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(2147483647 + 1);</code> и почему?</li>
+<li>Почему <code>0.1 + 0.2</code> не равно <code>0.3</code>? Какие два правила из этого следуют?</li>
+<li>Чем <code>'A'</code> отличается от <code>"A"</code>?</li>
+<li>Чем примитивные типы отличаются от ссылочных?</li>
+</ol>
+<p><strong>Часть Б</strong></p>
+<ol start="11">
+<li>Чему равны <code>7 / 2</code>, <code>7 / 2.0</code>, <code>7 % 2</code>? Почему первые два различаются?</li>
+<li>Как проверить, что число чётное? Как получить последнюю цифру?</li>
+<li>Чему равны <code>1 / 2 * 10</code> и <code>10 * 1 / 2</code>?</li>
+<li>Что произойдёт при <code>5 / 0</code> и при <code>5.0 / 0</code>?</li>
+<li><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = 5; <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">y</span> = <span class="term-data" title="Данные: переменная, поле или параметр">x</span>++; <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">z</span> = ++<span class="term-data" title="Данные: переменная, поле или параметр">x</span>;</code> — чему равны <code><span class="term-data" title="Данные: переменная, поле или параметр">x</span></code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">y</span></code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">z</span></code>?</li>
+<li>Чем <code>=</code> отличается от <code>==</code>?</li>
+<li>Почему строки нельзя сравнивать через <code>==</code>? Чем сравнивать?</li>
+<li>Запишите на Java условие «x от 1 до 10 включительно».</li>
+<li>Что такое сокращённое вычисление? Приведите пример, где оно спасает от ошибки.</li>
+<li>Какие преобразования типов Java выполняет автоматически, а какие нет?</li>
+<li>Чему равно <code>(<span class="term-type" title="Тип или класс">int</span>) 9.99</code>? А <code><span class="term-type" title="Тип или класс">Math</span>.<span class="term-method" title="Метод: действие или вычисление">round</span>(9.99)</code>?</li>
+<li><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> = 7, <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 2; <span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">avg</span> = <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code> — что в <code><span class="term-data" title="Данные: переменная, поле или параметр">avg</span></code> и как исправить?</li>
+<li>Как превратить строку <code>"42"</code> в число и число <code>42</code> в строку? Почему нельзя написать <code>(<span class="term-type" title="Тип или класс">int</span>) "42"</code>?</li>
+<li>Почему <code>Integer.<span class="term-method" title="Метод: действие или вычисление">parseInt</span>("25a")</code> компилируется, но не работает?</li>
+</ol>
+<h2 id="lecture-_17">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-111">1.1.1. Типы данных и операции — под запись</h1>
 <h1 id="notes-_1">Часть А. Переменные и типы</h1>
+<h2 id="notes-_2">Обобщение: подставь свои имена</h2>
+<p>Это шаблон, где подписи заменяются настоящими типами, именами и выражениями:</p>
+<div class="codehilite"><pre><span></span><code>Тип <span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span> = начальноеЗначение;
+<span class="term-data" title="Данные: переменная, поле или параметр">имяПеременной</span> = новоеВыражение;
+</code></pre></div>
+
+<p>Тип повторно не пишется при обычном изменении существующей переменной. <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 3; <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 4;</code> в той же области — повторное объявление, а не обновление значения.</p>
+<p>В учебных именах используй понятные слова. Java различает регистр. Одиночное подчёркивание нельзя использовать как обычное имя переменной в современных версиях Java; более широкие правила идентификаторов не означают, что любое сочетание знаков допустимо.</p>
 <h2 id="notes-1">1. Переменная</h2>
 <p><strong><span class="term-data" title="Данные: переменная, поле или параметр">Переменная</span></strong> — именованная область памяти, в которой хранится значение определённого типа.
 У переменной есть <strong>тип</strong>, <strong>имя</strong> и <strong>значение</strong>.</p>
@@ -417,9 +758,9 @@ blic <span class="term-language" title="Конструкция языка">void<
 </tr>
 <tr>
 <td><strong><code><span class="term-type" title="Тип или класс">char</span></code></strong></td>
-<td>один символ</td>
+<td>одна кодовая единица UTF-16</td>
 <td>2 байта</td>
-<td>65 536 символов</td>
+<td>0 … 65 535</td>
 <td><code><span class="term-type" title="Тип или класс">char</span> <span class="term-data" title="Данные: переменная, поле или параметр">grade</span> = 'A';</code></td>
 </tr>
 <tr>
@@ -435,7 +776,7 @@ blic <span class="term-language" title="Конструкция языка">void<
 - целое число → <code><span class="term-type" title="Тип или класс">int</span></code>;
 - дробное число → <code><span class="term-type" title="Тип или класс">double</span></code>;
 - да/нет → <code><span class="term-type" title="Тип или класс">boolean</span></code>;
-- один символ → <code><span class="term-type" title="Тип или класс">char</span></code>;
+- одна кодовая единица UTF-16, например буква A → <code><span class="term-type" title="Тип или класс">char</span></code>; для произвольного текста — String;
 - целое больше двух миллиардов → <code><span class="term-type" title="Тип или класс">long</span></code>.</p>
 <p><code><span class="term-type" title="Тип или класс">byte</span></code>, <code><span class="term-type" title="Тип или класс">short</span></code>, <code><span class="term-type" title="Тип или класс">float</span></code> применяют редко: когда нужно экономить память в больших массивах.</p>
 <h2 id="notes-3">3. Литералы</h2>
@@ -472,7 +813,7 @@ blic <span class="term-language" title="Конструкция языка">void<
 <tr>
 <td><code>'A'</code></td>
 <td><code><span class="term-type" title="Тип или класс">char</span></code></td>
-<td>одинарные кавычки, ровно один символ</td>
+<td>одинарные кавычки, одна кодовая единица UTF-16</td>
 </tr>
 <tr>
 <td><code>"A"</code></td>
@@ -496,7 +837,7 @@ blic <span class="term-language" title="Конструкция языка">void<
 1. Дробные числа не сравнивают через <code>==</code>.
 2. Деньги не хранят в <code><span class="term-type" title="Тип или класс">double</span></code>: суммы считают в копейках в типе <code><span class="term-type" title="Тип или класс">long</span></code> или в специальном классе <code>BigDecimal</code>.</p>
 <h2 id="notes-5">5. Символ и строка</h2>
-<p><strong><code><span class="term-type" title="Тип или класс">char</span></code></strong> — один символ в одинарных кавычках: <code>'A'</code>. Хранится как число — номер символа в таблице Unicode (<code>'A'</code> = 65).
+<p><strong><code><span class="term-type" title="Тип или класс">char</span></code></strong> — одна кодовая единица UTF-16 в одинарных кавычках: <code>'A'</code>. Хранится как 16-битное беззнаковое значение; для A оно совпадает с кодом Unicode (<code>'A'</code> = 65).
 <strong><code><span class="term-type" title="Тип или класс">String</span></code></strong> — строка, последовательность символов в двойных кавычках: <code>"Анна"</code>. Это не примитивный тип, а класс; у строки есть методы, например <code><span class="term-data" title="Данные: переменная, поле или параметр">name</span>.<span class="term-method" title="Метод: действие или вычисление">length</span>()</code> — длина строки.</p>
 <div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">char</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">letter</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">;</span>
 <span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">((</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="p">)</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">letter</span></span><span class="p">);</span><span class="w">          </span><span class="c1">// 65</span>
@@ -509,14 +850,14 @@ blic <span class="term-language" title="Конструкция языка">void<
 <p><strong>Константа</strong> — переменная, значение которой нельзя изменить после инициализации. Объявляется словом <code><span class="term-language" title="Конструкция языка">final</span></code>:
 <code><span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">PI</span> = 3.14159;</code>
 Имена констант пишут заглавными буквами через подчёркивание: <code>MAX_SCORE</code>.</p>
-<h2 id="notes-_2">Домашнее задание (часть А)</h2>
+<h2 id="notes-_3">Домашнее задание (часть А)</h2>
 <ol>
 <li>Выучить таблицу типов: для <code><span class="term-type" title="Тип или класс">int</span></code>, <code><span class="term-type" title="Тип или класс">double</span></code>, <code><span class="term-type" title="Тип или класс">char</span></code>, <code><span class="term-type" title="Тип или класс">boolean</span></code> — что хранит, размер, пример.</li>
 <li>Вопросы «Проверь себя» 1–10.</li>
 <li>Написать программу <code>Anketa</code>: объявить переменные для своих данных — имя (<code><span class="term-type" title="Тип или класс">String</span></code>), возраст (<code><span class="term-type" title="Тип или класс">int</span></code>), рост в метрах (<code><span class="term-type" title="Тип или класс">double</span></code>), первая буква фамилии (<code><span class="term-type" title="Тип или класс">char</span></code>), есть ли водительские права (<code><span class="term-type" title="Тип или класс">boolean</span></code>) — и вывести каждую с подписью.</li>
 </ol>
 <hr />
-<h1 id="notes-_3">Часть Б. Операции и преобразование типов</h1>
+<h1 id="notes-_4">Часть Б. Операции и преобразование типов</h1>
 <h2 id="notes-7">7. Арифметические операции</h2>
 <table>
 <thead>
@@ -663,7 +1004,7 @@ blic <span class="term-language" title="Конструкция языка">void<
 <p><code>=</code> — присваивание («положить»). <code>==</code> — сравнение («равны ли?»).</p>
 <p><strong>Строки сравнивают методом <code><span class="term-method" title="Метод: действие или вычисление">equals</span></code>, а не знаком <code>==</code>:</strong>
 <code>a.<span class="term-method" title="Метод: действие или вычисление">equals</span>(b)</code> — <code><span class="term-language" title="Конструкция языка">true</span></code>, если текст строк совпадает.
-<code>==</code> для строк сравнивает ссылки (адреса в памяти), а не текст.</p>
+<code>==</code> для строк сравнивает идентичность объектов, а не текст.</p>
 <h2 id="notes-10">10. Логические операции</h2>
 <p>Работают со значениями <code><span class="term-type" title="Тип или класс">boolean</span></code>, результат — <code><span class="term-type" title="Тип или класс">boolean</span></code>.</p>
 <table>
@@ -737,21 +1078,21 @@ blic <span class="term-language" title="Конструкция языка">void<
 <p><strong>Сокращённое вычисление:</strong> если результат ясен по первому операнду, второй не вычисляется. Для <code>&amp;&amp;</code>: первый <code><span class="term-language" title="Конструкция языка">false</span></code> → результат <code><span class="term-language" title="Конструкция языка">false</span></code>. Для <code>||</code>: первый <code><span class="term-language" title="Конструкция языка">true</span></code> → результат <code><span class="term-language" title="Конструкция языка">true</span></code>.</p>
 <p><strong>Приоритет:</strong> <code>!</code> → арифметика → сравнения → <code>&amp;&amp;</code> → <code>||</code>. В сложных условиях ставят скобки.</p>
 <h2 id="notes-11">11. Преобразование типов</h2>
-<div class="codehilite"><pre><span></span><code>          расширение: автоматически, <span class="term-data" title="Данные: переменная, поле или параметр">без</span> потерь ──────►
+<div class="codehilite"><pre><span></span><code>          расширение: <span class="term-data" title="Данные: переменная, поле или параметр">обычно</span> <span class="term-data" title="Данные: переменная, поле или параметр">без</span> явного приведения; точность <span class="term-data" title="Данные: переменная, поле или параметр">может</span> теряться ──────►
 <span class="term-type" title="Тип или класс">byte</span> → <span class="term-type" title="Тип или класс">short</span> → <span class="term-type" title="Тип или класс">int</span> → <span class="term-type" title="Тип или класс">long</span> → <span class="term-type" title="Тип или класс">float</span> → <span class="term-type" title="Тип или класс">double</span>
-          ◄────── сужение: только явно, возможна потеря
+          ◄────── сужение: <span class="term-data" title="Данные: переменная, поле или параметр">обычно</span> явно, возможна потеря
 </code></pre></div>
 
-<p><strong>Расширяющее преобразование</strong> — из типа с меньшим диапазоном в тип с большим. Выполняется автоматически, без потери данных.</p>
-<p><strong>Сужающее преобразование</strong> — в обратную сторону. Выполняется только явно, операцией <strong>приведения типа</strong>: <code>(тип) <span class="term-data" title="Данные: переменная, поле или параметр">значение</span></code>. Возможна потеря данных.
+<p><strong>Расширяющее преобразование</strong> обычно разрешено без явного приведения. В цепочке ниже не все целые значения сохраняют точность при переходе к float или double: например, long → double может округлить число. Автоматическое преобразование не обещает отсутствия потерь точности.</p>
+<p><strong>Сужающее преобразование</strong> может терять данные; в обычном выражении его явно задают приведением <code>(тип) <span class="term-data" title="Данные: переменная, поле или параметр">значение</span></code>. Для некоторых константных присваиваний действуют специальные разрешения, например <code><span class="term-type" title="Тип или класс">byte</span> <span class="term-data" title="Данные: переменная, поле или параметр">level</span> = 5</code>.
 <code>(<span class="term-type" title="Тип или класс">int</span>) 10.9</code> → <code>10</code> (дробная часть отбрасывается, а не округляется).
 Округление по правилам математики: <code><span class="term-type" title="Тип или класс">Math</span>.<span class="term-method" title="Метод: действие или вычисление">round</span>(10.9)</code> → <code>11</code>.</p>
-<p><strong>Тип результата выражения</strong> — самый широкий из типов операндов:
+<p><strong>Тип результата обычной бинарной числовой арифметики</strong> определяется числовым продвижением. byte, short и char обычно сначала становятся int; далее учитываются long, float и double. Например:
 <code><span class="term-type" title="Тип или класс">int</span></code> и <code><span class="term-type" title="Тип или класс">int</span></code> → <code><span class="term-type" title="Тип или класс">int</span></code>; <code><span class="term-type" title="Тип или класс">int</span></code> и <code><span class="term-type" title="Тип или класс">double</span></code> → <code><span class="term-type" title="Тип или класс">double</span></code>; <code><span class="term-type" title="Тип или класс">int</span></code> и <code><span class="term-type" title="Тип или класс">long</span></code> → <code><span class="term-type" title="Тип или класс">long</span></code>.</p>
 <p><strong>Ловушка среднего значения:</strong>
-<code><span class="term-type" title="Тип или класс">double</span> <span class="term-method" title="Метод: действие или вычисление">average</span> = <span class="term-method" title="Метод: действие или вычисление">sum</span> / count;</code> при целых <code><span class="term-method" title="Метод: действие или вычисление">sum</span></code> и <code>count</code> даёт целый результат (<code>3.0</code>).
-Правильно: <code><span class="term-type" title="Тип или класс">double</span> <span class="term-method" title="Метод: действие или вычисление">average</span> = (<span class="term-type" title="Тип или класс">double</span>) <span class="term-method" title="Метод: действие или вычисление">sum</span> / count;</code></p>
-<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">double</span> <span class="term-method" title="Метод: действие или вычисление">average</span> = <span class="term-method" title="Метод: действие или вычисление">sum</span> / count;
+<code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">average</span> = <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code> при целых <code><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">count</span></code> даёт целый результат (<code>3.0</code>).
+Правильно: <code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">average</span> = (<span class="term-type" title="Тип или класс">double</span>) <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code></p>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">average</span> = <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;
                  └────┬────┘
               1) <span class="term-type" title="Тип или класс">int</span> / <span class="term-type" title="Тип или класс">int</span> = 3
 └──────┬──────┘
@@ -787,14 +1128,14 @@ blic <span class="term-language" title="Конструкция языка">void<
 </tbody>
 </table>
 <p>Если строка не является числом, <code><span class="term-method" title="Метод: действие или вычисление">parseInt</span></code> вызывает ошибку выполнения <code>NumberFormatException</code>.</p>
-<h2 id="notes-_4">Домашнее задание (часть Б)</h2>
+<h2 id="notes-_5">Домашнее задание (часть Б)</h2>
 <ol>
 <li>Вопросы «Проверь себя» 11–24.</li>
 <li>Не запуская программу, записать в тетрадь результат каждого выражения, потом проверить запуском:
 <code>17 / 5</code>, <code>17 % 5</code>, <code>17 / 5.0</code>, <code>(<span class="term-type" title="Тип или класс">int</span>) 9.99</code>, <code>(<span class="term-type" title="Тип или класс">double</span>) 17 / 5</code>, <code>(<span class="term-type" title="Тип или класс">double</span>) (17 / 5)</code>, <code>"2" + 2 + 2</code>, <code>2 + 2 + "2"</code>, <code>10 &gt; 5 &amp;&amp; 10 &lt; 8</code>, <code>!(3 == 3) || 4 != 5</code>.</li>
 <li>Написать программу <code>Time</code>: в переменной <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">totalSeconds</span> = 7384;</code> перевести в часы, минуты и секунды и вывести в виде <code>2 ч 3 мин 4 с</code>.</li>
 </ol>
-<h2 id="notes-_5">Проверь себя</h2>
+<h2 id="notes-_6">Проверь себя</h2>
 <p><strong>Часть А</strong></p>
 <ol>
 <li>Что такое переменная? Из чего состоит её объявление?</li>
@@ -821,7 +1162,7 @@ blic <span class="term-language" title="Конструкция языка">void<
 <li>Что такое сокращённое вычисление? Приведите пример, где оно спасает от ошибки.</li>
 <li>Какие преобразования типов Java выполняет автоматически, а какие нет?</li>
 <li>Чему равно <code>(<span class="term-type" title="Тип или класс">int</span>) 9.99</code>? А <code><span class="term-type" title="Тип или класс">Math</span>.<span class="term-method" title="Метод: действие или вычисление">round</span>(9.99)</code>?</li>
-<li><code><span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">sum</span> = 7, count = 2; <span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">avg</span> = <span class="term-method" title="Метод: действие или вычисление">sum</span> / count;</code> — что в <code><span class="term-data" title="Данные: переменная, поле или параметр">avg</span></code> и как исправить?</li>
+<li><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> = 7, <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 2; <span class="term-type" title="Тип или класс">double</span> <span class="term-data" title="Данные: переменная, поле или параметр">avg</span> = <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code> — что в <code><span class="term-data" title="Данные: переменная, поле или параметр">avg</span></code> и как исправить?</li>
 <li>Как превратить строку <code>"42"</code> в число и число <code>42</code> в строку? Почему нельзя написать <code>(<span class="term-type" title="Тип или класс">int</span>) "42"</code>?</li>
 <li>Почему <code>Integer.<span class="term-method" title="Метод: действие или вычисление">parseInt</span>("25a")</code> компилируется, но не работает?</li>
-</ol></article></details><footer><a target="_top" href="../#java-first-program">← Первая программа на Java</a><a target="_top" href="../#java-bitwise">Поразрядные операции →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script></body></html>
+</ol></article></details><footer><a target="_top" href="../#java-first-program">← Первая программа на Java</a><a target="_top" href="../#java-bitwise">Поразрядные операции →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="course-traces.js?v=1"></script></body></html>

@@ -1,314 +1,170 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обзор языков программирования · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 01 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Обзор языков программирования: какие бывают и для чего каждый нужен</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details>
-<blockquote>
-<p>Предшествует <a target="_top" href="../#java-intro">Введению в курс</a>. Цель — до того, как мы погрузимся в Java и Kotlin, увидеть картину целиком: почему языков программирования сотни, чем они отличаются друг от друга и почему для мобильной разработки выбраны именно эти два.</p>
-</blockquote>
-<h2 id="lecture-1">1. Зачем нужно много языков программирования, если можно один</h2>
-<p>Логичный вопрос: если все языки в итоге заставляют процессор выполнять одни и те же операции (сложить числа, сравнить, перейти к другой инструкции), зачем их сотни? Ответ — разные языки решают разные задачи разной ценой: одни дают максимальный контроль над железом и скорость (но требуют больше кода и внимания), другие — максимальную скорость написания кода (но жертвуют производительностью или контролем над ошибками). Универсального «лучшего» языка не существует — есть более и менее подходящий для конкретной платформы и задачи.</p>
-<h2 id="lecture-2-">2. Как язык превращается в работающую программу: компиляция, интерпретация, байт-код</h2>
-<p><strong>Компилируемые языки</strong> (C, C++, Rust, Go) переводятся в машинный код <em>целиком, заранее</em>, специальной программой-компилятором. Результат — исполняемый файл, который процессор выполняет напрямую, без посредников. Плюс — максимальная скорость выполнения. Минус — под каждую операционную систему и архитектуру процессора нужна отдельная сборка.</p>
-<p><strong>Интерпретируемые языки</strong> (классический Python, PHP до определённой версии, Ruby) выполняются построчно специальной программой-интерпретатором в момент запуска, без отдельного шага компиляции в машинный код. Плюс — один и тот же файл с кодом работает где угодно, где есть интерпретатор; можно менять код и сразу видеть результат. Минус — медленнее компилируемых языков, потому что перевод в машинные операции происходит на лету.</p>
-<p><strong>Гибридный подход — байт-код и виртуальная машина</strong> (Java, Kotlin, C#): код сначала компилируется не в машинный код конкретного процессора, а в промежуточный <strong>байт-код</strong> — универсальный набор инструкций. Дальше этот байт-код выполняет <strong>виртуальная машина</strong> (для Java и Kotlin — JVM, Java Virtual Machine), которая уже во время выполнения переводит байт-код в машинные инструкции конкретного процессора (JIT-компиляция, just-in-time). Это соединяет плюсы обоих подходов: код, скомпилированный один раз в байт-код, работает на любой платформе, где есть JVM, а скорость благодаря JIT приближается к полностью компилируемым языкам. <strong>Именно так работают и Java, и Kotlin</strong> — языки этого курса.</p>
-<h2 id="lecture-3">3. Типизация: когда язык проверяет, что вы не перепутали типы данных</h2>
-<p><strong>Статическая типизация</strong> (Java, Kotlin, C++) — тип переменной известен и проверяется <strong>до</strong> запуска программы, на этапе компиляции. Ошибка вида «попытка сложить число со строкой» обнаружится сразу, ещё до того, как программа хоть раз запустится.</p>
-<p><strong>Динамическая типизация</strong> (Python, PHP, JavaScript) — тип определяется во время выполнения, переменная может в разные моменты хранить значения разных типов. Быстрее писать код, но некоторые ошибки типов всплывают только во время работы программы, иногда — у реального пользователя.</p>
-<p>Отдельная ось — <strong>строгая/слабая типизация</strong>: строгая (Java, Kotlin, Python) не позволяет неявно «превратить» одно в другое без явной команды (умножить строку на число — ошибка); слабая (классический JavaScript, PHP в ряде мест) допускает молчаливые неявные преобразования, что удобно, но иногда становится источником трудноуловимых багов. Java и Kotlin — оба строго и статически типизированы, что и разбирается подробно в лекции <a target="_top" href="../#java-types">«Типы данных и операции»</a>.</p>
-<h2 id="lecture-4">4. Парадигмы программирования: разные способы мышления о коде</h2>
-<ul>
-<li><strong>Процедурное программирование</strong> — программа как последовательность инструкций и вызовов функций (классический C).</li>
-<li><strong>Объектно-ориентированное программирование (ООП)</strong> — данные и логика объединяются в объекты, у объектов есть классы, наследование, полиморфизм (Java, Kotlin, C++, Python). Это основной стиль всего курса — подробно в разделе <a target="_top" href="../#java-classes">«Классы и объекты»</a> и далее.</li>
-<li><strong>Функциональное программирование</strong> — программа как вычисление функций без изменяемого состояния (чистый Haskell; элементы функционального стиля есть и в Kotlin — лямбды, неизменяемые <code>val</code>).</li>
-<li><strong>Декларативное программирование</strong> — вы описываете <em>что</em> нужно получить, а не <em>как</em> это сделать шаг за шагом. Классический пример — язык SQL: запрос <code>SELECT * FROM users WHERE age &gt; 18</code> не описывает алгоритм поиска, а декларирует результат — этим языком мы будем пользоваться в теме про SQLite.</li>
-</ul>
-<p>Kotlin особенно интересен тем, что сочетает ООП с элементами функционального стиля — то, что в Java часто требует громоздкого кода (например, обработка списка через циклы), в Kotlin делается в одну строку функциональными операциями (<code>map</code>, <code>filter</code>).</p>
-<h2 id="lecture-5">5. Карта языков по областям применения</h2>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обзор языков программирования · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 01 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Обзор языков программирования</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="languages" aria-label="Пошаговый разбор: От исходных данных к выводу">
+  <h2>От исходных данных к выводу</h2>
+  <p>Сначала прочитай строку кода и предскажи состояние. Затем перейди к следующему шагу. Схема показывает выбранный учебный сценарий, а не запускает произвольную Java-программу.</p>
+  <p class="diagram-code-caption">Код к текущему шагу</p>
+  <pre><code data-trace-code></code></pre>
+  <div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell></div><div data-trace-cell></div><div data-trace-cell></div></div>
+  <p class="trace-explanation" data-trace-explanation aria-live="polite"></p>
+  <div class="trace-controls"><button type="button" data-trace-action="back">← Назад</button><span data-trace-step></span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+  <script type="application/json" data-trace-model>[{"code": "int price = 120;", "cells": ["price = 120", "count ещё не объявлена", "Вывода пока нет"], "explanation": "Первая инструкция сохраняет цену. Само присваивание ещё не печатает результат."}, {"code": "int count = 3;", "cells": ["price = 120", "count = 3", "Вывода пока нет"], "explanation": "Количество хранится отдельно. Имя count выбрано автором, тип int задан языком."}, {"code": "int total = price * count;", "cells": ["price = 120", "count = 3", "total = 360"], "explanation": "Читаются два числа, вычисляется произведение и сохраняется готовое значение."}, {"code": "System.out.println(total);", "cells": ["Входные данные не меняются", "total = 360", "Консоль: 360"], "explanation": "Вывод получает вычисленное число. Компиляция и выполнение — разные этапы; на этой схеме показано выполнение инструкций."}]</script>
+</section>
+
+<h2 id="lecture-_2">Сначала пойми задачу: язык — способ записать решение</h2>
+<p>Представь, что нужно посчитать стоимость покупки. Человек формулирует правило словами: «Возьми цену одной вещи и умножь на количество». Для программы правило должно быть записано точно: какие исходные данные есть, какую операцию выполнить и что показать.</p>
+<p><strong>Алгоритм</strong> — понятная последовательность действий для решения задачи. <strong>Программа</strong> — запись решения на языке, которую можно подготовить к выполнению в выбранной среде. <strong>Язык программирования</strong> задаёт допустимые записи и их смысл. <strong>Среда выполнения</strong> помогает подготовленному коду работать. Эти понятия связаны, но не взаимозаменяемы: Java — язык, JVM — часть среды выполнения, IntelliJ IDEA — инструмент для написания кода.</p>
+<h2 id="lecture-_3">Общая форма: смысл задачи и конкретная запись</h2>
+<p>Это описание идеи, а не готовый код Java:</p>
+<div class="codehilite"><pre><span></span><code>получить исходные данные
+выполнить вычисление
+показать результат
+</code></pre></div>
+
+<p>А это три инструкции Java внутри main:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">);</span>
+</code></pre></div>
+
+<p>price и count — имена, выбранные автором. Можно выбрать ticketPrice и ticketCount, согласованно изменив обращения. int и знаки <code>=</code>, <code>;</code>, <code>*</code> принадлежат правилам языка. println — имя готового метода; произвольное другое имя вместо него не заработает.</p>
+<p>Здесь важно увидеть общую идею, а не выучить синтаксис раньше времени. Следующие темы отдельно объяснят каждую конструкцию.</p>
+<h2 id="lecture-_4">Одна маленькая программа целиком</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">LanguageDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">total</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">total</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Файл называется LanguageDemo.java. Для обычного запуска из его папки выполни <code>javac <span class="term-type" title="Тип или класс">LanguageDemo</span>.java</code>, затем <code>java <span class="term-type" title="Тип или класс">LanguageDemo</span></code>. Вывод — <strong>360</strong>.</p>
 <table>
 <thead>
 <tr>
-<th>Область</th>
-<th>Типичные языки</th>
-<th>Почему именно они</th>
+<th>Строка внутри main</th>
+<th>Что происходит</th>
+<th>Что пока не происходит</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Мобильная разработка (Android)</strong></td>
-<td><strong>Java, Kotlin</strong></td>
-<td>Официальные языки Android SDK, работают на JVM</td>
+<td><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">price</span> = 120;</code></td>
+<td>Создаётся локальная переменная с целым значением 120</td>
+<td>На экран ничего не выводится</td>
 </tr>
 <tr>
-<td><strong>Мобильная разработка (iOS)</strong></td>
-<td>Swift, (раньше — Objective-C)</td>
-<td>Официальный язык Apple для iOS/macOS</td>
+<td><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 3;</code></td>
+<td>Сохраняется количество</td>
+<td>Покупка автоматически не оформляется</td>
 </tr>
 <tr>
-<td><strong>Кросс-платформенная мобильная разработка</strong></td>
-<td>Kotlin Multiplatform, Flutter (Dart), React Native (JavaScript)</td>
-<td>Один код — под Android и iOS сразу</td>
+<td><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">total</span> = <span class="term-data" title="Данные: переменная, поле или параметр">price</span> * <span class="term-data" title="Данные: переменная, поле или параметр">count</span>;</code></td>
+<td>Читаются 120 и 3, вычисляется 360, результат сохраняется</td>
+<td>total не является самой формулой «навсегда»: это вычисленное значение</td>
 </tr>
 <tr>
-<td><strong>Веб-бэкенд</strong></td>
-<td>PHP, JavaScript (Node.js), Python, Java, C#, Go</td>
-<td>Обработка запросов на сервере — у каждой экосистемы свои сильные стороны</td>
+<td><code><span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">total</span>)</code></td>
+<td>Значение передаётся методу вывода</td>
+<td>Исходные переменные не меняются</td>
+</tr>
+</tbody>
+</table>
+<p>Полная запись <code><span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span></code> в исходнике обязательна для этого примера; сокращённое обозначение в таблице нужно только для чтения.</p>
+<h2 id="lecture-_5">Что происходит между файлом и работающей программой</h2>
+<p><strong>Исходный код</strong> — текст, который ты написал. <strong>Компилятор</strong> проверяет его и переводит в другой вид. Для привычного Java-проекта javac создаёт файлы <code>.<span class="term-language" title="Конструкция языка">class</span></code> с байт-кодом. <strong>Байт-код</strong> — инструкции для виртуальной машины, а не текст Java и не универсальные инструкции любого физического процессора.</p>
+<p>JVM загружает подготовленные классы и выполняет программу. В распространённых реализациях часть кода может интерпретироваться, а часто выполняемые участки компилироваться JIT-компилятором в машинный код. Поэтому разделение языков на «всегда компилируемые» и «всегда построчно интерпретируемые» слишком грубое: многое зависит от реализации.</p>
+<p>Например, CPython обычно сначала получает байт-код Python, затем исполняет его. Это не javac и не JVM. Наличие промежуточного представления само по себе не делает среды одинаковыми.</p>
+<h2 id="lecture-_6">Компиляция и запуск — не одно действие</h2>
+<p>Если потерять <code>;</code>, ошибка появится при компиляции: до нормального запуска дело не дойдёт. Если правильно скомпилировать программу, которая при выполнении делит целое число на ноль, возможна уже ошибка выполнения. А если вместо умножения написать сложение, программа может успешно запуститься и дать неверное по задаче число. Это <strong>логическая ошибка</strong>.</p>
+<p>Сначала проверь, какой именно этап не удался. Поиск «ошибки в компьютере» без такого различия обычно только запутывает.</p>
+<h2 id="lecture-_7">Типизация: два отдельных вопроса</h2>
+<p>Статическая типизация означает, что допустимость многих операций проверяется по типам до выполнения. Динамическая переносит больше таких проверок на время выполнения. Это не вопрос «указывает ли программист тип руками»: тип можно выводить автоматически, сохраняя статическую проверку.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">label</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Билетов: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">;</span>
+</code></pre></div>
+
+<p>Эта запись допустима: Java специально поддерживает соединение строки с представлением числа. Поэтому фраза «в статически типизированном языке нельзя сложить число со строкой» неверна без уточнения операции и правил языка. А <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = "три";</code> не подходит: строка не является значением int.</p>
+<p>Термины «сильная» и «слабая» типизация используются неодинаково в разных источниках. Полезнее спрашивать конкретно: разрешено ли неявное преобразование, какая операция выполняется и когда возникает ошибка.</p>
+<h2 id="lecture-java-android">Почему Java на компьютере и Android — не буквально одна среда</h2>
+<p>В настольных примерах курса <code>.<span class="term-language" title="Конструкция языка">class</span></code> выполняются на JVM. В сборке Android код проходит дополнительные преобразования в формат DEX и входит в пакет приложения; на устройстве используется среда ART. Android не запускает обычные <code>.<span class="term-language" title="Конструкция языка">class</span></code> так, как команда java в наших консольных опытах.</p>
+<p>Java и Kotlin/JVM могут взаимодействовать в одном проекте, но «совместимы» не означает, что любой код автоматически работает на любой платформе. Имеют значение библиотеки, версии, настройки сборки и доступные API. Kotlin имеет и другие целевые платформы, а не только JVM.</p>
+<h2 id="lecture-_8">Как выбирать язык без соревнования «кто лучше»</h2>
+<p>Начни с ограничений задачи: где программа будет работать, какие библиотеки нужны, какой код уже есть и кто его поддерживает. Для браузерного интерфейса важна браузерная платформа, для Android — инструменты Android, для анализа таблиц — библиотеки работы с данными.</p>
+<p>Сначала выбери платформу и задачу, затем сравни инструменты. Таблица языков ниже — ориентир по распространённым применениям, а не запрет использовать язык где-либо ещё.</p>
+<table>
+<thead>
+<tr>
+<th>Язык</th>
+<th>Где часто встречается</th>
+<th>Что важно различать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Java</td>
+<td>Серверные и консольные приложения, часть Android-проектов</td>
+<td>Язык Java и среда JVM — разные понятия</td>
 </tr>
 <tr>
-<td><strong>Веб-фронтенд (браузер)</strong></td>
-<td>JavaScript, TypeScript</td>
-<td>Единственный язык, который выполняют браузеры «из коробки»</td>
+<td>Python</td>
+<td>Автоматизация, анализ данных, серверные приложения</td>
+<td>Библиотека решает свою задачу; короткая запись не отменяет проверку алгоритма</td>
 </tr>
 <tr>
-<td><strong>Системное и embedded-программирование</strong></td>
-<td>C, C++, Rust, Assembly</td>
-<td>Прямой контроль над памятью и железом, максимальная скорость</td>
+<td>JavaScript</td>
+<td>Код веб-страниц; серверные приложения в подходящей среде</td>
+<td>JavaScript не является сокращением или разновидностью Java</td>
 </tr>
 <tr>
-<td><strong>Data Science, машинное обучение</strong></td>
-<td>Python, R</td>
-<td>Огромные готовые библиотеки для анализа данных</td>
+<td>C#</td>
+<td>Приложения на платформе .NET</td>
+<td>Похожий синтаксис не делает библиотеки Java и .NET взаимозаменяемыми</td>
 </tr>
 <tr>
-<td><strong>Игровая разработка</strong></td>
-<td>C++ (движки), C# (Unity)</td>
-<td>Производительность + удобные готовые движки</td>
+<td>C++</td>
+<td>Системные компоненты и приложения с требованиями к управлению ресурсами</td>
+<td>Правила времени жизни и памяти отличаются от начальных Java-примеров</td>
 </tr>
 <tr>
-<td><strong>Автоматизация, скрипты, DevOps</strong></td>
-<td>Python, Bash, PowerShell</td>
-<td>Быстро написать, быстро запустить, без компиляции</td>
-</tr>
-<tr>
-<td><strong>Работа с базами данных</strong></td>
 <td>SQL</td>
-<td>Декларативный язык именно и только для запросов к данным</td>
+<td>Запросы к данным в СУБД</td>
+<td>Обычно описывает, какой набор данных нужен; это другой вид задачи, чем консольная программа</td>
 </tr>
 </tbody>
 </table>
-<h2 id="lecture-6-java-kotlin">6. Место Java и Kotlin в этой картине</h2>
-<p>Java появилась в 1995 году как язык «write once, run anywhere» — благодаря JVM один и тот же байт-код работает на любой платформе, для которой есть виртуальная машина (подробная история — в лекции «История создания языка»). Android изначально строился именно на Java — виртуальная машина Android (сначала Dalvik, затем ART) выполняет тот же байт-код по той же логике.</p>
-<p>Kotlin появился в 2011 году как язык от JetBrains, тоже компилируется в JVM-байт-код и <strong>полностью совместим с Java</strong> — можно в одном проекте использовать оба языка одновременно, вызывать Java-код из Kotlin и наоборот. В 2019 году Google объявила Kotlin приоритетным (<code>Kotlin-<span class="term-data" title="Данные: переменная, поле или параметр">first</span></code>) языком для новой Android-разработки. Поэтому у нас не «два курса в одном», а один: тот же байт-код, та же платформа, та же JVM — просто два синтаксиса для описания одной и той же логики, и оба вам пригодятся на практике.</p>
-<h2 id="lecture-7">7. Дальше</h2>
-<p>Теперь, когда понятно, где именно на карте языков программирования находится наш курс, переходим к <a target="_top" href="../#java-intro">организационному введению</a> — что именно будем изучать, в каком порядке и какими инструментами пользоваться.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-00">00. Обзор языков программирования — под запись</h1>
-<blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. Определения нужно знать и уметь объяснить своими словами.</p>
-</blockquote>
-<h2 id="notes-1">1. Язык программирования и машинный код</h2>
-<p><strong>Язык программирования</strong> — формальный язык для записи программ: набор правил, по которым человек описывает компьютеру, что нужно сделать.</p>
-<p><strong>Машинный код</strong> — команды в виде чисел, которые процессор выполняет напрямую. У каждого типа процессора машинный код свой.</p>
-<p>Процессор понимает только машинный код. Текст программы на любом языке нужно перевести.</p>
-<p>Универсального языка нет. Каждый язык — компромисс:</p>
-<table>
-<thead>
-<tr>
-<th>Что получаем</th>
-<th>Чем платим</th>
-<th>Пример</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Скорость и контроль над памятью</td>
-<td>Писать долго, ошибиться легко</td>
-<td>C, C++</td>
-</tr>
-<tr>
-<td>Писать быстро и коротко</td>
-<td>Программа работает медленнее</td>
-<td>Python</td>
-</tr>
-<tr>
-<td>Одна программа на любом устройстве</td>
-<td>Нужна программа-посредник</td>
-<td>Java, Kotlin</td>
-</tr>
-</tbody>
-</table>
-<h2 id="notes-2">2. Три пути от текста к работающей программе</h2>
-<div class="codehilite"><pre><span></span><code>1) текст программы ──[компилятор]──► машинный <span class="term-method" title="Метод: действие или вычисление">код</span> ──► процессор
-
-2) текст программы ──[интерпретатор]──► процессор
-
-3) текст программы ──[компилятор]──► байт-<span class="term-method" title="Метод: действие или вычисление">код</span> ──[виртуальная машина]──► процессор
-</code></pre></div>
-
-<p><strong>Компилятор</strong> — программа, которая переводит весь текст программы в машинный код заранее, до запуска. Результат — исполняемый файл.
-Плюс: программа работает быстро. Минус: под каждую систему и каждый процессор нужна своя сборка.
-Примеры языков: C, C++, Rust, Go.</p>
-<p><strong>Интерпретатор</strong> — программа, которая читает текст программы и выполняет его по одной команде прямо во время запуска. Исполняемый файл не создаётся.
-Плюс: один и тот же файл с кодом работает везде, где установлен интерпретатор; изменил код — сразу запустил. Минус: работает медленнее; ошибка обнаруживается только тогда, когда выполнение до неё дошло.
-Примеры языков: Python, JavaScript, PHP.</p>
-<p><strong>Байт-код</strong> — промежуточный код, не привязанный к конкретному процессору. Процессор его не понимает; его выполняет виртуальная машина.</p>
-<p><strong>Виртуальная машина</strong> — программа, которая выполняет байт-код на конкретном устройстве. Виртуальная машина Java называется <strong>JVM</strong> (Java Virtual Machine).</p>
-<p>Путь программы на Java:</p>
-<div class="codehilite"><pre><span></span><code>файл .java ──[javac]──► файл .<span class="term-language" title="Конструкция языка">class</span> (байт-<span class="term-method" title="Метод: действие или вычисление">код</span>) ──► <span class="term-method" title="Метод: действие или вычисление">JVM</span> ──► процессор
-</code></pre></div>
-
-<p>Так работают Java, Kotlin, C#.</p>
-<p><strong>JIT-компиляция</strong> (just-in-time) — перевод часто выполняемых участков байт-кода в машинный код прямо во время работы программы. За счёт этого Java работает почти так же быстро, как компилируемые языки.</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Компилятор</th>
-<th>Интерпретатор</th>
-<th>Байт-код + ВМ</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Когда перевод</td>
-<td>Заранее, один раз</td>
-<td>При каждом запуске</td>
-<td>Часть заранее, часть при запуске</td>
-</tr>
-<tr>
-<td>Скорость работы</td>
-<td>Высокая</td>
-<td>Низкая</td>
-<td>Близка к высокой</td>
-</tr>
-<tr>
-<td>Работает на разных системах</td>
-<td>Нет, нужна пересборка</td>
-<td>Да, если есть интерпретатор</td>
-<td>Да, если есть виртуальная машина</td>
-</tr>
-<tr>
-<td>Когда видны ошибки записи</td>
-<td>До запуска</td>
-<td>Во время работы</td>
-<td>До запуска</td>
-</tr>
-<tr>
-<td>Языки</td>
-<td>C, C++, Rust, Go</td>
-<td>Python, JavaScript, PHP</td>
-<td><strong>Java, Kotlin</strong>, C#</td>
-</tr>
-</tbody>
-</table>
-<h2 id="notes-3">3. Типизация</h2>
-<p><strong>Тип данных</strong> определяет, какие значения можно хранить и какие операции с ними можно выполнять. Примеры: целое число, дробное число, строка, логическое значение (истина/ложь).</p>
-<p><strong>Когда проверяются типы:</strong></p>
-<p><strong>Статическая типизация</strong> — тип переменной задаётся в коде и проверяется до запуска программы. Ошибка типа не даст программе запуститься. Языки: Java, Kotlin, C++.</p>
-<p><strong>Динамическая типизация</strong> — тип определяется во время работы программы; одна переменная может в разные моменты хранить значения разных типов. Ошибка типа обнаруживается только при выполнении той строки, где она есть. Языки: Python, JavaScript, PHP.</p>
-<p><strong>Насколько строго проверяются типы:</strong></p>
-<p><strong>Строгая (сильная) типизация</strong> — язык не преобразует значения одного типа в другой молча; несовместимые типы дают ошибку. Языки: Java, Kotlin, Python.</p>
-<p><strong>Слабая типизация</strong> — язык сам, без предупреждения, преобразует типы, чтобы операция выполнилась. Языки: JavaScript, PHP.</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th><strong>Строгая</strong></th>
-<th><strong>Слабая</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Статическая</strong></td>
-<td><strong>Java, Kotlin</strong>, C#</td>
-<td>C, C++</td>
-</tr>
-<tr>
-<td><strong>Динамическая</strong></td>
-<td>Python</td>
-<td>JavaScript, PHP</td>
-</tr>
-</tbody>
-</table>
-<p>Примеры с пары:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;восемнадцать&quot;</span><span class="p">;</span><span class="w">   </span><span class="c1">// Java: программа не запустится вообще</span>
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span> <span class="o">=</span> <span class="s2">&quot;восемнадцать&quot;</span>
-<span class="nb"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>              <span class="c1"># Python: запустится и упадёт на этой строке</span>
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code><span class="s2">&quot;5&quot;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="s2">&quot;2&quot;</span><span class="w">   </span><span class="c1">// 10     JavaScript: молча преобразует типы</span>
-<span class="s2">&quot;5&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">2</span><span class="w">     </span><span class="c1">// &quot;52&quot;</span>
-</code></pre></div>
-
-<h2 id="notes-4">4. Парадигмы программирования</h2>
-<p><strong>Парадигма программирования</strong> — подход к тому, как организовать код программы.</p>
+<p><strong>Парадигма</strong> — подход к организации решения. В императивном стиле описываются действия и изменения состояния. В объектном стиле связанные данные и действия организуют через объекты. В функциональном стиле важны вычисления через функции и работа с результатами выражений. Один современный язык может поддерживать несколько подходов: это не три взаимоисключающие коробки.</p>
+<p>В начале курса мы изучаем последовательность действий и переменные. Затем классы и объекты помогут организовать более крупную программу. Название подхода само по себе не делает решение правильным: результат всё равно проверяется на конкретных входных данных.</p>
+<h2 id="lecture-_9">Попробуй сам: меняй одно условие за раз</h2>
 <ol>
-<li><strong>Процедурная</strong> — программа есть последовательность команд, собранных в функции. Пример: C.</li>
-<li><strong>Объектно-ориентированная (ООП)</strong> — программа есть набор объектов, каждый из которых хранит свои данные и умеет выполнять свои действия. Примеры: Java, Kotlin, C#.</li>
-<li><strong>Функциональная</strong> — программа есть цепочка функций, которые получают данные и возвращают новые, ничего не изменяя. Пример: Haskell; элементы есть в Kotlin.</li>
-<li><strong>Декларативная</strong> — программист описывает, <em>что</em> нужно получить, а не <em>как</em> это сделать. Пример: SQL.</li>
+<li>Предскажи вывод при price = 150 и count = 2, затем проверь.</li>
+<li>Замени имя count на quantity во всех нужных местах. Вывод должен сохраниться.</li>
+<li>Поменяй только <code>*</code> на <code>+</code>. Объясни, почему компилятор не обязан заметить ошибку постановки задачи.</li>
+<li>Назови отдельно язык, компилятор, среду выполнения и редактор в своём способе запуска.</li>
 </ol>
-<p>Большинство современных языков поддерживают несколько парадигм. Говорят об основной.</p>
-<h2 id="notes-5">5. Где какие языки используют</h2>
-<table>
-<thead>
-<tr>
-<th>Область</th>
-<th>Языки</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Android</strong></td>
-<td><strong>Java, Kotlin</strong></td>
-</tr>
-<tr>
-<td>iOS</td>
-<td>Swift</td>
-</tr>
-<tr>
-<td>Сразу Android и iOS</td>
-<td>Dart (Flutter), JavaScript (React Native), Kotlin Multiplatform</td>
-</tr>
-<tr>
-<td>Сайты: то, что в браузере</td>
-<td>JavaScript, TypeScript</td>
-</tr>
-<tr>
-<td>Сайты: то, что на сервере</td>
-<td>PHP, Python, Java, C#, Go, JavaScript (Node.js)</td>
-</tr>
-<tr>
-<td>Операционные системы, драйверы, микроконтроллеры</td>
-<td>C, C++, Rust</td>
-</tr>
-<tr>
-<td>Анализ данных, нейросети</td>
-<td>Python</td>
-</tr>
-<tr>
-<td>Игры</td>
-<td>C++ (Unreal Engine), C# (Unity)</td>
-</tr>
-<tr>
-<td>Автоматизация, скрипты</td>
-<td>Python, Bash, PowerShell</td>
-</tr>
-<tr>
-<td>Базы данных</td>
-<td>SQL</td>
-</tr>
-</tbody>
-</table>
-<h2 id="notes-6-java-kotlin">6. Java и Kotlin</h2>
-<p><strong>Java</strong> — 1995 год, компания Sun Microsystems. Принцип: «Write once, run anywhere» — «написал один раз, запускай где угодно».</p>
-<p><strong>Kotlin</strong> — представлен в 2011 году, компания JetBrains. Компилируется в тот же байт-код, что и Java, и полностью с ней совместим.</p>
-<p><strong>2019 год</strong> — Google объявила Kotlin приоритетным языком разработки под Android.</p>
-<p>Оба языка: байт-код + виртуальная машина; статическая строгая типизация; основная парадигма — ООП.</p>
-<div class="codehilite"><pre><span></span><code>Main.java ──[javac]────┐
-                       ├──► байт-<span class="term-method" title="Метод: действие или вычисление">код</span> (.<span class="term-language" title="Конструкция языка">class</span>) ──► виртуальная машина
-Main.kt   ──[kotlinc]──┘
+<p>Если можешь объяснить каждое изменение, ты уже читаешь программу как решение задачи, а не как набор незнакомых слов.</p>
+<h2 id="lecture-_10">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-_1">Обзор языков программирования — под запись</h1>
+<p><strong>Язык программирования</strong> задаёт допустимые записи и их смысл. <strong>Алгоритм</strong> — последовательность действий для решения задачи. <strong>Программа</strong> записывает решение на выбранном языке. <strong>Компилятор</strong> переводит исходник; <strong>среда выполнения</strong> обеспечивает выполнение подготовленного кода.</p>
+<h2 id="notes-_2">Общая форма маршрута</h2>
+<div class="codehilite"><pre><span></span><code>задача → алгоритм → исходный код → подготовка → выполнение → проверка
 </code></pre></div>
 
-<h2 id="notes-_1">Проверь себя</h2>
-<p>По этим вопросам — опрос в начале следующей пары.</p>
+<p>Для привычного Java-проекта: <code>.java → javac → .<span class="term-language" title="Конструкция языка">class</span> → JVM</code>. Для Android сборка получает DEX, который используется средой ART. Это не запуск обычного .class настольной командой java.</p>
+<p><strong>Статическая типизация</strong> позволяет проверять многие операции по типам до выполнения. <strong>Динамическая</strong> переносит больше таких проверок на время выполнения. Вывод типа компилятором не делает язык динамическим.</p>
+<p>Названия «сильная» и «слабая» типизация неоднозначны: уточняй конкретные правила преобразований. В Java <code>"Билетов: " + 3</code> допустимо, а <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = "три"</code> — нет.</p>
+<h2 id="notes-main">Пример внутри main</h2>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">price</span></span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">);</span>
+</code></pre></div>
+
+<p>Вывод — 360. price и count можно согласованно переименовать. int, знаки синтаксиса и имя готового println не заменяются произвольными словами.</p>
+<h2 id="notes-_3">Проверь себя</h2>
 <ol>
-<li>Почему процессор не может выполнить текст программы напрямую?</li>
-<li>Чем компилятор отличается от интерпретатора?</li>
-<li>Что такое байт-код и кто его выполняет?</li>
-<li>Опишите путь программы на Java от текста до выполнения.</li>
-<li>За счёт чего одна и та же программа на Java работает на Windows и Linux?</li>
-<li>Что такое JIT-компиляция?</li>
-<li>Чем статическая типизация отличается от динамической?</li>
-<li>Python — язык с динамической строгой типизацией. Что означает каждое слово?</li>
-<li>К какой клетке таблицы типизации относятся Java и Kotlin?</li>
-<li>Назовите четыре парадигмы программирования и по одному языку на каждую.</li>
-<li>Почему для прошивки микроконтроллера выбирают C, а для анализа данных — Python?</li>
-<li>Почему в одном Android-проекте можно использовать и Java, и Kotlin?</li>
-</ol></article></details><footer><a target="_top" href="../#java">← К программе Java</a><a target="_top" href="../#java-intro">Введение в курс →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script></body></html>
+<li>Чем язык отличается от IDE и среды выполнения?</li>
+<li>Почему после изменения count старое значение total само не пересчитывается?</li>
+<li>На каком этапе возможны синтаксическая, runtime- и логическая ошибки?</li>
+<li>Почему Android и настольная JVM — не одна и та же схема запуска?</li>
+<li>Как изменится результат примера после замены умножения сложением?</li>
+</ol></article></details><footer><a target="_top" href="../#java">← К программе Java</a><a target="_top" href="../#java-intro">Введение в курс →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="course-traces.js?v=1"></script></body></html>

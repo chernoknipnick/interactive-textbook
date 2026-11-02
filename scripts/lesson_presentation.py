@@ -14,7 +14,7 @@ CATEGORIES = {
     'language': 'Конструкция языка',
     'object': 'Объект или ссылка на него',
 }
-KEYWORDS = set('class new this return if else for while static public private protected final void null true false'.split())
+KEYWORDS = set('class new this super return if else for while do break continue switch case default yield static public private protected final abstract void null true false import package throw throws try catch finally instanceof extends implements interface enum record synchronized volatile transient native assert'.split())
 TYPES = set('int double boolean char byte short long float String Student Phone ObjectsDemo Robot Scanner Random System Math ИмяКласса ТипПоля ТипРезультата ТипПараметра'.split())
 METHODS = set('study rest isTired use charge isLow println print main help getName getEnergy setEnergy checkEnergy isValidEnergy getCreatedCount equals clone sum average findMin findMax countMatching'.split())
 DATA = set('anna boris partner learner first second firstText secondText firstPhone backup group numbers values name energy battery model createdCount MAX_ENERGY school args index studentId helper имяПеременной имяПоля имяПараметра значение аргументы'.split())
@@ -45,6 +45,8 @@ def legend():
 class SemanticMarkup(HTMLParser):
     def __init__(self, body):
         super().__init__(convert_charrefs=False)
+        self.source = body
+        self.line_offsets = [0] + [match.end() for match in re.finditer('\n', body)]
         self.output = []
         self.stack = []
         visible = html.unescape(re.sub(r'<[^>]*>', '', body))
@@ -94,16 +96,27 @@ class SemanticMarkup(HTMLParser):
                     category = 'type'
                 elif value in KEYWORDS:
                     category = 'language'
-                elif declared_method or value in self.methods or re.match(r'\s*\(', data[match.end():]):
+                elif declared_method or self.is_call(data, match):
                     category = 'method'
                 elif value in self.data:
                     category = 'data'
+                elif value in self.methods:
+                    category = 'method'
             elif strong:
                 category = TERMS.get(value.lower())
             if category:
                 return '<span class="term-' + category + '" title="' + CATEGORIES[category] + '">' + value + '</span>'
             return value
         self.output.append(re.sub(r'"(?:\\.|[^"\\])*"|[A-Za-zА-Яа-яЁё_][A-Za-zА-Яа-яЁё_0-9]*', token, data))
+
+    def is_call(self, data, match):
+        following = data[match.end():]
+        if not following.strip():
+            line, column = self.getpos()
+            tail = self.source[self.line_offsets[line - 1] + column + len(data):]
+            # Pygments places the identifier and opening parenthesis in separate spans.
+            following = re.sub(r'^(?:</?span\b[^>]*>|\s)*', '', tail)
+        return bool(re.match(r'\s*\(', following))
 
 
 def semantic_markup(body):

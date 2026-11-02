@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Статические поля и методы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="oop-visuals.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 13 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-123">1.2.3 Статические поля и методы</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="oop-widget" data-oop="static" aria-label="Пошаговая модель: 1.2.3 Статические поля и методы">
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Статические поля и методы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="oop-visuals.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 13 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Статические поля и методы</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="oop-widget" data-oop="static" aria-label="Пошаговая модель: 1.2.3 Статические поля и методы">
   <h2>Посмотри, как это работает</h2>
   <p>Предскажи результат строки, затем нажми «Дальше». Можно включить проигрывание и остановиться на любом шаге.</p>
   <code class="oop-code" data-oop-code></code>
@@ -8,7 +8,98 @@
   <p class="oop-explanation" data-oop-explanation aria-live="polite"></p>
 </section>
 
-<h2 id="lecture-_1">Основные понятия</h2>
+<h2 id="lecture-_2">Сначала спроси: чьи это данные?</h2>
+<p>Имя и заряд конкретного телефона принадлежат его экземпляру. Общее ограничение заряда или число созданий могут относиться к классу. Именно смысл задачи, а не удобство вызова из main, определяет выбор.</p>
+<p>Если два телефона случайно имеют заряд 70, это ещё не делает заряд общим. Завтра один разрядится, другой останется прежним. static у такого поля смешал бы разные состояния.</p>
+<h2 id="lecture-_3">Общие формы</h2>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">static</span> Тип имяПоляКласса;
+<span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">ТипРезультата</span> <span class="term-method" title="Метод: действие или вычисление">имяМетодаКласса</span>(параметры) {
+    действия;
+}
+
+<span class="term-type" title="Тип или класс">ИмяКласса</span>.<span class="term-method" title="Метод: действие или вычисление">имяМетодаКласса</span>(<span class="term-data" title="Данные: переменная, поле или параметр">аргументы</span>);
+имяОбъекта.<span class="term-method" title="Метод: действие или вычисление">имяМетодаОбъекта</span>(<span class="term-data" title="Данные: переменная, поле или параметр">аргументы</span>);
+</code></pre></div>
+
+<p>Это шаблоны разных объявлений и вызовов, а не единый готовый файл. static — фиксированное слово Java. Имена классов, полей и собственных методов выбираешь ты, но они должны совпадать с объявлениями.</p>
+<h2 id="lecture-_4">Полная программа со счётчиком</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">StaticReviewDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">());</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="p">();</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="p">();</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">());</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">alias</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">first</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">second</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="p">;</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Ticket</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">return</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Файл StaticReviewDemo.java. Вывод: <strong>0, 2, true, false</strong>, каждое значение отдельно.</p>
+<h2 id="lecture-_5">Разбираем каждую причину результата</h2>
+<p><code><span class="term-language" title="Конструкция языка">private</span> <span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">createdCount</span></code> объявляет общее поле этого загруженного класса. Начальное значение int-поля — 0. Конструктор увеличивает счётчик при каждом нормальном создании Ticket в этом простом сценарии.</p>
+<p>Первый new увеличивает 0 до 1, второй — 1 до 2. <code><span class="term-type" title="Тип или класс">Ticket</span> <span class="term-data" title="Данные: переменная, поле или параметр">alias</span> = <span class="term-data" title="Данные: переменная, поле или параметр">first</span></code> копирует ссылку и не вызывает конструктор, поэтому счётчик остаётся 2. Сравнение first == alias истинно: ссылки ведут к одному экземпляру. first == second ложно: выполнены два разных new.</p>
+<p>getCreatedCount — метод класса. Он читает общую переменную и не требует выбора конкретного билета. Вызов записан через имя Ticket, чтобы принадлежность была видна читателю.</p>
+<table>
+<thead>
+<tr>
+<th>Событие</th>
+<th style="text-align: right;">createdCount</th>
+<th style="text-align: right;">Экземпляры, созданные нашим кодом</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>До первого new</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Первый new</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Второй new</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>Копирование ссылки</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">По-прежнему 2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-this">Почему здесь нет this</h2>
+<p>Статический метод не имеет текущего экземпляра. В getCreatedCount не выбран «этот билет», поэтому this там недоступно. Но статический метод может получить объект параметром или создать его и вызвать экземплярный метод через явную ссылку.</p>
+<p>main уже делает это, работая с first и second. Поэтому утверждение «static не может использовать объекты» неверно. Правильно: у static нет <strong>неявного</strong> текущего объекта.</p>
+<p>Если добавить личное поле seat и попытаться просто <code><span class="term-language" title="Конструкция языка">return</span> seat</code> из статического метода, вопрос останется без ответа: место какого билета нужно вернуть? Либо метод должен быть экземплярным, либо нужный билет должен передаваться явно.</p>
+<h2 id="lecture-_6">Счётчик созданий — не число живых объектов</h2>
+<p>Если присвоить first = null, история созданий не исчезнет и createdCount не уменьшится. К экземпляру может оставаться alias. Даже если все пути потеряны, сборка мусора не изменяет наш счётчик автоматически.</p>
+<p>В однопоточном учебном опыте ++ достаточно для демонстрации. Несколько потоков, долговременный учёт пользователей или база данных требуют другого проектирования; поле static не является общим сетевым хранилищем всех запусков приложения.</p>
+<h2 id="lecture-static-final">static и final: разные вопросы</h2>
+<p>static определяет принадлежность классу вместо отдельной переменной у каждого экземпляра. final запрещает повторное присваивание переменной после её допустимой инициализации.</p>
+<p>Поэтому возможны четыре комбинации: личное изменяемое поле; личное final-поле; общее изменяемое поле; общее static final-поле. Для числовой общей границы удобна запись <code><span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">MAX_BATTERY</span> = 100</code>.</p>
+<p>Если final-переменная хранит ссылку на массив, запрещено перенаправить саму переменную, но не обязательно запрещено изменить элементы массива. final не является глубоким замораживанием всего объекта.</p>
+<h2 id="lecture-static">Не делай static средством скрыть ошибку</h2>
+<p>Если экземплярный метод нельзя вызвать из main без получателя, укажи нужный объект. Добавление static к личному полю только ради компиляции меняет модель: теперь разные экземпляры делят одну переменную.</p>
+<p>Правильный вопрос перед каждым static: «Нужно ли для смысла этого действия выбрать конкретный объект?» Проверка произвольного числа на диапазон может обойтись без экземпляра; уменьшение заряда конкретного телефона — нет.</p>
+<h2 id="lecture-_7">Самостоятельная проверка</h2>
+<p>Добавь третий new Ticket и предскажи 3. Потом добавь ещё одну ссылку на second — число останется 3. Переименуй getCreatedCount в countCreated, обнови объявление и вызовы. Смысл метода не зависит от выбранного имени, но согласованность обязательна.</p>
+<p>В следующей задаче раздели свойства Phone: model и battery — личные, MAX_BATTERY — общая граница, createdCount — общий учебный счётчик. Объясни роль каждого до написания кода.</p>
+<h2 id="lecture-_8">Справочник и дополнительные упражнения по теме</h2>
+<h2 id="lecture-_9">Основные понятия</h2>
 <blockquote>
 <p><strong>Экземплярное <span class="term-data" title="Данные: переменная, поле или параметр">поле</span></strong> — поле, отдельная переменная которого существует у каждого экземпляра класса.</p>
 <p><strong>Статическое <span class="term-data" title="Данные: переменная, поле или параметр">поле</span> (<code><span class="term-language" title="Конструкция языка">static</span></code>)</strong> — поле класса, не создаваемое заново для каждого экземпляра. В наших примерах у одного загруженного класса одна такая общая переменная.</p>
@@ -74,7 +165,7 @@
 <h2 id="lecture-9">9. Прогноз перед запуском</h2>
 <p>До первого <code><span class="term-language" title="Конструкция языка">new</span></code> число созданий 0. После Анны и Бориса — 2. После <code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-data" title="Данные: переменная, поле или параметр">anna</span></code> — по-прежнему 2. Неверная энергия приводит к отказу до увеличения счётчика — остаётся 2. Проверки <code><span class="term-method" title="Метод: действие или вычисление">isValidEnergy</span>(100)</code> и <code><span class="term-method" title="Метод: действие или вычисление">isValidEnergy</span>(101)</code> дают <code><span class="term-language" title="Конструкция языка">true</span></code> и <code><span class="term-language" title="Конструкция языка">false</span></code>.</p>
 <p>Не просто назови ответ, а укажи строку, на которой меняется счётчик. Отличать «читаем значение» от «создаём объект» полезнее, чем запоминать результат примера.</p>
-<h2 id="lecture-_2">Разбираем по картинкам</h2>
+<h2 id="lecture-_10">Разбираем по картинкам</h2>
 <p class="diagram-code-caption">Код к следующей схеме</p>
 
 <p>Четыре независимых примера объявления полей. Полю final studentId здесь сразу задано значение, чтобы не оставлять пропущенную инициализацию.</p>
@@ -87,7 +178,7 @@
 <figure class="lesson-diagram-frame"><img class="lesson-diagram" loading="lazy" src="images/10 Static и final четыре случая.png" alt="10 Static и final четыре случая"><figcaption><a href="images/10 Static и final четыре случая.png" target="_blank" rel="noopener">Открыть схему целиком ↗</a></figcaption></figure>
 
 <p>Для каждой карточки ответь на два независимых вопроса: чья это переменная и можно ли присвоить ей другое значение? Первый вопрос связан со static, второй — с final.</p>
-<h2 id="lecture-_3">Программа для самостоятельного запуска</h2>
+<h2 id="lecture-_11">Программа для самостоятельного запуска</h2>
 <p>Каждый пример запускается отдельно. Классы <code><span class="term-type" title="Тип или класс">Student</span></code> в разных темах — последовательные учебные версии: не собирать их вместе в одном пакете. В терминале из его папки: <code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">StaticDemo</span>.java</code>, затем <code>java <span class="term-type" title="Тип или класс">StaticDemo</span></code>. JDK 17 или новее.</p>
 <div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">StaticDemo</span></span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -98,9 +189,9 @@
 <span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Student</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">());</span>
 <span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">partner</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">anna</span></span><span class="p">);</span>
 <span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">boris</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getEnergy</span></span><span class="p">());</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">try</span></span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Student</span></span><span class="p">(</span><span class="s">&quot;Ошибка&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">101</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k"><span class="term-method" title="Метод: действие или вычисление">catch</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">error</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">catch</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">error</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="s">&quot;Создание отклонено&quot;</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">Student</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">getCreatedCount</span></span><span class="p">());</span>
@@ -115,7 +206,7 @@
 <span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">private</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">;</span>
 <span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">Student</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">,</span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">isValidEnergy</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="p">(</span><span class="s">&quot;Недопустимая энергия&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">throw</span></span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">IllegalArgumentException</span></span><span class="p">(</span><span class="s">&quot;Недопустимая энергия&quot;</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">;</span>
 <span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">this</span></span><span class="p">.</span><span class="na"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">energy</span></span><span class="p">;</span>
@@ -147,15 +238,28 @@
 <span class="term-language" title="Конструкция языка">false</span>
 </code></pre></div>
 
-<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-123">1.2.3 Статические поля и методы — Под запись</h1>
+<p>Перед запуском закрой готовый вывод и предскажи результат. Затем объясни каждое расхождение со своим прогнозом.</p>
+<h2 id="lecture-_12">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-123">1.2.3 Статические поля и методы — Под запись</h1>
 <h1 id="notes-java">java #ооп #конспект</h1>
-<h2 id="notes-_1">Определения</h2>
+<h2 id="notes-_1">Обобщение: подставь свои имена</h2>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">static</span> Тип имяПоляКласса;
+<span class="term-language" title="Конструкция языка">static</span> <span class="term-type" title="Тип или класс">ТипРезультата</span> <span class="term-method" title="Метод: действие или вычисление">имяМетодаКласса</span>(параметры) {
+    действия;
+}
+
+<span class="term-type" title="Тип или класс">ИмяКласса</span>.<span class="term-method" title="Метод: действие или вычисление">имяМетодаКласса</span>(<span class="term-data" title="Данные: переменная, поле или параметр">аргументы</span>);
+имяОбъекта.<span class="term-method" title="Метод: действие или вычисление">имяМетодаОбъекта</span>(<span class="term-data" title="Данные: переменная, поле или параметр">аргументы</span>);
+</code></pre></div>
+
+<p>Это шаблоны разных объявлений и вызовов, а не единый готовый файл. static — фиксированное слово Java. Имена классов, полей и собственных методов выбираешь ты, но они должны совпадать с объявлениями.</p>
+<h2 id="notes-_2">Определения</h2>
 <p><strong>Экземплярное <span class="term-data" title="Данные: переменная, поле или параметр">поле</span></strong> — поле, отдельная переменная которого существует у каждого экземпляра класса.</p>
 <p><strong>Статическое <span class="term-data" title="Данные: переменная, поле или параметр">поле</span> (<code><span class="term-language" title="Конструкция языка">static</span></code>)</strong> — поле класса, не создаваемое заново для каждого экземпляра. В наших примерах у одного загруженного класса одна такая общая переменная.</p>
 <p><strong>Статический <span class="term-method" title="Метод: действие или вычисление">метод</span> (<code><span class="term-language" title="Конструкция языка">static</span></code>)</strong> вызывается без текущего экземпляра. У него нет <code><span class="term-language" title="Конструкция языка">this</span></code>, но он может работать с объектами, явно полученными или созданными в его коде.</p>
 <p><strong><code><span class="term-language" title="Конструкция языка">final</span></code></strong> запрещает повторное присваивание переменной после её допустимой инициализации. Само по себе это не означает неизменяемости объекта, на который ведёт ссылка.</p>
 <p><strong><code><span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span></code></strong> часто используют для констант класса; например, <code><span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">MAX_ENERGY</span> = 100</code>.</p>
-<h2 id="notes-_2">Главная схема</h2>
+<h2 id="notes-_3">Главная схема</h2>
 <p class="diagram-code-caption">Код к следующей схеме</p>
 
 <p>В объявлении Student одни поля принадлежат классу, другие — каждому экземпляру. Это фрагмент полей, а не самостоятельная программа.</p>
@@ -169,7 +273,7 @@
 
 <figure class="lesson-diagram-frame"><img class="lesson-diagram" loading="lazy" src="images/04 Static.png" alt="04 Static"><figcaption><a href="images/04 Static.png" target="_blank" rel="noopener">Открыть схему целиком ↗</a></figcaption></figure>
 
-<h2 id="notes-_3">Личное и общее</h2>
+<h2 id="notes-_4">Личное и общее</h2>
 <table>
 <thead>
 <tr>
@@ -204,9 +308,9 @@
 <p>Счётчик увеличиваем один раз в основном конструкторе после проверки. Вторая ссылка на уже существующий объект не увеличивает его. Число созданий не равно числу живых объектов.</p>
 <p><code><span class="term-language" title="Конструкция языка">static</span></code> означает принадлежность классу, <code><span class="term-language" title="Конструкция языка">final</span></code> — запрет повторного присваивания. <code><span class="term-language" title="Конструкция языка">static</span> <span class="term-language" title="Конструкция языка">final</span> <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">MAX_ENERGY</span> = 100</code> — общая числовая константа. <code><span class="term-language" title="Конструкция языка">final</span></code>-ссылка не запрещает менять содержимое изменяемого объекта.</p>
 <p>Статический метод может работать с явно переданным объектом: у него отсутствует только неявный текущий экземпляр. Личную энергию студента не надо делать <code><span class="term-language" title="Конструкция языка">static</span></code> ради удобства вызова.</p>
-<h3 id="notes-_4">Нарисуй и предскажи</h3>
+<h3 id="notes-_5">Нарисуй и предскажи</h3>
 <p>Счётчик сначала 0. Создали двух студентов, затем написали <code><span class="term-type" title="Тип или класс">Student</span> <span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-data" title="Данные: переменная, поле или параметр">anna</span></code>. Каков счётчик? Почему он не станет меньше, если выполнить <code><span class="term-data" title="Данные: переменная, поле или параметр">partner</span> = <span class="term-language" title="Конструкция языка">null</span></code>?</p>
-<h2 id="notes-_5">Разбираем по картинкам</h2>
+<h2 id="notes-_6">Разбираем по картинкам</h2>
 <p class="diagram-code-caption">Код к следующей схеме</p>
 
 <p>Четыре независимых примера объявления полей. Полю final studentId здесь сразу задано значение, чтобы не оставлять пропущенную инициализацию.</p>
@@ -219,7 +323,7 @@
 <figure class="lesson-diagram-frame"><img class="lesson-diagram" loading="lazy" src="images/10 Static и final четыре случая.png" alt="10 Static и final четыре случая"><figcaption><a href="images/10 Static и final четыре случая.png" target="_blank" rel="noopener">Открыть схему целиком ↗</a></figcaption></figure>
 
 <p>Для каждой карточки ответь на два независимых вопроса: чья это переменная и можно ли присвоить ей другое значение? Первый вопрос связан со static, второй — с final.</p>
-<h2 id="notes-_6">Проверь себя</h2>
+<h2 id="notes-_7">Проверь себя</h2>
 <p>На каждый вопрос ответь своими словами и приведи пример:</p>
 <ol>
 <li>Чем экземплярное поле отличается от static?</li>
@@ -230,5 +334,5 @@
 <li>Показывает ли счётчик созданий число живых объектов?</li>
 <li>Как правильно обозначать вызовы статических и экземплярных методов?</li>
 </ol>
-<h2 id="notes-_7">Домашняя работа</h2>
-<p>Добавить в Phone константу <code>MAX_BATTERY = 100</code>, закрытый статический счётчик созданий и геттер для него. Сделать два конструктора, но увеличивать счётчик один раз на успешно созданный объект. Предсказать результат после двух созданий, присваивания второй ссылки и попытки создать телефон с зарядом 150. Отдельно объяснить, почему заряд телефона не должен быть static.</p></article></details><footer><a target="_top" href="../#java-constructors">← Конструкторы</a><a target="_top" href="../#java">К программе Java →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script><script src="visuals.js?v=7"></script><script src="oop-visuals.js?v=2"></script></body></html>
+<h2 id="notes-_8">Домашняя работа</h2>
+<p>Добавить в Phone константу <code>MAX_BATTERY = 100</code>, закрытый статический счётчик созданий и геттер для него. Сделать два конструктора, но увеличивать счётчик один раз на успешно созданный объект. Предсказать результат после двух созданий, присваивания второй ссылки и попытки создать телефон с зарядом 150. Отдельно объяснить, почему заряд телефона не должен быть static.</p></article></details><footer><a target="_top" href="../#java-constructors">← Конструкторы</a><a target="_top" href="../#java">К программе Java →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="oop-visuals.js?v=2"></script></body></html>

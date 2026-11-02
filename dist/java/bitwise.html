@@ -1,7 +1,420 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Поразрядные операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 05 ИЗ 13 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-112">1.1.2. Поразрядные операции — под запись</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details>
-<blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары.</p>
-</blockquote>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Поразрядные операции · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 05 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Поразрядные операции</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="bitwise" aria-label="Пошаговый разбор: Как маска выделяет один признак">
+  <h2>Как маска выделяет один признак</h2>
+  <p>Сначала прочитай строку кода и предскажи состояние. Затем перейди к следующему шагу. Схема показывает выбранный учебный сценарий, а не запускает произвольную Java-программу.</p>
+  <p class="diagram-code-caption">Код к текущему шагу</p>
+  <pre><code data-trace-code></code></pre>
+  <div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell></div><div data-trace-cell></div><div data-trace-cell></div></div>
+  <p class="trace-explanation" data-trace-explanation aria-live="polite"></p>
+  <div class="trace-controls"><button type="button" data-trace-action="back">← Назад</button><span data-trace-step></span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+  <script type="application/json" data-trace-model>[{"code": "final int READ = 1;\nfinal int WRITE = 2;", "cells": ["READ: 01₂", "WRITE: 10₂", "Два независимых бита"], "explanation": "Каждое разрешение занимает отдельную позицию. Числа 1 и 2 — значения, READ и WRITE — выбранные имена."}, {"code": "int permissions = READ | WRITE;", "cells": ["01₂ OR 10₂", "Результат: 11₂", "permissions = 3"], "explanation": "OR включает позиции, где хотя бы один бит равен единице. Это не обычное объяснение сложения для произвольных масок."}, {"code": "boolean canWrite = (permissions & WRITE) != 0;", "cells": ["11₂ AND 10₂ = 10₂", "10₂ = 2; 2 != 0", "canWrite = true"], "explanation": "Сначала побитовая операция даёт int, затем сравнение превращает его в boolean."}, {"code": "permissions = permissions & ~WRITE;", "cells": ["WRITE инвертируется", "Бит записи обнуляется", "permissions = 1"], "explanation": "Маска сохраняет остальные биты. Право чтения остаётся установленным."}, {"code": "System.out.println(-3 >> 1);\nSystem.out.println(-3 / 2);", "cells": ["Сдвиг: -2", "Деление: -1", "Результаты различаются"], "explanation": "Для отрицательных значений нельзя без оговорки приравнивать знаковый сдвиг к целочисленному делению Java."}]</script>
+</section>
+
+<h2 id="lecture-_2">Зачем смотреть на число по битам</h2>
+<p>Обычно число 6 означает количество или размер. Но то же целое можно читать как набор двоичных разрядов: <code>110₂</code>. Каждый бит может хранить отдельный признак. Тогда число становится компактной карточкой разрешений: читать, записывать, запускать.</p>
+<p><strong>Бит</strong> имеет два значения — 0 и 1. <strong>Маска</strong> — число, чьи биты выбирают нужные позиции другого числа. Побитовая операция рассматривает каждую пару разрядов отдельно; соседние разряды при <code>&amp;</code>, <code>|</code>, <code>^</code> не переносятся, как при сложении.</p>
+<h2 id="lecture-_3">Общая форма операций</h2>
+<div class="codehilite"><pre><span></span><code>Тип <span class="term-data" title="Данные: переменная, поле или параметр">результат</span> = первоеЗначение &amp; маска;
+Тип <span class="term-data" title="Данные: переменная, поле или параметр">результат</span> = первоеЗначение | маска;
+Тип <span class="term-data" title="Данные: переменная, поле или параметр">результат</span> = первоеЗначение ^ маска;
+Тип <span class="term-data" title="Данные: переменная, поле или параметр">результат</span> = ~<span class="term-data" title="Данные: переменная, поле или параметр">значение</span>;
+</code></pre></div>
+
+<p>В этом шаблоне Тип для наших примеров — int. Имена выбираешь ты, но знаки операций фиксированы. <code>^</code> в Java означает XOR, а не степень. У <code>~</code> один операнд, у <code>&amp;</code>, <code>|</code>, <code>^</code> в показанных выражениях два.</p>
+<p>Для целых это побитовые операции. <code>&amp;</code>, <code>|</code>, <code>^</code> также имеют варианты для boolean; поэтому неверно говорить, что эти знаки вообще разрешены только для целых. Для сдвигов и <code>~</code> нужны целочисленные операнды.</p>
+<h2 id="lecture-_4">Полная программа: флаги доступа</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">BitsDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">READ</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">READ</span></span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">boolean</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">canWrite</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">canWrite</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Файл BitsDemo.java. Вывод:</p>
+<div class="codehilite"><pre><span></span><code>3
+<span class="term-language" title="Конструкция языка">true</span>
+1
+-2
+-1
+</code></pre></div>
+
+<h2 id="lecture-_5">Разбор каждого действия</h2>
+<p>READ = 1 — двоично 01, WRITE = 2 — 10. <code><span class="term-data" title="Данные: переменная, поле или параметр">READ</span> | <span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></code> включает позиции, в которых единица есть хотя бы у одного операнда: 01 OR 10 → 11 → 3. Константы имеют разные одиночные биты именно для того, чтобы признаки можно было сочетать независимо.</p>
+<p><code><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span> &amp; <span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></code> оставляет только бит записи: 11 AND 10 → 10 → 2. Затем <code>!= 0</code> превращает целое число в логический ответ «такой бит установлен». Сами числа 0 и 2 нельзя непосредственно использовать как условие if: Java ожидает boolean.</p>
+<p>Скобки в <code>(<span class="term-data" title="Данные: переменная, поле или параметр">permissions</span> &amp; <span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span>) != 0</code> задают нужную группировку. Без них сравнение с нулём связывается не так, как требуется побитовой проверке, и получается несовместимое сочетание типов.</p>
+<p><code>~<span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></code> инвертирует <strong>все</strong> биты int, а не только нарисованные нами два. В результате AND с такой маской сохраняет прочие биты permissions и обнуляет выбранный бит WRITE. Поэтому 3 превращается в 1, право чтения остаётся.</p>
+<table>
+<thead>
+<tr>
+<th>Шаг</th>
+<th>Условная двоичная запись permissions</th>
+<th style="text-align: right;">Значение</th>
+<th>Смысл</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READ</td>
+<td>01</td>
+<td style="text-align: right;">1</td>
+<td>Только чтение</td>
+</tr>
+<tr>
+<td>READ OR WRITE</td>
+<td>11</td>
+<td style="text-align: right;">3</td>
+<td>Оба разрешения</td>
+</tr>
+<tr>
+<td>AND с WRITE</td>
+<td>10</td>
+<td style="text-align: right;">2</td>
+<td>Проверяем выделенный бит</td>
+</tr>
+<tr>
+<td>Удаление WRITE</td>
+<td>01</td>
+<td style="text-align: right;">1</td>
+<td>Чтение сохранилось</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-_6">Сначала два числа, затем общие таблицы</h2>
+<p>12 — это 1100₂, 10 — 1010₂. Для AND единица получается только из пары 1 и 1: результат 1000₂ = 8. Для OR достаточно одной единицы: 1110₂ = 14. Для XOR единица получается из разных битов: 0110₂ = 6.</p>
+<p>Проверь каждый столбец отдельно. Если результат нельзя объяснить по четырём парам битов, не переходи к большим десятичным числам.</p>
+<p><code>~12</code> даёт -13 в int, потому что инвертируются 32 бита знакового целого. Рисунок из четырёх битов помогает понять операцию, но не заменяет полный формат хранения отрицательного int.</p>
+<h2 id="lecture-_7">Сдвиги: важная граница аналогии с делением</h2>
+<p><code>5 &lt;&lt; 2</code> даёт 20, <code>20 &gt;&gt; 2</code> даёт 5. Для неотрицательных чисел и подходящего расстояния это похоже на умножение и целочисленное деление на степень двойки, пока учитываются диапазон и потеря битов.</p>
+<p>Для отрицательных <code>&gt;&gt;</code> и <code>/</code> могут различаться: <code>-3 &gt;&gt; 1</code> равно -2, а <code>-3 / 2</code> равно -1. Знаковый сдвиг сохраняет знак и соответствует округлению вниз при делении на степень двойки; целочисленное деление Java отбрасывает дробную часть к нулю.</p>
+<p><code>&gt;&gt;&gt;</code> заполняет освободившиеся старшие биты нулями. Для отрицательного int результат может стать большим положительным числом. Тип самого значения при этом не становится беззнаковым int.</p>
+<p>Для int реально используются младшие пять бит расстояния сдвига: поэтому <code>1 &lt;&lt; 32</code> даёт 1, а не математическое 2³². Для long учитываются младшие шесть бит. Запись <code>1 &lt;&lt; n</code> не является безусловным способом получить любую степень двойки.</p>
+<h2 id="lecture-_8">Не путай &amp; с &amp;&amp;</h2>
+<p>Для boolean <code>&amp;</code> вычисляет обе стороны, а <code>&amp;&amp;</code> может пропустить правую, если левая ложна. Это меняет поведение при вызове методов, ошибках или изменении состояния. В обычных составных условиях используй <code>&amp;&amp;</code> и <code>||</code>, а для битовых масок — соответствующие побитовые знаки.</p>
+<p>XOR с повторным тем же ключом возвращает исходные биты. Это полезный учебный опыт, но повторяющийся простой XOR не следует выдавать за надёжную защиту реальных паролей или файлов.</p>
+<h2 id="lecture-_9">Самостоятельное применение</h2>
+<p>Возьми READ = 1, WRITE = 2, EXECUTE = 4. Сначала предскажи число для чтения и запуска: 1 OR 4 → 5. Затем добавь запись: получится 7. Убери запуск: останется 3. После каждого шага проверь разрешения через маску.</p>
+<p>Менять названия констант можно; менять их на произвольные пересекающиеся биты без пересмотра модели нельзя. Так ты различаешь свободное имя и смысл значения.</p>
+<h2 id="lecture-_10">Справочник и дополнительные упражнения по теме</h2>
+<h2 id="lecture-1">1. Двоичная система</h2>
+<p><strong>Бит</strong> — минимальная единица информации; принимает значение 0 или 1.
+<strong>Байт</strong> — 8 бит. В n битах можно записать 2ⁿ разных значений: в байте — 256.
+<strong>Двоичная система счисления</strong> — способ записи чисел двумя цифрами, 0 и 1. Каждый разряд — степень двойки.</p>
+<div class="codehilite"><pre><span></span><code>разряды:   128  64  32  16   8   4   2   1
+            0   0   0   0   1   1   0   1    = 8 + 4 + 1 = 13
+</code></pre></div>
+
+<p><strong>Из двоичной в десятичную:</strong> сложить степени двойки тех разрядов, где стоит 1.
+<code>1101</code> = 8 + 4 + 0 + 1 = 13.</p>
+<p><strong>Из десятичной в двоичную:</strong> делить число на 2, записывая остатки, пока не получится 0; остатки прочитать в обратном порядке.</p>
+<div class="codehilite"><pre><span></span><code>22 / 2 = 11   остаток 0   ▲
+11 / 2 = 5    остаток 1   │
+ 5 / 2 = 2    остаток 1   │ читать
+ 2 / 2 = 1    остаток 0   │ снизу вверх
+ 1 / 2 = 0    остаток 1   │
+                               → 10110
+</code></pre></div>
+
+<p><code>Integer.<span class="term-method" title="Метод: действие или вычисление">toBinaryString</span>(n)</code> — двоичная запись числа в виде строки.
+Литералы: <code>0b1101</code> — двоичный, <code>0xFF</code> — шестнадцатеричный (одна шестнадцатеричная цифра = 4 бита, <code>0xFF</code> = <code>1111 1111</code> = 255).</p>
+<h2 id="lecture-2">2. Поразрядные операции</h2>
+<p><strong>Поразрядные (побитовые) операции</strong> выполняются над каждым битом целого числа отдельно. Побитовые варианты работают с целыми; знаки &amp;, | и ^ также определены для boolean, где действуют логические операции без сокращённого вычисления.</p>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Название</th>
+<th>Бит результата равен 1, если…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;</code></td>
+<td>И</td>
+<td>оба бита равны 1</td>
+</tr>
+<tr>
+<td><code>\|</code></td>
+<td>ИЛИ</td>
+<td>хотя бы один бит равен 1</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>исключающее ИЛИ (XOR)</td>
+<td>биты различаются</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>НЕ (инверсия)</td>
+<td>бит был равен 0</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>b</th>
+<th><code>a &amp; b</code></th>
+<th><code>a \| b</code></th>
+<th><code>a ^ b</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code>  1100   (12)        1100   (12)        1100   (12)
+&amp; 1010   (10)      | 1010   (10)      ^ 1010   (10)
+  ────               ────               ────
+  1000   (8)         1110   (14)        0110   (6)
+</code></pre></div>
+
+<p><strong>Маска</strong> — число, биты которого указывают, с какими битами другого числа работать.
+- <code>x &amp; маска</code> — оставить только биты, отмеченные в маске (остальные обнулить); проверить бит;
+- <code>x | маска</code> — установить отмеченные биты в 1;
+- <code>x ^ маска</code> — переключить отмеченные биты;
+- <code>x &amp; ~маска</code> — сбросить отмеченные биты в 0.</p>
+<p>В Java <code>^</code> — это XOR, а не возведение в степень.</p>
+<h2 id="lecture-3">3. Сдвиги</h2>
+<table>
+<thead>
+<tr>
+<th>Знак</th>
+<th>Название</th>
+<th>Что делает</th>
+<th>Арифметически</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x &lt;&lt; n</code></td>
+<td>сдвиг влево</td>
+<td>биты сдвигаются влево, справа добавляются нули</td>
+<td>Аналогия для допустимого расстояния; учитывай переполнение</td>
+</tr>
+<tr>
+<td><code>x &gt;&gt; n</code></td>
+<td>сдвиг вправо со знаком</td>
+<td>биты сдвигаются вправо, слева копируется знаковый бит</td>
+<td>Для отрицательных округление вниз, в отличие от деления Java к нулю</td>
+</tr>
+<tr>
+<td><code>x &gt;&gt;&gt; n</code></td>
+<td>сдвиг вправо без знака</td>
+<td>биты сдвигаются вправо, слева добавляются нули</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Для int и 0 ≤ n &lt; 31 выражение <code>1 &lt;&lt; n</code> даёт положительное 2ⁿ. Расстояние сдвига int берётся по младшим пяти битам, поэтому <code>1 &lt;&lt; 32</code> равно 1. При n = 31 результат отрицательный.</p>
+<div class="codehilite"><pre><span></span><code>       5 = 0000 0101
+  5 &lt;&lt; 2 = 0001 0100 = 20
+
+      20 = 0001 0100
+ 20 &gt;&gt; 2 = 0000 0101 = 5
+</code></pre></div>
+
+<h2 id="lecture-4">4. Отрицательные числа</h2>
+<p><strong>Дополнительный код</strong> — способ хранения отрицательных целых чисел. Старший (левый) бит — знаковый: 0 — число неотрицательное, 1 — отрицательное.
+Чтобы получить <code>−x</code>: инвертировать все биты <code>x</code> и прибавить 1.
+Следствие: <code>~x</code> = <code>−x − 1</code>. Например, <code>~12</code> = <code>−13</code>.</p>
+<div class="codehilite"><pre><span></span><code>  5  =  0000 0101
+        1111 1010     1) инвертировать все биты
+      +         1     2) прибавить единицу
+        1111 1011  = -5
+</code></pre></div>
+
+<h2 id="lecture-5">5. Применение поразрядных операций</h2>
+<ol>
+<li><strong>Флаги</strong> — несколько признаков «да/нет» в одном числе, по биту на признак:
+   включить — <code>flags | FLAG</code>; проверить — <code>(flags &amp; FLAG) != 0</code>; выключить — <code>flags &amp; ~FLAG</code>; переключить — <code>flags ^ FLAG</code>.</li>
+<li><strong>Упаковка нескольких значений в одно число</strong> (например, цвет ARGB в <code><span class="term-type" title="Тип или класс">int</span></code>):
+   извлечь байт — <code>(<span class="term-data" title="Данные: переменная, поле или параметр">color</span> &gt;&gt; сдвиг) &amp; 0xFF</code>.</li>
+<li><strong>Учебное обратимое преобразование, не надёжное шифрование реальных данных:</strong> <code>(x ^ key) ^ key</code> = <code>x</code> — повторное применение XOR с тем же ключом возвращает исходное значение.</li>
+<li><strong>Быстрые вычисления:</strong> <code>n &amp; 1</code> — проверка чётности; <code>x &lt;&lt; n</code> похоже на умножение на 2ⁿ только с учётом расстояния и диапазона.</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">READ</span></span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 001</span>
+<span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 010</span>
+<span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">EXECUTE</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">   </span><span class="c1">// 100</span>
+
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">READ</span></span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">;</span><span class="w">                     </span><span class="c1">// 011 = 3</span>
+<span class="kt"><span class="term-type" title="Тип или класс">boolean</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">canWrite</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">      </span><span class="c1">// true</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">permissions</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="p">;</span><span class="w">                 </span><span class="c1">// 001 = 1</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFF3366CC</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">red</span></span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">    </span><span class="c1">// 51</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">green</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">     </span><span class="c1">// 102</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">blue</span></span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">color</span></span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span><span class="w">            </span><span class="c1">// 204</span>
+</code></pre></div>
+
+<h2 id="lecture-6">6. <code>&amp;</code> и <code>&amp;&amp;</code>. Приоритет операций</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>&amp;&amp;</code>, <code>\|\|</code></th>
+<th><code>&amp;</code>, <code>\|</code>, <code>^</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>С какими типами</td>
+<td>только <code><span class="term-type" title="Тип или класс">boolean</span></code></td>
+<td>целые числа и <code><span class="term-type" title="Тип или класс">boolean</span></code></td>
+</tr>
+<tr>
+<td>Сокращённое вычисление</td>
+<td>да</td>
+<td>нет, обе части вычисляются всегда</td>
+</tr>
+<tr>
+<td>Где применять</td>
+<td>в условиях</td>
+<td>в работе с битами</td>
+</tr>
+</tbody>
+</table>
+<p>В условиях используют <code>&amp;&amp;</code> и <code>||</code>. Исключение — <code>^</code> для <code><span class="term-type" title="Тип или класс">boolean</span></code>: «истинно ровно одно из двух».</p>
+<p><strong>Приоритет операций</strong> (от высшего к низшему)</p>
+<table>
+<thead>
+<tr>
+<th>№</th>
+<th>Операции</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>x++</code> <code>x--</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>++x</code> <code>--x</code> <code>+x</code> <code>-x</code> <code>~</code> <code>!</code> <code>(тип)</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>*</code> <code>/</code> <code>%</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>+</code> <code>-</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code> <code>&gt;&gt;&gt;</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>==</code> <code>!=</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>&amp;</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>^</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>\|</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>\|\|</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>? :</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>=</code> <code>+=</code> <code>-=</code> и другие присваивания</td>
+</tr>
+</tbody>
+</table>
+<p>Поразрядные <code>&amp;</code>, <code>^</code>, <code>|</code> имеют приоритет <strong>ниже</strong> сравнений: пишут <code>(flags &amp; FLAG) != 0</code>.
+Если порядок неочевиден, ставят скобки.</p>
+<h2 id="lecture-_11">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>В тетради, в столбик, без компьютера: перевести в двоичную систему 9, 25, 100; перевести в десятичную <code>10011</code>, <code>111000</code>; вычислить <code>9 &amp; 5</code>, <code>9 | 5</code>, <code>9 ^ 5</code>, <code>3 &lt;&lt; 3</code>, <code>40 &gt;&gt; 2</code>. Проверить запуском.</li>
+<li>Программа <code>Rights</code>: константы <code><span class="term-data" title="Данные: переменная, поле или параметр">READ</span> = 1</code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span> = 2</code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">EXECUTE</span> = 4</code>, <code>DELETE = 8</code>. Создать переменную с правами «чтение и удаление», вывести её значение, проверить каждое из четырёх прав и вывести <code><span class="term-language" title="Конструкция языка">true</span></code>/<code><span class="term-language" title="Конструкция языка">false</span></code>, затем добавить право записи и убрать право удаления.</li>
+</ol>
+<h2 id="lecture-_12">Проверь себя</h2>
+<p>Ответь своими словами и подтверди ответ небольшим примером.</p>
+<ol>
+<li>Что такое бит и байт? Сколько значений можно записать в 8 битах?</li>
+<li>Переведите 22 в двоичную систему и <code>1101</code> в десятичную.</li>
+<li>Чему равны <code>12 &amp; 10</code>, <code>12 | 10</code>, <code>12 ^ 10</code>?</li>
+<li>Что делает операция <code>^</code>? Чему равно <code>x ^ x</code>?</li>
+<li>Что такое маска?</li>
+<li>Как с помощью поразрядной операции проверить, чётное ли число?</li>
+<li>Чему равны <code>5 &lt;&lt; 2</code> и <code>35 &gt;&gt; 2</code>? Какой арифметической операции соответствует сдвиг?</li>
+<li>Чем <code>&gt;&gt;</code> отличается от <code>&gt;&gt;&gt;</code>?</li>
+<li>Как хранится отрицательное число? Почему <code>~12</code> равно <code>−13</code>?</li>
+<li>Как включить флаг, проверить флаг и выключить флаг?</li>
+<li>Цвет хранится как <code>0xFF3366CC</code>. Как получить значение зелёного канала?</li>
+<li>Чем <code>&amp;</code> отличается от <code>&amp;&amp;</code>?</li>
+<li>Почему <code><span class="term-language" title="Конструкция языка">if</span> (flags &amp; <span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span> != 0)</code> не компилируется?</li>
+<li>Почему двойное применение XOR с одним ключом возвращает исходное число?</li>
+</ol>
+<h2 id="lecture-_13">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-112">1.1.2. Поразрядные операции — под запись</h1>
+<h2 id="notes-_1">Обобщение: подставь свои имена</h2>
+<div class="codehilite"><pre><span></span><code>Тип результат = первоеЗначение &amp; маска;
+Тип результат = первоеЗначение | маска;
+Тип результат = первоеЗначение ^ маска;
+Тип результат = ~<span class="term-data" title="Данные: переменная, поле или параметр">значение</span>;
+</code></pre></div>
+
+<p>В этом шаблоне Тип для наших примеров — int. Имена выбираешь ты, но знаки операций фиксированы. <code>^</code> в Java означает XOR, а не степень. У <code>~</code> один операнд, у <code>&amp;</code>, <code>|</code>, <code>^</code> в показанных выражениях два.</p>
+<p>Для целых это побитовые операции. <code>&amp;</code>, <code>|</code>, <code>^</code> также имеют варианты для boolean; поэтому неверно говорить, что эти знаки вообще разрешены только для целых. Для сдвигов и <code>~</code> нужны целочисленные операнды.</p>
 <h2 id="notes-1">1. Двоичная система</h2>
 <p><strong>Бит</strong> — минимальная единица информации; принимает значение 0 или 1.
 <strong>Байт</strong> — 8 бит. В n битах можно записать 2ⁿ разных значений: в байте — 256.
@@ -24,7 +437,7 @@
 <p><code>Integer.<span class="term-method" title="Метод: действие или вычисление">toBinaryString</span>(n)</code> — двоичная запись числа в виде строки.
 Литералы: <code>0b1101</code> — двоичный, <code>0xFF</code> — шестнадцатеричный (одна шестнадцатеричная цифра = 4 бита, <code>0xFF</code> = <code>1111 1111</code> = 255).</p>
 <h2 id="notes-2">2. Поразрядные операции</h2>
-<p><strong>Поразрядные (побитовые) операции</strong> выполняются над каждым битом целого числа отдельно. Работают только с целыми типами.</p>
+<p><strong>Поразрядные (побитовые) операции</strong> выполняются над каждым битом целого числа отдельно. Побитовые варианты работают с целыми; знаки &amp;, | и ^ также определены для boolean, где действуют логические операции без сокращённого вычисления.</p>
 <table>
 <thead>
 <tr>
@@ -124,13 +537,13 @@
 <td><code>x &lt;&lt; n</code></td>
 <td>сдвиг влево</td>
 <td>биты сдвигаются влево, справа добавляются нули</td>
-<td><code>x * 2ⁿ</code></td>
+<td>Аналогия для допустимого расстояния; учитывай переполнение</td>
 </tr>
 <tr>
 <td><code>x &gt;&gt; n</code></td>
 <td>сдвиг вправо со знаком</td>
 <td>биты сдвигаются вправо, слева копируется знаковый бит</td>
-<td><code>x / 2ⁿ</code></td>
+<td>Для отрицательных округление вниз, в отличие от деления Java к нулю</td>
 </tr>
 <tr>
 <td><code>x &gt;&gt;&gt; n</code></td>
@@ -140,7 +553,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>1 &lt;&lt; n</code> — число 2ⁿ (единица в разряде n).</p>
+<p>Для int и 0 ≤ n &lt; 31 выражение <code>1 &lt;&lt; n</code> даёт положительное 2ⁿ. Расстояние сдвига int берётся по младшим пяти битам, поэтому <code>1 &lt;&lt; 32</code> равно 1. При n = 31 результат отрицательный.</p>
 <div class="codehilite"><pre><span></span><code>       5 = 0000 0101
   5 &lt;&lt; 2 = 0001 0100 = 20
 
@@ -164,8 +577,8 @@
    включить — <code>flags | FLAG</code>; проверить — <code>(flags &amp; FLAG) != 0</code>; выключить — <code>flags &amp; ~FLAG</code>; переключить — <code>flags ^ FLAG</code>.</li>
 <li><strong>Упаковка нескольких значений в одно число</strong> (например, цвет ARGB в <code><span class="term-type" title="Тип или класс">int</span></code>):
    извлечь байт — <code>(<span class="term-data" title="Данные: переменная, поле или параметр">color</span> &gt;&gt; сдвиг) &amp; 0xFF</code>.</li>
-<li><strong>Шифрование:</strong> <code>(x ^ key) ^ key</code> = <code>x</code> — повторное применение XOR с тем же ключом возвращает исходное значение.</li>
-<li><strong>Быстрые вычисления:</strong> <code>n &amp; 1</code> — проверка чётности; <code>x &lt;&lt; n</code> — умножение на 2ⁿ.</li>
+<li><strong>Учебное обратимое преобразование, не надёжное шифрование реальных данных:</strong> <code>(x ^ key) ^ key</code> = <code>x</code> — повторное применение XOR с тем же ключом возвращает исходное значение.</li>
+<li><strong>Быстрые вычисления:</strong> <code>n &amp; 1</code> — проверка чётности; <code>x &lt;&lt; n</code> похоже на умножение на 2ⁿ только с учётом расстояния и диапазона.</li>
 </ol>
 <div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">READ</span></span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 001</span>
 <span class="kd"><span class="term-language" title="Конструкция языка">final</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span></span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 010</span>
@@ -279,14 +692,14 @@
 </table>
 <p>Поразрядные <code>&amp;</code>, <code>^</code>, <code>|</code> имеют приоритет <strong>ниже</strong> сравнений: пишут <code>(flags &amp; FLAG) != 0</code>.
 Если порядок неочевиден, ставят скобки.</p>
-<h2 id="notes-_1">Домашнее задание</h2>
+<h2 id="notes-_2">Домашнее задание</h2>
 <ol>
 <li>Вопросы «Проверь себя».</li>
 <li>В тетради, в столбик, без компьютера: перевести в двоичную систему 9, 25, 100; перевести в десятичную <code>10011</code>, <code>111000</code>; вычислить <code>9 &amp; 5</code>, <code>9 | 5</code>, <code>9 ^ 5</code>, <code>3 &lt;&lt; 3</code>, <code>40 &gt;&gt; 2</code>. Проверить запуском.</li>
 <li>Программа <code>Rights</code>: константы <code><span class="term-data" title="Данные: переменная, поле или параметр">READ</span> = 1</code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span> = 2</code>, <code><span class="term-data" title="Данные: переменная, поле или параметр">EXECUTE</span> = 4</code>, <code>DELETE = 8</code>. Создать переменную с правами «чтение и удаление», вывести её значение, проверить каждое из четырёх прав и вывести <code><span class="term-language" title="Конструкция языка">true</span></code>/<code><span class="term-language" title="Конструкция языка">false</span></code>, затем добавить право записи и убрать право удаления.</li>
 </ol>
-<h2 id="notes-_2">Проверь себя</h2>
-<p>По этим вопросам — опрос в начале следующей пары.</p>
+<h2 id="notes-_3">Проверь себя</h2>
+<p>Ответь своими словами и подтверди ответ небольшим примером.</p>
 <ol>
 <li>Что такое бит и байт? Сколько значений можно записать в 8 битах?</li>
 <li>Переведите 22 в двоичную систему и <code>1101</code> в десятичную.</li>
@@ -302,4 +715,4 @@
 <li>Чем <code>&amp;</code> отличается от <code>&amp;&amp;</code>?</li>
 <li>Почему <code><span class="term-language" title="Конструкция языка">if</span> (flags &amp; <span class="term-data" title="Данные: переменная, поле или параметр">WRITE</span> != 0)</code> не компилируется?</li>
 <li>Почему двойное применение XOR с одним ключом возвращает исходное число?</li>
-</ol></article><footer><a target="_top" href="../#java-types">← Типы данных и операции</a><a target="_top" href="../#java-conditions">Условный оператор →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script></body></html>
+</ol></article></details><footer><a target="_top" href="../#java-types">← Типы данных и операции</a><a target="_top" href="../#java-conditions">Условный оператор →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="course-traces.js?v=1"></script></body></html>

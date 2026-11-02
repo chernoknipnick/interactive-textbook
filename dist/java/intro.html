@@ -1,184 +1,125 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Введение в курс · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 02 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-0">Лекция 0. Введение в курс. Разработка мобильных приложений</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details>
-<blockquote>
-<p>Курс: МДК.01.03 «Разработка мобильных приложений» (ПМ.01, специальность 09.02.07). Объём — 172 часа. Полная структура курса: Навигатор.</p>
-</blockquote>
-<h2 id="lecture-_1">Зачем этот курс</h2>
-<p>Мобильные приложения — самый массовый способ, которым сегодня пользуются программным обеспечением: у среднего человека телефон в руках занимает больше времени, чем компьютер. Курс даёт полный путь от «что такое переменная» до собственного рабочего Android-приложения с базой данных и обращением к серверу — то есть закрывает как фундамент программирования, так и специфику мобильной платформы.</p>
-<p>К концу курса вы будете уметь:
-- писать программы на Java и Kotlin — с типами данных, условиями, циклами, массивами, методами;
-- проектировать код в объектно-ориентированном стиле (классы, наследование, полиморфизм);
-- разрабатывать интерфейс Android-приложения, обрабатывать события, работать с несколькими экранами;
-- хранить данные локально (SQLite) и знать основы работы с сервером (REST, облачные платформы);
-- защищать данные простыми криптографическими приёмами и понимать структуры данных, на которых строится любое приложение (списки, деревья, хеш-таблицы).</p>
-<h2 id="lecture-_2">Два языка вместо одного — и почему это не удвоенная нагрузка</h2>
-<p>Официальная программа курса написана под <strong>Java</strong> — экзаменационные вопросы, формулировки практических работ («Реализация сортировок в библиотечных классах Java») ссылаются именно на неё. Мы будем следовать программе и разбирать Java подробно — она и сегодня остаётся основным языком старых и части новых Android-проектов, а её виртуальная машина (JVM) и модель памяти — база, без которой не понять, что вообще происходит на платформе.</p>
-<p>Одновременно с этим мы будем показывать тот же код на <strong>Kotlin</strong> — официальном языке Google для Android-разработки с 2019 года и языке, на котором сегодня начинают почти все новые Android-проекты. Это не два разных курса, а один: Kotlin работает на той же виртуальной машине (JVM), что и Java, полностью совместим с ней (можно вызывать Java-код из Kotlin и наоборот) и решает те же задачи короче и безопаснее (например, <code><span class="term-language" title="Конструкция языка">null</span></code> контролируется на уровне типов, а не падает исключением в рантайме).</p>
-<p>Практический эффект такого подхода: вы будете понимать код на собеседовании или в существующем проекте независимо от того, на каком из двух языков он написан — а это на реальном рынке труда встречается постоянно, потому что переход индустрии с Java на Kotlin ещё не завершён.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Java</span>
-<span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Привет, Android!&quot;</span><span class="p">;</span>
-<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">();</span>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Введение в курс · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 02 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Введение в курс</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="intro" aria-label="Пошаговый разбор: Вычислить — не значит изменить переменную">
+  <h2>Вычислить — не значит изменить переменную</h2>
+  <p>Сначала прочитай строку кода и предскажи состояние. Затем перейди к следующему шагу. Схема показывает выбранный учебный сценарий, а не запускает произвольную Java-программу.</p>
+  <p class="diagram-code-caption">Код к текущему шагу</p>
+  <pre><code data-trace-code></code></pre>
+  <div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell></div><div data-trace-cell></div><div data-trace-cell></div></div>
+  <p class="trace-explanation" data-trace-explanation aria-live="polite"></p>
+  <div class="trace-controls"><button type="button" data-trace-action="back">← Назад</button><span data-trace-step></span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+  <script type="application/json" data-trace-model>[{"code": "String name = \"Анна\";\nint completed = 2;", "cells": ["name → \"Анна\"", "completed = 2", "Консоль пока пуста"], "explanation": "Сначала подготовлены исходные данные. Никакая инструкция вывода ещё не выполнена."}, {"code": "System.out.println(name);", "cells": ["name → \"Анна\"", "completed = 2", "Консоль: Анна"], "explanation": "Метод вывода показывает текст. Переменная completed пока не использовалась."}, {"code": "System.out.println(completed + 1);", "cells": ["Выражение даёт 3", "completed остаётся 2", "Консоль: Анна, затем 3"], "explanation": "Плюс вычисляет новое значение. Присваивания обратно в completed нет."}, {"code": "completed = completed + 1;", "cells": ["Читаем прежнее 2", "completed теперь 3", "Новой строки в консоли нет"], "explanation": "Это дополнительный опыт после исходной программы: теперь есть явное присваивание, которое действительно меняет переменную."}]</script>
+</section>
+
+<h2 id="lecture-_2">Как читать курс и не пытаться запомнить всё сразу</h2>
+<p>Цель курса — научиться объяснять, как программа получает данные, принимает решения, повторяет действия и работает с объектами. Мобильный интерфейс появится позже: кнопка сама по себе не заменяет алгоритм, а красивый экран не исправляет неверный расчёт.</p>
+<p><strong>Задача</strong> описывает желаемый результат. <strong>Решение</strong> задаёт шаги. <strong>Код</strong> записывает эти шаги на языке. <strong>Проверка</strong> показывает, совпало ли поведение с ожиданием. Если результат неверен, возвращайся к тому этапу, где возникло расхождение.</p>
+<h2 id="lecture-_3">Общая форма работы над программой</h2>
+<p>Это учебный маршрут, а не синтаксис Java:</p>
+<div class="codehilite"><pre><span></span><code>условие задачи → пример на бумаге → алгоритм → код
+→ прогноз вывода → запуск → сравнение → исправление
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="c1">// Kotlin — то же самое, короче и без явного типа</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Привет, Android!&quot;</span>
-<span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span>
-</code></pre></div>
-
-<h2 id="lecture-_3">Структура курса</h2>
-<table>
-<thead>
-<tr>
-<th>Раздел</th>
-<th>О чём</th>
-<th>Часы</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1. Основы языка (типы, ветвление, циклы, массивы, методы)</td>
-<td>Фундамент программирования</td>
-<td>16</td>
-</tr>
-<tr>
-<td>2. Введение в ООП (+ Context/Intent, Generics)</td>
-<td>Классы, наследование, первое знакомство с Android-понятиями</td>
-<td>16</td>
-</tr>
-<tr>
-<td>3. Android-разработка (UI, жизненный цикл, потоки, сервисы, фрагменты, графика)</td>
-<td>Собственно мобильная разработка</td>
-<td>48</td>
-</tr>
-<tr>
-<td>4. Алгоритмы и структуры данных (списки, деревья, сортировки, SQLite, хеширование, криптография)</td>
-<td>Инструменты, на которых строится логика приложения</td>
-<td>48</td>
-</tr>
-<tr>
-<td>5. Серверная часть (HTTP, REST, облачные платформы, Material Design)</td>
-<td>Как приложение общается с внешним миром</td>
-<td>—</td>
-</tr>
-</tbody>
-</table>
-<p>Разделы идут именно в этом порядке не случайно: раздел 3 (Android) невозможно понять без ООП из раздела 2, а раздел 4 (структуры данных) постоянно опирается на Android-примеры («список в Android», «SQLite-запрос в Android») из раздела 3.</p>
-<h2 id="lecture-_4">Инструменты</h2>
-<ul>
-<li><strong>JDK</strong> (Java Development Kit) — обязателен, на нём работает и Java, и Kotlin.</li>
-<li><strong>Android Studio</strong> — официальная среда разработки для Android (включает эмулятор устройства — не обязательно иметь физический телефон для учёбы).</li>
-<li><strong>Kotlin-плагин</strong> — идёт в Android Studio из коробки, отдельно ставить не нужно.</li>
-<li><strong>Git</strong> — по желанию, для сохранения версий своих проектов, пригодится в любом будущем проекте.</li>
-</ul>
-<h2 id="lecture-_5">Как будет строиться каждая тема</h2>
-<p>Каждая лекция курса сопровождается практикой — по официальным номерам рабочей программы (ПР3.01–ПР3.04, ЛР3.01–ЛР3.02, см. Навигатор). Итоговая цель раздела 3 (Android) и раздела 5 (сервер) — собственный небольшой, но полностью рабочий Android-проект, который можно показать на собеседовании.</p>
-<h2 id="lecture-_6">С чего начать прямо сейчас</h2>
-<ol>
-<li>Установить Android Studio (официальный сайт: developer.android.com/studio).</li>
-<li>Создать тестовый проект «Hello World» и запустить его на эмуляторе — убедиться, что окружение работает, до следующего занятия.</li>
-<li>Перейти к первой теме: <a target="_top" href="../#java-first-program">Первая программа на Java: структура и запуск</a>, далее — <a target="_top" href="../#java-types">1.1.1 Типы данных и операции</a>, затем — <a target="_top" href="../#java-conditions">1.1.3 Условный оператор</a>.</li>
-</ol></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-0">0. Введение в курс — под запись</h1>
-<blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары.</p>
-</blockquote>
-<h2 id="notes-1">1. О курсе</h2>
-<p><strong>Курс:</strong> МДК.01.03 «Разработка мобильных приложений» (профессиональный модуль ПМ.01). Объём — 172 часа. Итоговая аттестация — экзамен.</p>
-<p><strong>К концу курса вы должны уметь:</strong></p>
-<ol>
-<li>писать программы на Java: типы данных, условия, циклы, массивы, методы;</li>
-<li>проектировать код в объектно-ориентированном стиле: классы, наследование, полиморфизм;</li>
-<li>разрабатывать интерфейс Android-приложения и обрабатывать действия пользователя;</li>
-<li>хранить данные в базе SQLite и получать данные с сервера;</li>
-<li>применять основные структуры данных и алгоритмы: списки, деревья, сортировки, хеширование.</li>
-</ol>
-<h2 id="notes-2">2. Структура курса</h2>
-<div class="codehilite"><pre><span></span><code>┌──────────────────────────────────────────────────────────┐
-│ 2.3 Серверная часть: HTTP, REST, облака, Material Design │
-├──────────────────────────────────────────────────────────┤
-│ 2.2 Алгоритмы и структуры данных, SQLite, криптография   │
-├──────────────────────────────────────────────────────────┤
-│ 2.1 Android: экраны, интерфейс, потоки, сервисы, графика │
-├──────────────────────────────────────────────────────────┤
-│ 1.2 Введение в ООП: классы, конструкторы, наследование   │
-├──────────────────────────────────────────────────────────┤
-│ 1.1 Основы языка: типы, условия, циклы, массивы, методы  │  ← начинаем отсюда
-└──────────────────────────────────────────────────────────┘
-</code></pre></div>
-
-<p><strong>Раздел 1. Основы программирования</strong>
-- Тема 1.1. Основы языка: типы данных, условный оператор, циклы, массивы, методы.
-- Тема 1.2. Введение в ООП: классы и объекты, конструкторы, статические поля и методы, наследование и полиморфизм.</p>
-<p><strong>Раздел 2. Android и архитектура программных продуктов</strong>
-- Тема 2.1. Основы программирования Android-приложений: интерфейс, потоки, сервисы, графика.
-- Тема 2.2. Алгоритмы и структуры данных: списки, очереди, деревья, сортировки, хеширование, базы данных SQLite, криптография.
-- Тема 2.3. Серверная часть мобильных приложений: HTTP, REST, облачные платформы.</p>
-<p>Каждый следующий раздел опирается на предыдущий. Пропущенная тема не «забудется сама»: на неё опирается всё, что идёт после.</p>
-<p>Практические работы первого раздела: ПР00 (типы данных), ПР01 (условный оператор), ПР02 (циклы и массивы), ПР03 (методы).</p>
-<h2 id="notes-3">3. Два языка</h2>
-<p><strong>Основной язык курса — Java.</strong> Причины:</p>
-<ol>
-<li>программа курса, практические работы и экзамен составлены по Java;</li>
-<li>огромная часть существующих Android-приложений написана на Java, и их код нужно уметь читать и дорабатывать;</li>
-<li>в Java всё записывается явно, поэтому на ней лучше видно, как устроена программа.</li>
-</ol>
-<p><strong>Kotlin</strong> показывается параллельно: тот же код, записанный короче. Kotlin работает на той же виртуальной машине и полностью совместим с Java, поэтому это не второй курс, а вторая запись того же самого.</p>
-<p>Одна и та же программа:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Java</span>
-<span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">Main</span></span><span class="w"> </span><span class="p">{</span>
+<p>Не начинай со случайного поиска похожего файла. Сначала придумай маленький пример, для которого ответ понятен без программы. Тогда будет с чем сравнить запуск.</p>
+<h2 id="lecture-_4">Пример: что проверяем в первой программе</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">CourseDemo</span></span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Привет, Android!&quot;</span><span class="p">;</span>
-<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">();</span>
-<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Анна&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">completed</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">name</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">completed</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="c1">// Kotlin</span>
-<span class="kd">fun</span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Привет, Android!&quot;</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">greeting</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span>
-<span class="w">    </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="p">)</span>
-<span class="p">}</span>
+<p>Файл — CourseDemo.java. После компиляции и запуска ожидаются две строки:</p>
+<div class="codehilite"><pre><span></span><code>Анна
+3
 </code></pre></div>
 
-<p>Обе выводят <code>16</code>. В Kotlin тип переменной не записан, но он есть: компилятор определяет его сам до запуска. Типизация остаётся статической.</p>
-<h2 id="notes-4">4. Инструменты</h2>
-<p><strong>JDK</strong> (Java Development Kit) — набор инструментов разработчика на Java. В него входят компилятор <code>javac</code> и виртуальная машина JVM. Без JDK программу на Java нельзя ни собрать, ни запустить.</p>
-<p><strong>IDE</strong> (Integrated Development Environment, среда разработки) — программа для написания кода: редактор с подсветкой и подсказками, кнопка запуска, отладчик.</p>
-<p><strong>Что используем в курсе:</strong>
-- сейчас — онлайн-компилятор в браузере (ничего устанавливать не нужно);
-- дома и на практических — IntelliJ IDEA Community или Visual Studio Code с расширением для Java;
-- в разделе про Android — Android Studio.</p>
-<p>Сообщение об ошибке нужно читать: в нём указаны номер строки и то, чего ожидал компилятор. Пример: <code>error: ';' expected</code> — в указанной строке пропущена точка с запятой.</p>
-<h2 id="notes-5">5. Как проходит каждая тема</h2>
-<div class="codehilite"><pre><span></span><code>лекция ──► конспект ──► опрос ──► практическая ──► защита
+<table>
+<thead>
+<tr>
+<th>Запись</th>
+<th>Роль</th>
+<th>Важная проверка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">String</span> <span class="term-data" title="Данные: переменная, поле или параметр">name</span> = "Анна";</code></td>
+<td>Сохранить текст в локальной переменной</td>
+<td>Кавычки обозначают значение, name — выбранное имя</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">completed</span> = 2;</code></td>
+<td>Сохранить целое число</td>
+<td>Это не строка "2"</td>
+</tr>
+<tr>
+<td><code><span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">name</span>)</code></td>
+<td>Показать сохранённый текст</td>
+<td>Само объявление name ещё ничего не печатает</td>
+</tr>
+<tr>
+<td><code><span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">completed</span> + 1)</code></td>
+<td>Вычислить сумму и показать её</td>
+<td>Значение completed остаётся 2: присваивания обратно нет</td>
+</tr>
+</tbody>
+</table>
+<p>Эта последняя деталь важна с первой темы. Вычисление нового значения и изменение переменной — разные действия. Чтобы сохранить 3, нужна инструкция <code><span class="term-data" title="Данные: переменная, поле или параметр">completed</span> = <span class="term-data" title="Данные: переменная, поле или параметр">completed</span> + 1;</code>.</p>
+<h2 id="lecture-_5">Какие названия можно выбирать</h2>
+<p>CourseDemo — имя собственного класса, name и completed — имена переменных. Ты можешь назвать их по-другому, согласованно исправив обращения. Слова public, class, static, void и int задаёт Java. Метод println уже объявлен в библиотеке; его имя просто так не меняется.</p>
+<p>Имя публичного класса в привычной файловой форме совпадает с именем файла. Если класс назвать MyCourse, файл будет MyCourse.java, а команда запуска — <code>java MyCourse</code>. Названия примеров в лекциях помогают отличать программы и не являются обязательными именами твоих проектов.</p>
+<h2 id="lecture-jdk-jvm-ide">JDK, JVM и IDE: три разных назначения</h2>
+<p><strong>JDK</strong> — набор инструментов разработки Java; для наших опытов особенно важны javac и java. <strong>JVM</strong> — виртуальная машина, выполняющая подготовленный Java-байт-код. <strong>IDE</strong> — среда, где удобно редактировать, запускать и отлаживать проект.</p>
+<p>Редактор может показывать красивую подсветку, даже если запуск ещё не настроен. Наличие файла <code>.java</code> не доказывает наличие JDK. Ошибка «команда javac не найдена» чаще относится к установке или настройке инструментов, а не к арифметике в программе.</p>
+<p>В онлайн-среде часть этих действий выполняет сервер. Поэтому нужно учитывать ограничения сервиса: имя класса Main, способ ввода данных, время выполнения. Пример с ожидающим Scanner может казаться «зависшим», хотя он просто ждёт ввод.</p>
+<h2 id="lecture-run">Кнопка Run объединяет несколько действий</h2>
+<p>В обычном проекте сначала проверяется и компилируется исходник, затем запускается точка входа. IDE скрывает команды за кнопкой, но различие этапов остаётся. Если компилятор остановился, не ищи ещё не полученный вывод в консоли.</p>
+<p>Привычные команды из папки файла:</p>
+<div class="codehilite"><pre><span></span><code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">CourseDemo</span>.java
+java <span class="term-type" title="Тип или класс">CourseDemo</span>
 </code></pre></div>
 
-<h2 id="notes-6">6. Правила курса</h2>
+<p>Расширение <code>.java</code> указываем javac как часть имени исходного файла. Во второй команде выбираем имя класса, поэтому не дописываем <code>.<span class="term-language" title="Конструкция языка">class</span></code>. Это показанная здесь двухшаговая схема; у современных JDK есть и другие способы запуска.</p>
+<h2 id="lecture-_6">Как пользоваться подробной лекцией</h2>
+<p>Сначала прочитай общую форму. В ней подписи обозначают места для твоих имён и значений. Затем изучи конкретный пример. Перед инфографикой расположен именно тот фрагмент, который она объясняет. Сверь состояние до и после каждой строки.</p>
+<p>Легенда цветов помогает различать роли, но смысл не определяется одним цветом: поле и параметр находятся в группе данных, а различаются местом объявления. В вопросе «почему стало 3?» ищи вычисление или присваивание, а не оттенок текста.</p>
+<p>При первом проходе не нужно помнить весь справочник. Нужно уметь вернуться к объявлению, найти нужную строку и проверить свою гипотезу маленьким запуском.</p>
+<h2 id="lecture-_7">Как разбирать сообщение об ошибке</h2>
 <ol>
-<li><strong>Конспект ведётся в тетради от руки.</strong> Всё, что диктуется под запись, должно быть в тетради. Файл «Под запись» — для сверки, а не вместо конспекта.</li>
-<li><strong>Каждая лекция начинается с опроса</strong> по вопросам «Проверь себя» из предыдущей темы.</li>
-<li><strong>Практическая работа считается сданной только после защиты.</strong> На защите нужно показать работающую программу и объяснить любую её строку.</li>
-<li><strong>Код, который студент не может объяснить, не засчитывается</strong>, откуда бы он ни взялся: от соседа, из интернета или от нейросети.</li>
-<li><strong>Вариант</strong> в практических работах определяется по номеру в журнале.</li>
-<li><strong>Пропущенная тема</strong> восстанавливается самостоятельно по файлам курса; практическая по ней сдаётся в общем порядке.</li>
-<li><strong>Допуск к экзамену</strong> — все практические и лабораторные работы сданы.</li>
+<li>Прочитай первое относящееся к твоему файлу сообщение.</li>
+<li>Найди указанную строку и проверь также строку перед ней.</li>
+<li>Определи, что не подошло: имя, тип, скобка, инструкция, настройка запуска.</li>
+<li>Исправь одну причину и повтори проверку.</li>
 </ol>
-<p>Экзамен: банк из 88 вопросов трёх уровней сложности. Вопросы «Проверь себя» после каждой лекции — подготовка к нему.</p>
-<h2 id="notes-_1">Домашнее задание</h2>
+<p>После пропущенной скобки компилятор иногда показывает много последствий. Исправление самой первой причины может убрать сразу несколько сообщений. Это не повод менять весь файл наугад.</p>
+<h2 id="lecture-_8">Как задавать вопрос и проверять чужой пример</h2>
+<p>Хороший вопрос содержит ожидаемый результат, фактический вывод, точный текст ошибки и небольшой код, который её воспроизводит. Фраза «не работает» не показывает, на каком этапе возникла проблема.</p>
+<p>Код из интернета или подсказки можно использовать для изучения, но сначала выясни имена переменных, входные данные и последовательность действий. Затем поменяй значения и объясни новый результат. Если после переименования переменной всё перестало работать, проверь согласованность обращений.</p>
+<h2 id="lecture-java-kotlin">Java и Kotlin в этом маршруте</h2>
+<p>Основные примеры этой части написаны на Java. Когда синтаксис Java понятен, сравнение с Kotlin помогает увидеть ту же идею в другой записи. Разница в количестве строк ещё не объясняет, почему решение корректно.</p>
+<p>Консольные Java-программы запускаются на JVM. Для Android код проходит сборку в DEX и работает с ART и Android API. Поэтому сначала мы осваиваем общие конструкции и объекты, а затем связываем их с жизненным циклом мобильного приложения.</p>
+<h2 id="lecture-_9">Самостоятельный первый шаг</h2>
+<p>Создай свою программу с именем класса StudyCard. Сохрани имя предмета и число завершённых заданий в двух переменных. Выведи их, затем отдельно выведи число «на одно задание больше». Проверь, изменилось ли исходное число без присваивания.</p>
+<p>Порядок сдачи работ, критерии оценивания, сроки и организационные требования уточняй у своего преподавателя. Учебные рекомендации на странице не устанавливают новые правила допуска или экзамена.</p>
+<h2 id="lecture-_10">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-_1">Введение в курс — под запись</h1>
+<p>Маршрут: задача → пример на бумаге → алгоритм → код → прогноз → запуск → проверка. Учись объяснять изменение данных, а не только воспроизводить текст файла.</p>
+<p><strong>JDK</strong> — инструменты разработки; <strong>JVM</strong> — виртуальная машина для Java-байт-кода; <strong>IDE</strong> — среда редактирования, запуска и отладки. Наличие редактора ещё не доказывает, что JDK установлен и настроен.</p>
+<h2 id="notes-_2">Обычный двухшаговый запуск</h2>
+<div class="codehilite"><pre><span></span><code>javac -encoding UTF-8 <span class="term-type" title="Тип или класс">ИмяКласса</span>.java
+java <span class="term-type" title="Тип или класс">ИмяКласса</span>
+</code></pre></div>
+
+<p>Это шаблон команды: замени имя на реальное. Класс, файл и команда запуска должны быть согласованы. После изменения исходника снова выполняется компиляция.</p>
+<h2 id="notes-_3">Как проверять пример</h2>
+<p>Сначала предскажи вывод, затем запусти. Измени одно значение или имя и объясни новый результат. Сообщая об ошибке, приложи небольшой код, ожидаемый результат и точный текст сообщения.</p>
+<h2 id="notes-_4">Проверь себя</h2>
 <ol>
-<li>Выучить определения из лекции 00 и этой лекции, ответить на вопросы «Проверь себя».</li>
-<li>Установить на домашний компьютер IntelliJ IDEA Community или Visual Studio Code по инструкции из чата группы. Если компьютера нет — убедиться, что онлайн-компилятор открывается с телефона.</li>
-<li>В онлайн-компиляторе вывести на экран три строки: фамилию, группу и название курса.</li>
+<li>Что делает javac и что делает java?</li>
+<li>Почему красивой подсветки недостаточно для работающей программы?</li>
+<li>Почему print и присваивание — разные действия?</li>
+<li>Как понять, на каком этапе возникла ошибка?</li>
 </ol>
-<h2 id="notes-_2">Проверь себя</h2>
-<p>По этим вопросам — опрос в начале следующей пары.</p>
-<ol>
-<li>Почему раздел про Android идёт после раздела про ООП?</li>
-<li>Назовите три причины, по которым основной язык курса — Java.</li>
-<li>Почему изучение Kotlin рядом с Java не является вторым отдельным курсом?</li>
-<li>Что такое JDK и что в него входит?</li>
-<li>Чем IDE отличается от JDK?</li>
-<li>Что делает онлайн-компилятор, когда вы нажимаете «Запуск»?</li>
-<li>В Kotlin написано <code>val <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 5</code> без указания типа. Какая это типизация и почему?</li>
-<li>Что значит «защитить практическую работу»?</li>
-</ol></article></details><footer><a target="_top" href="../#java-languages">← Обзор языков программирования</a><a target="_top" href="../#java-first-program">Первая программа на Java →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script></body></html>
+<p>Порядок сдачи, сроки, правила оценивания и требования к экзамену уточняй у преподавателя. Этот конспект не устанавливает новых условий допуска.</p></article></details><footer><a target="_top" href="../#java-languages">← Обзор языков программирования</a><a target="_top" href="../#java-first-program">Первая программа на Java →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="course-traces.js?v=1"></script></body></html>

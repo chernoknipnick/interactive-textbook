@@ -125,11 +125,13 @@ for i,(slug,base,title) in enumerate(topics):
     prev=f'<a target="_top" href="../#java-{topics[i-1][0]}">← {html.escape(topics[i-1][2])}</a>' if i else '<a target="_top" href="../#java">← К программе Java</a>'
     nxt=f'<a target="_top" href="../#java-{topics[i+1][0]}">{html.escape(topics[i+1][2])} →</a>' if i+1<len(topics) else '<a target="_top" href="../#java">К программе Java →</a>'
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА {i+1:02d} ИЗ {len(topics)} · {versions[0][1].upper()}</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav>{sections}<footer>{prev}{nxt}</footer></main><script src="lecture.js?v=3"></script></body></html>'''
-    page=page.replace('</head>','<link rel="stylesheet" href="lesson-semantics.css?v=1"></head>').replace('</body>','<script src="lesson-semantics.js?v=1"></script></body>')
+    page=page.replace('</head>','<link rel="stylesheet" href="lesson-semantics.css?v=1"></head>').replace('</body>','<script src="lesson-semantics.js?v=2"></script></body>')
     if (ROOT/'content/java-visuals'/(slug+'.html')).is_file():
-        page=page.replace('</head>','<link rel="stylesheet" href="visuals.css?v=6"></head>').replace('</body>','<script src="visuals.js?v=7"></script></body>')
+        page=page.replace('</head>','<link rel="stylesheet" href="visuals.css?v=6"></head>').replace('</body>','<script src="visuals.js?v=8"></script></body>')
     if slug in {'references','classes','constructors','static'}:
         page=page.replace('</head>','<link rel="stylesheet" href="oop-visuals.css?v=1"></head>').replace('</body>','<script src="oop-visuals.js?v=2"></script></body>')
+    if 'data-course-trace=' in page:
+        page=page.replace('</head>','<link rel="stylesheet" href="course-traces.css?v=1"></head>').replace('</body>','<script src="course-traces.js?v=1"></script></body>')
     (OUT/(slug+'.html')).write_text(page,encoding='utf-8')
 
 (ROOT/'dist/java-lessons.js').write_text('window.javaLessons='+json.dumps(lessons,ensure_ascii=False)+';\n',encoding='utf-8')

@@ -1,15 +1,132 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Циклы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 07 ИЗ 13 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-114">1.1.4. Циклы — под запись</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details>
-<blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. После тем «Циклы» и «Массивы» — практическая работа ПР02.</p>
-</blockquote>
-<h2 id="notes-1-while">1. Цикл <code><span class="term-language" title="Конструкция языка">while</span></code></h2>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Циклы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"><link rel="stylesheet" href="course-traces.css?v=1"></head><body><main><div class="eyebrow">JAVA / ТЕМА 07 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Циклы</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="course-trace" data-course-trace="loops" aria-label="Пошаговый разбор: Сумма растёт, а условие однажды становится ложным">
+  <h2>Сумма растёт, а условие однажды становится ложным</h2>
+  <p>Сначала прочитай строку кода и предскажи состояние. Затем перейди к следующему шагу. Схема показывает выбранный учебный сценарий, а не запускает произвольную Java-программу.</p>
+  <p class="diagram-code-caption">Код к текущему шагу</p>
+  <pre><code data-trace-code></code></pre>
+  <div class="trace-cells" role="group" aria-label="Состояние после шага"><div data-trace-cell></div><div data-trace-cell></div><div data-trace-cell></div></div>
+  <p class="trace-explanation" data-trace-explanation aria-live="polite"></p>
+  <div class="trace-controls"><button type="button" data-trace-action="back">← Назад</button><span data-trace-step></span><button type="button" data-trace-action="next">Дальше →</button><button type="button" data-trace-action="play" aria-pressed="false">▶ Проиграть</button><button type="button" data-trace-action="reset">Сначала</button></div>
+  <script type="application/json" data-trace-model>[{"code": "int sum = 0;\nfor (int number = 1; number \u003c= 3; number++) {", "cells": ["Начало: sum = 0", "Проверка: 1 \u003c= 3", "Входим в первое тело"], "explanation": "Объявление счётчика выполняется один раз. Условие проверяется перед телом."}, {"code": "sum += number;\nSystem.out.println(sum);", "cells": ["Текущий number = 1", "sum: 0 → 1", "Консоль: 1"], "explanation": "После тела number++ подготовит 2 для следующей проверки."}, {"code": "sum += number;\nSystem.out.println(sum);", "cells": ["Текущий number = 2", "sum: 1 → 3", "Консоль: 1, 3"], "explanation": "Накопитель объявлен до цикла, поэтому не сбрасывается при новом проходе."}, {"code": "sum += number;\nSystem.out.println(sum);", "cells": ["Текущий number = 3", "sum: 3 → 6", "Консоль: 1, 3, 6"], "explanation": "Третье тело завершено. Изменение счётчика даст 4."}, {"code": "number \u003c= 3", "cells": ["При проверке number = 4", "4 \u003c= 3 даёт false", "Тело не выполняется"], "explanation": "Это четвёртая проверка, но не четвёртое выполнение тела."}, {"code": "System.out.println(\"Итог: \" + sum);", "cells": ["Цикл завершён", "sum = 6", "Консоль: Итог: 6"], "explanation": "sum доступна снаружи. Локальный number из заголовка for здесь уже не используется."}]</script>
+</section>
+
+<h2 id="lecture-_2">Цикл — повторение с проверяемым правилом</h2>
+<p>Если нужно вывести три числа, можно написать три команды. Но для тысячи чисел удобнее описать действие один раз и задать правило повторения. <strong>Итерация</strong> — одно выполнение тела. Условие определяет, нужно ли очередное выполнение.</p>
+<p>Цикл не «понимает, сколько достаточно» по смыслу задачи. Ты задаёшь начальное состояние, условие и изменения. Ошибка в любом из этих мест может дать лишний проход или бесконечное повторение.</p>
+<h2 id="lecture-_3">Общие формы трёх циклов</h2>
+<p>Это шаблоны, а не готовые программы:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">while</span> (логическоеУсловие) {
+    действия;
+}
+
+<span class="term-language" title="Конструкция языка">for</span> (начальныеДействия; логическоеУсловие; действияПослеИтерации) {
+    телоЦикла;
+}
+
+<span class="term-language" title="Конструкция языка">do</span> {
+    действия;
+} <span class="term-language" title="Конструкция языка">while</span> (логическоеУсловие);
+</code></pre></div>
+
+<p>Имена и конкретные выражения зависят от задачи. Слова while, for, do и знаки синтаксиса задаёт Java. У do-while после круглой скобки в конце есть <code>;</code>; у обычного while точка с запятой сразу после условия создаёт пустое тело, что часто оказывается ошибкой.</p>
+<h2 id="lecture-_4">Полный пример: сумма от одного до трёх</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">LoopDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="p">;</span>
+<span class="w">            </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="s">&quot;Итог: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Файл LoopDemo.java. Вывод:</p>
+<div class="codehilite"><pre><span></span><code>1
+3
+6
+Итог: 6
+</code></pre></div>
+
+<h2 id="lecture-_5">Читаем заголовок не слева направо один раз, а по порядку исполнения</h2>
+<p><code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">number</span> = 1</code> выполняется один раз. Затем проверяется <code><span class="term-data" title="Данные: переменная, поле или параметр">number</span> &lt;= 3</code>. Если true, выполняется тело. Только после тела выполняется number++. Потом программа возвращается к проверке условия, а не к повторному объявлению number.</p>
+<p><code><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></code> объявлена <strong>до</strong> цикла, поэтому сохраняет накопленный результат между итерациями и доступна после цикла. <code><span class="term-data" title="Данные: переменная, поле или параметр">number</span></code> объявлена в заголовке for и за пределами этого цикла недоступна. Это различие областей видимости, а не особое свойство имён sum и number.</p>
+<p><code><span class="term-data" title="Данные: переменная, поле или параметр">sum</span> += <span class="term-data" title="Данные: переменная, поле или параметр">number</span></code> для этих int-значений означает прибавление текущего number к прежней сумме и сохранение результата. Ноль выбран потому, что добавление нуля не меняет сумму. Для произведения начальное значение обычно 1, а не 0.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Перед проверкой number</th>
+<th>Условие</th>
+<th style="text-align: right;">sum до тела</th>
+<th style="text-align: right;">sum после тела</th>
+<th>Следующее действие</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>true</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>number становится 2</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>true</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td>number становится 3</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>true</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td>number становится 4</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>false</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">Тело не выполняется</td>
+<td>Выход к итоговому println</td>
+</tr>
+</tbody>
+</table>
+<p>Проверок четыре, а выполнений тела три. Последняя ложная проверка нужна, чтобы выйти.</p>
+<h2 id="lecture-while">Тот же алгоритм через while</h2>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="p">;</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">number</span></span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Вставляй этот вариант <strong>вместо</strong> предыдущего расчёта внутри main, а не рядом с повторным объявлением sum в той же области. Результат тот же, но начальное значение и изменение счётчика расположены отдельно от условия.</p>
+<p>Если убрать number++, условие для положительных маленьких значений останется истинным и сумма начнёт расти при бесконечном повторении. Если поставить sum = 0 внутрь тела, сумма будет забываться перед каждым прибавлением.</p>
+<h2 id="lecture-do-while">Зачем нужен do-while</h2>
+<p>Он сначала выполняет тело и только потом проверяет продолжение. Например, ввод нужно предложить хотя бы один раз. Но это не означает, что любая программа с do-while всегда корректно обработает неверный тип ввода: проверки Scanner нужно писать отдельно.</p>
+<p>Для предсказания поведения возьми исходное значение, при котором условие ложно. while выполнит тело ноль раз, do-while — один. Так проще увидеть различие без длинного примера.</p>
+<h2 id="lecture-break-continue">break, continue и точка продолжения</h2>
+<p>break выходит из ближайшего цикла. continue завершает текущую итерацию ближайшего цикла. У for после continue выполняется действие изменения, затем новая проверка. У while управление возвращается к условию: если нужное изменение стояло ниже continue, оно может быть пропущено.</p>
+<p>Безметочные break и continue во вложенных циклах относятся к ближайшему циклу. В Java есть и варианты с метками, но для начальных задач достаточно этого случая.</p>
+<h2 id="lecture-_6">Как считать число повторений</h2>
+<p>У <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">index</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">index</span> &lt; 5; <span class="term-data" title="Данные: переменная, поле или параметр">index</span>++)</code> тело выполняется для 0, 1, 2, 3, 4 — пять раз. При <code>&lt;= 5</code> добавится значение 5 — получится шесть раз. При старте с 1 и <code>&lt;= 5</code> снова пять раз, но набор значений другой.</p>
+<p>Вложенные циклы перемножают количества проходов только когда число выполнений внутреннего одинаково для каждого прохода внешнего. Если внутренняя граница зависит от внешнего счётчика, нужна отдельная трассировка, а не слепое умножение.</p>
+<h2 id="lecture-_7">Переход к самостоятельной задаче</h2>
+<p>Сначала измени границу 3 на 5: сумма должна стать 15. Затем убери промежуточный вывод и оставь только итог. Потом посчитай не сумму всех чисел, а количество чётных: отдельный count начинается с 0 и увеличивается внутри if.</p>
+<p>Перед запуском всегда перечисляй первые два и последний допустимый счётчик. Затем добавляй первую недопустимую проверку. Такой маленький список часто сразу показывает ошибку на единицу.</p>
+<p>Для закрепления объясни, почему <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">number</span> = 10; <span class="term-data" title="Данные: переменная, поле или параметр">number</span> &gt; 0; <span class="term-data" title="Данные: переменная, поле или параметр">number</span> -= 3)</code> использует значения 10, 7, 4, 1 и заканчивается после получения -2.</p>
+<h2 id="lecture-_8">Справочник и дополнительные упражнения по теме</h2>
+<h2 id="lecture-1-while">1. Цикл <code><span class="term-language" title="Конструкция языка">while</span></code></h2>
 <p><strong>Цикл</strong> — конструкция, которая многократно выполняет один и тот же блок кода.
 <strong>Тело цикла</strong> — блок кода, который повторяется.
 <strong>Итерация</strong> — одно выполнение тела цикла.</p>
 <p><strong>Цикл <code><span class="term-language" title="Конструкция языка">while</span></code></strong> (с предусловием) повторяет тело, пока условие истинно:</p>
-<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">условие</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">тело</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">цикла</span></span>
-<span class="p">}</span>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">while</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>) {
+    тело <span class="term-method" title="Метод: действие или вычисление">цикла</span>
+}
 </code></pre></div>
 
 <p>Условие проверяется <strong>перед</strong> каждой итерацией. Если оно ложно с самого начала, тело не выполнится ни разу.</p>
@@ -27,12 +144,12 @@
 1. <strong>начальное значение</strong> переменной, от которой зависит условие (до цикла);
 2. <strong>условие</strong> продолжения;
 3. <strong>изменение</strong> этой переменной в теле цикла.</p>
-<p><strong>Бесконечный цикл</strong> — цикл, условие которого никогда не становится ложным. Причины: переменная в условии не изменяется в теле; изменяется не в ту сторону; после условия стоит <code>;</code>.</p>
-<h2 id="notes-2-for">2. Цикл <code><span class="term-language" title="Конструкция языка">for</span></code></h2>
+<p><strong>Бесконечный цикл</strong> — цикл, который не завершается сам по предусмотренным путям; например, условие остаётся истинным и нет выхода через break или return. Причины: переменная в условии не изменяется в теле; изменяется не в ту сторону; после условия стоит <code>;</code>.</p>
+<h2 id="lecture-2-for">2. Цикл <code><span class="term-language" title="Конструкция языка">for</span></code></h2>
 <p><strong>Цикл <code><span class="term-language" title="Конструкция языка">for</span></code></strong> (со счётчиком):</p>
-<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="n">инициализация</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">условие</span></span><span class="p">;</span><span class="w"> </span><span class="n">изменение</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">тело</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">цикла</span></span>
-<span class="p">}</span>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">for</span> (инициализация; <span class="term-method" title="Метод: действие или вычисление">условие</span>; изменение) {
+    тело <span class="term-method" title="Метод: действие или вычисление">цикла</span>
+}
 </code></pre></div>
 
 <ol>
@@ -41,9 +158,9 @@
 <li><strong>изменение</strong> — выполняется после каждой итерации.</li>
 </ol>
 <p>Порядок выполнения: инициализация → (условие → тело → изменение) → (условие → тело → изменение) → … → условие ложно → выход.</p>
-<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">for</span> ( <span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 1 ;  <span class="term-method" title="Метод: действие или вычисление">i</span> &lt;= 5 ;  <span class="term-method" title="Метод: действие или вычисление">i</span>++ ) {
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">for</span> ( <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1 ;  <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5 ;  <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++ ) {
         ①            ②        ④
-    <span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-method" title="Метод: действие или вычисление">i</span>);     ③
+    <span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">i</span>);     ③
 }
 </code></pre></div>
 
@@ -52,10 +169,10 @@
 <thead>
 <tr>
 <th>Шаг</th>
-<th><code><span class="term-method" title="Метод: действие или вычисление">i</span></code></th>
-<th><code><span class="term-method" title="Метод: действие или вычисление">i</span> &lt;= 5</code></th>
+<th><code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code></th>
+<th><code><span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5</code></th>
 <th>Что выведено</th>
-<th>После <code><span class="term-method" title="Метод: действие или вычисление">i</span>++</code></th>
+<th>После <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span>++</code></th>
 </tr>
 </thead>
 <tbody>
@@ -103,30 +220,322 @@
 </tr>
 </tbody>
 </table>
-<p>Счётчик цикла обычно называют <code><span class="term-method" title="Метод: действие или вычисление">i</span></code> (затем <code><span class="term-data" title="Данные: переменная, поле или параметр">j</span></code>, <code>k</code>). Переменная, объявленная в заголовке <code><span class="term-language" title="Конструкция языка">for</span></code>, существует только внутри цикла.</p>
+<p>Счётчик цикла обычно называют <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code> (затем <code><span class="term-data" title="Данные: переменная, поле или параметр">j</span></code>, <code>k</code>). Переменная, объявленная в заголовке <code><span class="term-language" title="Конструкция языка">for</span></code>, существует только внутри цикла.</p>
 <p><strong>Два стандартных заголовка для «повторить n раз»:</strong>
-- <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 0; <span class="term-method" title="Метод: действие или вычисление">i</span> &lt; <span class="term-method" title="Метод: действие или вычисление">n</span>; <span class="term-method" title="Метод: действие или вычисление">i</span>++)</code> — счётчик от 0 до n−1 (основной вариант: так нумеруются элементы массивов и символы строк);
-- <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 1; <span class="term-method" title="Метод: действие или вычисление">i</span> &lt;= <span class="term-method" title="Метод: действие или вычисление">n</span>; <span class="term-method" title="Метод: действие или вычисление">i</span>++)</code> — счётчик от 1 до n.</p>
+- <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt; <span class="term-data" title="Данные: переменная, поле или параметр">n</span>; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code> — счётчик от 0 до n−1 (основной вариант: так нумеруются элементы массивов и символы строк);
+- <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= <span class="term-data" title="Данные: переменная, поле или параметр">n</span>; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code> — счётчик от 1 до n.</p>
 <p><strong>Ошибка на единицу</strong> — цикл выполняется на одну итерацию больше или меньше, чем нужно. Чаще всего из-за путаницы <code>&lt;</code> и <code>&lt;=</code> или начала с 0 вместо 1.</p>
-<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">       </span><span class="c1">// 0 1 2 3 4     — 5 раз</span>
-<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 1 2 3 4 5     — 5 раз</span>
-<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 0 1 2 3 4 5   — 6 раз</span>
-<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="c1">// 10 5 0        — обратный отсчёт</span>
-<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">   </span><span class="c1">// 0 2 4 6 8     — с шагом 2</span>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">       </span><span class="c1">// 0 1 2 3 4     — 5 раз</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 1 2 3 4 5     — 5 раз</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 0 1 2 3 4 5   — 6 раз</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="c1">// 10 5 0        — обратный отсчёт</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">   </span><span class="c1">// 0 2 4 6 8     — с шагом 2</span>
 </code></pre></div>
 
-<h2 id="notes-3-do-while">3. Цикл <code>do-<span class="term-language" title="Конструкция языка">while</span></code></h2>
-<p><strong>Цикл <code>do-<span class="term-language" title="Конструкция языка">while</span></code></strong> (с постусловием):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">do</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">тело</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">цикла</span></span>
-<span class="p">}</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">условие</span></span><span class="p">);</span>
+<h2 id="lecture-3-do-while">3. Цикл <code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code></h2>
+<p><strong>Цикл <code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code></strong> (с постусловием):</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">do</span> {
+    тело <span class="term-method" title="Метод: действие или вычисление">цикла</span>
+} <span class="term-language" title="Конструкция языка">while</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>);
 </code></pre></div>
 
 <p>Условие проверяется <strong>после</strong> каждой итерации, поэтому тело выполняется <strong>хотя бы один раз</strong>.
 После <code><span class="term-language" title="Конструкция языка">while</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>)</code> ставится точка с запятой.
 Типичное применение — повторять ввод, пока данные некорректны.</p>
 <div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="p">;</span><span class="w">                       </span><span class="c1">// объявлена до цикла, чтобы её видело условие</span>
-<span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="k"><span class="term-language" title="Конструкция языка">do</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="s">&quot;Введите возраст (0-120): &quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scanner</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">nextInt</span></span><span class="p">();</span>
+<span class="p">}</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">120</span><span class="p">);</span>
+</code></pre></div>
+
+<h2 id="lecture-4">4. Какой цикл выбрать</h2>
+<table>
+<thead>
+<tr>
+<th>Ситуация</th>
+<th>Цикл</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Число повторений известно заранее; нужен счётчик</td>
+<td><code><span class="term-language" title="Конструкция языка">for</span></code></td>
+</tr>
+<tr>
+<td>Число повторений неизвестно; повторять, пока выполняется условие</td>
+<td><code><span class="term-language" title="Конструкция языка">while</span></code></td>
+</tr>
+<tr>
+<td>То же, но тело должно выполниться хотя бы один раз</td>
+<td><code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>Любой цикл можно переписать через любой другой; выбирают тот, с которым код понятнее.</p>
+<h2 id="lecture-5-break-continue">5. <code><span class="term-language" title="Конструкция языка">break</span></code> и <code><span class="term-language" title="Конструкция языка">continue</span></code></h2>
+<p><strong><code><span class="term-language" title="Конструкция языка">break</span></code></strong> — немедленно завершает цикл; выполнение продолжается с инструкции после цикла.
+<strong><code><span class="term-language" title="Конструкция языка">continue</span></code></strong> — завершает текущую итерацию и переходит к следующей (в <code><span class="term-language" title="Конструкция языка">for</span></code> — к изменению счётчика).
+Безметочные break и continue относятся к ближайшему циклу. В Java есть также формы с метками, которые здесь не используются.</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">continue</span></span><span class="p">;</span><span class="w">              </span><span class="c1">// нечётные пропускаем</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// 2 4 6 8 10</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="lecture-6">6. Типовые алгоритмы с циклом</h2>
+<ol>
+<li><strong>Накопление суммы:</strong> накопитель создаётся до цикла (<code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> = 0;</code>), изменяется в цикле (<code><span class="term-data" title="Данные: переменная, поле или параметр">sum</span> += …;</code>), используется после цикла. Для произведения начальное значение — 1.</li>
+<li><strong>Подсчёт по условию:</strong> счётчик до цикла (<code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 0;</code>), в цикле <code><span class="term-language" title="Конструкция языка">if</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>) { <span class="term-data" title="Данные: переменная, поле или параметр">count</span>++; }</code>.</li>
+<li><strong>Разбор числа на цифры:</strong> <code><span class="term-language" title="Конструкция языка">while</span> (<span class="term-data" title="Данные: переменная, поле или параметр">n</span> &gt; 0) { цифра = <span class="term-data" title="Данные: переменная, поле или параметр">n</span> % 10; <span class="term-data" title="Данные: переменная, поле или параметр">n</span> /= 10; }</code>.</li>
+<li><strong>Поиск (флаг):</strong> <code><span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">found</span> = <span class="term-language" title="Конструкция языка">false</span>;</code> до цикла; в цикле при совпадении <code><span class="term-data" title="Данные: переменная, поле или параметр">found</span> = <span class="term-language" title="Конструкция языка">true</span>; <span class="term-language" title="Конструкция языка">break</span>;</code>.</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                           </span><span class="c1">// сумма чисел от 1 до 100</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="p">;</span>
+<span class="p">}</span><span class="w">                                      </span><span class="c1">// 5050</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                         </span><span class="c1">// сколько чисел от 1 до 100 кратно 7</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w">                                      </span><span class="c1">// 14</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="p">;</span><span class="w">                          </span><span class="c1">// сумма цифр числа</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">digitSum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">digitSum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span><span class="w">                                      </span><span class="c1">// 10</span>
+</code></pre></div>
+
+<p><strong>Обход строки:</strong> <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt; s.<span class="term-method" title="Метод: действие или вычисление">length</span>(); <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++) { <span class="term-type" title="Тип или класс">char</span> <span class="term-data" title="Данные: переменная, поле или параметр">c</span> = s.<span class="term-method" title="Метод: действие или вычисление">charAt</span>(<span class="term-data" title="Данные: переменная, поле или параметр">i</span>); … }</code>
+<code>s.<span class="term-method" title="Метод: действие или вычисление">charAt</span>(<span class="term-data" title="Данные: переменная, поле или параметр">i</span>)</code> — символ с номером <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code>; номера идут от 0 до <code>s.<span class="term-method" title="Метод: действие или вычисление">length</span>() - 1</code>.</p>
+<h2 id="lecture-7">7. Вложенные циклы</h2>
+<p><strong>Вложенный цикл</strong> — цикл внутри тела другого цикла. На каждую итерацию внешнего цикла внутренний выполняется полностью.
+Если число проходов внутреннего цикла одинаково на каждой итерации внешнего, общее количество выполнений внутреннего тела равно произведению. Для зависимых границ нужна отдельная трассировка.
+Счётчики вложенных циклов называют по-разному: <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code> — внешний, <code><span class="term-data" title="Данные: переменная, поле или параметр">j</span></code> — внутренний.</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;\t&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>1   2   3
+2   4   6
+3   6   9
+</code></pre></div>
+
+<h2 id="lecture-8">8. Ошибки, которые компилятор не замечает</h2>
+<table>
+<thead>
+<tr>
+<th>Что написано</th>
+<th>Что происходит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>переменная условия не меняется в теле <code><span class="term-language" title="Конструкция языка">while</span></code></td>
+<td>бесконечный цикл</td>
+</tr>
+<tr>
+<td><code><span class="term-language" title="Конструкция языка">while</span> (x &lt; 10);</code> при неизменном x &lt; 10</td>
+<td>бесконечное повторение пустого тела</td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">i</span>--</code> вместо <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span>++</code></td>
+<td>цикл идёт не в ту сторону</td>
+</tr>
+<tr>
+<td><code>&lt;=</code> вместо <code>&lt;</code></td>
+<td>лишняя итерация</td>
+</tr>
+<tr>
+<td>накопитель произведения начинается с 0</td>
+<td>результат всегда 0</td>
+</tr>
+</tbody>
+</table>
+<p>Если непонятно, что делает цикл, — составить таблицу трассировки.</p>
+<h2 id="lecture-_9">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>В тетради: таблица трассировки для цикла <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 10; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &gt; 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> -= 3)</code> — значения <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code>, результат проверки условия, сколько раз выполнится тело.</li>
+<li>Программы:
+   - <code>Factorial</code>: ввести число n (от 1 до 12) и вывести n! = 1 · 2 · … · n;
+   - <code>Vowels</code>: посчитать количество гласных букв в строке <code>"Программирование"</code>;
+   - <code>Guess</code>: программа «загадала» число 37; пользователь вводит числа, пока не угадает; после каждой попытки программа пишет «больше» или «меньше», в конце — число попыток.</li>
+</ol>
+<h2 id="lecture-_10">Проверь себя</h2>
+<p>Ответь своими словами и подтверди ответ небольшим примером.</p>
+<ol>
+<li>Что такое цикл, тело цикла, итерация?</li>
+<li>Какие три вещи нужны, чтобы цикл завершился?</li>
+<li>Назовите три части заголовка <code><span class="term-language" title="Конструкция языка">for</span></code> и порядок их выполнения.</li>
+<li>Сколько раз выполнится тело: <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt; 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>, <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>, <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>?</li>
+<li>Чему равен счётчик после завершения <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>, если он объявлен до цикла?</li>
+<li>Чем <code><span class="term-language" title="Конструкция языка">while</span></code> отличается от <code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code>?</li>
+<li>Назовите три причины бесконечного цикла.</li>
+<li>Что такое «ошибка на единицу»?</li>
+<li>Что делают <code><span class="term-language" title="Конструкция языка">break</span></code> и <code><span class="term-language" title="Конструкция языка">continue</span></code>?</li>
+<li>Где должна быть объявлена переменная-накопитель и почему?</li>
+<li>С какого значения начинают накопитель суммы? Произведения?</li>
+<li>Как получить последнюю цифру числа и отбросить её?</li>
+<li>Как пройти по всем символам строки? Какой номер у последнего символа?</li>
+<li>Внешний цикл выполняется 4 раза, внутренний — 5. Сколько раз выполнится тело внутреннего?</li>
+<li>Какой цикл выбрать, чтобы повторять ввод, пока пользователь не введёт корректное значение?</li>
+</ol>
+<h2 id="lecture-_11">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-114">1.1.4. Циклы — под запись</h1>
+<h2 id="notes-_1">Обобщение: подставь свои имена</h2>
+<p>Это шаблоны, а не готовые программы:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">while</span> (логическоеУсловие) {
+    действия;
+}
+
+<span class="term-language" title="Конструкция языка">for</span> (начальныеДействия; логическоеУсловие; действияПослеИтерации) {
+    телоЦикла;
+}
+
+<span class="term-language" title="Конструкция языка">do</span> {
+    действия;
+} <span class="term-language" title="Конструкция языка">while</span> (логическоеУсловие);
+</code></pre></div>
+
+<p>Имена и конкретные выражения зависят от задачи. Слова while, for, do и знаки синтаксиса задаёт Java. У do-while после круглой скобки в конце есть <code>;</code>; у обычного while точка с запятой сразу после условия создаёт пустое тело, что часто оказывается ошибкой.</p>
+<h2 id="notes-1-while">1. Цикл <code><span class="term-language" title="Конструкция языка">while</span></code></h2>
+<p><strong>Цикл</strong> — конструкция, которая многократно выполняет один и тот же блок кода.
+<strong>Тело цикла</strong> — блок кода, который повторяется.
+<strong>Итерация</strong> — одно выполнение тела цикла.</p>
+<p><strong>Цикл <code><span class="term-language" title="Конструкция языка">while</span></code></strong> (с предусловием) повторяет тело, пока условие истинно:</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">while</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>) {
+    тело <span class="term-method" title="Метод: действие или вычисление">цикла</span>
+}
+</code></pre></div>
+
+<p>Условие проверяется <strong>перед</strong> каждой итерацией. Если оно ложно с самого начала, тело не выполнится ни разу.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">money</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">month</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">money</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">50000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">money</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">8000</span><span class="p">;</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">month</span></span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="s">&quot;Месяцев: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">month</span></span><span class="p">);</span><span class="w">     </span><span class="c1">// 7</span>
+</code></pre></div>
+
+<p><strong>Чтобы цикл завершился, нужны три вещи:</strong>
+1. <strong>начальное значение</strong> переменной, от которой зависит условие (до цикла);
+2. <strong>условие</strong> продолжения;
+3. <strong>изменение</strong> этой переменной в теле цикла.</p>
+<p><strong>Бесконечный цикл</strong> — цикл, который не завершается сам по предусмотренным путям; например, условие остаётся истинным и нет выхода через break или return. Причины: переменная в условии не изменяется в теле; изменяется не в ту сторону; после условия стоит <code>;</code>.</p>
+<h2 id="notes-2-for">2. Цикл <code><span class="term-language" title="Конструкция языка">for</span></code></h2>
+<p><strong>Цикл <code><span class="term-language" title="Конструкция языка">for</span></code></strong> (со счётчиком):</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">for</span> (инициализация; <span class="term-method" title="Метод: действие или вычисление">условие</span>; изменение) {
+    тело <span class="term-method" title="Метод: действие или вычисление">цикла</span>
+}
+</code></pre></div>
+
+<ol>
+<li><strong>инициализация</strong> — выполняется один раз перед циклом;</li>
+<li><strong>условие</strong> — проверяется перед каждой итерацией;</li>
+<li><strong>изменение</strong> — выполняется после каждой итерации.</li>
+</ol>
+<p>Порядок выполнения: инициализация → (условие → тело → изменение) → (условие → тело → изменение) → … → условие ложно → выход.</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">for</span> ( <span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1 ;  <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5 ;  <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++ ) {
+        ①            ②        ④
+    <span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">i</span>);     ③
+}
+</code></pre></div>
+
+<p>Трассировка:</p>
+<table>
+<thead>
+<tr>
+<th>Шаг</th>
+<th><code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code></th>
+<th><code><span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5</code></th>
+<th>Что выведено</th>
+<th>После <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span>++</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>true</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>true</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>true</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>true</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5</td>
+<td>true</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>6</td>
+<td>6</td>
+<td><strong>false</strong></td>
+<td>—</td>
+<td>выход</td>
+</tr>
+</tbody>
+</table>
+<p>Счётчик цикла обычно называют <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code> (затем <code><span class="term-data" title="Данные: переменная, поле или параметр">j</span></code>, <code>k</code>). Переменная, объявленная в заголовке <code><span class="term-language" title="Конструкция языка">for</span></code>, существует только внутри цикла.</p>
+<p><strong>Два стандартных заголовка для «повторить n раз»:</strong>
+- <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt; <span class="term-data" title="Данные: переменная, поле или параметр">n</span>; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code> — счётчик от 0 до n−1 (основной вариант: так нумеруются элементы массивов и символы строк);
+- <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= <span class="term-data" title="Данные: переменная, поле или параметр">n</span>; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code> — счётчик от 1 до n.</p>
+<p><strong>Ошибка на единицу</strong> — цикл выполняется на одну итерацию больше или меньше, чем нужно. Чаще всего из-за путаницы <code>&lt;</code> и <code>&lt;=</code> или начала с 0 вместо 1.</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">       </span><span class="c1">// 0 1 2 3 4     — 5 раз</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 1 2 3 4 5     — 5 раз</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w">      </span><span class="c1">// 0 1 2 3 4 5   — 6 раз</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="c1">// 10 5 0        — обратный отсчёт</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">   </span><span class="c1">// 0 2 4 6 8     — с шагом 2</span>
+</code></pre></div>
+
+<h2 id="notes-3-do-while">3. Цикл <code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code></h2>
+<p><strong>Цикл <code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code></strong> (с постусловием):</p>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">do</span> {
+    тело <span class="term-method" title="Метод: действие или вычисление">цикла</span>
+} <span class="term-language" title="Конструкция языка">while</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>);
+</code></pre></div>
+
+<p>Условие проверяется <strong>после</strong> каждой итерации, поэтому тело выполняется <strong>хотя бы один раз</strong>.
+После <code><span class="term-language" title="Конструкция языка">while</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>)</code> ставится точка с запятой.
+Типичное применение — повторять ввод, пока данные некорректны.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="p">;</span><span class="w">                       </span><span class="c1">// объявлена до цикла, чтобы её видело условие</span>
+<span class="k"><span class="term-language" title="Конструкция языка">do</span></span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="s">&quot;Введите возраст (0-120): &quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scanner</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">nextInt</span></span><span class="p">();</span>
 <span class="p">}</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">age</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">120</span><span class="p">);</span>
@@ -151,61 +560,61 @@
 </tr>
 <tr>
 <td>То же, но тело должно выполниться хотя бы один раз</td>
-<td><code>do-<span class="term-language" title="Конструкция языка">while</span></code></td>
+<td><code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code></td>
 </tr>
 </tbody>
 </table>
 <p>Любой цикл можно переписать через любой другой; выбирают тот, с которым код понятнее.</p>
-<h2 id="notes-5-break-continue">5. <code>break</code> и <code>continue</code></h2>
-<p><strong><code>break</code></strong> — немедленно завершает цикл; выполнение продолжается с инструкции после цикла.
-<strong><code>continue</code></strong> — завершает текущую итерацию и переходит к следующей (в <code><span class="term-language" title="Конструкция языка">for</span></code> — к изменению счётчика).
-Во вложенных циклах <code>break</code> и <code>continue</code> действуют только на ближайший (внутренний) цикл.</p>
-<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w">              </span><span class="c1">// нечётные пропускаем</span>
+<h2 id="notes-5-break-continue">5. <code><span class="term-language" title="Конструкция языка">break</span></code> и <code><span class="term-language" title="Конструкция языка">continue</span></code></h2>
+<p><strong><code><span class="term-language" title="Конструкция языка">break</span></code></strong> — немедленно завершает цикл; выполнение продолжается с инструкции после цикла.
+<strong><code><span class="term-language" title="Конструкция языка">continue</span></code></strong> — завершает текущую итерацию и переходит к следующей (в <code><span class="term-language" title="Конструкция языка">for</span></code> — к изменению счётчика).
+Безметочные break и continue относятся к ближайшему циклу. В Java есть также формы с метками, которые здесь не используются.</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">continue</span></span><span class="p">;</span><span class="w">              </span><span class="c1">// нечётные пропускаем</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// 2 4 6 8 10</span>
+<span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// 2 4 6 8 10</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <h2 id="notes-6">6. Типовые алгоритмы с циклом</h2>
 <ol>
-<li><strong>Накопление суммы:</strong> накопитель создаётся до цикла (<code><span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">sum</span> = 0;</code>), изменяется в цикле (<code><span class="term-method" title="Метод: действие или вычисление">sum</span> += …;</code>), используется после цикла. Для произведения начальное значение — 1.</li>
+<li><strong>Накопление суммы:</strong> накопитель создаётся до цикла (<code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> = 0;</code>), изменяется в цикле (<code><span class="term-data" title="Данные: переменная, поле или параметр">sum</span> += …;</code>), используется после цикла. Для произведения начальное значение — 1.</li>
 <li><strong>Подсчёт по условию:</strong> счётчик до цикла (<code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">count</span> = 0;</code>), в цикле <code><span class="term-language" title="Конструкция языка">if</span> (<span class="term-method" title="Метод: действие или вычисление">условие</span>) { <span class="term-data" title="Данные: переменная, поле или параметр">count</span>++; }</code>.</li>
-<li><strong>Разбор числа на цифры:</strong> <code><span class="term-language" title="Конструкция языка">while</span> (<span class="term-method" title="Метод: действие или вычисление">n</span> &gt; 0) { цифра = <span class="term-method" title="Метод: действие или вычисление">n</span> % 10; <span class="term-method" title="Метод: действие или вычисление">n</span> /= 10; }</code>.</li>
-<li><strong>Поиск (флаг):</strong> <code><span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">found</span> = <span class="term-language" title="Конструкция языка">false</span>;</code> до цикла; в цикле при совпадении <code><span class="term-data" title="Данные: переменная, поле или параметр">found</span> = <span class="term-language" title="Конструкция языка">true</span>; break;</code>.</li>
+<li><strong>Разбор числа на цифры:</strong> <code><span class="term-language" title="Конструкция языка">while</span> (<span class="term-data" title="Данные: переменная, поле или параметр">n</span> &gt; 0) { цифра = <span class="term-data" title="Данные: переменная, поле или параметр">n</span> % 10; <span class="term-data" title="Данные: переменная, поле или параметр">n</span> /= 10; }</code>.</li>
+<li><strong>Поиск (флаг):</strong> <code><span class="term-type" title="Тип или класс">boolean</span> <span class="term-data" title="Данные: переменная, поле или параметр">found</span> = <span class="term-language" title="Конструкция языка">false</span>;</code> до цикла; в цикле при совпадении <code><span class="term-data" title="Данные: переменная, поле или параметр">found</span> = <span class="term-language" title="Конструкция языка">true</span>; <span class="term-language" title="Конструкция языка">break</span>;</code>.</li>
 </ol>
-<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                           </span><span class="c1">// сумма чисел от 1 до 100</span>
-<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                           </span><span class="c1">// сумма чисел от 1 до 100</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="p">;</span>
 <span class="p">}</span><span class="w">                                      </span><span class="c1">// 5050</span>
 </code></pre></div>
 
 <div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                         </span><span class="c1">// сколько чисел от 1 до 100 кратно 7</span>
-<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="o">++</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span><span class="w">                                      </span><span class="c1">// 14</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">n</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="p">;</span><span class="w">                          </span><span class="c1">// сумма цифр числа</span>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="p">;</span><span class="w">                          </span><span class="c1">// сумма цифр числа</span>
 <span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">digitSum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">n</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">digitSum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">n</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
-<span class="w">    </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">n</span></span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="k"><span class="term-language" title="Конструкция языка">while</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">digitSum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">n</span></span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
 <span class="p">}</span><span class="w">                                      </span><span class="c1">// 10</span>
 </code></pre></div>
 
-<p><strong>Обход строки:</strong> <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 0; <span class="term-method" title="Метод: действие или вычисление">i</span> &lt; s.<span class="term-method" title="Метод: действие или вычисление">length</span>(); <span class="term-method" title="Метод: действие или вычисление">i</span>++) { <span class="term-type" title="Тип или класс">char</span> <span class="term-data" title="Данные: переменная, поле или параметр">c</span> = s.<span class="term-method" title="Метод: действие или вычисление">charAt</span>(<span class="term-method" title="Метод: действие или вычисление">i</span>); … }</code>
-<code>s.<span class="term-method" title="Метод: действие или вычисление">charAt</span>(<span class="term-method" title="Метод: действие или вычисление">i</span>)</code> — символ с номером <code><span class="term-method" title="Метод: действие или вычисление">i</span></code>; номера идут от 0 до <code>s.<span class="term-method" title="Метод: действие или вычисление">length</span>() - 1</code>.</p>
+<p><strong>Обход строки:</strong> <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt; s.<span class="term-method" title="Метод: действие или вычисление">length</span>(); <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++) { <span class="term-type" title="Тип или класс">char</span> <span class="term-data" title="Данные: переменная, поле или параметр">c</span> = s.<span class="term-method" title="Метод: действие или вычисление">charAt</span>(<span class="term-data" title="Данные: переменная, поле или параметр">i</span>); … }</code>
+<code>s.<span class="term-method" title="Метод: действие или вычисление">charAt</span>(<span class="term-data" title="Данные: переменная, поле или параметр">i</span>)</code> — символ с номером <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code>; номера идут от 0 до <code>s.<span class="term-method" title="Метод: действие или вычисление">length</span>() - 1</code>.</p>
 <h2 id="notes-7">7. Вложенные циклы</h2>
 <p><strong>Вложенный цикл</strong> — цикл внутри тела другого цикла. На каждую итерацию внешнего цикла внутренний выполняется полностью.
-Общее число итераций = (итераций внешнего) × (итераций внутреннего).
-Счётчики вложенных циклов называют по-разному: <code><span class="term-method" title="Метод: действие или вычисление">i</span></code> — внешний, <code><span class="term-data" title="Данные: переменная, поле или параметр">j</span></code> — внутренний.</p>
-<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+Если число проходов внутреннего цикла одинаково на каждой итерации внешнего, общее количество выполнений внутреннего тела равно произведению. Для зависимых границ нужна отдельная трассировка.
+Счётчики вложенных циклов называют по-разному: <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code> — внешний, <code><span class="term-data" title="Данные: переменная, поле или параметр">j</span></code> — внутренний.</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-method" title="Метод: действие или вычисление">i</span></span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;\t&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">print</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;\t&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">();</span>
 <span class="p">}</span>
@@ -230,11 +639,11 @@
 <td>бесконечный цикл</td>
 </tr>
 <tr>
-<td><code><span class="term-language" title="Конструкция языка">while</span> (x &lt; 10);</code></td>
-<td>бесконечный цикл с пустым телом</td>
+<td><code><span class="term-language" title="Конструкция языка">while</span> (x &lt; 10);</code> при неизменном x &lt; 10</td>
+<td>бесконечное повторение пустого тела</td>
 </tr>
 <tr>
-<td><code><span class="term-method" title="Метод: действие или вычисление">i</span>--</code> вместо <code><span class="term-method" title="Метод: действие или вычисление">i</span>++</code></td>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">i</span>--</code> вместо <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span>++</code></td>
 <td>цикл идёт не в ту сторону</td>
 </tr>
 <tr>
@@ -248,31 +657,31 @@
 </tbody>
 </table>
 <p>Если непонятно, что делает цикл, — составить таблицу трассировки.</p>
-<h2 id="notes-_1">Домашнее задание</h2>
+<h2 id="notes-_2">Домашнее задание</h2>
 <ol>
 <li>Вопросы «Проверь себя».</li>
-<li>В тетради: таблица трассировки для цикла <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 10; <span class="term-method" title="Метод: действие или вычисление">i</span> &gt; 0; <span class="term-method" title="Метод: действие или вычисление">i</span> -= 3)</code> — значения <code><span class="term-method" title="Метод: действие или вычисление">i</span></code>, результат проверки условия, сколько раз выполнится тело.</li>
+<li>В тетради: таблица трассировки для цикла <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 10; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &gt; 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> -= 3)</code> — значения <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code>, результат проверки условия, сколько раз выполнится тело.</li>
 <li>Программы:
    - <code>Factorial</code>: ввести число n (от 1 до 12) и вывести n! = 1 · 2 · … · n;
    - <code>Vowels</code>: посчитать количество гласных букв в строке <code>"Программирование"</code>;
    - <code>Guess</code>: программа «загадала» число 37; пользователь вводит числа, пока не угадает; после каждой попытки программа пишет «больше» или «меньше», в конце — число попыток.</li>
 </ol>
-<h2 id="notes-_2">Проверь себя</h2>
-<p>По этим вопросам — опрос в начале следующей пары.</p>
+<h2 id="notes-_3">Проверь себя</h2>
+<p>Ответь своими словами и подтверди ответ небольшим примером.</p>
 <ol>
 <li>Что такое цикл, тело цикла, итерация?</li>
 <li>Какие три вещи нужны, чтобы цикл завершился?</li>
 <li>Назовите три части заголовка <code><span class="term-language" title="Конструкция языка">for</span></code> и порядок их выполнения.</li>
-<li>Сколько раз выполнится тело: <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 0; <span class="term-method" title="Метод: действие или вычисление">i</span> &lt; 5; <span class="term-method" title="Метод: действие или вычисление">i</span>++)</code>, <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 1; <span class="term-method" title="Метод: действие или вычисление">i</span> &lt;= 5; <span class="term-method" title="Метод: действие или вычисление">i</span>++)</code>, <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-method" title="Метод: действие или вычисление">i</span> = 0; <span class="term-method" title="Метод: действие или вычисление">i</span> &lt;= 5; <span class="term-method" title="Метод: действие или вычисление">i</span>++)</code>?</li>
-<li>Чему равен счётчик после завершения <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-method" title="Метод: действие или вычисление">i</span> = 1; <span class="term-method" title="Метод: действие или вычисление">i</span> &lt;= 5; <span class="term-method" title="Метод: действие или вычисление">i</span>++)</code>, если он объявлен до цикла?</li>
-<li>Чем <code><span class="term-language" title="Конструкция языка">while</span></code> отличается от <code>do-<span class="term-language" title="Конструкция языка">while</span></code>?</li>
+<li>Сколько раз выполнится тело: <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt; 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>, <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>, <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 0; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>?</li>
+<li>Чему равен счётчик после завершения <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-data" title="Данные: переменная, поле или параметр">i</span> = 1; <span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= 5; <span class="term-data" title="Данные: переменная, поле или параметр">i</span>++)</code>, если он объявлен до цикла?</li>
+<li>Чем <code><span class="term-language" title="Конструкция языка">while</span></code> отличается от <code><span class="term-language" title="Конструкция языка">do</span>-<span class="term-language" title="Конструкция языка">while</span></code>?</li>
 <li>Назовите три причины бесконечного цикла.</li>
 <li>Что такое «ошибка на единицу»?</li>
-<li>Что делают <code>break</code> и <code>continue</code>?</li>
+<li>Что делают <code><span class="term-language" title="Конструкция языка">break</span></code> и <code><span class="term-language" title="Конструкция языка">continue</span></code>?</li>
 <li>Где должна быть объявлена переменная-накопитель и почему?</li>
 <li>С какого значения начинают накопитель суммы? Произведения?</li>
 <li>Как получить последнюю цифру числа и отбросить её?</li>
 <li>Как пройти по всем символам строки? Какой номер у последнего символа?</li>
 <li>Внешний цикл выполняется 4 раза, внутренний — 5. Сколько раз выполнится тело внутреннего?</li>
 <li>Какой цикл выбрать, чтобы повторять ввод, пока пользователь не введёт корректное значение?</li>
-</ol></article><footer><a target="_top" href="../#java-conditions">← Условный оператор</a><a target="_top" href="../#java-arrays">Массивы →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script></body></html>
+</ol></article></details><footer><a target="_top" href="../#java-conditions">← Условный оператор</a><a target="_top" href="../#java-arrays">Массивы →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script><script src="course-traces.js?v=1"></script></body></html>

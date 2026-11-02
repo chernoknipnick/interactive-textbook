@@ -1,8 +1,13 @@
 <section class="lesson-visual" data-visual="condition" aria-label="Пошаговая проверка условия">
   <div class="visual-heading"><span>РАЗБЕРЁМ НА СХЕМЕ</span><strong>Почему выполняется только одна ветка?</strong></div>
   <label class="visual-input">Баллы на экзамене (0–100)<input data-score type="number" min="0" max="100" step="1" value="75"></label>
-  <code class="visual-code">if (score &gt;= 60) { "Сдано" } else { "Не сдано" }</code>
-  <p class="visual-caption">Схема логики: строки обозначают результат выбранной ветки, а не полный исполняемый Java-код.</p>
+  <pre class="visual-code"><code data-condition-code>int score = 75;
+if (score &gt;= 60) {
+    System.out.println("Сдано");
+} else {
+    System.out.println("Не сдано");
+}</code></pre>
+  <p class="visual-caption">Этот фрагмент размещается внутри main. Значение score в коде меняется вместе с полем ввода; схема показывает результат сравнения и выбранную ветку.</p>
   <div class="condition-flow"><div class="visual-node active" data-node="0"><small>1 · ПОЛУЧИТЬ ЗНАЧЕНИЕ</small><b data-input-value>score = 75</b></div><span class="visual-arrow" aria-hidden="true">↓</span><div class="visual-node" data-node="1"><small>2 · ПРОВЕРИТЬ</small><b data-test>75 ≥ 60 ?</b><span data-comparison>Пока не проверяли</span></div><span class="visual-arrow" aria-hidden="true">↓</span><div class="condition-branches"><div class="visual-node" data-branch="true"><small>TRUE · ДА</small><b>Сдано</b></div><div class="visual-node" data-branch="false"><small>FALSE · НЕТ</small><b>Не сдано</b></div></div></div>
   <div class="visual-controls"><button data-action="back" disabled aria-label="Предыдущий шаг условия">← Назад</button><span data-step>Шаг 1 из 3</span><button data-action="next" aria-label="Следующий шаг условия">Дальше →</button><button data-action="reset">Сначала</button></div>
   <p class="visual-explanation" data-explanation aria-live="polite">Задано 75 баллов. Нажми «Дальше», чтобы проверить условие. Потом попробуй 59 и 60.</p>

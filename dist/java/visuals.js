@@ -1,7 +1,12 @@
 document.querySelectorAll('[data-visual]').forEach(widget=>{
-  let step=0,selected=null;
+  let step=0,selected=null,timer=null;
   const kind=widget.dataset.visual,total=kind==='array'?5:3;
   const find=s=>widget.querySelector(s);
+  const play=document.createElement('button');
+  play.type='button';play.dataset.action='play';
+  find('.visual-controls').append(play);
+  function pause(){clearInterval(timer);timer=null;play.textContent='▶ Проиграть';play.setAttribute('aria-pressed','false');}
+  pause();
   const launchText=[
     'Сначала есть только текст в Hello.java. Это исходный код: JVM запускает не этот текст, а результат компиляции.',
     'Команда javac Hello.java проверяет код и при успешной компиляции создаёт Hello.class с байт-кодом. При ошибке компиляции исправляем исходник.',
@@ -24,6 +29,7 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
     if(kind==='condition'){
       const input=find('[data-score]'),score=input.valueAsNumber;
       const valid=input.value!==''&&Number.isInteger(score)&&score>=0&&score<=100;
+      play.disabled=!valid;
       find('[data-action=next]').disabled=!valid||step===total-1;
       if(!valid){
         find('[data-input-value]').textContent='Введите баллы';find('[data-test]').textContent='score ≥ 60 ?';find('[data-comparison]').textContent='Нет допустимого значения';
@@ -31,6 +37,8 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
         find('[data-explanation]').textContent='Введи целое число от 0 до 100.';return;
       }
       const passed=score>=60;
+      find('[data-condition-code]').textContent=`int score = ${score};\nif (score >= 60) {\n    System.out.println("Сдано");\n} else {\n    System.out.println("Не сдано");\n}`;
+      window.highlightJavaTerms?.(find('[data-condition-code]'));
       find('[data-input-value]').textContent=`score = ${score}`;
       find('[data-test]').textContent=`${score} ≥ 60 ?`;
       find('[data-comparison]').textContent=step===0?'Пока не проверяли':String(passed);
@@ -66,10 +74,19 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
   }
   widget.addEventListener('click',e=>{
     const action=e.target.closest('[data-action]')?.dataset.action;
-    if(action){step=action==='reset'?0:Math.max(0,Math.min(total-1,step+(action==='next'?1:-1)));selected=null;draw();}
+    if(action==='play'){
+      if(timer){pause();return;}
+      if(step===total-1){step=0;draw();}
+      play.textContent='Ⅱ Пауза';play.setAttribute('aria-pressed','true');
+      timer=setInterval(()=>{step++;draw();if(step===total-1)pause();},3000);
+      return;
+    }
+    if(action){pause();step=action==='reset'?0:Math.max(0,Math.min(total-1,step+(action==='next'?1:-1)));selected=null;draw();}
     const cell=e.target.closest('[data-index]');
     if(cell){selected=cell.closest('[data-array]').dataset.array+cell.dataset.index;draw();}
   });
-  find('[data-score]')?.addEventListener('input',()=>{step=0;draw();});
+  find('[data-score]')?.addEventListener('input',()=>{pause();step=0;draw();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+  window.addEventListener('pagehide',pause);
   draw();
 });

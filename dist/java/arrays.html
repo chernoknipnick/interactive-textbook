@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Массивы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"></head><body><main><div class="eyebrow">JAVA / ТЕМА 08 ИЗ 13 · ПОД ЗАПИСЬ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="notes-115">1.1.5. Массивы — под запись</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="lesson-visual" data-visual="array" aria-label="Массивы и ссылки в памяти">
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Массивы · Java</title><link rel="stylesheet" href="lecture.css?v=5"><link rel="stylesheet" href="lesson-semantics.css?v=1"><link rel="stylesheet" href="visuals.css?v=6"></head><body><main><div class="eyebrow">JAVA / ТЕМА 08 ИЗ 13 · ЛЕКЦИЯ</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav><article><h1 id="lecture-_1">Массивы</h1><details class="term-legend" open><summary>Как читать цвета в этой лекции</summary><ul><li><b class="term-type">Типы и классы</b><span>какие значения и объекты описываем</span></li><li><b class="term-object">Объекты и ссылки</b><span>какой экземпляр и как его найти</span></li><li><b class="term-data">Переменные, поля, параметры</b><span>где находятся данные</span></li><li><b class="term-method">Методы и конструкторы</b><span>какое действие выполняем</span></li><li><b class="term-language">Конструкции Java</b><span>какие правила задаёт язык</span></li></ul><p>Цвет обозначает группу, а не заменяет объяснение. Наведи на выделенный фрагмент, чтобы увидеть подсказку. Имена полей, переменных и параметров находятся в одной группе данных; их точную роль определяй по объявлению и контексту. Текст в кавычках остаётся строковым значением.</p></details><section class="lesson-visual" data-visual="array" aria-label="Массивы и ссылки в памяти">
   <div class="visual-heading"><span>РАЗБЕРЁМ НА СХЕМЕ</span><strong>Две переменные — один массив?</strong></div>
   <code class="visual-code" data-array-code>int[] a = {5, 3, 4, 2, 5};</code>
   <div class="memory-refs"><span><b>a</b> → массив A</span><span data-b-ref><b>b</b> — ещё не объявлена</span></div>
@@ -10,9 +10,354 @@
   <p class="visual-explanation" data-explanation aria-live="polite">Создали массив из пяти чисел. Переменная a хранит ссылку на этот массив.</p>
 </section>
 
-<blockquote>
-<p>МДК.01.03 «Разработка мобильных приложений». Это то, что должно быть в тетради после пары. После темы — практическая работа ПР02.</p>
-</blockquote>
+<h2 id="lecture-_2">Массив нужен, когда значений много, а правило обработки одно</h2>
+<p>Пять оценок можно хранить в пяти переменных. Но тогда для суммы придётся перечислять их вручную, а добавление шестой оценки потребует менять формулу. <strong>Массив</strong> объединяет элементы одного типа, к которым можно обращаться по номеру — индексу.</p>
+<p>У массива фиксирована длина после создания. Изменить существующий элемент можно; «добавить шестую ячейку» к тому же массиву длины пять нельзя. Для другого размера создают другой массив или выбирают другую структуру данных.</p>
+<h2 id="lecture-_3">Общая форма</h2>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">ТипЭлемента</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">имяМассива</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипЭлемента</span>[длина];
+<span class="term-data" title="Данные: переменная, поле или параметр">имяМассива</span>[индекс] = <span class="term-data" title="Данные: переменная, поле или параметр">значение</span>;
+<span class="term-type" title="Тип или класс">ТипЭлемента</span> <span class="term-data" title="Данные: переменная, поле или параметр">значениеЭлемента</span> = <span class="term-data" title="Данные: переменная, поле или параметр">имяМассива</span>[индекс];
+</code></pre></div>
+
+<p>Имена выбираешь ты. Квадратные скобки задают массив или доступ к ячейке, а круглые при вызове метода имеют другую роль. <code><span class="term-method" title="Метод: действие или вычисление">length</span></code> у массива — поле, поэтому <code><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span>.<span class="term-method" title="Метод: действие или вычисление">length</span></code> пишется без <code>()</code>.</p>
+<p>Вместо создания с длиной можно перечислить начальные значения: <code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">numbers</span> = {4, -2, 7};</code>. Здесь длина определяется тремя элементами.</p>
+<h2 id="lecture-_4">Полная программа</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">class</span></span> <span class="nc"><span class="term-type" title="Тип или класс">ArrayDemo</span></span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd"><span class="term-language" title="Конструкция языка">public</span></span><span class="w"> </span><span class="kd"><span class="term-language" title="Конструкция языка">static</span></span><span class="w"> </span><span class="kt"><span class="term-language" title="Конструкция языка">void</span></span><span class="w"> </span><span class="nf"><span class="term-method" title="Метод: действие или вычисление">main</span></span><span class="p">(</span><span class="n"><span class="term-type" title="Тип или класс">String</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">args</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">};</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">maximum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">index</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">index</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">index</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">index</span></span><span class="o">]</span><span class="p">;</span>
+<span class="w">            </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">index</span></span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">maximum</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">maximum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">index</span></span><span class="o">]</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">average</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="p">)</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">maximum</span></span><span class="p">);</span>
+<span class="w">        </span><span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">average</span></span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Файл ArrayDemo.java. Вывод: <strong>9</strong>, <strong>7</strong>, <strong>3.0</strong>, каждое с новой строки. Для этой программы входной массив заведомо непустой; иначе обращение к numbers[0] потребовало бы другого решения.</p>
+<h2 id="lecture-_5">Каждая роль в объявлении</h2>
+<p><code><span class="term-type" title="Тип или класс">int</span>[]</code> — тип переменной: ссылка на массив целых. numbers — её выбранное имя. Фигурные скобки со значениями задают начальные элементы. Это не тело метода. Целые элементы имеют значения 4, -2, 7; индексы — 0, 1, 2.</p>
+<p>Число элементов равно 3, но индекс 3 уже недопустим. Всегда различай количество и последний индекс. <code><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span>[1]</code> означает второй элемент -2, а не поиск числа 1 внутри массива.</p>
+<h2 id="lecture-_6">Два действия внутри каждой итерации</h2>
+<p>Сначала к сумме прибавляется текущий элемент. Затем этот же элемент сравнивается с лучшим максимумом, найденным к данному моменту. Независимые расчёты могут находиться в одном цикле, если ты понимаешь их состояния.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">index</th>
+<th style="text-align: right;">Текущий элемент</th>
+<th style="text-align: right;">sum после прибавления</th>
+<th style="text-align: right;">maximum после проверки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">До цикла</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">Обращения нет: условие ложно</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7</td>
+</tr>
+</tbody>
+</table>
+<p>Почему максимум не начинается с нуля? В массиве {-8, -3, -5} нуля нет, но ошибочный максимум 0 останется больше всех элементов. Первый элемент — допустимый начальный кандидат непустого массива.</p>
+<h2 id="lecture-_7">Среднее: сначала сумма, потом деление</h2>
+<p><code>(<span class="term-type" title="Тип или класс">double</span>) <span class="term-data" title="Данные: переменная, поле или параметр">sum</span> / <span class="term-data" title="Данные: переменная, поле или параметр">numbers</span>.<span class="term-method" title="Метод: действие или вычисление">length</span></code> превращает сумму в double до деления. Замени вход на {1, 2}: среднее должно быть 1.5. Если получится 1.0, вероятно, сначала выполнилось целочисленное деление.</p>
+<p>На массиве из трёх нулей среднее равно 0.0. На пустом массиве формула не определяет полезное среднее автоматически: сначала нужно решить, какое поведение предусмотрено задачей. Нельзя подставлять пустой массив в пример, рассчитанный только на непустой, и делать вывод о всей Java.</p>
+<h2 id="lecture-new-int3">Что создаётся при new int[3]</h2>
+<p>Создаётся массив с тремя целыми элементами, первоначально равными нулю. Ноль — начальное значение элемента, а не признак отсутствия самого массива. Для массива ссылочного типа начальные элементы будут null — это отдельное различие, важное перед объектами.</p>
+<p>Переменная numbers хранит ссылку. При <code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">backup</span> = <span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></code> не создаётся независимая копия элементов. Изменение <code><span class="term-data" title="Данные: переменная, поле или параметр">backup</span>[0]</code> будет видно через numbers. Для отдельного массива int[] можно использовать clone; для массивов ссылок это ещё не глубокое копирование всех объектов.</p>
+<h2 id="lecture-for-for-each">for и for-each</h2>
+<div class="codehilite"><pre><span></span><code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">ТипЭлемента</span> <span class="term-data" title="Данные: переменная, поле или параметр">временноеИмя</span> : <span class="term-data" title="Данные: переменная, поле или параметр">имяМассива</span>) {
+    использовать <span class="term-data" title="Данные: переменная, поле или параметр">значение</span> временногоИмени;
+}
+</code></pre></div>
+
+<p>В этом шаблоне временная переменная получает значение очередного элемента. Если элементы int, присваивание нового числа этой временной переменной само по себе не меняет ячейку исходного массива. Чтобы записывать в ячейки по позиции, используй индексированный обход.</p>
+<p>for-each удобно читать для суммы, когда индекс не нужен. Если нужно знать позицию максимума или менять конкретную ячейку, индексированный for часто понятнее.</p>
+<h2 id="lecture-_8">Случайные числа без магической формулы</h2>
+<p><code><span class="term-type" title="Тип или класс">Random</span>.<span class="term-method" title="Метод: действие или вычисление">nextInt</span>(bound)</code> возвращает целое от 0 включительно до bound не включительно. Для диапазона 10–15 сначала считаем число допустимых целых: 15 - 10 + 1 = 6. Затем nextInt(6) даёт 0–5, прибавление 10 сдвигает диапазон к 10–15.</p>
+<p>Формула <code><span class="term-data" title="Данные: переменная, поле или параметр">random</span>.<span class="term-method" title="Метод: действие или вычисление">nextInt</span>(maxValue - minValue + 1) + minValue</code> подходит для наших небольших диапазонов, когда minValue &lt;= maxValue и вычисление размера диапазона помещается в int. Это не универсальная формула для любых крайних int.</p>
+<p>Повторения случайных чисел допустимы. За десять попыток не обязаны встретиться все разрешённые значения. Для проверки алгоритма удобнее временно подставить фиксированный массив, иначе данные меняются между запусками.</p>
+<h2 id="lecture-_9">Двумерный массив: ещё один уровень</h2>
+<p><code><span class="term-type" title="Тип или класс">int</span>[][] table</code> — ссылка на массив, элементы которого сами являются ссылками на int[]. Поэтому строки могут иметь разную длину, а отдельная строка может быть null. Для обхода строки проверяй её собственную длину, а не всегда длину первой строки.</p>
+<p>Сначала разберись с одной строкой, затем с внешним массивом строк. Умножение матриц — задача на согласование размеров, а не простое повторение одного и того же индекса.</p>
+<h2 id="lecture-_10">Самостоятельная проверка</h2>
+<p>Прогони исходный алгоритм для {-8, -3, -5}, {0}, {1, 2}. Предскажи сумму, максимум и среднее. Затем добавь счётчик положительных элементов: он начинается с нуля и увеличивается при условии <code><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span>[<span class="term-data" title="Данные: переменная, поле или параметр">index</span>] &gt; 0</code>.</p>
+<p>Не меняй одновременно генерацию, вычисление и вывод. Сначала получи верные результаты на известных данных, только затем возвращай случайное заполнение.</p>
+<h2 id="lecture-_11">Справочник и дополнительные упражнения по теме</h2>
+<h2 id="lecture-1">1. Массив, элемент, индекс</h2>
+<p><strong>Массив</strong> — набор значений одного типа, которые хранятся подряд под общим именем.
+<strong>Элемент</strong> — одно значение в массиве.
+<strong>Индекс</strong> — номер элемента. Индексы начинаются <strong>с нуля</strong>: в массиве из <code>n</code> элементов индексы от 0 до <code>n − 1</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="term-data" title="Данные: переменная, поле или параметр">marks</span>
+┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+│ 5 │ 3 │ 5 │ 3 │ 4 │ 4 │ 3 │ 2 │ 5 │ 4 │   ← элементы
+└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+  0   1   2   3   4   5   6   7   8   9      ← индексы
+
+длина: 10        первый: <span class="term-data" title="Данные: переменная, поле или параметр">marks</span>[0]        последний: <span class="term-data" title="Данные: переменная, поле или параметр">marks</span>[9]
+</code></pre></div>
+
+<p><strong>Создание массива</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[</span><span class="mi">5</span><span class="o">]</span><span class="p">;</span><span class="w">           </span><span class="c1">// 1) пустой массив заданного размера</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span><span class="w">      </span><span class="c1">// 2) массив с готовыми значениями</span>
+</code></pre></div>
+
+<p><strong>Обращение к элементу:</strong> <code>имя[индекс]</code> — <code><span class="term-data" title="Данные: переменная, поле или параметр">marks</span>[0] = 5;</code>, <code><span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">x</span> = <span class="term-data" title="Данные: переменная, поле или параметр">marks</span>[2];</code></p>
+<p><strong>Значения по умолчанию</strong> при создании через <code><span class="term-language" title="Конструкция языка">new</span></code>: числа — <code>0</code>, <code><span class="term-type" title="Тип или класс">boolean</span></code> — <code><span class="term-language" title="Конструкция языка">false</span></code>, <code><span class="term-type" title="Тип или класс">char</span></code> — символ с кодом 0, <code><span class="term-type" title="Тип или класс">String</span></code> и другие ссылочные типы — <code><span class="term-language" title="Конструкция языка">null</span></code>.</p>
+<p><strong>Размер массива задаётся при создании и не меняется.</strong></p>
+<h2 id="lecture-2">2. Длина массива</h2>
+<p><strong><code>имя.<span class="term-method" title="Метод: действие или вычисление">length</span></code></strong> — длина массива (количество элементов). Пишется без круглых скобок.
+Индекс последнего элемента: <code>имя.<span class="term-method" title="Метод: действие или вычисление">length</span> - 1</code>.</p>
+<p>Обращение к индексу меньше 0 или больше <code><span class="term-method" title="Метод: действие или вычисление">length</span> − 1</code> — ошибка выполнения <code>ArrayIndexOutOfBoundsException</code>.</p>
+<p>Пример сообщения: <code>Index 10 out of bounds <span class="term-language" title="Конструкция языка">for</span> <span class="term-method" title="Метод: действие или вычисление">length</span> 10</code> — обратились к индексу 10 в массиве длины 10.</p>
+<h2 id="lecture-3">3. Обход массива</h2>
+<p><strong>Обход массива циклом <code><span class="term-language" title="Конструкция языка">for</span></code>:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// marks[i] — текущий элемент, i — его индекс</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Цикл <code><span class="term-language" title="Конструкция языка">for</span>-each</code></strong> перебирает все элементы по порядку:</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">mark</span></span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// mark — копия текущего элемента</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Нужно</th>
+<th><code><span class="term-language" title="Конструкция языка">for</span></code></th>
+<th><code><span class="term-language" title="Конструкция языка">for</span>-each</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>только прочитать все элементы</td>
+<td>можно</td>
+<td>удобнее</td>
+</tr>
+<tr>
+<td>знать индекс элемента</td>
+<td>да</td>
+<td>нет</td>
+</tr>
+<tr>
+<td>изменять элементы массива</td>
+<td>да</td>
+<td>нет</td>
+</tr>
+<tr>
+<td>обход в обратном порядке, через один, части массива</td>
+<td>да</td>
+<td>нет</td>
+</tr>
+</tbody>
+</table>
+<p>Вывод массива целиком: <code><span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(Arrays.<span class="term-method" title="Метод: действие или вычисление">toString</span>(<span class="term-data" title="Данные: переменная, поле или параметр">marks</span>));</code>
+Нужен <code><span class="term-language" title="Конструкция языка">import</span> java.util.Arrays;</code></p>
+<h2 id="lecture-4">4. Типовые алгоритмы</h2>
+<p><strong>Сумма и среднее</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">average</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="p">)</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong>Максимум</strong> (минимум — так же, со знаком <code>&lt;</code>)</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">max</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span><span class="w">                          </span><span class="c1">// начинаем с первого элемента, а не с нуля</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">max</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">max</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Подсчёт по условию</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">mark</span></span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">mark</span></span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">count</span></span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Поиск элемента</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">position</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="w">                           </span><span class="c1">// -1 означает «не найден»</span>
+<span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">position</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">break</span></span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="lecture-5-random">5. Случайные числа — класс <code><span class="term-type" title="Тип или класс">Random</span></code></h2>
+<div class="codehilite"><pre><span></span><code><span class="kn"><span class="term-language" title="Конструкция языка">import</span></span><span class="w"> </span><span class="nn">java.util.<span class="term-type" title="Тип или класс">Random</span></span><span class="p">;</span>
+
+<span class="n"><span class="term-type" title="Тип или класс">Random</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">random</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Random</span></span><span class="p">();</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">a</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">random</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">nextInt</span></span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w">                      </span><span class="c1">// от 0 до 9</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">b</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">random</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">nextInt</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">max</span></span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">min</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">min</span><span class="p">;</span><span class="w">     </span><span class="c1">// от min до max включительно</span>
+</code></pre></div>
+
+<p>Заполнение массива:</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">random</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">nextInt</span></span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">          </span><span class="c1">// от 2 до 5</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>нужно: от 2 <span class="term-data" title="Данные: переменная, поле или параметр">до</span> 5              вариантов: 5 − 2 + 1 = 4   (2, 3, 4, 5)
+
+<span class="term-data" title="Данные: переменная, поле или параметр">random</span>.<span class="term-method" title="Метод: действие или вычисление">nextInt</span>(4)        →  0, 1, 2, 3
+<span class="term-data" title="Данные: переменная, поле или параметр">random</span>.<span class="term-method" title="Метод: действие или вычисление">nextInt</span>(4) + 2    →  2, 3, 4, 5
+</code></pre></div>
+
+<h2 id="lecture-6">6. Массив — ссылочный тип</h2>
+<p><strong>Массив — ссылочный тип.</strong> В переменной хранится не сам массив, а ссылка на него: значение доступа к объекту, не обязательно доступный числовой адрес.</p>
+<ul>
+<li><code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">b</span> = <span class="term-data" title="Данные: переменная, поле или параметр">a</span>;</code> копирует <strong>ссылку</strong>: <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> указывают на один и тот же массив.</li>
+<li>Настоящая копия: <code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">c</span> = Arrays.<span class="term-method" title="Метод: действие или вычисление">copyOf</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span>, <span class="term-data" title="Данные: переменная, поле или параметр">a</span>.<span class="term-method" title="Метод: действие или вычисление">length</span>);</code></li>
+<li><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span> == <span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> сравнивает ссылки. Сравнение по содержимому: <code>Arrays.<span class="term-method" title="Метод: действие или вычисление">equals</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span>, <span class="term-data" title="Данные: переменная, поле или параметр">b</span>)</code>.</li>
+</ul>
+<div class="codehilite"><pre><span></span><code> <span class="term-data" title="Данные: переменная, поле или параметр">a</span> ┌─────┐
+   │  ●──┼───┐     ┌───┬───┬───┐
+   └─────┘   ├────►│ 1 │ 2 │ 3 │
+ <span class="term-data" title="Данные: переменная, поле или параметр">b</span> ┌─────┐   │     └───┴───┴───┘
+   │  ●──┼───┘
+   └─────┘
+две переменные, один массив
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">a</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[]</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">b</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">a</span></span><span class="p">;</span>
+<span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">b</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="n"><span class="term-type" title="Тип или класс">System</span></span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">println</span></span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">a</span></span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">);</span><span class="w">    </span><span class="c1">// 100</span>
+</code></pre></div>
+
+<h2 id="lecture-7">7. Двумерные массивы</h2>
+<p><strong>Двумерный массив</strong> — массив, элементы которого являются массивами; таблица из строк и столбцов.</p>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[][]</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[</span><span class="mi">2</span><span class="o">][</span><span class="mi">3</span><span class="o">]</span><span class="p">;</span><span class="w">               </span><span class="c1">// 2 строки, 3 столбца</span>
+<span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="o">[][]</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">}</span><span class="w"> </span><span class="p">};</span><span class="w">    </span><span class="c1">// с готовыми значениями</span>
+</code></pre></div>
+
+<p><code>table[<span class="term-data" title="Данные: переменная, поле или параметр">i</span>][<span class="term-data" title="Данные: переменная, поле или параметр">j</span>]</code> — элемент в строке <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code>, столбце <code><span class="term-data" title="Данные: переменная, поле или параметр">j</span></code>.
+<code>table.<span class="term-method" title="Метод: действие или вычисление">length</span></code> — число строк; <code>table[<span class="term-data" title="Данные: переменная, поле или параметр">i</span>].<span class="term-method" title="Метод: действие или вычисление">length</span></code> — число столбцов в строке <code><span class="term-data" title="Данные: переменная, поле или параметр">i</span></code>.</p>
+<p>Обход — вложенными циклами:</p>
+<div class="codehilite"><pre><span></span><code><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">table</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">table</span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">j</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// table[i][j]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="lecture-8">8. Частые ошибки</h2>
+<table>
+<thead>
+<tr>
+<th>Что написано</th>
+<th>Что происходит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">i</span> &lt;= <span class="term-data" title="Данные: переменная, поле или параметр">a</span>.<span class="term-method" title="Метод: действие или вычисление">length</span></code> в условии цикла</td>
+<td><code>ArrayIndexOutOfBoundsException</code> на последней итерации</td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">a</span>.<span class="term-method" title="Метод: действие или вычисление">length</span>()</code> со скобками</td>
+<td>ошибка компиляции: у массива <code><span class="term-method" title="Метод: действие или вычисление">length</span></code> без скобок</td>
+</tr>
+<tr>
+<td>максимум начинается с 0</td>
+<td>неверный ответ, если все числа отрицательные</td>
+</tr>
+<tr>
+<td><code><span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span>)</code></td>
+<td>выводится строковое представление массива вроде <code>[I@1b6d3586</code>, а не элементы; это не физический адрес и не гарантированно уникальный номер</td>
+</tr>
+<tr>
+<td><code><span class="term-data" title="Данные: переменная, поле или параметр">b</span> = <span class="term-data" title="Данные: переменная, поле или параметр">a</span></code> вместо копирования</td>
+<td>изменения в <code><span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> меняют <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span></code></td>
+</tr>
+<tr>
+<td><code><span class="term-method" title="Метод: действие или вычисление">nextInt</span>(<span class="term-data" title="Данные: переменная, поле или параметр">max</span> - min) + min</code></td>
+<td>максимальное значение никогда не выпадает</td>
+</tr>
+<tr>
+<td>среднее без <code>(<span class="term-type" title="Тип или класс">double</span>)</code></td>
+<td>дробная часть отбрасывается</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lecture-_12">Домашнее задание</h2>
+<ol>
+<li>Вопросы «Проверь себя».</li>
+<li>Программа <code>Week</code>: массив температур за 7 дней (значения задать в коде, среди них должны быть отрицательные). Вывести массив, среднюю температуру, самый тёплый и самый холодный день (номер дня и температуру), количество дней с температурой ниже нуля.</li>
+<li>Программа <code>Dice</code>: бросить кубик 20 раз (случайные числа от 1 до 6), сохранить результаты в массив, вывести массив и сколько раз выпала шестёрка.</li>
+<li>Программа <code>Reverse</code>: вывести массив <code>{1, 2, 3, 4, 5}</code> в обратном порядке.</li>
+</ol>
+<h2 id="lecture-_13">Проверь себя</h2>
+<p>Ответь своими словами и подтверди ответ небольшим примером.</p>
+<ol>
+<li>Что такое массив, элемент, индекс?</li>
+<li>С какого числа начинаются индексы? Какой индекс у последнего элемента массива из 20 элементов?</li>
+<li>Какими двумя способами можно создать массив?</li>
+<li>Что лежит в массиве <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[5]</code> и <code><span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">String</span>[3]</code> сразу после создания?</li>
+<li>Можно ли изменить размер созданного массива?</li>
+<li>Чем <code><span class="term-data" title="Данные: переменная, поле или параметр">marks</span>.<span class="term-method" title="Метод: действие или вычисление">length</span></code> отличается от <code><span class="term-data" title="Данные: переменная, поле или параметр">name</span>.<span class="term-method" title="Метод: действие или вычисление">length</span>()</code>?</li>
+<li>Что произойдёт при <code><span class="term-data" title="Данные: переменная, поле или параметр">marks</span>[<span class="term-data" title="Данные: переменная, поле или параметр">marks</span>.<span class="term-method" title="Метод: действие или вычисление">length</span>]</code>? Как называется ошибка?</li>
+<li>Запишите цикл <code><span class="term-language" title="Конструкция языка">for</span></code>, который проходит по всем элементам массива <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span></code>.</li>
+<li>Чем <code><span class="term-language" title="Конструкция языка">for</span>-each</code> отличается от <code><span class="term-language" title="Конструкция языка">for</span></code>? Когда <code><span class="term-language" title="Конструкция языка">for</span>-each</code> использовать нельзя?</li>
+<li>Почему <code><span class="term-language" title="Конструкция языка">for</span> (<span class="term-type" title="Тип или класс">int</span> <span class="term-data" title="Данные: переменная, поле или параметр">m</span> : <span class="term-data" title="Данные: переменная, поле или параметр">marks</span>) { <span class="term-data" title="Данные: переменная, поле или параметр">m</span> = 0; }</code> не обнуляет массив?</li>
+<li>Почему максимум нельзя начинать с нуля? С чего начинать?</li>
+<li>Как получить случайное целое от 10 до 50 включительно?</li>
+<li><code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">a</span> = {1, 2, 3}; <span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">b</span> = <span class="term-data" title="Данные: переменная, поле или параметр">a</span>; <span class="term-data" title="Данные: переменная, поле или параметр">b</span>[1] = 9;</code> — чему равен <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span>[1]</code> и почему?</li>
+<li>Как создать независимую копию массива? Как сравнить два массива по содержимому?</li>
+<li>Как вывести массив целиком одной строкой?</li>
+<li><code><span class="term-type" title="Тип или класс">int</span>[][] t = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[3][4];</code> — сколько строк, столбцов, элементов? Как обойти?</li>
+</ol>
+<h2 id="lecture-_14">Где уточнить правила</h2>
+<p>Официальные материалы: <a href="https://dev.java/learn/">основы Java</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-15.html">спецификация выражений</a>, <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-5.html">преобразования типов</a>. Для Android отдельно учитывается <a href="https://developer.android.com/build">процесс сборки приложения</a>.</p></article><details class="notes"><summary>Конспект · Под запись</summary><article><h1 id="notes-115">1.1.5. Массивы — под запись</h1>
+<h2 id="notes-_1">Обобщение: подставь свои имена</h2>
+<div class="codehilite"><pre><span></span><code><span class="term-type" title="Тип или класс">ТипЭлемента</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">имяМассива</span> = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">ТипЭлемента</span>[длина];
+<span class="term-data" title="Данные: переменная, поле или параметр">имяМассива</span>[индекс] = <span class="term-data" title="Данные: переменная, поле или параметр">значение</span>;
+<span class="term-type" title="Тип или класс">ТипЭлемента</span> <span class="term-data" title="Данные: переменная, поле или параметр">значениеЭлемента</span> = <span class="term-data" title="Данные: переменная, поле или параметр">имяМассива</span>[индекс];
+</code></pre></div>
+
+<p>Имена выбираешь ты. Квадратные скобки задают массив или доступ к ячейке, а круглые при вызове метода имеют другую роль. <code><span class="term-method" title="Метод: действие или вычисление">length</span></code> у массива — поле, поэтому <code><span class="term-data" title="Данные: переменная, поле или параметр">numbers</span>.<span class="term-method" title="Метод: действие или вычисление">length</span></code> пишется без <code>()</code>.</p>
+<p>Вместо создания с длиной можно перечислить начальные значения: <code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">numbers</span> = {4, -2, 7};</code>. Здесь длина определяется тремя элементами.</p>
 <h2 id="notes-1">1. Массив, элемент, индекс</h2>
 <p><strong>Массив</strong> — набор значений одного типа, которые хранятся подряд под общим именем.
 <strong>Элемент</strong> — одно значение в массиве.
@@ -84,14 +429,14 @@
 </tbody>
 </table>
 <p>Вывод массива целиком: <code><span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(Arrays.<span class="term-method" title="Метод: действие или вычисление">toString</span>(<span class="term-data" title="Данные: переменная, поле или параметр">marks</span>));</code>
-Нужен <code><span class="term-data" title="Данные: переменная, поле или параметр">import</span> java.util.Arrays;</code></p>
+Нужен <code><span class="term-language" title="Конструкция языка">import</span> java.util.Arrays;</code></p>
 <h2 id="notes-4">4. Типовые алгоритмы</h2>
 <p><strong>Сумма и среднее</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">average</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="p">)</span><span class="w"> </span><span class="n"><span class="term-method" title="Метод: действие или вычисление">sum</span></span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span>
+<span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">average</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">double</span></span><span class="p">)</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">sum</span></span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span>
 </code></pre></div>
 
 <p><strong>Максимум</strong> (минимум — так же, со знаком <code>&lt;</code>)</p>
@@ -117,13 +462,13 @@
 <span class="k"><span class="term-language" title="Конструкция языка">for</span></span><span class="w"> </span><span class="p">(</span><span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">length</span></span><span class="p">;</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k"><span class="term-language" title="Конструкция языка">if</span></span><span class="w"> </span><span class="p">(</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">marks</span></span><span class="o">[</span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">position</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">i</span></span><span class="p">;</span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="k"><span class="term-language" title="Конструкция языка">break</span></span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <h2 id="notes-5-random">5. Случайные числа — класс <code><span class="term-type" title="Тип или класс">Random</span></code></h2>
-<div class="codehilite"><pre><span></span><code><span class="kn"><span class="term-data" title="Данные: переменная, поле или параметр">import</span></span><span class="w"> </span><span class="nn">java.util.<span class="term-type" title="Тип или класс">Random</span></span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kn"><span class="term-language" title="Конструкция языка">import</span></span><span class="w"> </span><span class="nn">java.util.<span class="term-type" title="Тип или класс">Random</span></span><span class="p">;</span>
 
 <span class="n"><span class="term-type" title="Тип или класс">Random</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">random</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k"><span class="term-language" title="Конструкция языка">new</span></span><span class="w"> </span><span class="n"><span class="term-type" title="Тип или класс">Random</span></span><span class="p">();</span>
 <span class="kt"><span class="term-type" title="Тип или класс">int</span></span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">a</span></span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n"><span class="term-data" title="Данные: переменная, поле или параметр">random</span></span><span class="p">.</span><span class="na"><span class="term-method" title="Метод: действие или вычисление">nextInt</span></span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w">                      </span><span class="c1">// от 0 до 9</span>
@@ -143,7 +488,7 @@
 </code></pre></div>
 
 <h2 id="notes-6">6. Массив — ссылочный тип</h2>
-<p><strong>Массив — ссылочный тип.</strong> В переменной хранится не сам массив, а ссылка на него (адрес в памяти).</p>
+<p><strong>Массив — ссылочный тип.</strong> В переменной хранится не сам массив, а ссылка на него: значение доступа к объекту, не обязательно доступный числовой адрес.</p>
 <ul>
 <li><code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">b</span> = <span class="term-data" title="Данные: переменная, поле или параметр">a</span>;</code> копирует <strong>ссылку</strong>: <code><span class="term-data" title="Данные: переменная, поле или параметр">a</span></code> и <code><span class="term-data" title="Данные: переменная, поле или параметр">b</span></code> указывают на один и тот же массив.</li>
 <li>Настоящая копия: <code><span class="term-type" title="Тип или класс">int</span>[] <span class="term-data" title="Данные: переменная, поле или параметр">c</span> = Arrays.<span class="term-method" title="Метод: действие или вычисление">copyOf</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span>, <span class="term-data" title="Данные: переменная, поле или параметр">a</span>.<span class="term-method" title="Метод: действие или вычисление">length</span>);</code></li>
@@ -203,7 +548,7 @@
 </tr>
 <tr>
 <td><code><span class="term-type" title="Тип или класс">System</span>.out.<span class="term-method" title="Метод: действие или вычисление">println</span>(<span class="term-data" title="Данные: переменная, поле или параметр">a</span>)</code></td>
-<td>выводится адрес вида <code>[I@1b6d3586</code>, а не элементы</td>
+<td>выводится строковое представление массива вроде <code>[I@1b6d3586</code>, а не элементы; это не физический адрес и не гарантированно уникальный номер</td>
 </tr>
 <tr>
 <td><code><span class="term-data" title="Данные: переменная, поле или параметр">b</span> = <span class="term-data" title="Данные: переменная, поле или параметр">a</span></code> вместо копирования</td>
@@ -219,15 +564,15 @@
 </tr>
 </tbody>
 </table>
-<h2 id="notes-_1">Домашнее задание</h2>
+<h2 id="notes-_2">Домашнее задание</h2>
 <ol>
 <li>Вопросы «Проверь себя».</li>
 <li>Программа <code>Week</code>: массив температур за 7 дней (значения задать в коде, среди них должны быть отрицательные). Вывести массив, среднюю температуру, самый тёплый и самый холодный день (номер дня и температуру), количество дней с температурой ниже нуля.</li>
 <li>Программа <code>Dice</code>: бросить кубик 20 раз (случайные числа от 1 до 6), сохранить результаты в массив, вывести массив и сколько раз выпала шестёрка.</li>
 <li>Программа <code>Reverse</code>: вывести массив <code>{1, 2, 3, 4, 5}</code> в обратном порядке.</li>
 </ol>
-<h2 id="notes-_2">Проверь себя</h2>
-<p>По этим вопросам — опрос в начале следующей пары.</p>
+<h2 id="notes-_3">Проверь себя</h2>
+<p>Ответь своими словами и подтверди ответ небольшим примером.</p>
 <ol>
 <li>Что такое массив, элемент, индекс?</li>
 <li>С какого числа начинаются индексы? Какой индекс у последнего элемента массива из 20 элементов?</li>
@@ -245,4 +590,4 @@
 <li>Как создать независимую копию массива? Как сравнить два массива по содержимому?</li>
 <li>Как вывести массив целиком одной строкой?</li>
 <li><code><span class="term-type" title="Тип или класс">int</span>[][] t = <span class="term-language" title="Конструкция языка">new</span> <span class="term-type" title="Тип или класс">int</span>[3][4];</code> — сколько строк, столбцов, элементов? Как обойти?</li>
-</ol></article><footer><a target="_top" href="../#java-loops">← Циклы</a><a target="_top" href="../#java-methods">Методы: процедуры и функции →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=1"></script><script src="visuals.js?v=7"></script></body></html>
+</ol></article></details><footer><a target="_top" href="../#java-loops">← Циклы</a><a target="_top" href="../#java-methods">Методы: процедуры и функции →</a></footer></main><script src="lecture.js?v=3"></script><script src="lesson-semantics.js?v=2"></script><script src="visuals.js?v=8"></script></body></html>
