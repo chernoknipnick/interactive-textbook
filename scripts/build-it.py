@@ -47,18 +47,22 @@ def load_lessons():
             number, title, body = sections[i:i + 3]
             if number in lessons or not body.strip():
                 raise ValueError(f"Duplicate or empty lecture {number}")
-            converter = markdown.Markdown(
-                extensions=["extra", "toc", "sane_lists"],
-                extension_configs={"toc": {"slugify": slugify_unicode, "baselevel": 1}},
-            )
-            html = converter.convert(body)
+            html, outline = render_markdown(body)
             # Source headings are level three beneath the file's lecture delimiter.
             html = html.replace("<h3 ", "<h2 ").replace("</h3>", "</h2>")
-            outline = [(item["id"], unescape(item["name"])) for item in converter.toc_tokens]
             lessons[number] = (title, topic, html, outline)
     if list(lessons) != [f"{number:02d}" for number in range(1, 25)]:
         raise ValueError("Expected exactly 24 lectures in course order")
     return lessons
+
+
+def render_markdown(source):
+    converter = markdown.Markdown(
+        extensions=["extra", "toc", "sane_lists"],
+        extension_configs={"toc": {"slugify": slugify_unicode, "baselevel": 1}},
+    )
+    html = converter.convert(source)
+    return html, [(item["id"], unescape(item["name"])) for item in converter.toc_tokens]
 
 
 LESSONS = load_lessons()
@@ -147,7 +151,9 @@ def build_home():
             f'<h2>{escape(name)}</h2><p>{escape(description)}.</p>{transition}<ol>{links}</ol></section>'
         )
     practice_rows = "".join(
-        f'<tr><th scope="row">{number}</th><td>{name}</td><td>{hours}</td><td>{result}</td><td><a href="{lecture_href(lecture)}">Лекция {lecture}</a></td></tr>'
+        '<tr><th scope="row">'
+        + (f'<a href="practice-02.html">{number}</a>' if number == "ПР02" else number)
+        + f'</th><td>{name}</td><td>{hours}</td><td>{result}</td><td><a href="{lecture_href(lecture)}">Лекция {lecture}</a></td></tr>'
         for number, name, hours, result, lecture in PRACTICE
     )
     main = f"""
@@ -157,6 +163,7 @@ def build_home():
         <p class="lead">Проследи, как сообщение о сломанном компьютере становится заявкой, как его хранят и обрабатывают и как из данных получается решение.</p>
         <div class="stats"><span><b>24</b> лекции</span><span><b>48 ч</b> теории</span><span><b>30 ч</b> практики</span><span><b>2 ч</b> зачёта</span></div>
         <a class="primary" href="{lecture_href('01')}">Начать с лекции 01 →</a>
+        <a class="primary" href="practice-02.html">Открыть ПР02 →</a>
       </section>
       <section class="key" aria-labelledby="key-title">
         <h2 id="key-title">Как читать выделения</h2>
@@ -185,8 +192,20 @@ def build_home():
     (OUTPUT / "index.html").write_text(layout("Содержание курса", main, home=True), encoding="utf-8")
 
 
-def build_lecture(title, body, outline, *, number=None, topic=None):
+def article_content(title, body, outline, meta):
     toc = "".join(f'<li><a href="#{escape(anchor)}">{escape(label)}</a></li>' for anchor, label in outline)
+    return f"""
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">{meta}</p>
+        <h1>{escape(title)}</h1>
+        {legend(body)}
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol>{toc}</ol></details>
+      <article class="lesson">{body}</article>"""
+
+
+def build_lecture(title, body, outline, *, number=None, topic=None):
     if number:
         label = "Темы 01–02" if number == "10" else f"Тема {topic}"
         meta = f"{label} · Лекция {number} · 2 академических часа"
@@ -196,26 +215,27 @@ def build_lecture(title, body, outline, *, number=None, topic=None):
         meta = "Дополнительный материал · 2 академических часа"
         previous = '<a href="./#extra">← Дополнительные материалы</a>'
         following = '<a href="lecture-01.html">К лекции 01 →</a>'
-    main = f"""
-      <div class="lesson-head">
-        <a class="back" href="./">← Содержание ОП.03</a>
-        <p class="label">{meta}</p>
-        <h1>{escape(title)}</h1>
-        {legend(body)}
-      </div>
-      <details class="outline"><summary>На этой странице</summary><ol>{toc}</ol></details>
-      <article class="lesson">{body}</article>
+    main = article_content(title, body, outline, meta) + f"""
       <nav class="page-links" aria-label="Переходы между лекциями">{previous}{following}</nav>
     """
     filename = lecture_href(number) if number else "git.html"
     (OUTPUT / filename).write_text(layout(title, main, topic=topic, current=number), encoding="utf-8")
 
 
+def build_practice():
+    title = PRACTICE[1][1]
+    body, outline = render_markdown((SOURCE / "practice-02.md").read_text(encoding="utf-8"))
+    main = article_content(title, body, outline, "Тема 02 · ПР02 · 2 академических часа")
+    main += '<nav class="page-links" aria-label="Навигация практикума"><a href="./#practice">← К списку работ</a></nav>'
+    (OUTPUT / "practice-02.html").write_text(layout(f"ПР02. {title}", main, topic="02"), encoding="utf-8")
+
+
 OUTPUT.mkdir(parents=True, exist_ok=True)
 build_home()
+build_practice()
 for number, (title, topic, body, outline) in LESSONS.items():
     build_lecture(title, body, outline, number=number, topic=topic)
 git_body = (SOURCE / "git.html").read_text(encoding="utf-8")
 git_outline = re.findall(r'<h2 id="([^"]+)">([^<]+)</h2>', git_body)
 build_lecture("Git с нуля. Как проект запоминает изменения", git_body, git_outline)
-print("Built 24 scheduled lectures, Git supplement, and course contents.")
+print("Built 24 scheduled lectures, practice 02, Git supplement, and course contents.")
