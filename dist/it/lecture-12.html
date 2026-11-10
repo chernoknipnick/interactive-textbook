@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Биты, байты и размер файла · учебные материалы дисциплины ОП.03">
+  <title>Биты, байты и размер файла · ОП.03</title>
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="site-header">
+    <a class="brand" href="./"><b>ОП.03</b><span>Информационные технологии</span></a>
+    <a class="library" href="../">← Все дисциплины</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav class="section-menu" aria-label="Разделы дисциплины">
+        <a class="section-link" href="./"><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="./#topic-01"><small>ТЕМА 01</small>Информационные технологии</a><a class="section-link" href="./#topic-02" aria-current="location"><small>ТЕМА 02</small>Информационные процессы</a><a class="section-link" href="./#topic-03"><small>ТЕМА 03</small>Средства реализации</a>
+        <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
+        <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>
+      </nav>
+      <nav class="lecture-menu" aria-label="Лекции темы"><p class="label">Лекции темы</p><ol><li><a href="lecture-10.html"><span>10</span>Выбор технологии и путь данных</a></li><li><a href="lecture-11.html"><span>11</span>Извлечение информации и качество данных</a></li><li><a href="lecture-12.html" aria-current="page"><span>12</span>Биты, байты и размер файла</a></li><li><a href="lecture-13.html"><span>13</span>Количество информации по Хартли</a></li><li><a href="lecture-14.html"><span>14</span>Вероятность события и энтропия</a></li><li><a href="lecture-15.html"><span>15</span>Передача данных и пропускная способность</a></li><li><a href="lecture-16.html"><span>16</span>Обработка данных: отбор, группировка, подсчёт</a></li><li><a href="lecture-17.html"><span>17</span>Хранение и накопление данных</a></li><li><a href="lecture-18.html"><span>18</span>Представление информации</a></li><li><a href="lecture-19.html"><span>19</span>Использование информации и сквозная модель</a></li></ol></nav>
+    </aside>
+    <main id="main">
+      
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">Тема 02 · Лекция 12 · 2 академических часа</p>
+        <h1>Биты, байты и размер файла</h1>
+        <ul class="legend" aria-label="Цветовые группы терминов"><li class="source">Источники и входные данные</li><li class="result">Результаты и показатели</li></ul>
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol><li><a href="#две-системы-единиц">Две системы единиц</a></li><li><a href="#контрольный-пример">Контрольный пример</a></li><li><a href="#самопроверка">Самопроверка</a></li></ol></details>
+      <article class="lesson"><p><strong>Цель пары.</strong> Переводить единицы объёма, отличать размер файла от количества символов и записывать расчёт так, чтобы его можно было проверить.</p>
+<h2 id="две-системы-единиц">Две системы единиц</h2>
+<p>Бит принимает одно из двух значений. Байт содержит 8 бит. Обозначение <code>B</code> в примерах — байт, <code>bit</code> — бит. Сетевую скорость часто указывают в битах за секунду, а размер файла — в байтах. Сравнение требует одинаковых единиц.</p>
+<table>
+<thead>
+<tr>
+<th>Единица</th>
+<th style="text-align: right;">В байтах</th>
+<th>Вид</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 kB</td>
+<td style="text-align: right;">1 000</td>
+<td>Десятичная</td>
+</tr>
+<tr>
+<td>1 MB</td>
+<td style="text-align: right;">1 000 000</td>
+<td>Десятичная</td>
+</tr>
+<tr>
+<td>1 KiB</td>
+<td style="text-align: right;">1 024</td>
+<td>Двоичная</td>
+</tr>
+<tr>
+<td>1 MiB</td>
+<td style="text-align: right;">1 048 576</td>
+<td>Двоичная</td>
+</tr>
+</tbody>
+</table>
+<p>Отличие растёт с размером. В ПР02 подписывай единицы у исходных величин и у результата. Если в условии используется KiB, умножай на 1024. <a href="https://pml.nist.gov/cuu/Units/binary.html">NIST о двоичных приставках</a></p>
+<h2 id="контрольный-пример">Контрольный пример</h2>
+<p><strong class="source">Исходные данные</strong>: 40 файлов по 2 KiB. Один файл содержит 2 × 1024 = 2048 байт. Сумма: 40 × 2048 = 81 920 байт, или 80 KiB. В битах это 81 920 × 8 = <strong class="result">655 360 бит</strong>. Полезный объём файлов может отличаться от места на диске и от объёма трафика при обмене.</p>
+<p>Длина текста в символах зависит от того, как считаются символы, а размер файла — от кодировки и содержимого. В UTF-8 латинская <code>A</code> занимает один байт, кириллическая <code>А</code> — два. Для демонстрации сохрани по одному символу в отдельных файлах UTF-8 без BOM и переноса строки и посмотри свойство «Размер». Если редактор добавил перевод строки, число увеличится.</p>
+<h2 id="самопроверка">Самопроверка</h2>
+<ol>
+<li>Сколько бит в 3 KiB?</li>
+<li>Сколько байт в 2 MB?</li>
+<li>У двух файлов по одному символу. Обязаны ли совпадать размеры?</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+<ol>
+<li>3 × 1024 × 8 = 24 576 бит.</li>
+<li>2 000 000 байт.</li>
+<li>Нет. В разных кодировках или для разных символов число байтов может различаться.</li>
+</ol>
+</details>
+<p><strong>Под запись.</strong> Перед расчётом явно укажи разницу между битом, байтом, десятичной и двоичной приставками.</p></article>
+      <nav class="page-links" aria-label="Переходы между лекциями"><a href="lecture-11.html">← Лекция 11</a><a href="lecture-13.html">Лекция 13 →</a></nav>
+    
+    </main>
+  </div>
+  <script src="course.js" defer></script>
+</body>
+</html>

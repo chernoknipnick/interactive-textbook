@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Количество информации по Хартли · учебные материалы дисциплины ОП.03">
+  <title>Количество информации по Хартли · ОП.03</title>
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="site-header">
+    <a class="brand" href="./"><b>ОП.03</b><span>Информационные технологии</span></a>
+    <a class="library" href="../">← Все дисциплины</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav class="section-menu" aria-label="Разделы дисциплины">
+        <a class="section-link" href="./"><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="./#topic-01"><small>ТЕМА 01</small>Информационные технологии</a><a class="section-link" href="./#topic-02" aria-current="location"><small>ТЕМА 02</small>Информационные процессы</a><a class="section-link" href="./#topic-03"><small>ТЕМА 03</small>Средства реализации</a>
+        <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
+        <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>
+      </nav>
+      <nav class="lecture-menu" aria-label="Лекции темы"><p class="label">Лекции темы</p><ol><li><a href="lecture-10.html"><span>10</span>Выбор технологии и путь данных</a></li><li><a href="lecture-11.html"><span>11</span>Извлечение информации и качество данных</a></li><li><a href="lecture-12.html"><span>12</span>Биты, байты и размер файла</a></li><li><a href="lecture-13.html" aria-current="page"><span>13</span>Количество информации по Хартли</a></li><li><a href="lecture-14.html"><span>14</span>Вероятность события и энтропия</a></li><li><a href="lecture-15.html"><span>15</span>Передача данных и пропускная способность</a></li><li><a href="lecture-16.html"><span>16</span>Обработка данных: отбор, группировка, подсчёт</a></li><li><a href="lecture-17.html"><span>17</span>Хранение и накопление данных</a></li><li><a href="lecture-18.html"><span>18</span>Представление информации</a></li><li><a href="lecture-19.html"><span>19</span>Использование информации и сквозная модель</a></li></ol></nav>
+    </aside>
+    <main id="main">
+      
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">Тема 02 · Лекция 13 · 2 академических часа</p>
+        <h1>Количество информации по Хартли</h1>
+        <ul class="legend" aria-label="Цветовые группы терминов"><li class="result">Результаты и показатели</li></ul>
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol><li><a href="#что-измеряет-формула">Что измеряет формула</a></li><li><a href="#пять-статусов-и-три-бита-кода">Пять статусов и три бита кода</a></li><li><a href="#самопроверка">Самопроверка</a></li></ol></details>
+      <article class="lesson"><p><strong>Цель пары.</strong> Считать количество информации для равновероятных исходов и отличать его от длины фиксированного кода.</p>
+<h2 id="что-измеряет-формула">Что измеряет формула</h2>
+<p>Есть восемь одинаково вероятных кабинетов. Нам сообщили, в каком появилась заявка. До сообщения было восемь возможных исходов, после сообщения остался один. В модели Хартли количество информации равно <code>I = log₂ N</code>, где <code>N</code> — число равновероятных исходов. При <code>N = 8</code> получается 3 бита. Это можно представить как три последовательных ответа «да» или «нет», каждый из которых делит оставшиеся варианты пополам.</p>
+<p>Если <code>N = 1</code>, исход известен заранее и <code>I = 0</code>. Если исходов 16, добавляется один двоичный шаг и <code>I = 4</code>. Логарифм по основанию 2 отвечает на вопрос, в какую степень возвести 2, чтобы получить число исходов.</p>
+<h2 id="пять-статусов-и-три-бита-кода">Пять статусов и три бита кода</h2>
+<p>Пусть статусов пять, все равновероятны. По формуле получаем <code>log₂ 5 ≈ 2,32 бита</code>. Для фиксированного двоичного кода каждому статусу нужна комбинация целой длины. Два бита дают четыре комбинации и не покрывают пять статусов. Три бита дают восемь комбинаций, три остаются свободными. <strong class="result">Оценка информации</strong> равна примерно 2,32 бита, длина фиксированного кода — 3 бита. Обе величины полезны, каждая отвечает на свой вопрос.</p>
+<table>
+<thead>
+<tr>
+<th>Исходов</th>
+<th style="text-align: right;">Количество информации</th>
+<th style="text-align: right;">Минимальная длина фиксированного кода</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td style="text-align: right;">2 бита</td>
+<td style="text-align: right;">2 бита</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align: right;">≈ 2,32 бита</td>
+<td style="text-align: right;">3 бита</td>
+</tr>
+<tr>
+<td>8</td>
+<td style="text-align: right;">3 бита</td>
+<td style="text-align: right;">3 бита</td>
+</tr>
+<tr>
+<td>9</td>
+<td style="text-align: right;">≈ 3,17 бита</td>
+<td style="text-align: right;">4 бита</td>
+</tr>
+</tbody>
+</table>
+<p>При проверке ПР02 сначала запиши условие равновероятности. Если вероятность разных событий известна и отличается, в следующей лекции пригодится модель Шеннона.</p>
+<h2 id="самопроверка">Самопроверка</h2>
+<ol>
+<li>Сколько информации несёт выбор одного из 32 равновероятных вариантов?</li>
+<li>Сколько бит нужно для фиксированного кода шести вариантов?</li>
+<li>Где уместен расчёт длины кода?</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+<ol>
+<li>5 бит, потому что 2⁵ = 32.</li>
+<li>3 бита, поскольку 2² &lt; 6 ≤ 2³.</li>
+<li>Например, при проектировании двоичного поля, которое должно различать все предусмотренные состояния.</li>
+</ol>
+</details>
+<p><strong>Под запись.</strong> Для равновероятных исходов <code>I = log₂ N</code>. Длина фиксированного кода — целое число бит, достаточное для всех вариантов.</p></article>
+      <nav class="page-links" aria-label="Переходы между лекциями"><a href="lecture-12.html">← Лекция 12</a><a href="lecture-14.html">Лекция 14 →</a></nav>
+    
+    </main>
+  </div>
+  <script src="course.js" defer></script>
+</body>
+</html>

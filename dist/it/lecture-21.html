@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Excel: реестр, формулы и сводная таблица · учебные материалы дисциплины ОП.03">
+  <title>Excel: реестр, формулы и сводная таблица · ОП.03</title>
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="site-header">
+    <a class="brand" href="./"><b>ОП.03</b><span>Информационные технологии</span></a>
+    <a class="library" href="../">← Все дисциплины</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav class="section-menu" aria-label="Разделы дисциплины">
+        <a class="section-link" href="./"><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="./#topic-01"><small>ТЕМА 01</small>Информационные технологии</a><a class="section-link" href="./#topic-02"><small>ТЕМА 02</small>Информационные процессы</a><a class="section-link" href="./#topic-03" aria-current="location"><small>ТЕМА 03</small>Средства реализации</a>
+        <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
+        <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>
+      </nav>
+      <nav class="lecture-menu" aria-label="Лекции темы"><p class="label">Лекции темы</p><ol><li><a href="lecture-20.html"><span>20</span>Word: технический документ и отчёт</a></li><li><a href="lecture-21.html" aria-current="page"><span>21</span>Excel: реестр, формулы и сводная таблица</a></li><li><a href="lecture-22.html"><span>22</span>Access: связи, целостность и запросы</a></li><li><a href="lecture-23.html"><span>23</span>Mathcad: расчётная модель и единицы</a></li><li><a href="lecture-24.html"><span>24</span>Распределённые системы и презентация результата</a></li></ol></nav>
+    </aside>
+    <main id="main">
+      
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">Тема 03 · Лекция 21 · 2 академических часа</p>
+        <h1>Excel: реестр, формулы и сводная таблица</h1>
+        <ul class="legend" aria-label="Цветовые группы терминов"><li class="source">Источники и входные данные</li><li class="result">Результаты и показатели</li><li class="software">Программные средства</li></ul>
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol><li><a href="#организация-исходной-таблицы">Организация исходной таблицы</a></li><li><a href="#относительные-и-абсолютные-ссылки">Относительные и абсолютные ссылки</a></li><li><a href="#сводка-по-статусам">Сводка по статусам</a></li><li><a href="#самопроверка">Самопроверка</a></li></ol></details>
+      <article class="lesson"><p><strong>Цель пары.</strong> Ввести согласованный реестр, проверить ссылки в формулах и получить сводку, которую можно проверить вручную.</p>
+<h2 id="организация-исходной-таблицы">Организация исходной таблицы</h2>
+<p><strong class="software">Excel</strong> подходит для быстрого расчёта и анализа записей. Одна строка — одна заявка, один столбец — один признак. У чисел должны быть единицы, у столбцов — заголовки. Для анализа не вставляй строки ручных итогов внутрь реестра. Пустая длительность означает, что завершённого измерения нет.</p>
+<p>Введи <strong class="source">исходный реестр</strong> начиная с ячейки A1:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">ID</th>
+<th style="text-align: right;">Кабинет</th>
+<th>Статус</th>
+<th style="text-align: right;">Длительность, мин</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">101</td>
+<td style="text-align: right;">302</td>
+<td>Открыта</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">302</td>
+<td>Выполнена</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr>
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">303</td>
+<td>Открыта</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">302</td>
+<td>Выполнена</td>
+<td style="text-align: right;">50</td>
+</tr>
+</tbody>
+</table>
+<h2 id="относительные-и-абсолютные-ссылки">Относительные и абсолютные ссылки</h2>
+<p>В H1 запиши норматив 45 минут. В E1 напиши «Отклонение, мин». В E3 введи формулу <code>=D3-$H$1</code>. Скопируй E3 и вставь в E5. Ссылка <code>D3</code> изменится на <code>D5</code>, а <code>$H$1</code> останется на нормативе. Ожидаемые результаты — −15 и +5 минут. Для открытых заявок оставь E2 и E4 пустыми. Средняя длительность двух выполненных заявок — 40 минут. <a href="https://support.microsoft.com/en-us/excel/switch-between-relative-absolute-and-mixed-references">Типы ссылок в Excel, Microsoft</a></p>
+<h2 id="сводка-по-статусам">Сводка по статусам</h2>
+<p>Выдели A1:D5. Выбери «Вставка → Сводная таблица» и размести её на новом листе. Перетащи «Статус» в строки, «ID» — в значения. В параметрах поля значений выбери «Количество», поскольку ID обозначает запись. <strong class="result">Контрольный итог</strong>: две открытые, две выполненные, всего четыре. Сверь его с числом строк исходной таблицы. При расширении реестра проверь диапазон источника и обнови сводку. <a href="https://support.microsoft.com/en-us/excel/get-started/create-a-pivottable-to-analyze-worksheet-data">Сводные таблицы, Microsoft</a></p>
+<p>В ПР04 покажи исходный диапазон, формулу с адресами, сводку и ручную проверку. Такие таблицы применяются для инвентаризации, первичного анализа и регулярной отчётности.</p>
+<h2 id="самопроверка">Самопроверка</h2>
+<ol>
+<li>Что будет, если вместо количества выбрать сумму ID?</li>
+<li>Почему формула содержит <code>$H$1</code>?</li>
+<li>Как проверить сводку после добавления строки?</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+<ol>
+<li>Получится сумма номеров, которая не отвечает на вопрос о числе заявок.</li>
+<li>Эта ссылка сохраняет адрес норматива при копировании.</li>
+<li>Убедиться, что строка входит в источник, обновить сводку и сверить общее число строк.</li>
+</ol>
+</details>
+<p><strong>Под запись.</strong> Реестр хранит записи, формула выполняет вычисление, сводка группирует и агрегирует. Итог сверяется с исходным набором.</p></article>
+      <nav class="page-links" aria-label="Переходы между лекциями"><a href="lecture-20.html">← Лекция 20</a><a href="lecture-22.html">Лекция 22 →</a></nav>
+    
+    </main>
+  </div>
+  <script src="course.js" defer></script>
+</body>
+</html>

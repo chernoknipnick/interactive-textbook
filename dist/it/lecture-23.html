@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mathcad: расчётная модель и единицы · учебные материалы дисциплины ОП.03">
+  <title>Mathcad: расчётная модель и единицы · ОП.03</title>
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="site-header">
+    <a class="brand" href="./"><b>ОП.03</b><span>Информационные технологии</span></a>
+    <a class="library" href="../">← Все дисциплины</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav class="section-menu" aria-label="Разделы дисциплины">
+        <a class="section-link" href="./"><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="./#topic-01"><small>ТЕМА 01</small>Информационные технологии</a><a class="section-link" href="./#topic-02"><small>ТЕМА 02</small>Информационные процессы</a><a class="section-link" href="./#topic-03" aria-current="location"><small>ТЕМА 03</small>Средства реализации</a>
+        <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
+        <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>
+      </nav>
+      <nav class="lecture-menu" aria-label="Лекции темы"><p class="label">Лекции темы</p><ol><li><a href="lecture-20.html"><span>20</span>Word: технический документ и отчёт</a></li><li><a href="lecture-21.html"><span>21</span>Excel: реестр, формулы и сводная таблица</a></li><li><a href="lecture-22.html"><span>22</span>Access: связи, целостность и запросы</a></li><li><a href="lecture-23.html" aria-current="page"><span>23</span>Mathcad: расчётная модель и единицы</a></li><li><a href="lecture-24.html"><span>24</span>Распределённые системы и презентация результата</a></li></ol></nav>
+    </aside>
+    <main id="main">
+      
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">Тема 03 · Лекция 23 · 2 академических часа</p>
+        <h1>Mathcad: расчётная модель и единицы</h1>
+        <ul class="legend" aria-label="Цветовые группы терминов"><li class="source">Источники и входные данные</li><li class="action">Операции и процессы</li><li class="result">Результаты и показатели</li><li class="software">Программные средства</li></ul>
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol><li><a href="#от-формулы-к-проверяемому-расчётному-листу">От формулы к проверяемому расчётному листу</a></li><li><a href="#показ-на-двух-сценариях">Показ на двух сценариях</a></li><li><a href="#самопроверка">Самопроверка</a></li></ol></details>
+      <article class="lesson"><p><strong>Цель пары.</strong> Собрать модель с единицами, проверить два сценария и объяснить допущения расчёта.</p>
+<h2 id="от-формулы-к-проверяемому-расчётному-листу">От формулы к проверяемому расчётному листу</h2>
+<p>В расчётном листе видны исходные параметры, формулы, единицы и результат. В <strong class="software">Mathcad Prime</strong> значения можно задавать с единицами, а при выводе — представлять в совместимых единицах. Такой лист удобен для инженерной проверки: другой человек видит, что изменится при другой нагрузке. <a href="https://support.ptc.com/help/mathcad/r12.0/en/PTC_Mathcad_Help/defining_units_and_unit_functions.html">Справка по единицам, PTC</a></p>
+<p>Один лаборант выполняет одинаковые по длительности задачи последовательно. <strong class="source">Входные параметры</strong>: <code>N</code> — число заявок, <code>t</code> — длительность одной. <strong class="action">Вычисление</strong>: <code>T = N × t</code>. Нагрузку сравниваем с лимитом 90 минут. Это учебная модель: заявки считаются независимыми, перерывы и переключения не включены.</p>
+<h2 id="показ-на-двух-сценариях">Показ на двух сценариях</h2>
+<ol>
+<li>В математических областях листа задай <code>N := 5</code> и <code>t := 12 min</code>. Запиши ниже <code>T := N·t</code>. При вводе выбирай стандартную единицу минуты.</li>
+<li>Выведи значение <code>T</code> оператором вычисления <code>=</code> и установи вывод в минутах. <strong class="result">Ожидаемое значение</strong> — 60 минут. В часах оно равно 1.</li>
+<li>Измени <code>N</code> на 8. Получится 96 минут. Если вместо 12 минут ввести 0,2 часа, результат в минутах останется прежним.</li>
+<li>Проверь предел: <code>90 / 12 = 7,5</code>. Полностью можно закончить 7 заявок. Семь займут 84 минуты, восемь — 96.</li>
+</ol>
+<p>Для ПР06 сохрани расчётный лист и пояснение с двумя проверками вручную. Если нужен график, по горизонтали укажи число заявок, по вертикали — суммарное время в минутах. Линия лимита пересечётся с моделью при 7,5. Решение принимается для целого числа задач.</p>
+<h2 id="самопроверка">Самопроверка</h2>
+<ol>
+<li>Что получится при пяти заявках по 15 минут?</li>
+<li>Почему 7,5 в расчёте превращается в 7 завершённых заявок?</li>
+<li>Можно ли всегда поделить результат на два при втором исполнителе?</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+<ol>
+<li>75 минут.</li>
+<li>Полная заявка должна укладываться в лимит. Восьмая превысит 90 минут.</li>
+<li>Только при подходящем распределении независимых задач. Для нечётного числа одинаковых задач время определяется более загруженным исполнителем.</li>
+</ol>
+</details>
+<p><strong>Под запись.</strong> Расчётная модель включает вход, формулу, единицы и допущения. Вывод проверяется вручную хотя бы на двух наборах параметров.</p></article>
+      <nav class="page-links" aria-label="Переходы между лекциями"><a href="lecture-22.html">← Лекция 22</a><a href="lecture-24.html">Лекция 24 →</a></nav>
+    
+    </main>
+  </div>
+  <script src="course.js" defer></script>
+</body>
+</html>

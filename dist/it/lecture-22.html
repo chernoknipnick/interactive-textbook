@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Access: связи, целостность и запросы · учебные материалы дисциплины ОП.03">
+  <title>Access: связи, целостность и запросы · ОП.03</title>
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="site-header">
+    <a class="brand" href="./"><b>ОП.03</b><span>Информационные технологии</span></a>
+    <a class="library" href="../">← Все дисциплины</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav class="section-menu" aria-label="Разделы дисциплины">
+        <a class="section-link" href="./"><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="./#topic-01"><small>ТЕМА 01</small>Информационные технологии</a><a class="section-link" href="./#topic-02"><small>ТЕМА 02</small>Информационные процессы</a><a class="section-link" href="./#topic-03" aria-current="location"><small>ТЕМА 03</small>Средства реализации</a>
+        <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
+        <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>
+      </nav>
+      <nav class="lecture-menu" aria-label="Лекции темы"><p class="label">Лекции темы</p><ol><li><a href="lecture-20.html"><span>20</span>Word: технический документ и отчёт</a></li><li><a href="lecture-21.html"><span>21</span>Excel: реестр, формулы и сводная таблица</a></li><li><a href="lecture-22.html" aria-current="page"><span>22</span>Access: связи, целостность и запросы</a></li><li><a href="lecture-23.html"><span>23</span>Mathcad: расчётная модель и единицы</a></li><li><a href="lecture-24.html"><span>24</span>Распределённые системы и презентация результата</a></li></ol></nav>
+    </aside>
+    <main id="main">
+      
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">Тема 03 · Лекция 22 · 2 академических часа</p>
+        <h1>Access: связи, целостность и запросы</h1>
+        <ul class="legend" aria-label="Цветовые группы терминов"><li class="base">Базовый уровень</li><li class="result">Результаты и показатели</li><li class="software">Программные средства</li></ul>
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol><li><a href="#две-сущности-и-связь-между-ними">Две сущности и связь между ними</a></li><li><a href="#запрос-к-двум-таблицам">Запрос к двум таблицам</a></li><li><a href="#самопроверка">Самопроверка</a></li></ol></details>
+      <article class="lesson"><p><strong>Цель пары.</strong> Объяснить, зачем разделять сущности и как получить список открытых заявок вместе с номерами кабинетов.</p>
+<h2 id="две-сущности-и-связь-между-ними">Две сущности и связь между ними</h2>
+<p>В одной аудитории бывает много заявок. Если в каждой записывать название корпуса, этаж и описание кабинета, одинаковые сведения будут повторяться. При изменении названия придётся обновить все строки. В <strong class="base">базе данных</strong> отдельно хранят справочник кабинетов и список заявок. Заявка содержит ссылку на запись кабинета.</p>
+<p>В учебной базе <strong class="software">Access</strong> создай <code>Rooms</code>: <code>RoomID</code> — числовой типа «Длинное целое» и первичный ключ, <code>RoomNumber</code> — короткий текст. Создай <code>Tickets</code>: <code>TicketID</code> — числовой типа «Длинное целое» и первичный ключ, <code>RoomID</code> — числовой типа «Длинное целое», <code>Status</code> — короткий текст. Задаём числовые ключи вручную, чтобы номера совпали с примером. Свяжи поля <code>RoomID</code> в окне связей и включи целостность данных. <a href="https://support.microsoft.com/en-us/access/create-edit-or-delete-a-relationship">Связи таблиц, Microsoft</a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Rooms.RoomID</th>
+<th>RoomNumber</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>302</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>303</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">TicketID</th>
+<th style="text-align: right;">Tickets.RoomID</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">101</td>
+<td style="text-align: right;">1</td>
+<td>open</td>
+</tr>
+<tr>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">1</td>
+<td>done</td>
+</tr>
+<tr>
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">2</td>
+<td>open</td>
+</tr>
+<tr>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">1</td>
+<td>done</td>
+</tr>
+</tbody>
+</table>
+<h2 id="запрос-к-двум-таблицам">Запрос к двум таблицам</h2>
+<p>Открой новый запрос в режиме SQL и выполни:</p>
+<pre><code class="language-sql">SELECT Tickets.TicketID, Rooms.RoomNumber
+FROM Rooms INNER JOIN Tickets ON Rooms.RoomID = Tickets.RoomID
+WHERE Tickets.[Status] = 'open'
+ORDER BY Tickets.TicketID;
+</code></pre>
+<p><code>JOIN</code> соединяет записи по номеру ключа, <code>WHERE</code> отбирает открытые заявки, <code>ORDER BY</code> сортирует их. <strong class="result">Контрольный результат</strong>: 101–302 и 103–303. При попытке сохранить отдельную пробную заявку с <code>RoomID = 9</code> связь должна отклонить запись, поскольку в справочнике только 1 и 2. После проверки отмени ввод пробной строки.</p>
+<p>Таблицы хранят данные. Запрос описывает выборку. Форма упрощает ввод, а отчёт Access оформляет результат для чтения. В ПР05 пригодятся схема связи, запрос и две строки результата. Схема объясняет, откуда запрос взял <code>RoomNumber</code>.</p>
+<h2 id="самопроверка">Самопроверка</h2>
+<ol>
+<li>Может ли один кабинет быть связан с несколькими заявками?</li>
+<li>Что произойдёт с запросом, если поменять статус 103 на <code>done</code>?</li>
+<li>Как обнаружить попытку сослаться на отсутствующий кабинет?</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+<ol>
+<li>Да. Это связь «один ко многим».</li>
+<li>Останется 101–302.</li>
+<li>Включить ссылочную целостность и проверить на учебной записи.</li>
+</ol>
+</details>
+<p><strong>Под запись.</strong> Первичный ключ определяет строку, внешний ключ ссылается на неё. Запрос объединяет связанные данные и применяет критерий отбора.</p></article>
+      <nav class="page-links" aria-label="Переходы между лекциями"><a href="lecture-21.html">← Лекция 21</a><a href="lecture-23.html">Лекция 23 →</a></nav>
+    
+    </main>
+  </div>
+  <script src="course.js" defer></script>
+</body>
+</html>

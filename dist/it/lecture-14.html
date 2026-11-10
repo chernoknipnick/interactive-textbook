@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Вероятность события и энтропия · учебные материалы дисциплины ОП.03">
+  <title>Вероятность события и энтропия · ОП.03</title>
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="site-header">
+    <a class="brand" href="./"><b>ОП.03</b><span>Информационные технологии</span></a>
+    <a class="library" href="../">← Все дисциплины</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav class="section-menu" aria-label="Разделы дисциплины">
+        <a class="section-link" href="./"><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="./#topic-01"><small>ТЕМА 01</small>Информационные технологии</a><a class="section-link" href="./#topic-02" aria-current="location"><small>ТЕМА 02</small>Информационные процессы</a><a class="section-link" href="./#topic-03"><small>ТЕМА 03</small>Средства реализации</a>
+        <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
+        <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>
+      </nav>
+      <nav class="lecture-menu" aria-label="Лекции темы"><p class="label">Лекции темы</p><ol><li><a href="lecture-10.html"><span>10</span>Выбор технологии и путь данных</a></li><li><a href="lecture-11.html"><span>11</span>Извлечение информации и качество данных</a></li><li><a href="lecture-12.html"><span>12</span>Биты, байты и размер файла</a></li><li><a href="lecture-13.html"><span>13</span>Количество информации по Хартли</a></li><li><a href="lecture-14.html" aria-current="page"><span>14</span>Вероятность события и энтропия</a></li><li><a href="lecture-15.html"><span>15</span>Передача данных и пропускная способность</a></li><li><a href="lecture-16.html"><span>16</span>Обработка данных: отбор, группировка, подсчёт</a></li><li><a href="lecture-17.html"><span>17</span>Хранение и накопление данных</a></li><li><a href="lecture-18.html"><span>18</span>Представление информации</a></li><li><a href="lecture-19.html"><span>19</span>Использование информации и сквозная модель</a></li></ol></nav>
+    </aside>
+    <main id="main">
+      
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">Тема 02 · Лекция 14 · 2 академических часа</p>
+        <h1>Вероятность события и энтропия</h1>
+        <ul class="legend" aria-label="Цветовые группы терминов"><li class="result">Результаты и показатели</li></ul>
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol><li><a href="#редкое-и-частое-событие">Редкое и частое событие</a></li><li><a href="#считаем-и-проверяем">Считаем и проверяем</a></li><li><a href="#где-применяется">Где применяется</a></li><li><a href="#самопроверка">Самопроверка</a></li></ol></details>
+      <article class="lesson"><p><strong>Цель пары.</strong> Посчитать информацию отдельного события и среднюю неопределённость для простого распределения.</p>
+<h2 id="редкое-и-частое-событие">Редкое и частое событие</h2>
+<p>Пусть вероятность обычного статуса заявки равна 3/4, редкого — 1/4. Сообщение о редком исходе сильнее меняет ожидание. Для события с вероятностью <code>p &gt; 0</code> количество информации записывают как <code>I = −log₂ p</code>. При <code>p = 1</code> получаем 0 бит. При <code>p = 1/4</code> получаем 2 бита. При <code>p = 3/4</code> получаем примерно 0,415 бита.</p>
+<p><strong class="result">Энтропия</strong> — среднее количество информации о наступившем исходе для заданного распределения. Чтобы найти среднее, умножаем оценку каждого исхода на его вероятность и складываем. Исходы с нулевой вероятностью пропускаем. Вероятности исходов в полной модели в сумме дают 1.</p>
+<h2 id="считаем-и-проверяем">Считаем и проверяем</h2>
+<table>
+<thead>
+<tr>
+<th>Исход</th>
+<th style="text-align: right;">Вероятность</th>
+<th style="text-align: right;">Информация</th>
+<th style="text-align: right;">Вклад в среднее</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Обычный</td>
+<td style="text-align: right;">0,75</td>
+<td style="text-align: right;">≈ 0,415 бита</td>
+<td style="text-align: right;">≈ 0,311 бита</td>
+</tr>
+<tr>
+<td>Редкий</td>
+<td style="text-align: right;">0,25</td>
+<td style="text-align: right;">2 бита</td>
+<td style="text-align: right;">0,500 бита</td>
+</tr>
+<tr>
+<td><strong>Итого</strong></td>
+<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>≈ 0,811 бита</strong></td>
+</tr>
+</tbody>
+</table>
+<p>При двух равновероятных исходах энтропия равна 1 биту. В нашем примере один исход более предсказуем, поэтому средняя оценка ниже 1. Если статус хранится словом <code>open</code> в UTF-8, само слово занимает четыре байта без кавычек и служебных символов. Энтропия и размер конкретной записи измеряют разные вещи.</p>
+<h2 id="где-применяется">Где применяется</h2>
+<p>Вероятности помогают обсуждать предсказуемость источника и эффективность кодирования. В отчёте по ПР02 сначала покажи распределение и проверку суммы вероятностей, затем расчёт по каждому исходу и только потом округлённый итог.</p>
+<h2 id="самопроверка">Самопроверка</h2>
+<ol>
+<li>Сколько информации даёт событие с вероятностью 1/8?</li>
+<li>Какова энтропия четырёх равновероятных исходов?</li>
+<li>Почему нельзя просто усреднить 0,415 и 2 без весов?</li>
+</ol>
+<details>
+<summary>Ответы</summary>
+<ol>
+<li>3 бита.</li>
+<li>2 бита.</li>
+<li>Исходы встречаются с разной частотой. В среднем их вклады учитываются с вероятностями 0,75 и 0,25.</li>
+</ol>
+</details>
+<p><strong>Под запись.</strong> Количество информации события зависит от его вероятности. Энтропия — среднее по всем исходам с учётом вероятностей.</p></article>
+      <nav class="page-links" aria-label="Переходы между лекциями"><a href="lecture-13.html">← Лекция 13</a><a href="lecture-15.html">Лекция 15 →</a></nav>
+    
+    </main>
+  </div>
+  <script src="course.js" defer></script>
+</body>
+</html>

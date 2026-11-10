@@ -3,22 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Лекция ОП.03 по Git для начинающих. Создаём репозиторий, проверяем правки и читаем историю двух коммитов.">
+  <meta name="description" content="Git с нуля. Как проект запоминает изменения · учебные материалы дисциплины ОП.03">
   <title>Git с нуля. Как проект запоминает изменения · ОП.03</title>
-  <link rel="stylesheet" href="../java/lecture.css?v=5">
+  <link rel="stylesheet" href="course.css">
 </head>
 <body>
-<main>
-  <div class="eyebrow">ОП.03 / ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ / ЛЕКЦИЯ 02</div>
-  <div class="tools">
-    <button id="outline-toggle" type="button" aria-expanded="false" aria-controls="outline">Содержание лекции ↓</button>
-    <a href="../#java">← К учебнику</a>
-  </div>
-  <nav id="outline" hidden aria-label="Содержание лекции"></nav>
-
-  <article>
-    <h1>Git с нуля. Как проект запоминает изменения</h1>
-    <p><strong>На 2 академических часа.</strong> Разберём, зачем проекту история, создадим локальный репозиторий и по двум коммитам восстановим, как менялось требование к учебному сервису.</p>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="site-header">
+    <a class="brand" href="./"><b>ОП.03</b><span>Информационные технологии</span></a>
+    <a class="library" href="../">← Все дисциплины</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <nav class="section-menu" aria-label="Разделы дисциплины">
+        <a class="section-link" href="./"><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="./#topic-01"><small>ТЕМА 01</small>Информационные технологии</a><a class="section-link" href="./#topic-02"><small>ТЕМА 02</small>Информационные процессы</a><a class="section-link" href="./#topic-03"><small>ТЕМА 03</small>Средства реализации</a>
+        <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
+        <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>
+      </nav>
+      
+    </aside>
+    <main id="main">
+      
+      <div class="lesson-head">
+        <a class="back" href="./">← Содержание ОП.03</a>
+        <p class="label">Дополнительный материал · 2 академических часа</p>
+        <h1>Git с нуля. Как проект запоминает изменения</h1>
+        
+      </div>
+      <details class="outline"><summary>На этой странице</summary><ol><li><a href="#problem">1. Зачем проекту история</a></li><li><a href="#tools">2. Где здесь Git, GitHub и GitHub Pages</a></li><li><a href="#model">3. Три места, где может находиться правка</a></li><li><a href="#first-commit">4. Демонстрация. Создаём первую версию</a></li><li><a href="#second-commit">5. Добавляем правило и проверяем, что именно изменилось</a></li><li><a href="#mistakes">6. Если результат отличается</a></li><li><a href="#check">7. Самопроверка и отчёт</a></li><li><a href="#remember">8. Коротко под запись</a></li></ol></details>
+      <article class="lesson"><p><strong>На 2 академических часа.</strong> Разберём, зачем проекту история, создадим локальный репозиторий и по двум коммитам восстановим, как менялось требование к учебному сервису.</p>
     <details class="notes">
       <summary>План пары · 90 минут</summary>
       <ol>
@@ -133,9 +147,11 @@ git status --short</code></pre></div>
 
     <h2 id="remember">8. Коротко под запись</h2>
     <p><strong>Репозиторий</strong> — проект с историей версий. <strong>Коммит</strong> — запись подготовленного состояния в истории. <code>git status</code> показывает состояние файлов, <code>git diff</code> — правки рабочей папки относительно индекса, <code>git diff --staged</code> — подготовленные правки, <code>git log</code> — историю. На следующей лекции используем эту же папку, чтобы попробовать изменения в отдельной ветке.</p>
-  </article>
-  <footer><a href="../#java">← К учебнику Java</a><a href="../">На главную учебника →</a></footer>
-</main>
-<script src="../java/lecture.js?v=3"></script>
+</article>
+      <nav class="page-links" aria-label="Переходы между лекциями"><a href="./#extra">← Дополнительные материалы</a><a href="lecture-01.html">К лекции 01 →</a></nav>
+    
+    </main>
+  </div>
+  <script src="course.js" defer></script>
 </body>
 </html>
