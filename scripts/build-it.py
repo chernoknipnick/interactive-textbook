@@ -109,6 +109,7 @@ def layout(title, main, *, topic=None, current=None, home=False):
     <aside>
       <nav class="section-menu" aria-label="Разделы дисциплины">
         <a class="section-link" href="./"{active}><small>ОП.03</small>Содержание курса</a>
+        <a class="section-link" href="../account/"><small>МОЯ УЧЁБА</small>Личный кабинет</a>
         {groups}
         <a class="section-link" href="./#practice"><small>ПР01–ПР07</small>Практические работы</a>
         <a class="section-link supplement" href="./#extra"><small>ДОПОЛНИТЕЛЬНО</small>Git с нуля</a>

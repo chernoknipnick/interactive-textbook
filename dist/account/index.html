@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Личный кабинет обучающегося и учебные группы">
+  <title>Личный кабинет · Учебник</title>
+  <link rel="stylesheet" href="account.css">
+</head>
+<body>
+  <header><a class="brand" href="../">▤ Учебник</a><a href="../">← К материалам</a></header>
+  <main>
+    <div class="page-heading"><p class="eyebrow">УЧЁБА В ОДНОМ МЕСТЕ</p><h1>Личный кабинет</h1><p id="intro">Войди, чтобы открыть профиль и свои учебные группы.</p></div>
+    <p id="notice" role="status" aria-live="polite" hidden></p>
+    <section id="auth" class="card" hidden>
+      <div class="tabs" role="group" aria-label="Вход или регистрация">
+        <button id="login-tab" type="button" aria-pressed="true">Вход</button>
+        <button id="register-tab" type="button" aria-pressed="false">Регистрация</button>
+      </div>
+      <form id="auth-form">
+        <label id="name-label" hidden>Имя и фамилия<input name="full_name" autocomplete="name" minlength="2" maxlength="100"></label>
+        <label>Электронная почта<input name="email" type="email" autocomplete="username" required maxlength="254"></label>
+        <label>Пароль<input name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128"></label>
+        <label id="code-label" hidden>Код группы <small>Можно вступить после регистрации</small><input name="group_code" autocomplete="off" maxlength="64"></label>
+        <button class="primary" id="auth-submit" type="submit">Войти</button>
+      </form>
+      <button class="text-button" id="forgot" type="button">Восстановить пароль</button>
+    </section>
+    <section id="recovery" class="card" hidden>
+      <h2>Новый пароль</h2>
+      <form id="recovery-form"><label>Новый пароль<input name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128"></label><button class="primary" type="submit">Сохранить пароль</button></form>
+    </section>
+    <div id="dashboard" hidden>
+      <div class="dashboard-top"><span id="role" class="badge"></span><button id="logout" type="button">Выйти</button></div>
+      <section class="card">
+        <h2>Мой профиль</h2>
+        <p id="account-email" class="muted"></p>
+        <form id="profile-form" class="inline-form"><label>Имя и фамилия<input name="full_name" autocomplete="name" required minlength="2" maxlength="100"></label><button type="submit">Сохранить</button></form>
+      </section>
+      <section class="card" id="join-section" hidden>
+        <h2>Вступить в группу</h2><p class="muted">Получи код у преподавателя и введи его здесь.</p>
+        <form id="join-form" class="inline-form"><label>Код группы<input name="code" autocomplete="off" required maxlength="64"></label><button class="primary" type="submit">Присоединиться</button></form>
+      </section>
+      <section class="card" id="teacher-section" hidden>
+        <h2>Создать группу</h2><p class="muted">После создания появится код для приглашения студентов.</p>
+        <form id="group-form" class="inline-form"><label>Название группы<input name="name" placeholder="Например, КСП-21" required minlength="2" maxlength="80"></label><button class="primary" type="submit">Создать группу</button></form>
+      </section>
+      <section class="groups-section"><h2 id="groups-title">Мои группы</h2><div id="groups"></div></section>
+      <section class="card">
+        <h2>Учебные материалы</h2>
+        <div class="subjects"><a href="../#java"><b>Java</b><span>Лекции и практические →</span></a><a href="../it/"><b>ОП.03</b><span>Информационные технологии →</span></a><a href="../#home"><b>SQL</b><span>Базы данных и песочница →</span></a></div>
+      </section>
+    </div>
+    <p id="loading" class="muted">Подключаем личный кабинет…</p>
+  </main>
+  <script src="supabase.js"></script>
+  <script src="config.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>
