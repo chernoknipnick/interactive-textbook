@@ -116,8 +116,28 @@ with tempfile.TemporaryDirectory(prefix="textbook-db-check-", dir=scratch) as wo
             cursor.execute(migration)
         assert call(teacher1, "SELECT textbook_group_code(%s,false)", (group,))[0][0] == replacement
         assert len(call(teacher1, "SELECT user_id FROM textbook_memberships WHERE group_id=%s", (group,))) == 1
+        feedback_migration = Path(__file__).with_name("002_feedback.sql").read_text(encoding="utf-8")
+        with owner.cursor() as cursor:
+            cursor.execute(feedback_migration)
+        feedback_id = "10000000-0000-0000-0000-000000000001"
+        send = "SELECT textbook_send_feedback(%s,%s,%s,%s,%s,%s)"
+        values = (feedback_id, "unclear", "Please explain this example", "https://chernoknipnick.github.io/interactive-textbook/it/lecture-01.html", "Student demo", "")
+        assert call(None, send, values)[0][0] == feedback_id
+        call(None, send, values)
+        denied(None, "SELECT * FROM textbook_feedback")
+        assert call(student1, "SELECT id FROM textbook_feedback") == []
+        assert call(teacher1, "SELECT id::text FROM textbook_feedback") == [(feedback_id,)]
+        assert call(student1, "UPDATE textbook_feedback SET status='done' RETURNING id") == []
+        denied(teacher1, "UPDATE textbook_feedback SET message='Changed message'")
+        call(teacher1, "UPDATE textbook_feedback SET status='planned' WHERE id=%s", (feedback_id,))
+        denied(None, send, (feedback_id, "idea", "A valid suggestion text", "https://example.com/", "", ""))
+        denied(None, send, (feedback_id, "idea", "A valid suggestion text", "https://chernoknipnick.github.io/interactive-textbook/account/#access_token=bad", "", ""))
+        denied(None, send, (feedback_id, "idea", "A valid suggestion text", "", "", "bot"))
+        with owner.cursor() as cursor:
+            cursor.execute(feedback_migration)
+        assert call(teacher1, "SELECT status FROM textbook_feedback WHERE id=%s", (feedback_id,)) == [("planned",)]
         owner.close()
-        print("Passed: repeatable migration, account isolation, group ownership, concurrent joins, code rotation and member removal.")
+        print("Passed: account/group isolation, repeatable migrations, feedback submission/deduplication, private inbox and limited status updates.")
     finally:
         subprocess.run(
             [str(args.pg_bin / "pg_ctl.exe"), "-D", str(data), "-m", "immediate", "-w", "stop"],

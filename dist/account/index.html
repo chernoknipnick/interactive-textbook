@@ -46,6 +46,11 @@
         <form id="group-form" class="inline-form"><label>Название группы<input name="name" placeholder="Например, КСП-21" required minlength="2" maxlength="80"></label><button class="primary" type="submit">Создать группу</button></form>
       </section>
       <section class="groups-section"><h2 id="groups-title">Мои группы</h2><div id="groups"></div></section>
+      <section class="card" id="feedback-section" hidden>
+        <div class="group-head"><h2>Предложения по учебнику</h2><button type="button" id="feedback-refresh">Обновить</button></div>
+        <p class="muted">Последние 100 сообщений из формы сайта. У каждого есть тема, текст и состояние рассмотрения.</p>
+        <div id="feedback-list"></div>
+      </section>
       <section class="card">
         <h2>Учебные материалы</h2>
         <div class="subjects"><a href="../#java"><b>Java</b><span>Лекции и практические →</span></a><a href="../it/"><b>ОП.03</b><span>Информационные технологии →</span></a><a href="../#home"><b>SQL</b><span>Базы данных и песочница →</span></a></div>
@@ -56,5 +61,6 @@
   <script src="supabase.js"></script>
   <script src="config.js"></script>
   <script src="account.js"></script>
+  <script src="../site-updates.js?v=1"></script>
 </body>
 </html>

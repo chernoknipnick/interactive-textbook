@@ -9,3 +9,9 @@ document.querySelectorAll('.codehilite').forEach(block=>{
   button.onclick=async()=>{try{await navigator.clipboard.writeText(block.querySelector('pre').innerText);button.textContent='Скопировано';setTimeout(()=>button.textContent='Копировать',1500);}catch(e){button.textContent='Выдели код для копирования';}};
   block.appendChild(button);
 });
+
+if (window.self === window.top) {
+  const updates = document.createElement("script");
+  updates.src = new URL("../site-updates.js?v=1", document.currentScript.src).href;
+  document.head.append(updates);
+}

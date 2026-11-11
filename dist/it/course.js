@@ -13,3 +13,9 @@ document.querySelectorAll(".lesson .codehilite pre code, .lesson pre code[class^
   });
   code.parentElement.after(button);
 });
+
+if (window.self === window.top) {
+  const updates = document.createElement("script");
+  updates.src = new URL("../site-updates.js?v=1", document.currentScript.src).href;
+  document.head.append(updates);
+}

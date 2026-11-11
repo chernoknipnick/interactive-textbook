@@ -199,6 +199,64 @@ async function renderGroups(user, isTeacher, groups, version) {
   if (version === refreshVersion) document.getElementById("groups").replaceChildren(container);
 }
 
+async function loadFeedback(version = refreshVersion) {
+  const section = document.getElementById("feedback-section");
+  section.hidden = true;
+  if (!teacher || !currentUser) return;
+  const entries = checked(await client.from("textbook_feedback")
+    .select("id,category,message,topic_url,sender_name,status,created_at")
+    .order("created_at", {ascending: false}).limit(100));
+  if (version !== refreshVersion) return;
+  const content = document.createDocumentFragment();
+  const categories = {unclear: "Непонятно в теме", bug: "Ошибка на сайте", idea: "Идея развития"};
+  for (const entry of entries) {
+    const article = node("article", null, "feedback-entry");
+    article.append(node("h3", categories[entry.category] || "Сообщение"));
+    const date = new Intl.DateTimeFormat("ru-RU", {dateStyle: "medium", timeStyle: "short"})
+      .format(new Date(entry.created_at));
+    article.append(node("small", date + (entry.sender_name ? " · " + entry.sender_name : ""), "muted"));
+    article.append(node("p", entry.message));
+    if (entry.topic_url) {
+      try {
+        const url = new URL(entry.topic_url);
+        if (url.origin === location.origin && url.pathname.startsWith(new URL("../", location.href).pathname)) {
+          const link = node("a", "Открыть тему →");
+          link.href = url.href;
+          article.append(link);
+        }
+      } catch {}
+    }
+    const label = node("label", "Состояние");
+    const select = document.createElement("select");
+    for (const [value, text] of [["new", "Новое"], ["planned", "В плане"], ["done", "Готово"]]) {
+      const option = node("option", text);
+      option.value = value;
+      select.append(option);
+    }
+    select.value = entry.status;
+    select.addEventListener("change", async () => {
+      select.disabled = true;
+      try {
+        checked(await client.from("textbook_feedback").update({status: select.value})
+          .eq("id", entry.id).select("id").single());
+        entry.status = select.value;
+        message("Состояние предложения сохранено.");
+      } catch (error) {
+        select.value = entry.status;
+        message(explain(error), true);
+      } finally {
+        select.disabled = false;
+      }
+    });
+    label.append(select);
+    article.append(label);
+    content.append(article);
+  }
+  if (!entries.length) content.append(node("p", "Пока нет сообщений из формы сайта.", "muted"));
+  document.getElementById("feedback-list").replaceChildren(content);
+  section.hidden = false;
+}
+
 async function refresh() {
   const version = ++refreshVersion;
   try {
@@ -208,7 +266,12 @@ async function refresh() {
     authSection.hidden = Boolean(user);
     dashboard.hidden = true;
     recovery.hidden = mode !== "recovery" || !user;
-    if (!user) return;
+    if (!user) {
+      teacher = false;
+      document.getElementById("feedback-section").hidden = true;
+      document.getElementById("feedback-list").replaceChildren();
+      return;
+    }
     if (mode === "recovery") {
       dashboard.hidden = true;
       return;
@@ -239,6 +302,11 @@ async function refresh() {
     const groups = checked(await query);
     await renderGroups(user, teacher, groups, version);
     if (version === refreshVersion) dashboard.hidden = false;
+    try {
+      await loadFeedback(version);
+    } catch {
+      if (teacher && version === refreshVersion) message("Группы загружены. Не удалось обновить предложения — попробуй позже.", true);
+    }
   } catch (error) {
     if (version !== refreshVersion) return;
     if (error.name === "AuthSessionMissingError") {
@@ -257,6 +325,9 @@ async function refresh() {
 
 document.getElementById("login-tab").onclick = () => setMode("login");
 document.getElementById("register-tab").onclick = () => setMode("register");
+document.getElementById("feedback-refresh").onclick = () => action(
+  document.getElementById("feedback-section"), () => loadFeedback()
+);
 
 authForm.addEventListener("submit", event => {
   event.preventDefault();
