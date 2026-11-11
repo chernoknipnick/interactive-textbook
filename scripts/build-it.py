@@ -6,6 +6,7 @@ import re
 
 import markdown
 from markdown.extensions.toc import slugify_unicode
+from site_icons import add_site_icons
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -240,3 +241,5 @@ git_body = (SOURCE / "git.html").read_text(encoding="utf-8")
 git_outline = re.findall(r'<h2 id="([^"]+)">([^<]+)</h2>', git_body)
 build_lecture("Git с нуля. Как проект запоминает изменения", git_body, git_outline)
 print("Built 24 scheduled lectures, practice 02, Git supplement, and course contents.")
+
+add_site_icons(ROOT / "dist")

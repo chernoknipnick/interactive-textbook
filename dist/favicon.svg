@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Интерактивный учебник</title>
+  <rect width="64" height="64" rx="14" fill="#15382e"/>
+  <path d="M11 17c7-4 14-4 21 0v32c-7-4-14-4-21 0Z" fill="#e8fff4"/>
+  <path d="M32 17c7-4 14-4 21 0v32c-7-4-14-4-21 0Z" fill="#97e8c5"/>
+  <path d="M32 18v30" stroke="#28614c" stroke-width="2"/>
+  <path d="M17 25h9M17 31h9M17 37h7" stroke="#28614c" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M43 15h5v17l-2.5-2-2.5 2Z" fill="#ffc777"/>
+</svg>
