@@ -112,7 +112,7 @@
     if (!updatesReady) {
       updatesReady = new Promise((resolve, reject) => {
         const script = document.createElement("script");
-        script.src = new URL("site-updates.js?v=20", base).href;
+        script.src = new URL("site-updates.js?v=21", base).href;
         script.onload = resolve;
         script.onerror = reject;
         document.head.append(script);

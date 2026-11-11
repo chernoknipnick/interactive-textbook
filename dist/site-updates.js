@@ -5,7 +5,7 @@
   root.id = "site-updates-root";
   const css = document.createElement("link");
   css.rel = "stylesheet";
-  css.href = new URL("site-updates.css", base).href;
+  css.href = new URL("site-updates.css?v=21", base).href;
   document.head.append(css);
   root.innerHTML = `
     <button class="su-launcher" type="button" aria-haspopup="dialog">Что нового <span class="su-badge" hidden>Новое</span></button>

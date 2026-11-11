@@ -1,5 +1,5 @@
 @import url("assets/fonts/fonts.css");
-:root{--tb-bg:#070707;--tb-panel:#111111;--tb-panel-hover:#191919;--tb-ink:#ebe8e1;--tb-muted:#a5a49f;--tb-line:#ffffff1f;--tb-header-height:76px;--tb-font:"Textbook Sans",Arial,sans-serif;color-scheme:dark}
+:root{--tb-bg:#070707;--tb-panel:#111111;--tb-panel-hover:#191919;--tb-ink:#ebe8e1;--tb-muted:#b8b7af;--tb-line:#ffffff1f;--tb-header-height:76px;--tb-font:"Textbook Sans",Arial,sans-serif;color-scheme:dark}
 html{scroll-behavior:smooth}
 body{background:var(--tb-bg);color:var(--tb-ink);font-family:var(--tb-font);-webkit-font-smoothing:antialiased}
 body.has-site-shell{padding-top:var(--tb-header-height);isolation:isolate}
@@ -13,11 +13,11 @@ button,input,textarea,select{font-family:inherit}
 .tb-brand img{width:28px;height:28px;filter:grayscale(1)}
 .tb-brand span{color:#a5a49f}
 .tb-global-nav{display:flex;align-items:center;gap:28px;margin:0;overflow:visible}
-.tb-global-nav a,.tb-global-nav button{display:inline-flex;align-items:center;gap:7px;padding:6px 0;margin:0;font-size:13px;font-weight:600;color:var(--tb-ink);white-space:nowrap}
-.tb-global-nav small{font:10px/1.4 var(--tb-font);color:#83837f}
+.tb-global-nav a,.tb-global-nav button{display:inline-flex;align-items:center;gap:7px;padding:6px 0;margin:0;font-size:15px;font-weight:600;color:var(--tb-ink);white-space:nowrap}
+.tb-global-nav small{font:13px/1.4 var(--tb-font);color:#b0b0a6}
 .tb-global-nav a:hover{color:white;text-decoration:underline;text-underline-offset:6px}
 .tb-global-nav .tb-contact{border:0;border-bottom:1px solid #d5d3ce;background:none;border-radius:0;color:var(--tb-ink);cursor:pointer}
-.tb-mobile-toggle,.tb-topic-toggle{display:none;border:1px solid var(--tb-line);background:#111;color:var(--tb-ink);border-radius:25px;padding:7px 12px;font:13px var(--tb-font);cursor:pointer}
+.tb-mobile-toggle,.tb-topic-toggle{display:none;border:1px solid var(--tb-line);background:#111;color:var(--tb-ink);border-radius:25px;padding:7px 12px;font:14px var(--tb-font);cursor:pointer}
 .tb-header :focus-visible{outline:2px solid #e3ded4;outline-offset:5px}
 .tb-atmosphere{position:fixed;inset:-30%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 35% 28%,#62625938,transparent 36%),radial-gradient(ellipse at 74% 50%,#55564e25,transparent 29%);filter:blur(65px);animation:tb-drift 28s ease-in-out infinite alternate}
 .tb-scrim{display:none}
