@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Учебник по Java, SQL и информационным технологиям. Лекции, наглядные примеры и практические работы.">
   <title>Учебник · От понимания к практике</title>
-  <link rel="stylesheet" href="style.css?v=21">
+  <link rel="stylesheet" href="style.css?v=22">
 <!-- textbook-icons -->
 <link rel="icon" href="favicon.ico?v=1" sizes="16x16 32x32 48x48">
 <link rel="icon" href="favicon.svg?v=1" type="image/svg+xml" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=1" sizes="180x180">
-<link rel="stylesheet" href="theme.css?v=21">
-<script src="site-shell.js?v=21" defer></script>
+<link rel="stylesheet" href="theme.css?v=22">
+<script src="site-shell.js?v=22" defer></script>
 <!-- /textbook-icons -->
 </head>
 <body class="library-view">
@@ -35,65 +35,47 @@
       <p class="sidebar-label">ПРАКТИКА</p><div id="java-work-links"></div>
     </nav>
   </aside>
-  <main id="main">
+  <main id="main" tabindex="-1"><nav id="app-breadcrumb" class="tb-breadcrumb" aria-label="Путь к материалу" hidden></nav>
     <section id="library">
-      <div class="landing-hero">
-        <div class="landing-copy">
-          <p class="eyebrow">ТВОЯ ТОЧКА ВХОДА В ТЕХНОЛОГИИ</p>
-          <h1>УЧИСЬ.<br>СОЗДАВАЙ<span>.</span></h1>
-          <p class="landing-lead">От «не понял» до «получилось».</p>
-          <p class="landing-description">Лекции, наглядные примеры и практика.<br>Выбирай тему и двигайся в своём темпе.</p>
-          <div class="subject-pills"><a href="#java"><b>J</b> Java</a><a href="#home"><b>SQL</b> Базы данных</a><a href="it/"><b>IT</b> Инфотехнологии</a></div>
-        </div>
-        <div class="knowledge-orbit" aria-hidden="true">
-          <div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div>
-          <div class="orbit-core">
-            <svg viewBox="0 0 240 240" fill="none">
-              <path d="M42 67c27-14 52-11 78 5 26-16 51-19 78-5v116c-27-14-52-11-78 5-26-16-51-19-78-5V67Z" stroke="currentColor" stroke-width="2"/>
-              <path d="M120 72v116M58 91c16-5 31-3 46 4M58 108c16-5 31-3 46 4M58 125c16-5 31-3 46 4M136 95c15-7 30-9 46-4M136 112c15-7 30-9 46-4M136 129c15-7 30-9 46-4" stroke="currentColor" stroke-width="2"/>
-              <circle cx="120" cy="120" r="99" stroke="currentColor" opacity=".18"/>
-            </svg>
-            <span>LEARN · BUILD · REPEAT</span>
-          </div>
-          <span class="orbit-label orbit-java">JAVA</span><span class="orbit-label orbit-sql">SQL</span><span class="orbit-label orbit-it">IT</span>
-        </div>
-      </div>
-      <a class="section-jump" href="#courses"><span><small>01 / УЧЕБНЫЙ МАРШРУТ</small>ВЫБЕРИ ДИСЦИПЛИНУ</span><span class="round-arrow" aria-hidden="true">↓</span></a>
+      <div class="welcome"><p class="eyebrow">ТВОЁ УЧЕБНОЕ ПРОСТРАНСТВО</p><h1>Что изучаем сегодня?</h1><p>Выбери дисциплину или найди нужную тему. Все материалы доступны без входа.</p></div>
+      <section class="finder" aria-label="Поиск материалов"><label for="material-search">Найти лекцию или практическую</label><div class="search-field"><span aria-hidden="true">⌕</span><input id="material-search" type="search" placeholder="Например: массивы, SELECT, информация" autocomplete="off"><button id="clear-search" type="button" hidden>Очистить</button></div><div id="search-panel" hidden><p id="search-summary" role="status" aria-live="polite"></p><div id="search-results"></div></div></section>
+      <a id="resume-material" class="resume-material" hidden><span><small>ПОСЛЕДНИЙ ОТКРЫТЫЙ МАТЕРИАЛ · НА ЭТОМ УСТРОЙСТВЕ</small><strong id="resume-title"></strong></span><b>Продолжить →</b></a>
       <section class="course-section" id="courses" aria-labelledby="courses-title">
-        <div class="section-heading"><p class="eyebrow">С ЧЕГО НАЧНЁМ?</p><h2 id="courses-title">Три направления.<br>Один учебник.</h2><p>Теория становится понятнее,<br>когда можно попробовать самому.</p></div>
+        <div class="section-heading"><h2 id="courses-title">Дисциплины</h2><p>Лекции и практика по каждому предмету</p></div>
         <div class="discipline-grid">
           <a class="discipline-card" href="#java"><span class="card-number">01 / ПРОГРАММИРОВАНИЕ <b>↗</b></span><div class="discipline-art java-art" aria-hidden="true">{ <em>J</em> }</div><h3>Java</h3><p>От первой программы до классов,<br>объектов и собственной системы.</p><span class="card-bottom"><span id="java-count">Лекции и практика</span><b>Открыть →</b></span></a>
           <a class="discipline-card" href="#home"><span class="card-number">02 / РАБОТА С ДАННЫМИ <b>↗</b></span><div class="discipline-art sql-art" aria-hidden="true"><span>SELECT <em>*</em><br>FROM knowledge;</span></div><h3>Базы данных и SQL</h3><p>Таблицы, связи и запросы.<br>Сразу с настоящей песочницей.</p><span class="card-bottom"><span>5 лекций · SQL в браузере</span><b>Открыть →</b></span></a>
           <a class="discipline-card" href="it/"><span class="card-number">03 / ОП.03 <b>↗</b></span><div class="discipline-art it-art" aria-hidden="true"><span>вход</span><i>→</i><span>идея</span><i>→</i><span>результат</span></div><h3>Информационные технологии</h3><p>Как работают данные и инструменты.<br>От модели до готового отчёта.</p><span class="card-bottom"><span>24 лекции · пошаговые примеры</span><b>Открыть →</b></span></a>
         </div>
       </section>
-      <section class="practice-feature"><div><p class="eyebrow">02 / ПОПРОБУЙ САМ</p><h2>От теории<br>к своей программе.</h2><p>Выбери практическую, повтори общий пример<br>и переходи к своему варианту.</p></div><a class="outline-button" href="#all-practice">Все практические <span>↗</span></a></section>
+      <section class="practice-feature"><div><p class="eyebrow">02 / ПОПРОБУЙ САМ</p><h2>От теории к своей программе.</h2><p>Выбери практическую, повтори общий пример<br>и переходи к своему варианту.</p></div><a class="outline-button" href="#all-practice">Все практические <span>↗</span></a></section>
       <div class="landing-footer"><span>УЧЕБНИК / 2026</span><span>Лекции · Практические · Наглядные примеры</span><a href="account/">Мой кабинет ↗</a></div>
     </section>
     <section id="home" class="course-page" hidden>
-      <div class="course-heading"><p class="eyebrow">ОП.08 / БАЗЫ ДАННЫХ И SQL</p><h1>Данные.<br>Со смыслом.</h1><p>Разбери таблицы и связи, научись задавать вопросы данным и проверь запрос в песочнице.</p><div class="heading-actions"><a class="solid-button" href="#01">Начать с основ ↗</a><a href="#setup">Настроить окружение →</a></div></div>
-      <div class="list-heading"><h2>Лекции</h2><span>05 / ОТ ОСНОВ К ПРАКТИКЕ</span></div><div id="sql-topic-cards" class="topic-grid"></div>
+      <div class="course-heading"><p class="eyebrow">ОП.08 / БАЗЫ ДАННЫХ И SQL</p><h1>Базы данных и SQL</h1><p>Разбери таблицы и связи, научись задавать вопросы данным и проверь запрос в песочнице.</p><div class="heading-actions"><a class="solid-button" href="#01">Начать с основ ↗</a><a href="#setup">Настроить окружение →</a></div></div>
+      <nav class="course-tabs" aria-label="Материалы SQL"><a href="#home" aria-current="page">Лекции</a><a href="#practice">Практика в SQL-песочнице</a></nav><div class="list-heading"><h2>Лекции</h2><span>05 / ОТ ОСНОВ К ПРАКТИКЕ</span></div><div id="sql-topic-cards" class="topic-grid lesson-list"></div>
       <a class="practice-banner" href="#practice"><span><small>ПРАКТИКУМ</small>SQL прямо в браузере</span><b>Открыть песочницу ↗</b></a>
     </section>
     <section id="java-home" class="course-page" hidden>
-      <div class="course-heading"><p class="eyebrow">ПРОГРАММИРОВАНИЕ / JAVA</p><h1>От первой строки<br>к своим проектам.</h1><p>Лекции, примеры кода и пошаговые модели. Собери знания в работающую программу.</p><div class="heading-actions"><a class="solid-button" href="#java-first-program">Первая программа ↗</a><a href="#java-practice">К практическим →</a></div></div>
-      <div class="list-heading"><h2>Лекции</h2><span id="java-meta"></span></div><div id="java-topic-cards" class="topic-grid"></div>
+      <div class="course-heading"><p class="eyebrow">ПРОГРАММИРОВАНИЕ / JAVA</p><h1>Программирование на Java</h1><p>Лекции, примеры кода и пошаговые модели. Собери знания в работающую программу.</p><div class="heading-actions"><a class="solid-button" href="#java-first-program">Первая программа ↗</a><a href="#java-practice">К практическим →</a></div></div>
+      <nav class="course-tabs" aria-label="Материалы Java"><a href="#java" aria-current="page">Лекции</a><a href="#java-practice">Практика</a></nav><div class="list-heading"><h2>Лекции</h2><span id="java-meta"></span></div><div id="java-topic-cards" class="topic-grid lesson-list"></div>
     </section>
-    <section id="java-practice-home" class="course-page" hidden><div class="course-heading"><p class="eyebrow">JAVA / ПРАКТИКА</p><h1>Напиши.<br>Запусти. Разберись.</h1><p>Лабораторные и практические работы с вариантами, примерами и ссылками на нужную теорию.</p></div><div id="java-work-cards" class="topic-grid"></div></section>
+    <section id="java-practice-home" class="course-page" hidden><nav class="course-tabs" aria-label="Материалы Java"><a href="#java">Лекции</a><a href="#java-practice" aria-current="page">Практика</a></nav><div class="course-heading"><p class="eyebrow">JAVA / ПРАКТИКА</p><h1>Практика по Java</h1><p>Лабораторные и практические работы с вариантами, примерами и ссылками на нужную теорию.</p></div><div id="java-work-cards" class="topic-grid"></div></section>
     <section id="all-practice" class="practice-hub" hidden>
-      <div class="course-heading"><p class="eyebrow">02 / ВСЯ ПРАКТИКА</p><h1>Попробуй<br>своими руками.</h1><p>Работы собраны по дисциплинам. Выбирай задание, открывай теорию и проверяй результат.</p></div>
+      <div class="course-heading"><p class="eyebrow">02 / ВСЯ ПРАКТИКА</p><h1>Практические работы</h1><p>Работы собраны по дисциплинам. Выбирай задание, открывай теорию и проверяй результат.</p></div>
       <div class="list-heading"><h2>Java</h2><a href="#java">Открыть лекции →</a></div><div id="all-java-work-cards" class="topic-grid"></div>
       <div class="list-heading"><h2>Информационные технологии</h2><a href="it/">Открыть лекции →</a></div><div class="topic-grid"><a class="topic-card" href="it/practice-02.html"><span class="card-number">ПР02 / ОП.03 <b>↗</b></span><h3>Методы количественной оценки информации</h3><p>Общий пример, шесть вариантов и каркас отчёта.</p><span class="card-bottom">Открыть задание →</span></a></div>
       <a class="practice-banner" href="#practice"><span><small>БАЗЫ ДАННЫХ</small>SQL-песочница</span><b>Открыть ↗</b></a>
     </section>
     <section id="reader" hidden>
-      <div class="reader-bar"><button id="toggle-sidebar" type="button" aria-controls="course-sidebar" aria-expanded="true">☰ Темы</button><a id="reader-back" href="#home">← К программе</a><span id="reader-name"></span><a id="external" target="_blank" rel="noopener">Развернуть ↗</a></div>
-      <p id="reader-status" role="status" hidden>Открываем материал…</p><iframe id="frame" title="Материалы учебника"></iframe>
+      <div class="reader-bar"><button id="toggle-sidebar" type="button" aria-controls="course-sidebar" aria-expanded="true">☰ Темы</button><a id="reader-back" href="#home">← Все темы</a><span id="reader-name"></span><a id="external" target="_blank" rel="noopener">Открыть отдельно ↗</a></div>
+      <nav class="reader-sequence" aria-label="Переход между материалами"><a id="previous-material"></a><span id="material-position"></span><a id="next-material"></a></nav><p id="reader-status" role="status" hidden>Открываем материал…</p><iframe id="frame" title="Материалы учебника"></iframe>
     </section>
   </main>
-  <script src="java-lessons.js?v=21"></script>
-  <script src="java-practices.js?v=21"></script>
-  <script src="app.js?v=21"></script>
-  <script src="site-updates.js?v=21"></script>
+  <script src="java-lessons.js?v=22"></script>
+  <script src="java-practices.js?v=22"></script>
+  <script src="material-index.js?v=22"></script>
+  <script src="app.js?v=22"></script>
+  <script src="site-updates.js?v=22"></script>
 </body>
 </html>

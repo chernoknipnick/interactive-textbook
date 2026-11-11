@@ -89,7 +89,9 @@ frame.addEventListener("load", () => { status.hidden = true; });
 
 function route() {
   let key = location.hash.slice(1) || "library";
+  const searchAnchor = key === "search";
   const courseAnchor = key === "courses";
+  if (searchAnchor || key === "main") key = "library";
   if (courseAnchor) key = "library";
   if (!["library", "home", "java", "java-practice", "all-practice"].includes(key) && !titles[key] && !javaByKey[key]) {
     key = "library";
@@ -121,15 +123,15 @@ function route() {
     else link.removeAttribute("aria-current");
   });
   document.getElementById("toggle-sidebar").setAttribute(
-    "aria-expanded", String(!document.body.classList.contains("focus-view"))
+    "aria-expanded", String(!matchMedia("(max-width: 900px)").matches && !document.body.classList.contains("focus-view"))
   );
   if (reader) {
     const topic = javaByKey[key];
     const url = topic
-      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=20"
-      : key === "practice" ? "practice.html?v=20"
-      : key === "setup" ? "lectures/setup.html?v=20"
-      : "lectures/course.html?v=20#" + key;
+      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=22"
+      : key === "practice" ? "practice.html?v=22"
+      : key === "setup" ? "lectures/setup.html?v=22"
+      : "lectures/course.html?v=22#" + key;
     if (frame.getAttribute("src") !== url) {
       status.hidden = false;
       frame.src = url;
@@ -140,8 +142,62 @@ function route() {
     document.getElementById("reader-back").href = topic?.work ? "#java-practice" : java ? "#java" : "#home";
   }
   document.title = (reader ? frame.title : library ? "Учебник" : hub ? "Практические работы" : java ? "Java" : "Базы данных и SQL") + " · От понимания к практике";
+  const crumb = document.getElementById("app-breadcrumb");
+  crumb.replaceChildren(); crumb.hidden = library;
+  const homeLink = element("a", "Дисциплины"); homeLink.href = "#library"; crumb.append(homeLink);
+  if (!library) {
+    crumb.append(element("span", "/"));
+    if (hub) crumb.append(element("span", "Практические работы"));
+    else {
+      const courseLink = element("a", java ? "Java" : "Базы данных и SQL");
+      courseLink.href = java ? "#java" : "#home"; crumb.append(courseLink);
+      if (reader || key === "java-practice") crumb.append(element("span", "/"), element("span", reader ? frame.title : "Практика"));
+    }
+  }
+  if (reader) {
+    const sequence = java ? (javaByKey[key]?.work ? javaWorks.map(w=>"java-work-"+w.id) : javaTopics.map(t=>"java-"+t.id)) : key === "practice" ? ["practice"] : ["setup",...sqlTopics.map(t=>t.id)];
+    const pos = sequence.indexOf(key);
+    for (const [id,offset,label] of [["previous-material",-1,"← Предыдущая"],["next-material",1,"Следующая →"]]) {
+      const link = document.getElementById(id), target = sequence[pos+offset];
+      link.hidden = !target; if(target){link.href="#"+target;link.textContent=label;link.title=javaByKey[target]?.title||titles[target];}
+    }
+    document.getElementById("material-position").textContent = (pos+1)+" из "+sequence.length;
+    try {localStorage.setItem("textbook-last-material",JSON.stringify({href:"#"+key,title:frame.title,course:java?"Java":"SQL"}));} catch {}
+  }
+  if(library) updateResume();
   window.scrollTo(0, 0);
+  if(searchAnchor) requestAnimationFrame(()=>document.getElementById("material-search").focus());
   if (courseAnchor) requestAnimationFrame(() => document.getElementById("courses").scrollIntoView());
 }
 window.addEventListener("hashchange", route);
+
+const materials = [
+ ...sqlTopics.map(t=>({title:t.title,href:"#"+t.id,course:"Базы данных и SQL",kind:"Лекция"})),
+ {title:"Подготовка окружения",href:"#setup",course:"Базы данных и SQL",kind:"Инструкция"},
+ {title:"SQL-песочница",href:"#practice",course:"Базы данных и SQL",kind:"Практика"},
+ ...javaTopics.map(t=>({title:t.title,href:"#java-"+t.id,course:"Java",kind:"Лекция"})),
+ ...javaWorks.map(t=>({title:t.title,href:"#java-work-"+t.id,course:"Java",kind:t.number})),
+ ...(window.itMaterials||[])
+];
+const search = document.getElementById("material-search");
+function updateResume(){
+ const link=document.getElementById("resume-material"); link.hidden=true;
+ try {
+  const last=JSON.parse(localStorage.getItem("textbook-last-material"));
+  const match=materials.find(m=>m.href===last?.href);
+  if(match){link.href=match.href;document.getElementById("resume-title").textContent=match.course+" · "+match.title;link.hidden=false;}
+ }catch{}
+}
+function findMaterials(){
+ const query=search.value.trim().toLocaleLowerCase("ru").replaceAll("ё","е");
+ document.getElementById("search-panel").hidden=!query;
+ document.getElementById("clear-search").hidden=!query;
+ const results=document.getElementById("search-results");results.replaceChildren();
+ if(!query)return;
+ const found=materials.filter(m=>(m.title+" "+m.course+" "+m.kind).toLocaleLowerCase("ru").replaceAll("ё","е").includes(query));
+ document.getElementById("search-summary").textContent=found.length ? "Найдено материалов: "+found.length : "Ничего не найдено. Попробуй другое слово или выбери дисциплину ниже.";
+ for(const m of found){const a=element("a","","search-result");a.href=m.href;a.append(element("small",m.course+" · "+m.kind),element("strong",m.title),element("span","Открыть →"));results.append(a);}
+}
+search.addEventListener("input",findMaterials);
+document.getElementById("clear-search").onclick=()=>{search.value="";findMaterials();search.focus();};
 route();

@@ -18,8 +18,8 @@ def add_site_icons(dist):
             f'<link rel="icon" href="{prefix}favicon.ico?v=1" sizes="16x16 32x32 48x48">\n'
             f'<link rel="icon" href="{prefix}favicon.svg?v=1" type="image/svg+xml" sizes="any">\n'
             f'<link rel="apple-touch-icon" href="{prefix}apple-touch-icon.png?v=1" sizes="180x180">\n'
-            f'<link rel="stylesheet" href="{prefix}theme.css?v=21">\n'
-            f'<script src="{prefix}site-shell.js?v=21" defer></script>\n'
+            f'<link rel="stylesheet" href="{prefix}theme.css?v=22">\n'
+            f'<script src="{prefix}site-shell.js?v=22" defer></script>\n'
             '<!-- /textbook-icons -->'
         )
         if "<!-- textbook-icons -->" in source:
@@ -31,7 +31,7 @@ def add_site_icons(dist):
             href = match.group(2)
             if href.startswith(("http:", "https:", "//", "data:")):
                 return match.group(0)
-            return match.group(1) + href.split("?")[0] + "?v=21" + match.group(3)
+            return match.group(1) + href.split("?")[0] + "?v=22" + match.group(3)
         updated = re.sub(r'(<link\b[^>]*rel="stylesheet"[^>]*href=")([^"]+)(")',
                          version_stylesheet, updated)
         if updated != source:

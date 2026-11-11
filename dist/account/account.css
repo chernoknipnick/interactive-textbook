@@ -46,3 +46,5 @@ td,th{border-bottom:1px solid var(--line);padding:12px 6px;text-align:left;verti
 :focus-visible{outline:2px solid #e7e9d4;outline-offset:4px}
 @media(max-width:900px){main{gap:24px;padding:40px 22px 70px}h1{font-size:52px}.card{padding:22px}.inline-form,.group-name-form{flex-direction:column;align-items:stretch}}
 @media(max-width:650px){main{display:block;padding:28px 18px 65px}.page-heading{padding:0;margin-bottom:30px}h1{font-size:45px}.card{padding:20px}.subjects{grid-template-columns:1fr}.group-card table{font-size:15px}.group-card td:last-child button{font-size:14px;padding:6px 9px}#notice{margin-bottom:20px}}
+
+.tb-standalone-crumb{grid-column:1/-1;grid-row:1;margin:0}.has-site-shell .page-heading{grid-row:2}.has-site-shell #auth,.has-site-shell #recovery{grid-row:2/4}
