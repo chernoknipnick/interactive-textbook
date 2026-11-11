@@ -54,3 +54,46 @@ body.tb-legacy-material .nav-btn,body.tb-legacy-material .s-title,body.tb-legacy
 body.tb-legacy-material .hero{background:#fff!important;padding:18px 30px;border:0;max-width:1000px;margin:auto}body.tb-legacy-material .hero::before,body.tb-legacy-material .hero::after{display:none}body.tb-legacy-material .hero-desc{font-size:18px;font-weight:400;line-height:1.75;max-width:850px}body.tb-legacy-material .hero h1{font-weight:700;letter-spacing:-.025em}body.tb-legacy-material .hero h1 em,body.tb-legacy-material .s-title em{color:#192435;font-style:normal}body.tb-legacy-material .hero-eyebrow{color:#536276;font:600 13px/1.5 "Segoe UI",Arial,sans-serif;letter-spacing:.6px;margin-bottom:10px}body.tb-legacy-material .lecture-nav{position:static;padding:12px 30px 0;background:#fff!important;border:0}body.tb-legacy-material .lecture-nav .sql-contents{background:#fff;border:0;margin:0;padding:0;width:100%}body .sql-contents>summary{display:inline-block;background:#eef4fc;border:1px solid #b9cce6;padding:8px 14px;border-radius:7px;color:#2457b6;font-size:16px;cursor:pointer}body .sql-contents>div{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px;padding:12px;background:#f2f6fc;border-radius:8px}body.tb-legacy-material .nav-btn{font-size:15px;padding:8px 12px;border-radius:7px}body .lesson-meta{margin-top:14px;padding:8px 12px}body .lesson-meta summary{font-size:14px}body.tb-legacy-material .meta-pill{font-size:14px}body.tb-legacy-material .learning-key{margin-top:4px}body.tb-legacy-material .s-title{font-weight:700}body.tb-legacy-material .s-sub{font-weight:400}body.tb-legacy-material .hero h1 br{display:none}body.tb-legacy-material .hero h1 br::after{content:" "}
 
 body #toggle-sidebar,body #reader-practice{line-height:1.35}body .reader-sequence a{line-height:1.35;padding:5px 12px}body .reader-sequence{min-height:44px}body .reader-bar{min-height:48px}
+
+/* Course cards retain their layout; illustrations occupy a bounded column. */
+body .discipline-card{display:flex;flex-direction:column;gap:0;min-width:0;padding:22px;min-height:260px}
+body .discipline-card>.card-number{display:block;margin-bottom:16px;color:#536b86;font-size:12px;line-height:1.5;letter-spacing:.8px}
+.course-card-body{display:grid;grid-template-columns:minmax(0,1fr) 106px;gap:14px;align-items:center;flex:1;min-width:0}.course-card-copy{min-width:0}.course-card-copy h3{margin:0 0 12px!important;font-size:24px!important;line-height:1.25!important}.course-card-copy p{margin:0;color:#4e6076;font-size:16px;line-height:1.65}.course-card-copy br{display:none}.course-card-image{display:block;width:106px;height:100px;object-fit:contain;align-self:center}.course-card-copy br::after{content:" "}
+body .discipline-card>.card-bottom{display:flex;flex-direction:row;justify-content:space-between;align-items:center;width:100%;border-top:1px solid #d8dfe8;padding-top:16px;margin-top:20px;font-size:14px;gap:10px;grid-row:auto;grid-column:auto}
+body .discipline-card .card-bottom b{font-size:16px;white-space:nowrap}
+/* Available row width, rather than the viewport, determines work layout. */
+body .topic-grid:has(>.work-row){grid-template-columns:1fr;container-type:inline-size}
+body #java-work-cards,body #all-java-work-cards{container-type:inline-size}
+body .work-row{min-width:0;grid-template-columns:130px minmax(0,1fr) auto;gap:8px 18px;align-items:center}
+body .work-row>*{min-width:0}body .work-row .card-number{white-space:nowrap;font-size:29px;letter-spacing:0;grid-row:1/3;grid-column:1}
+body .work-row h3{grid-column:2;grid-row:1;margin:0;font-size:18px;font-weight:500;overflow-wrap:break-word}
+body .work-row>p{grid-column:2;grid-row:2;margin:0;line-height:1.6}
+body .work-row .card-bottom{position:static;grid-column:3;grid-row:1/3;justify-self:end;align-self:center;text-align:center;white-space:normal;font-size:16px;line-height:1.4;max-width:230px;min-height:44px}
+@container(max-width:820px){body .work-row{grid-template-columns:105px minmax(0,1fr);gap:8px 16px}body .work-row .card-number{grid-column:1;grid-row:1/3;align-self:start;font-size:27px}body .work-row h3{grid-column:2;grid-row:1}body .work-row>p{grid-column:2;grid-row:2}body .work-row .card-bottom{grid-column:2;grid-row:3;justify-self:start;margin-top:6px;max-width:100%}}
+@container(max-width:440px){body .work-row{grid-template-columns:minmax(0,1fr);padding:17px}body .work-row .card-number{grid-column:1;grid-row:1;font-size:30px}body .work-row h3{grid-column:1;grid-row:2;font-size:18px}body .work-row>p{grid-column:1;grid-row:3;font-size:15px}body .work-row .card-bottom{grid-column:1;grid-row:4;justify-self:stretch;justify-content:center;width:100%;max-width:none;margin-top:6px}}
+/* Groups make the course map manageable without removing a topic. */
+body .topic-groups{display:grid;gap:14px;border:0;border-radius:0;overflow:visible}
+body .topic-group{padding:0;margin:0;border:1px solid #c7d4e4;border-radius:10px;background:#fff;overflow:hidden}
+body .topic-group>summary{display:flex;align-items:center;gap:16px;padding:17px 20px;list-style:none;cursor:pointer;color:#243d5e;background:#f7f9fc;font-size:18px;line-height:1.4;min-height:60px}
+body .topic-group>summary::-webkit-details-marker,body .sidebar-group>summary::-webkit-details-marker{display:none}
+body .topic-group>summary::before,body .sidebar-group>summary::before{content:"▸";font-size:16px;color:var(--accent);flex-shrink:0}
+body .topic-group[open]>summary::before,body .sidebar-group[open]>summary::before{content:"▾"}
+body .topic-group>summary strong{font-size:19px;font-weight:600;color:#263d5c}
+body .group-count{margin-left:auto;white-space:nowrap;font-size:14px;font-weight:400;color:#536b86}
+body .group-description{margin:0;padding:12px 20px;color:#536276;font-size:16px;border-top:1px solid #dbe3ee;background:#fff}
+body .topic-group>.lesson-list{border:0;border-top:1px solid #dbe3ee;border-radius:0}
+body .topic-group .topic-card{grid-template-columns:95px minmax(0,1fr) auto;padding:18px 20px;gap:7px 16px}
+body .topic-group .topic-card h3{font-size:20px}body .topic-group .topic-card>p{font-size:16px;line-height:1.6;color:#4e6076;max-width:720px}
+body .topic-group .card-bottom{color:var(--accent);font-size:15px}
+body .sidebar-group{padding:0;margin:6px 0;border:0;border-radius:6px;background:transparent}
+body .sidebar-group>summary{display:flex;align-items:center;gap:7px;list-style:none;padding:9px 8px;color:#344d6c;font-size:14px;line-height:1.45;cursor:pointer}
+body .sidebar-group>summary strong{font-weight:600;font-size:14px}
+body .sidebar-group .group-count{display:none}body .sidebar-group-body{padding-left:6px}body .sidebar-group-body a{margin:2px 0}
+body #course-select{width:100%;text-overflow:ellipsis;padding-right:28px}
+@media(max-width:1100px){.course-card-body{grid-template-columns:minmax(0,1fr) 90px}.course-card-image{width:90px;height:90px}.course-card-copy h3{font-size:23px!important}}
+@media(max-width:900px){body .discipline-card{min-height:0}.course-card-body{grid-template-columns:minmax(0,1fr) 110px}.course-card-image{width:110px;height:100px}}
+@media(max-width:650px){body .topic-group>summary{padding:15px;gap:10px}body .topic-group>summary strong{font-size:18px}body .group-description{padding:12px 15px;font-size:15px}body .topic-group .topic-card{grid-template-columns:1fr;padding:17px;gap:8px}body .topic-group .card-number,body .topic-group .topic-card>p,body .topic-group .card-bottom{grid-column:1;grid-row:auto}body .topic-group .card-bottom{margin-top:5px}.course-card-body{grid-template-columns:minmax(0,1fr) 76px;gap:10px}.course-card-image{width:76px;height:80px}.course-card-copy h3{font-size:23px!important}.course-card-copy p{font-size:16px}body .discipline-card{padding:19px}body .discipline-card>.card-bottom{font-size:13px;flex-wrap:wrap}body .topic-group .topic-card h3{font-size:20px}}
+@media(prefers-reduced-motion:no-preference){body .discipline-card:hover .course-card-image{animation:course-art-lift .6s ease-out}@keyframes course-art-lift{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}}
+
+body #course-sidebar #java-work-links a i{font-family:"Segoe UI",Arial,sans-serif;font-style:normal;font-size:18px;min-width:56px}
+@media(prefers-reduced-motion:no-preference){body .course-page:not([hidden]),body .practice-hub:not([hidden]),body #library:not([hidden]){animation:course-route-enter .16s ease-out}@keyframes course-route-enter{from{transform:translateY(3px)}to{transform:translateY(0)}}}

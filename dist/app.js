@@ -40,21 +40,65 @@ function topicCard(href, label, title, description, footer) {
 function sidebarLink(href, number, title, container) {
   const link = document.createElement("a");
   link.href = href;
-  link.append(element("i", number), document.createTextNode(title));
+  link.append(element("i", number.replace(/(ПР|ЛР)(\d+)/,"$1 $2")), document.createTextNode(title));
   container.append(link);
 }
 
+const javaDescriptions={
+ languages:"Чем отличаются языки и где используется Java. Разберёшься, как выбрать инструмент под задачу.",
+ intro:"Как исходный код превращается в работающую программу: компиляция, байт-код и JVM.",
+ "first-program":"Создашь Hello World и разберёшь main, команды вывода и порядок выполнения программы.",
+ types:"Как хранить числа, символы и логические значения. Типы переменных, вычисления и преобразования.",
+ bitwise:"Как число представлено битами. На примерах разберёшь AND, OR, XOR и сдвиги.",
+ conditions:"Как программа принимает решения: if, else и switch. Проверка условий и выбор ветки.",
+ loops:"Как повторять команды с for и while. Условия завершения и типовые ошибки в циклах.",
+ arrays:"Как хранить много значений: индексы, обход, сумма, максимум и ссылки на массив.",
+ methods:"Как разделить программу на понятные действия: параметры, возвращаемое значение и вызовы методов.",
+ references:"Чем объект отличается от ссылки на него. Присваивание, общие объекты, копирование и null.",
+ classes:"Как описывать свои сущности: поля хранят состояние, методы задают поведение объектов.",
+ constructors:"Как создать объект с правильным начальным состоянием. Конструкторы и передача параметров.",
+ static:"Что принадлежит классу, а что отдельному объекту. Общее состояние и статические методы.",
+ "oop-summary":"Соберёшь картину ООП: ответственность классов, доступ к данным и взаимодействие объектов."
+};
+const javaGroups=[
+ {title:"Базовый уровень",hint:"Знакомство с языком, первая программа и типы данных.",ids:["languages","intro","first-program","types"]},
+ {title:"Следующий шаг · Алгоритмы",hint:"Биты, условия, циклы, массивы и собственные методы.",ids:["bitwise","conditions","loops","arrays","methods"]},
+ {title:"Сложнее · Объекты и ООП",hint:"Ссылки, классы, создание объектов и общее состояние.",ids:["references","classes","constructors","static","oop-summary"]}
+];
+const sqlGroups=[
+ {title:"Базовый уровень",hint:"Таблицы, связи и организация данных.",ids:["01","02","03"]},
+ {title:"Следующий шаг · Запросы",hint:"Получение данных, транзакции, индексы и права доступа.",ids:["04","05"]}
+];
+function groupedTargets(container,groups,sidebar=false){
+ container.classList.add(sidebar?"sidebar-groups":"topic-groups");
+ if(!sidebar)container.classList.remove("topic-grid","lesson-list");
+ const targets={};
+ groups.forEach((group,index)=>{
+  const details=document.createElement("details");details.className=sidebar?"sidebar-group":"topic-group";details.open=index===0;
+  const summary=element("summary","");summary.append(element("strong",group.title),element("span",group.ids.length+([2,3,4].includes(group.ids.length)?" темы":" тем"),"group-count"));
+  const body=element("div","",sidebar?"sidebar-group-body":"lesson-list");
+  if(!sidebar)details.append(summary,element("p",group.hint,"group-description"),body);else details.append(summary,body);
+  container.append(details);group.ids.forEach(id=>targets[id]=body);
+ });return targets;
+}
+const javaOverview=groupedTargets(document.getElementById("java-topic-cards"),javaGroups);
+const javaSidebar=groupedTargets(document.getElementById("java-topic-links"),javaGroups,true);
+const sqlOverview=groupedTargets(document.getElementById("sql-topic-cards"),sqlGroups);
+// Keep the SQL section order; group its existing lecture links in place.
+const sqlNav=document.getElementById("sql-nav"),sqlLinks=[...sqlNav.querySelectorAll("a")].filter(a=>/^#0[1-5]$/.test(a.hash));
+const sqlGroupsNode=element("div","");sqlLinks[0].before(sqlGroupsNode);
+const sqlSidebar=groupedTargets(sqlGroupsNode,sqlGroups,true);sqlLinks.forEach(link=>sqlSidebar[link.hash.slice(1)].append(link));
 for (const topic of sqlTopics) {
-  document.getElementById("sql-topic-cards").append(topicCard(
+  sqlOverview[topic.id].append(topicCard(
     "#" + topic.id, "ЛЕКЦИЯ " + topic.id, topic.title, topic.detail, "Открыть лекцию →"
   ));
 }
 for (const topic of javaTopics) {
   const href = "#java-" + topic.id;
-  sidebarLink(href, topic.number, topic.title, document.getElementById("java-topic-links"));
-  document.getElementById("java-topic-cards").append(topicCard(
+  sidebarLink(href, topic.number, topic.title, javaSidebar[topic.id]);
+  javaOverview[topic.id].append(topicCard(
     href, "ТЕМА " + topic.number, topic.title,
-    topic.full ? "Лекция, примеры и конспект под запись." : "Конспект под запись и основные понятия.",
+    javaDescriptions[topic.id] || "Основные понятия и примеры по теме.",
     "Открыть тему →"
   ));
 }
@@ -121,7 +165,7 @@ function route() {
   document.querySelectorAll("#course-sidebar nav a").forEach(link => {
     const active = link.hash === "#" + key;
     link.classList.toggle("active", active);
-    if (active) link.setAttribute("aria-current", "page");
+    if (active) {link.setAttribute("aria-current", "page");const group=link.closest("details");if(group)group.open=true;}
     else link.removeAttribute("aria-current");
   });
   document.getElementById("toggle-sidebar").setAttribute(
@@ -133,10 +177,10 @@ function route() {
   if (reader) {
     const topic = javaByKey[key];
     const url = topic
-      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=23"
-      : key === "practice" ? "practice.html?v=23"
-      : key === "setup" ? "lectures/setup.html?v=23"
-      : "lectures/course.html?v=23#" + key;
+      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=24"
+      : key === "practice" ? "practice.html?v=24"
+      : key === "setup" ? "lectures/setup.html?v=24"
+      : "lectures/course.html?v=24#" + key;
     if (frame.getAttribute("src") !== url) {
       status.hidden = false;
       frame.src = url;
