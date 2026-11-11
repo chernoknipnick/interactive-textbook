@@ -1,4 +1,5 @@
 (() => {
+  document.querySelectorAll(".term-legend[open]").forEach(node=>node.removeAttribute("open"));
   const materialPath = location.pathname;
   if (materialPath.includes("/lectures/") || materialPath.endsWith("/practice.html")) {
     document.body.classList.add("tb-legacy-material");
@@ -36,8 +37,7 @@
   for (const [number, title, path] of [
     ["01", "Дисциплины", "./#library"],
     ["02", "Практика", "./#all-practice"],
-    ["03", "Личный кабинет", "account/"],
-    ["04", "Поиск", "./#search"]
+    ["03", "Личный кабинет", "account/"]
   ]) {
     const link = document.createElement("a");
     link.href = new URL(path, base).href;
@@ -52,7 +52,20 @@
   feedback.textContent = "Помощь и идеи";
   const news=document.createElement("button");news.type="button";news.className="tb-contact tb-news";news.textContent="Что нового";
   news.onclick=async()=>{closeMenus();await ensureUpdates();document.querySelector(".su-launcher")?.click();};
-  nav.append(news,feedback);
+  const more=document.createElement("details");more.className="tb-more";
+  const summary=document.createElement("summary");summary.textContent="Ещё";
+  const moreItems=document.createElement("div");moreItems.append(news,feedback);
+  const external=document.getElementById("external");if(external) moreItems.append(external);
+  more.append(summary,moreItems);nav.append(more);
+  moreItems.addEventListener("click",()=>more.open=false);
+  function courseBrand(){
+    const course=document.body.dataset.course || (location.pathname.includes("/it/")?"it":"");
+    if(course)document.body.dataset.course=course;
+    const name={java:"Java",sql:"Базы данных и SQL",it:"Информационные технологии"}[course];
+    logo.replaceChildren(icon,document.createTextNode(name||"учебник"));
+    if(name){logo.href=new URL(course==="java"?"./#java":course==="sql"?"./#home":"it/",base).href;const small=document.createElement("small");small.textContent=" / учебник";logo.append(small);}else{logo.href=new URL("./#library",base).href;const span=document.createElement("span");span.textContent="./";logo.append(span);}
+  }
+  courseBrand();window.addEventListener("hashchange",courseBrand);
   header.append(logo, topicToggle, menuToggle, nav);
   const oldHeader = document.querySelector("body > header");
   if (oldHeader) oldHeader.replaceWith(header);
@@ -95,7 +108,7 @@
   function markSection() {
     const links = nav.querySelectorAll("a");
     const active = location.pathname.includes("/account/") ? 2
-      : location.hash === "#search" ? 3 : location.hash.includes("practice") || location.hash.includes("java-work-") || location.pathname.includes("practice") ? 1 : 0;
+      : location.hash.includes("practice") || location.hash.includes("java-work-") || location.pathname.includes("practice") ? 1 : 0;
     links.forEach((link, index) => {
       if (index === active) link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");
@@ -136,7 +149,7 @@
     if (!updatesReady) {
       updatesReady = new Promise((resolve, reject) => {
         const script = document.createElement("script");
-        script.src = new URL("site-updates.js?v=22", base).href;
+        script.src = new URL("site-updates.js?v=23", base).href;
         script.onload = resolve;
         script.onerror = reject;
         document.head.append(script);

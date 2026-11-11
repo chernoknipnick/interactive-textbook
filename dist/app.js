@@ -28,8 +28,9 @@ function element(tag, text, className) {
 function topicCard(href, label, title, description, footer) {
   const card = document.createElement("a");
   card.className = "topic-card";
+  if (/^(ПР|ЛР)/.test(label)) card.classList.add("work-row");
   card.href = href;
-  const top = element("span", label, "card-number");
+  const top = element("span", label.replace(/(ПР|ЛР)(\d+)/,"$1 $2").replace(" / JAVA", ""), "card-number");
   top.append(element("b", "↗"));
   card.append(top, element("h3", title), element("p", description),
     element("span", footer, "card-bottom"));
@@ -100,6 +101,7 @@ function route() {
   const library = key === "library";
   const hub = key === "all-practice";
   const reader = Boolean(titles[key] || javaByKey[key]);
+  document.body.dataset.course = library || hub ? "" : java ? "java" : "sql";
   if (java) lastJava = key;
   else if (!library && !hub) lastSQL = key;
   document.body.classList.toggle("library-view", library);
@@ -125,13 +127,16 @@ function route() {
   document.getElementById("toggle-sidebar").setAttribute(
     "aria-expanded", String(!matchMedia("(max-width: 900px)").matches && !document.body.classList.contains("focus-view"))
   );
+  const breadcrumb = document.getElementById("app-breadcrumb");
+  if(reader) document.querySelector(".reader-bar").insertBefore(breadcrumb,document.getElementById("reader-practice"));
+  else document.getElementById("main").prepend(breadcrumb);
   if (reader) {
     const topic = javaByKey[key];
     const url = topic
-      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=22"
-      : key === "practice" ? "practice.html?v=22"
-      : key === "setup" ? "lectures/setup.html?v=22"
-      : "lectures/course.html?v=22#" + key;
+      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=23"
+      : key === "practice" ? "practice.html?v=23"
+      : key === "setup" ? "lectures/setup.html?v=23"
+      : "lectures/course.html?v=23#" + key;
     if (frame.getAttribute("src") !== url) {
       status.hidden = false;
       frame.src = url;
@@ -139,6 +144,9 @@ function route() {
     frame.title = topic?.title || titles[key];
     document.getElementById("external").href = url;
     document.getElementById("reader-name").textContent = frame.title;
+    const practiceLink=document.getElementById("reader-practice");
+    practiceLink.href=java?"#java-practice":"#practice";
+    practiceLink.hidden=key==="practice"||Boolean(topic?.work);
     document.getElementById("reader-back").href = topic?.work ? "#java-practice" : java ? "#java" : "#home";
   }
   document.title = (reader ? frame.title : library ? "Учебник" : hub ? "Практические работы" : java ? "Java" : "Базы данных и SQL") + " · От понимания к практике";
@@ -157,7 +165,7 @@ function route() {
   if (reader) {
     const sequence = java ? (javaByKey[key]?.work ? javaWorks.map(w=>"java-work-"+w.id) : javaTopics.map(t=>"java-"+t.id)) : key === "practice" ? ["practice"] : ["setup",...sqlTopics.map(t=>t.id)];
     const pos = sequence.indexOf(key);
-    for (const [id,offset,label] of [["previous-material",-1,"← Предыдущая"],["next-material",1,"Следующая →"]]) {
+    for (const [id,offset,label] of [["previous-material",-1,"← Назад"],["next-material",1,"Следующая →"]]) {
       const link = document.getElementById(id), target = sequence[pos+offset];
       link.hidden = !target; if(target){link.href="#"+target;link.textContent=label;link.title=javaByKey[target]?.title||titles[target];}
     }
