@@ -1,0 +1,46 @@
+@import url("assets/fonts/fonts.css");
+:root{--tb-bg:#070707;--tb-panel:#111111;--tb-panel-hover:#191919;--tb-ink:#ebe8e1;--tb-muted:#a5a49f;--tb-line:#ffffff1f;--tb-header-height:76px;--tb-font:"Textbook Sans",Arial,sans-serif;color-scheme:dark}
+html{scroll-behavior:smooth}
+body{background:var(--tb-bg);color:var(--tb-ink);font-family:var(--tb-font);-webkit-font-smoothing:antialiased}
+body.has-site-shell{padding-top:var(--tb-header-height);isolation:isolate}
+body::selection{background:#ebe8e1;color:#111}
+button,input,textarea,select{font-family:inherit}
+[hidden]{display:none!important}
+.tb-header,.tb-header *,.tb-scrim{box-sizing:border-box}
+.tb-header{position:fixed;inset:0 0 auto;z-index:100;height:var(--tb-header-height);display:flex;justify-content:space-between;align-items:center;gap:24px;padding:0 32px;background:#070707e6;backdrop-filter:blur(20px);border-bottom:1px solid #ffffff09;color:var(--tb-ink);font:500 14px/1.4 var(--tb-font)}
+.tb-header a{color:inherit;text-decoration:none;background:none;border-radius:0}
+.tb-header .tb-brand{display:flex;align-items:center;gap:10px;font-size:24px;letter-spacing:-1.4px;font-weight:800;padding:0;white-space:nowrap}
+.tb-brand img{width:28px;height:28px;filter:grayscale(1)}
+.tb-brand span{color:#a5a49f}
+.tb-global-nav{display:flex;align-items:center;gap:28px;margin:0;overflow:visible}
+.tb-global-nav a,.tb-global-nav button{display:inline-flex;align-items:center;gap:7px;padding:6px 0;margin:0;font-size:13px;font-weight:600;color:var(--tb-ink);white-space:nowrap}
+.tb-global-nav small{font:10px/1.4 var(--tb-font);color:#83837f}
+.tb-global-nav a:hover{color:white;text-decoration:underline;text-underline-offset:6px}
+.tb-global-nav .tb-contact{border:0;border-bottom:1px solid #d5d3ce;background:none;border-radius:0;color:var(--tb-ink);cursor:pointer}
+.tb-mobile-toggle,.tb-topic-toggle{display:none;border:1px solid var(--tb-line);background:#111;color:var(--tb-ink);border-radius:25px;padding:7px 12px;font:13px var(--tb-font);cursor:pointer}
+.tb-header :focus-visible{outline:2px solid #e3ded4;outline-offset:5px}
+.tb-atmosphere{position:fixed;inset:-30%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 35% 28%,#62625938,transparent 36%),radial-gradient(ellipse at 74% 50%,#55564e25,transparent 29%);filter:blur(65px);animation:tb-drift 28s ease-in-out infinite alternate}
+.tb-scrim{display:none}
+.tb-header .tb-global-nav a[aria-current]{color:#fff}
+.embedded-reader{padding-top:0!important}
+.tb-legacy-material{--bg:#090909;--bg2:#131510;--bg3:#1b1f16;--bg4:#252b1e;--border:#ffffff18;--border2:#ffffff30;--text:#dce1ce;--muted:#9ca98a;font-family:var(--tb-font)!important}
+.tb-legacy-material .hero{background:transparent}
+.tb-legacy-material h1,.tb-legacy-material h2,.tb-legacy-material h3{font-family:var(--tb-font);letter-spacing:-.035em}
+.tb-legacy-material .nav-btn{border-radius:24px}
+@keyframes tb-drift{to{transform:translate(5%,-3%) scale(1.08)}}
+@media(min-width:1600px){.tb-header{padding-inline:max(32px,calc((100vw - 1450px)/2))}}
+@media(max-width:900px){
+ :root{--tb-header-height:66px}
+ .tb-header{padding:0 18px;gap:10px}
+ .tb-header .tb-brand{font-size:22px;margin-right:auto}
+ .tb-mobile-toggle{display:block}
+ .has-course-menu .tb-topic-toggle{display:block}
+ .library-view .tb-topic-toggle,.practice-hub-view .tb-topic-toggle{display:none}
+ .tb-global-nav{display:none;position:absolute;top:66px;left:0;right:0;padding:20px;background:#0d0d0df5;border-bottom:1px solid var(--tb-line);flex-direction:column;align-items:stretch;gap:12px}
+ .site-menu-open .tb-global-nav{display:flex}
+ .tb-global-nav a,.tb-global-nav button{font-size:16px;padding:10px 2px}
+ .site-menu-open .tb-scrim,.course-menu-open .tb-scrim{display:block;position:fixed;inset:var(--tb-header-height) 0 0;background:#0009;z-index:70}
+ .course-menu-open aside.tb-topics,body.course-menu-open #course-sidebar{display:block;position:fixed;inset:var(--tb-header-height) auto 0 0;z-index:80;width:min(320px,88vw);height:auto;max-height:none;background:#0d0d0d;overflow:auto;transform:none}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tb-atmosphere{animation:none}}
+@media print{.tb-header,.tb-atmosphere,.tb-scrim{display:none!important}body.has-site-shell{padding-top:0}}
