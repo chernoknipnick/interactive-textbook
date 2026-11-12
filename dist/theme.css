@@ -1,4 +1,3 @@
-@import url("assets/fonts/fonts.css");
 :root{--tb-bg:#070707;--tb-panel:#111111;--tb-panel-hover:#191919;--tb-ink:#ebe8e1;--tb-muted:#b8b7af;--tb-line:#ffffff1f;--tb-header-height:76px;--tb-font:"Textbook Sans",Arial,sans-serif;color-scheme:dark}
 html{scroll-behavior:smooth}
 body{background:var(--tb-bg);color:var(--tb-ink);font-family:var(--tb-font);-webkit-font-smoothing:antialiased}
