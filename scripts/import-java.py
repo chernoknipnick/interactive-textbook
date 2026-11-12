@@ -8,7 +8,6 @@ from pathlib import Path
 import re, json, html, shutil, argparse
 import markdown
 from pygments.formatters import HtmlFormatter
-from site_icons import add_site_icons
 from lesson_presentation import diagram_markup, semantic_markup, legend
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -167,4 +166,4 @@ print(f'Built {len(lessons)} topics, {sum(x["full"] for x in lessons)} full lect
 print(f'Built {len(practice)} student practical/lab assignments.')
 print('References outside imported topics (rendered as text): '+', '.join(sorted(unresolved)))
 
-add_site_icons(ROOT / "dist")
+

@@ -43,4 +43,6 @@ def add_site_icons(dist):
 
 
 if __name__ == "__main__":
-    add_site_icons(Path(__file__).resolve().parents[1] / "dist")
+    # Keep the historical command safe: preparation only writes the ignored artifact.
+    from build import build_site
+    build_site()
