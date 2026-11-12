@@ -14,7 +14,7 @@ class Checks(unittest.TestCase):
             terms[word]=ids
         fixtures=[('dex','#java-languages'),('транзакци','#05'),('инкапсуляци','#java-constructors'),('инкапсуляци','#java-oop-summary')]
         for token,url in fixtures:
-            found={index['documents'][i]['u'] for word,ids in terms.items() if token in word for i in ids}
+            found={index['documents'][i]['u'] for word,ids in terms.items() if word.startswith(token) for i in ids}
             self.assertIn(url,found)
 
 if __name__=="__main__":unittest.main()

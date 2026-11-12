@@ -6,7 +6,7 @@
  let data,pending,timer,active=-1,serial=0;
  function load(){
   if(data)return Promise.resolve(data);
-  if(!pending)pending=fetch(new URL('search-index.json',document.currentScript?.src||location.href)).then(r=>{if(!r.ok)throw Error('index');return r.json();}).then(raw=>{
+  if(!pending)pending=fetch(new URL('search-index.json?v=27',document.currentScript?.src||location.href)).then(r=>{if(!r.ok)throw Error('index');return r.json();}).then(raw=>{
    let previous='';const terms=raw.lexicon.split('\n').map(line=>{const [prefix,suffix,posting]=line.split('|');const word=previous.slice(0,parseInt(prefix,16))+suffix;previous=word;let mask=0n;if(posting.startsWith('#'))mask=BigInt('0x'+posting.slice(1));else posting.split('.').forEach(id=>mask|=1n<<BigInt(parseInt(id,36)));return [word,mask];});
    data={docs:raw.documents,terms};return data;
   }).catch(e=>{pending=null;throw e;});
@@ -28,7 +28,7 @@
    const started=performance.now();
    const tokens=(query.match(/[\p{L}\p{N}_]+/gu)||[]).map(stem);if(!tokens.length){summary.textContent='Введи слово или название темы.';return;}
    const matchedWords=new Map();let mask=(1n<<BigInt(index.docs.length))-1n;
-   for(const token of tokens){let found=0n;for(const [word,posting] of index.terms){if(word.includes(token)){found|=posting;matchedWords.set(word,posting);}}mask&=found;}
+   for(const token of tokens){let found=0n;for(const [word,posting] of index.terms){if(word.startsWith(token)){found|=posting;matchedWords.set(word,posting);}}mask&=found;}
    const found=index.docs.map((doc,i)=>({...doc,i})).filter(doc=>mask&(1n<<BigInt(doc.i))).map(doc=>{const title=normalize(doc.t);return {...doc,score:title.startsWith(query)?300:title.includes(query)?200:tokens.every(t=>title.includes(t))?150:50};}).sort((a,b)=>b.score-a.score||a.i-b.i);
    summary.textContent=found.length?'Найдено материалов: '+found.length+(found.length>30?' · показаны первые 30':''):'Ничего не найдено. Попробуй другое слово или выбери дисциплину ниже.';
    for(const doc of found.slice(0,30)){

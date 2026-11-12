@@ -21,7 +21,7 @@ class Document(HTMLParser):
     def __init__(self,source):
         super().__init__(convert_charrefs=True);self.root=Node();self.stack=[self.root];self.feed(source)
     def handle_starttag(self,tag,attrs):
-        node=Node(tag,attrs);self.stack[-1].children.append(node)
+        node=Node(tag,attrs);node.parent=self.stack[-1];self.stack[-1].children.append(node)
         if tag not in VOID:self.stack.append(node)
     def handle_startendtag(self,tag,attrs): self.handle_starttag(tag,attrs); self.handle_endtag(tag) if tag not in VOID else None
     def handle_endtag(self,tag):
@@ -33,7 +33,13 @@ def compact(text):return re.sub(r"\s+"," ",text).strip()
 def read_page(source):
     root=Document(source).root
     title=next((compact(n.text(False)) for n in root.walk() if n.tag=="title"),"Учебник")
-    paras=[compact(n.text()) for n in root.walk() if n.tag=="p" and len(compact(n.text()))>45]
+    def introductory(node):
+        parent=getattr(node,"parent",None)
+        while parent:
+            if parent.tag in SKIP or {"notes","term-legend","course-trace","oop-widget","lesson-visual"}.intersection(parent.attrs.get("class","").split()):return False
+            parent=getattr(parent,"parent",None)
+        return True
+    paras=[compact(n.text()) for n in root.walk() if n.tag=="p" and introductory(n) and len(compact(n.text()))>45]
     intro=next((p for p in paras if not p.startswith(("Цвет обозначает","Официальные материалы"))),"Учебные материалы, объяснения, примеры и задания для самостоятельной работы.")
     return title,intro,compact(root.text())
 
