@@ -97,3 +97,28 @@ body #course-select{width:100%;text-overflow:ellipsis;padding-right:28px}
 
 body #course-sidebar #java-work-links a i{font-family:"Segoe UI",Arial,sans-serif;font-style:normal;font-size:18px;min-width:56px}
 @media(prefers-reduced-motion:no-preference){body .course-page:not([hidden]),body .practice-hub:not([hidden]),body #library:not([hidden]){animation:course-route-enter .16s ease-out}@keyframes course-route-enter{from{transform:translateY(3px)}to{transform:translateY(0)}}}
+
+/* Interactive lesson widgets: one light palette for all states. */
+:root{--w-bg:#f2f6fc;--w-panel:#fff;--w-line:#b7c9df;--w-ink:#192435;--w-muted:#536276;--w-accent:#2457b6;--w-ok:#176747;--w-warn:#94500f}
+body .course-trace,body .oop-widget,body .oop-recap-figure{background:var(--w-bg);border-color:var(--w-line);color:var(--w-ink)}
+body .course-trace h2,body .oop-widget h2,body .oop-recap-figure figcaption{color:var(--w-ink)}
+body .course-trace>p,body .oop-widget>p,body .oop-caption,body .oop-recap-card p{color:var(--w-muted);font-size:16px;line-height:1.7}
+body .course-trace pre,body .course-trace pre code,body .oop-code{background:#eef3fa;color:var(--w-ink);border-color:var(--w-line);font:16px/1.7 Consolas,monospace}
+body .trace-cells>div{background:var(--w-panel);border-color:var(--w-line);color:var(--w-ink);font-size:17px;line-height:1.6}
+body .trace-cells>.trace-changed{background:#e9f6ee;border-color:var(--w-ok);color:var(--w-ink)}
+body .trace-explanation,body .oop-explanation{background:var(--w-panel);border-left-color:var(--w-warn);color:var(--w-ink);font-size:17px;line-height:1.75}
+body .trace-controls span,body .oop-controls span{color:var(--w-muted);font:15px/1.5 "Segoe UI",Arial,sans-serif}
+body .trace-controls button,body .oop-controls button{background:var(--w-panel);border:1px solid #98b0ce;color:var(--w-accent);font:600 16px/1.4 "Segoe UI",Arial,sans-serif;padding:9px 14px;border-radius:7px;min-height:42px}
+body .trace-controls button[data-trace-action=next],body .trace-controls button[data-trace-action=play],body .oop-controls button[data-oop-action=next],body .oop-controls button[data-oop-action=play]{background:var(--w-accent);border-color:var(--w-accent);color:#fff}
+body .trace-controls button:disabled,body .oop-controls button:disabled{opacity:1;background:#edf1f6;color:var(--w-muted);border-color:#bac9db;cursor:default}
+body .oop-widget button:focus-visible{outline:3px solid var(--w-accent);outline-offset:3px}
+body .oop-recap-card{background:var(--w-panel);border-color:var(--w-line);color:var(--w-ink);font-size:17px;line-height:1.7}
+body .oop-recap-figure figcaption{font-size:16px;line-height:1.6}body .oop-recap-arrow{color:#a33768}
+body .oop-node rect{fill:#e8eef7;stroke:#718baa}body .oop-node text{fill:var(--w-ink)}body .oop-node .oop-title{fill:var(--w-warn)}
+body .oop-node.is-active rect{fill:#e9f6ee;stroke:var(--w-ok)}
+body .oop-node.is-muted{opacity:1}body .oop-node.is-muted rect{fill:#f5f7fa;stroke:#a1b2c8}body .oop-node.is-muted text,body .oop-node.is-muted .oop-title{fill:var(--w-muted)}
+body .oop-link{stroke:var(--w-warn)}
+
+body .oop-scene marker path{fill:var(--w-warn)}
+body .trace-controls button:hover:not(:disabled),body .oop-controls button:hover:not(:disabled){background:#e4edf9;color:#173e82;border-color:#718baa}
+body .trace-controls button[aria-pressed=true],body .oop-controls button[aria-pressed=true]{background:#173e82;color:#fff;border-color:#173e82}

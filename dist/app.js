@@ -177,10 +177,10 @@ function route() {
   if (reader) {
     const topic = javaByKey[key];
     const url = topic
-      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=24"
-      : key === "practice" ? "practice.html?v=24"
-      : key === "setup" ? "lectures/setup.html?v=24"
-      : "lectures/course.html?v=24#" + key;
+      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=25"
+      : key === "practice" ? "practice.html?v=25"
+      : key === "setup" ? "lectures/setup.html?v=25"
+      : "lectures/course.html?v=25#" + key;
     if (frame.getAttribute("src") !== url) {
       status.hidden = false;
       frame.src = url;
