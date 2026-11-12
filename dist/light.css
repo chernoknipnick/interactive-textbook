@@ -127,3 +127,5 @@ body .trace-controls button[aria-pressed=true],body .oop-controls button[aria-pr
 
 body .search-snippet{grid-column:1/-1;font-size:16px;line-height:1.65;color:#435a75;margin:3px 0}body .search-matches{font-size:14px;color:#536276}body mark{background:#fff0b8;color:#422d08;padding:0 2px;border-radius:2px}body .search-selected{background:#eaf1fc;outline:2px solid #2457b6;outline-offset:-2px}
 body .search-result{min-width:0}body .search-snippet{overflow-wrap:anywhere}
+
+body .outline-row{display:flex;align-items:start;gap:12px;justify-content:space-between;padding:4px 0}body .outline-row a{flex:1}body .share-section{font:14px/1.4 "Segoe UI",sans-serif;background:#fff;border:1px solid #adc4df;border-radius:6px;padding:7px 10px;color:#2457b6;white-space:nowrap}body.embedded-reader [id]{scroll-margin-top:16px}

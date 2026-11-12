@@ -133,7 +133,7 @@ document.getElementById("toggle-sidebar").onclick = event => {
 frame.addEventListener("load", () => { status.hidden = true; });
 
 function route() {
-  let key = location.hash.slice(1) || "library";
+  let key = location.hash.slice(1).split("/")[0] || "library";
   const searchAnchor = key === "search";
   const courseAnchor = key === "courses";
   if (searchAnchor || key === "main") key = "library";
@@ -177,10 +177,10 @@ function route() {
   if (reader) {
     const topic = javaByKey[key];
     const url = topic
-      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=25"
-      : key === "practice" ? "practice.html?v=25"
-      : key === "setup" ? "lectures/setup.html?v=25"
-      : "lectures/course.html?v=25#" + key;
+      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=26"
+      : key === "practice" ? "practice.html?v=26"
+      : key === "setup" ? "lectures/setup.html?v=26"
+      : "lectures/course.html?v=26#" + key;
     if (frame.getAttribute("src") !== url) {
       status.hidden = false;
       frame.src = url;

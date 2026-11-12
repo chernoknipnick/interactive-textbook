@@ -24,6 +24,8 @@ def add_site_icons(dist):
             f'<link rel="stylesheet" href="{prefix}light.css?v=25">\n'
             '<!-- /textbook-icons -->'
         )
+        if page != dist / "index.html":
+            links = links.replace('<!-- /textbook-icons -->', f'<script src="{prefix}reader-position.js?v=26" defer></script>\n<!-- /textbook-icons -->')
         if "<!-- textbook-icons -->" in source:
             updated = re.sub(r"<!-- textbook-icons -->.*?<!-- /textbook-icons -->",
                              lambda _: links, source, flags=re.DOTALL)
