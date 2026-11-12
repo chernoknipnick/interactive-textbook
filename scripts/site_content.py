@@ -40,7 +40,7 @@ def read_page(source):
 def prepare_metadata(output):
     urls=[];seen_titles=set();seen_desc=set()
     for page in sorted(output.rglob("*.html")):
-        source=page.read_text(encoding="utf-8");rel=page.relative_to(output).as_posix()
+        source=normalize_headings(page.read_text(encoding="utf-8"));rel=page.relative_to(output).as_posix()
         title,intro,_=read_page(source)
         if title in seen_titles:title += " · " + rel.removesuffix(".html").replace("/"," / ")
         seen_titles.add(title)
@@ -60,4 +60,23 @@ def prepare_metadata(output):
         if rel!="404.html":urls.append(url)
     sitemap='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+"".join("<url><loc>"+xml_escape(u)+"</loc></url>" for u in urls)+"</urlset>\n"
     (output/"sitemap.xml").write_bytes(sitemap.encode("utf-8"));(output/"robots.txt").write_bytes(("User-agent: *\nAllow: /\nSitemap: "+BASE+"sitemap.xml\n").encode())
+
+
+def normalize_headings(source):
+    # Notes are subordinate to the lecture; preserve anchors and relative levels.
+    def notes(match):
+        if not re.search(r"<h1\b",match[0]):return match[0]
+        return re.sub(r"(<\/?h)([1-5])(\b)",lambda m:m[1]+str(int(m[2])+1)+m[3],match[0])
+    source=re.sub(r'<details\b[^>]*class="notes"[^>]*>.*?</article></details>',notes,source,flags=re.S)
+    first=True;level=1
+    def heading(match):
+        nonlocal first,level
+        closing=bool(match[1]);attrs=match[2]
+        if not closing:
+            level=1 if first else 2;first=False
+            if "data-page-heading" not in attrs:attrs+=' data-page-heading=""'
+        return '<'+('/' if closing else '')+'h'+str(level)+attrs+'>'
+    # Avoid matching sample HTML inside scripts/styles.
+    chunks=re.split(r'(<script\b.*?</script>|<style\b.*?</style>)',source,flags=re.S|re.I)
+    return ''.join(chunk if re.match(r'<(?:script|style)\b',chunk,re.I) else re.sub(r'<(/?)h1([^>]*)>',heading,chunk,flags=re.I) for chunk in chunks)
 

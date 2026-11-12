@@ -122,3 +122,5 @@ body .oop-link{stroke:var(--w-warn)}
 body .oop-scene marker path{fill:var(--w-warn)}
 body .trace-controls button:hover:not(:disabled),body .oop-controls button:hover:not(:disabled){background:#e4edf9;color:#173e82;border-color:#718baa}
 body .trace-controls button[aria-pressed=true],body .oop-controls button[aria-pressed=true]{background:#173e82;color:#fff;border-color:#173e82}
+
+.reader-accessible-title{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}

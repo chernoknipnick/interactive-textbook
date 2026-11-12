@@ -186,6 +186,7 @@ function route() {
       frame.src = url;
     }
     frame.title = topic?.title || titles[key];
+    document.getElementById("reader-heading").textContent=frame.title;
     document.getElementById("external").href = url;
     document.getElementById("reader-name").textContent = frame.title;
     const practiceLink=document.getElementById("reader-practice");
@@ -193,6 +194,9 @@ function route() {
     practiceLink.hidden=key==="practice"||Boolean(topic?.work);
     document.getElementById("reader-back").href = topic?.work ? "#java-practice" : java ? "#java" : "#home";
   }
+  const pageHeadings=[...document.querySelectorAll('[data-page-heading]')];
+  const visibleHeading=pageHeadings.find(h=>!h.closest('section[hidden]'));
+  for(const heading of pageHeadings){const tag=heading===visibleHeading?'H1':'H2';if(heading.tagName!==tag){const replacement=document.createElement(tag);for(const attr of heading.attributes)replacement.setAttribute(attr.name,attr.value);replacement.append(...heading.childNodes);heading.replaceWith(replacement);}}
   document.title = (reader ? frame.title : library ? "Учебник" : hub ? "Практические работы" : java ? "Java" : "Базы данных и SQL") + " · От понимания к практике";
   const crumb = document.getElementById("app-breadcrumb");
   crumb.replaceChildren(); crumb.hidden = library;

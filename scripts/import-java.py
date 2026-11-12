@@ -125,7 +125,9 @@ for i,(slug,base,title) in enumerate(topics):
         if j==0:
             body=re.sub(r'</h1>',lambda match:match[0]+legend(),body,count=1)
         if j==0: sections+='<article>'+body+'</article>'
-        else:sections+='<details class="notes"><summary>Конспект · Под запись</summary><article>'+body+'</article></details>'
+        else:
+            body=re.sub(r'(<\/?h)([1-5])(\b)',lambda m:m[1]+str(int(m[2])+1)+m[3],body)
+            sections+='<details class="notes"><summary>Конспект · Под запись</summary><article>'+body+'</article></details>'
     prev=f'<a target="_top" href="../#java-{topics[i-1][0]}">← {html.escape(topics[i-1][2])}</a>' if i else '<a target="_top" href="../#java">← К программе Java</a>'
     nxt=f'<a target="_top" href="../#java-{topics[i+1][0]}">{html.escape(topics[i+1][2])} →</a>' if i+1<len(topics) else '<a target="_top" href="../#java">К программе Java →</a>'
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · Java</title><link rel="stylesheet" href="lecture.css?v=5"></head><body><main><div class="eyebrow">JAVA / ТЕМА {i+1:02d} ИЗ {len(topics)} · {versions[0][1].upper()}</div><div class="tools"><button id="outline-toggle" aria-expanded="false" aria-controls="outline">Содержание темы ↓</button><span>Авторские материалы из Obsidian</span></div><nav id="outline" hidden aria-label="Содержание темы"></nav>{sections}<footer>{prev}{nxt}</footer></main><script src="lecture.js?v=3"></script></body></html>'''
