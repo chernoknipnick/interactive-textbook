@@ -244,16 +244,5 @@ function updateResume(){
   if(match){link.href=match.href;document.getElementById("resume-title").textContent=match.course+" · "+match.title;link.hidden=false;}
  }catch{}
 }
-function findMaterials(){
- const query=search.value.trim().toLocaleLowerCase("ru").replaceAll("ё","е");
- document.getElementById("search-panel").hidden=!query;
- document.getElementById("clear-search").hidden=!query;
- const results=document.getElementById("search-results");results.replaceChildren();
- if(!query)return;
- const found=materials.filter(m=>(m.title+" "+m.course+" "+m.kind).toLocaleLowerCase("ru").replaceAll("ё","е").includes(query));
- document.getElementById("search-summary").textContent=found.length ? "Найдено материалов: "+found.length : "Ничего не найдено. Попробуй другое слово или выбери дисциплину ниже.";
- for(const m of found){const a=element("a","","search-result");a.href=m.href;a.append(element("small",m.course+" · "+m.kind),element("strong",m.title),element("span","Открыть →"));results.append(a);}
-}
-search.addEventListener("input",findMaterials);
-document.getElementById("clear-search").onclick=()=>{search.value="";findMaterials();search.focus();};
+window.textbookSearchFallback=materials;
 route();

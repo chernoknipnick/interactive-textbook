@@ -80,3 +80,41 @@ def normalize_headings(source):
     chunks=re.split(r'(<script\b.*?</script>|<style\b.*?</style>)',source,flags=re.S|re.I)
     return ''.join(chunk if re.match(r'<(?:script|style)\b',chunk,re.I) else re.sub(r'<(/?)h1([^>]*)>',heading,chunk,flags=re.I) for chunk in chunks)
 
+
+def build_search_index(output):
+    import json
+    records=[]
+    for page in sorted(output.rglob("*.html")):
+        rel=page.relative_to(output).as_posix()
+        if rel in {"index.html","404.html","it/index.html","account/index.html","lectures/course.html"}:continue
+        if not rel.startswith(("java/","it/","lectures/")) and rel!="practice.html":continue
+        source=page.read_text(encoding="utf-8");title,intro,text=read_page(source)
+        if rel.startswith("java/"):course="Java";url="#java-"+page.stem;kind="Практика" if page.stem.startswith("work-") else "Лекция"
+        elif rel.startswith("it/"):course="Информационные технологии";url=rel;kind="Практика" if "practice" in rel else "Лекция"
+        else:course="Базы данных и SQL";url="#practice" if rel=="practice.html" else "#setup";kind="Практика" if rel=="practice.html" else "Инструкция"
+        records.append({"t":title,"u":url,"c":course,"k":kind,"s":intro[:200],"text":text})
+    sql=(output/"lectures/course.html").read_text(encoding="utf-8")
+    panels=re.split(r'<div class="lecture-panel(?: active)?" id="panel-(\d+)">',sql)
+    names=["Базовые понятия","Связи между таблицами","Нормализация","SELECT и запросы","Продвинутый SQL"]
+    for i in range(1,len(panels),2):
+        number=panels[i];text=compact(Document(panels[i+1].split('<script',1)[0]).root.text());records.append({"t":names[int(number)-1],"u":"#"+number,"c":"Базы данных и SQL","k":"Лекция","s":text[:200],"text":text})
+    # A shared word dictionary with document bitsets avoids repeating the full lectures.
+    terms={}
+    for index,record in enumerate(records):
+        for word in set(re.findall(r"[\w]+",record.pop("text").lower().replace("ё","е"))):
+            if len(word)>1:terms[word]=terms.get(word,0)|(1<<index)
+    previous="";packed=[]
+    alphabet="0123456789abcdefghijklmnopqrstuvwxyz"
+    def base36(value):
+        return alphabet[value] if value<36 else base36(value//36)+alphabet[value%36]
+    for word,bits in sorted(terms.items()):
+        prefix=0
+        while prefix<min(len(word),len(previous)) and word[prefix]==previous[prefix]:prefix+=1
+        postings=".".join(base36(i) for i in range(len(records)) if bits&(1<<i))
+        mask="#"+format(bits,"x")
+        packed.append(format(prefix,"x")+"|"+word[prefix:]+"|"+(mask if len(mask)<len(postings) else postings));previous=word
+    payload={"documents":records,"lexicon":"\n".join(packed)}
+    encoded=json.dumps(payload,ensure_ascii=False,separators=(",",":")).encode("utf-8")
+    if len(encoded)>150_000:raise RuntimeError("Search index exceeded 150 KB")
+    (output/"search-index.json").write_bytes(encoded)
+    print(f"Search: {len(records)} materials, {len(terms)} terms, {len(encoded)} bytes")

@@ -2,7 +2,7 @@
 from pathlib import Path
 import shutil
 from site_icons import add_site_icons
-from site_content import prepare_metadata
+from site_content import prepare_metadata, build_search_index
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "dist"
@@ -17,6 +17,7 @@ def build_site():
     shutil.copytree(SOURCE, OUTPUT)
     add_site_icons(OUTPUT)
     prepare_metadata(OUTPUT)
+    build_search_index(OUTPUT)
     (OUTPUT / ".nojekyll").write_text("", encoding="utf-8")
     print(f"Prepared {sum(1 for _ in OUTPUT.rglob('*.html'))} HTML pages in {OUTPUT}")
     return OUTPUT
