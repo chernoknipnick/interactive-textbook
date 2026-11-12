@@ -221,7 +221,7 @@ function route() {
     try {localStorage.setItem("textbook-last-material",JSON.stringify({href:"#"+key,title:frame.title,course:java?"Java":"SQL"}));} catch {}
   }
   if(library) updateResume();
-  window.scrollTo(0, 0);
+  window.scrollTo({top:0,behavior:'instant'});
   if(searchAnchor) requestAnimationFrame(()=>document.getElementById("material-search").focus());
   if (courseAnchor) requestAnimationFrame(() => document.getElementById("courses").scrollIntoView());
 }

@@ -5,7 +5,7 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
   const play=document.createElement('button');
   play.type='button';play.dataset.action='play';
   find('.visual-controls').append(play);
-  function pause(){clearInterval(timer);timer=null;play.textContent='▶ Проиграть';play.setAttribute('aria-pressed','false');}
+  function pause(){clearTimeout(timer);timer=null;window.lessonMotion?.pause(widget);play.textContent='▶ Проиграть';play.setAttribute('aria-pressed','false');}
   pause();
   const launchText=[
     'Сначала есть только текст в Hello.java. Это исходный код: JVM запускает не этот текст, а результат компиляции.',
@@ -20,7 +20,9 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
     'Меняем b[1] на 7 в копии B. В исходном массиве a[1] остаётся 9. Изменения копии больше не меняют исходный массив.'
   ];
   const codes=['int[] a = {5, 3, 4, 2, 5};','int[] b = a;','b[1] = 9;','b = a.clone();','b[1] = 7;'];
+  let drawn=-1;
   function draw(){
+    if(drawn>=0&&drawn!==step)window.lessonMotion?.step(widget,[find('[data-array-code]'),find('[data-condition-code]'),find('[data-explanation]')]);drawn=step;
     find('[data-step]').textContent=`Шаг ${step+1} из ${total}`;
     find('[data-action=back]').disabled=step===0;
     find('[data-action=next]').disabled=step===total-1;
@@ -78,7 +80,7 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
       if(timer){pause();return;}
       if(step===total-1){step=0;draw();}
       play.textContent='Ⅱ Пауза';play.setAttribute('aria-pressed','true');
-      timer=setInterval(()=>{step++;draw();if(step===total-1)pause();},3000);
+      widget.classList.add('is-playing');widget.classList.remove('is-paused');const tick=()=>{step++;draw();if(step===total-1){pause();return;}timer=setTimeout(tick,1800);};timer=setTimeout(tick,1800);
       return;
     }
     if(action){pause();step=action==='reset'?0:Math.max(0,Math.min(total-1,step+(action==='next'?1:-1)));selected=null;draw();}
@@ -86,6 +88,7 @@ document.querySelectorAll('[data-visual]').forEach(widget=>{
     if(cell){selected=cell.closest('[data-array]').dataset.array+cell.dataset.index;draw();}
   });
   find('[data-score]')?.addEventListener('input',()=>{pause();step=0;draw();});
+  widget.addEventListener('lesson-pause',pause);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
   window.addEventListener('pagehide',pause);
   draw();

@@ -60,6 +60,8 @@
     const marker = element('marker', {id: markerId, viewBox: '0 0 10 10', refX: '9', refY: '5', markerWidth: '6', markerHeight: '6', orient: 'auto-start-reverse'}, defs);
     element('path', {d: 'M0 0 L10 5 L0 10 z', fill: '#e7a269'}, marker);
     const linkLayer = element('g', {}, scene);
+    const linkEls=new Map();
+    for(const key of new Set(frames.flatMap(frame=>frame[2].map(([a,b])=>`${a}-${b}`)))){const path=element('path',{d:paths[key],class:'oop-link','marker-end':`url(#${markerId})`},linkLayer);path.style.display='none';linkEls.set(key,path);}
     const nodes = positions.map(([left, top], index) => {
       const group = element('g', {class: 'oop-node', transform: `translate(${left} ${top})`}, scene);
       element('rect', {width: '440', height: '180', rx: '15'}, group);
@@ -69,8 +71,9 @@
       return {group, label};
     });
     function pause() {
-      clearInterval(timer);
+      clearTimeout(timer);
       timer = null;
+      window.lessonMotion?.pause(widget);
       find('[data-oop-action=play]').textContent = '▶ Проиграть';
       find('[data-oop-action=play]').setAttribute('aria-pressed', 'false');
     }
@@ -86,12 +89,9 @@
         label.textContent = labels[index];
         group.classList.toggle('is-active', active.includes(index));
         group.classList.toggle('is-muted', /ещё нет|ещё не создан|ещё не присвоено/.test(labels[index]));
-        if (animate && active.includes(index) && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          group.animate([{opacity: .4}, {opacity: 1}], {duration: 450});
-        }
+        if(animate&&active.includes(index))window.lessonMotion?.step(widget,[label]);
       });
-      linkLayer.replaceChildren();
-      links.forEach(([from, to]) => element('path', {d: paths[`${from}-${to}`], class: 'oop-link', 'marker-end': `url(#${markerId})`}, linkLayer));
+      linkEls.forEach((path,key)=>path.style.display=links.some(([a,b])=>`${a}-${b}`===key)?'':'none');
     }
     widget.addEventListener('click', event => {
       const action = event.target.closest('[data-oop-action]')?.dataset.oopAction;
@@ -101,19 +101,20 @@
         if (step === frames.length - 1) { step = 0; draw(); }
         find('[data-oop-action=play]').textContent = 'Ⅱ Пауза';
         find('[data-oop-action=play]').setAttribute('aria-pressed', 'true');
-        timer = setInterval(() => {
-          step += 1;
-          draw();
-          if (step === frames.length - 1) pause();
-        }, 2800);
+        widget.classList.add('is-playing');widget.classList.remove('is-paused');
+        const tick=()=>{step+=1;draw();if(step===frames.length-1){pause();return;}timer=setTimeout(tick,1800);};
+        timer=setTimeout(tick,1800);
         return;
       }
       pause();
       step = action === 'reset' ? 0 : Math.max(0, Math.min(frames.length - 1, step + (action === 'next' ? 1 : -1)));
       draw();
     });
-    document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+    widget.addEventListener('lesson-pause',pause);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
     window.addEventListener('pagehide', pause);
-    draw(false);
+    document.addEventListener('DOMContentLoaded',()=>window.lessonMotion?.reserve(widget,find('[data-oop-code]'),frames.map(f=>f[0])));
+    find('[data-oop-code]').style.minHeight=(Math.max(...frames.map(f=>f[0].split('\n').length))*27+30)+'px';
+    pause();draw(false);
   });
 })();

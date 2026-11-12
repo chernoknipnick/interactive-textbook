@@ -30,7 +30,7 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn(b"\r\n", page.read_bytes(), str(page))
             source=page.read_text(encoding="utf-8")
             self.assertEqual(1,source.count("<!-- textbook-icons -->"),str(page))
-            self.assertIn("light.css?v=25",source)
+            self.assertIn("light.css?v=26",source)
         add_site_icons(ROOT / "build")
         self.assertEqual(first,digest_tree(ROOT / "build"))
 

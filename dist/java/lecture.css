@@ -34,3 +34,5 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #e7
 [hidden]{display:none!important}
 @media(max-width:650px){main{padding:25px 19px 45px}h1{font-size:33px}h2{font-size:24px}.tools{margin:15px 0 20px}pre{padding:15px;font-size:15px}footer{flex-direction:column}.related strong{width:100%}}
 @media print{body{background:white;color:black}main{max-width:none;padding:0}.tools,.copy,footer{display:none}pre{color:black;background:white;white-space:pre-wrap}}
+
+:root{--ease-out:cubic-bezier(.22,.61,.36,1);--ease-in-out:cubic-bezier(.45,0,.25,1);--dur-1:140ms;--dur-2:240ms;--dur-3:320ms}

@@ -1,5 +1,5 @@
 :root{--tb-bg:#070707;--tb-panel:#111111;--tb-panel-hover:#191919;--tb-ink:#ebe8e1;--tb-muted:#b8b7af;--tb-line:#ffffff1f;--tb-header-height:76px;--tb-font:"Textbook Sans",Arial,sans-serif;color-scheme:dark}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto}
 body{background:var(--tb-bg);color:var(--tb-ink);font-family:var(--tb-font);-webkit-font-smoothing:antialiased}
 body.has-site-shell{padding-top:var(--tb-header-height);isolation:isolate}
 body::selection{background:#ebe8e1;color:#111}
@@ -54,3 +54,5 @@ button,input,textarea,select{font-family:inherit}
 body.reading #site-updates-root .su-launcher{bottom:72px}body.reading #site-updates-root .su-toast{bottom:132px}
 
 body.has-site-shell #site-updates-root .su-launcher{display:none}@media(min-width:901px){.tb-header .tb-topic-toggle{display:none}}
+
+.tb-atmosphere{filter:none;animation:none}.orbit-outer{animation:none}
