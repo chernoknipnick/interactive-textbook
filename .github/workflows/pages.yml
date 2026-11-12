@@ -25,6 +25,8 @@ jobs:
         uses: actions/checkout@v6
       - name: Build static website
         run: python scripts/build.py
+      - name: Check static artifact
+        run: python -m unittest discover -s tests -v
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static website
