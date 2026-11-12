@@ -27,6 +27,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(status,subprocess.check_output(["git","status","--porcelain"],cwd=ROOT))
         self.assertIn(".nojekyll",first)
         for page in (ROOT / "build").rglob("*.html"):
+            self.assertNotIn(b"\r\n", page.read_bytes(), str(page))
             source=page.read_text(encoding="utf-8")
             self.assertEqual(1,source.count("<!-- textbook-icons -->"),str(page))
             self.assertIn("light.css?v=25",source)

@@ -38,8 +38,10 @@ def add_site_icons(dist):
                          version_stylesheet, updated)
         # Typography is bundled locally; avoid blocking lesson rendering on external font services.
         updated = re.sub(r'<link\b[^>]*(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>', '', updated)
-        if updated != source:
-            page.write_text(updated, encoding="utf-8")
+        # Identical UTF-8/LF output on Windows preview and Linux Pages.
+        encoded = updated.encode("utf-8")
+        if page.read_bytes() != encoded:
+            page.write_bytes(encoded)
 
 
 if __name__ == "__main__":
