@@ -162,3 +162,9 @@ body .visual-node.skipped small,body .visual-node.skipped b{color:#536276}
 body .visual-controls button:disabled{opacity:1;background:#edf1f6;color:#536276;border-color:#bac9db}
 body.tb-legacy-material .hbadge.pg{color:#2457b6}
 body.tb-legacy-material .analogy-arrow{color:#536276}
+body .admin-metrics>div{background:#f7f9fc;border-color:#c5d3e3}
+body .admin-metrics dt,body .admin-email{color:#536276}
+body .admin-metrics dd,body .account-disclosure>summary{color:#192435}
+body .admin-bar{background:#2457b6}
+body .admin-table-wrap,body .admin-bar-space{border-color:#c5d3e3}
+body .admin-users-table th{background:#eef3fa;color:#243348}

@@ -291,6 +291,12 @@ html[data-theme="dark"] body .visual-node.skipped small,html[data-theme="dark"] 
 html[data-theme="dark"] body .visual-controls button:disabled{background:#202b3c;color:#b4c2d5;border-color:#586f8e;}
 html[data-theme="dark"] body.tb-legacy-material .hbadge.pg{color:#a6bfed;}
 html[data-theme="dark"] body.tb-legacy-material .analogy-arrow{color:#b4c2d5;}
+html[data-theme="dark"] body .admin-metrics>div{background:#182332;border-color:#586f8e;}
+html[data-theme="dark"] body .admin-metrics dt,html[data-theme="dark"] body .admin-email{color:#b4c2d5;}
+html[data-theme="dark"] body .admin-metrics dd,html[data-theme="dark"] body .account-disclosure>summary{color:#e5edf7;}
+html[data-theme="dark"] body .admin-bar{background:#2457b6;}
+html[data-theme="dark"] body .admin-table-wrap,html[data-theme="dark"] body .admin-bar-space{border-color:#586f8e;}
+html[data-theme="dark"] body .admin-users-table th{background:#202e42;color:#e5edf7;}
 
 html[data-theme="dark"]{--accent-strong:#2457b6}
 html[data-theme="dark"] body[data-course="java"]{--accent-strong:#99460f}

@@ -52,12 +52,14 @@ with tempfile.TemporaryDirectory(prefix="textbook-db-check-", dir=scratch) as wo
                 CREATE ROLE anon NOLOGIN;
                 CREATE ROLE authenticated NOLOGIN;
                 CREATE SCHEMA auth;
-                CREATE TABLE auth.users(id uuid primary key);
+                CREATE TABLE auth.users(id uuid primary key, email text,
+                  created_at timestamptz not null default now(), email_confirmed_at timestamptz,
+                  raw_user_meta_data jsonb not null default '{}', is_anonymous boolean not null default false);
                 CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS
                   'SELECT nullif(current_setting(''request.jwt.claim.sub'',true),'''')::uuid';
                 GRANT USAGE ON SCHEMA auth TO anon,authenticated;
             """)
-            cursor.executemany("INSERT INTO auth.users VALUES (%s)", [(uid,) for uid in users])
+            cursor.executemany("INSERT INTO auth.users(id) VALUES (%s)", [(uid,) for uid in users])
         migration = Path(__file__).with_name("001_accounts_and_groups.sql").read_text(encoding="utf-8")
         with owner.cursor() as cursor:
             cursor.execute(migration)
@@ -136,8 +138,52 @@ with tempfile.TemporaryDirectory(prefix="textbook-db-check-", dir=scratch) as wo
         with owner.cursor() as cursor:
             cursor.execute(feedback_migration)
         assert call(teacher1, "SELECT status FROM textbook_feedback WHERE id=%s", (feedback_id,)) == [("planned",)]
+        admin_migration = Path(__file__).with_name("003_admin_statistics.sql").read_text(encoding="utf-8")
+        with owner.cursor() as cursor:
+            cursor.execute(admin_migration)
+            cursor.execute(admin_migration)
+            cursor.execute("INSERT INTO textbook_administrators VALUES (%s)", (teacher1,))
+            for uid, offset, confirmed in [(teacher1,0,True),(teacher2,7,False),(student1,6,True),(student2,20,False)]:
+                cursor.execute("""UPDATE auth.users SET email=%s,
+                  created_at=(((now() at time zone 'Europe/Moscow')::date-%s)::timestamp at time zone 'Europe/Moscow'),
+                  email_confirmed_at=case when %s then now() else null end WHERE id=%s""", (uid+'@example.test',offset,confirmed,uid))
+            cursor.execute("INSERT INTO auth.users(id,is_anonymous) VALUES ('00000000-0000-0000-0001-000000000001',true)")
+        for uid in [None,teacher2,student1,student2]:
+            denied(uid,"SELECT textbook_admin_statistics()")
+            denied(uid,"SELECT textbook_admin_users('',1)")
+            denied(uid,"SELECT textbook_private.admin_statistics()")
+        denied(student1,"INSERT INTO textbook_administrators VALUES (%s)",(student1,))
+        denied(teacher1,"INSERT INTO textbook_administrators VALUES (%s)",(teacher2,))
+        denied(teacher1,"SELECT email FROM auth.users")
+        assert call(student1,"SELECT * FROM textbook_administrators")==[]
+        assert len(call(teacher1,"SELECT * FROM textbook_administrators"))==1
+        another = call(teacher1,"SELECT textbook_create_group('Second Group')")[0][0]
+        another_code = call(teacher1,"SELECT textbook_group_code(%s,false)",(another,))[0][0]
+        call(student1,"SELECT textbook_join_group(%s)",(another_code,))
+        stats = call(teacher1,"SELECT textbook_admin_statistics()")[0][0]
+        assert stats['accounts']==4 and stats['confirmed']==2 and stats['unconfirmed']==2,stats
+        assert stats['new_today']==1 and stats['new_7_days']==2,stats
+        assert stats['groups']==2 and stats['group_members']==1,stats
+        assert len(stats['daily'])==14 and sum(d['count'] for d in stats['daily'])==3,stats
+        directory = call(teacher1,"SELECT textbook_admin_users('',1)")[0][0]
+        assert directory['total']==4 and len(directory['users'])==4,directory
+        assert directory['users'][0]['role']=='administrator'
+        assert call(teacher1,"SELECT textbook_admin_users('student one',1)")[0][0]['total']==1
+        assert call(teacher1,"SELECT textbook_admin_users(%s,1)",('%',))[0][0]['total']==0
+        denied(teacher1,"SELECT textbook_admin_users('',0)")
+        denied(teacher1,"SELECT textbook_admin_users(repeat('x',101),1)")
+        with owner.cursor() as cursor:
+            for i in range(30):
+                cursor.execute("INSERT INTO auth.users(id,email) VALUES (%s,%s)",
+                  (f'10000000-0000-0000-0000-{i:012d}',f'page-{i}@example.test'))
+            cursor.execute(admin_migration)
+        first = call(teacher1,"SELECT textbook_admin_users('page-',1)")[0][0]
+        second = call(teacher1,"SELECT textbook_admin_users('page-',2)")[0][0]
+        assert first['total']==30 and len(first['users'])==25 and len(second['users'])==5
+        assert not {u['id'] for u in first['users']} & {u['id'] for u in second['users']}
         owner.close()
         print("Passed: account/group isolation, repeatable migrations, feedback submission/deduplication, private inbox and limited status updates.")
+        print("Passed: admin-only aggregates/directory, no self-promotion or auth table access, Moscow day boundaries, distinct members, literal search and stable pagination.")
     finally:
         subprocess.run(
             [str(args.pg_bin / "pg_ctl.exe"), "-D", str(data), "-m", "immediate", "-w", "stop"],

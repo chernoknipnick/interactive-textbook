@@ -7,7 +7,7 @@
   <title>Личный кабинет · Учебник</title>
   <link rel="stylesheet" href="account.css">
 </head>
-<body>
+<body class="account-page">
   <header><a class="brand" href="../">▤ Учебник</a><a href="../">← К материалам</a></header>
   <main>
     <div class="page-heading"><p class="eyebrow">УЧЁБА В ОДНОМ МЕСТЕ</p><h1>Личный кабинет</h1><p id="intro">Войди, чтобы открыть профиль и свои учебные группы.</p></div>
@@ -31,7 +31,23 @@
       <form id="recovery-form"><label>Новый пароль<input name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128"></label><button class="primary" type="submit">Сохранить пароль</button></form>
     </section>
     <div id="dashboard" hidden>
-      <div class="dashboard-top"><span id="role" class="badge"></span><button id="logout" type="button">Выйти</button></div>
+      <div class="dashboard-top"><span id="role" class="badge"></span><div class="dashboard-actions"><button id="account-refresh" type="button">Обновить кабинет</button><button id="logout" type="button">Выйти</button></div></div>
+      <section class="card admin-statistics" id="admin-section" hidden aria-labelledby="admin-title">
+        <div class="group-head"><h2 id="admin-title">Статистика учебника</h2><button type="button" id="admin-refresh">Обновить статистику</button></div>
+        <p class="muted">Все аккаунты учебника, включая преподавателей. Даты — по московскому времени.</p>
+        <p id="admin-status" role="status" aria-live="polite"></p>
+        <dl class="admin-metrics" id="admin-metrics"></dl>
+        <figure class="admin-trend"><figcaption>Регистрации за последние 14 дней</figcaption><ol id="admin-daily" aria-label="Число регистраций по дням"></ol></figure>
+        <details id="admin-users-section" class="account-disclosure">
+          <summary><h3>Кто зарегистрировался</h3><span class="muted">Открыть список</span></summary>
+          <form id="admin-search" class="inline-form"><label>Найти по имени или почте<input name="query" type="search" maxlength="100" autocomplete="off"></label><button type="submit">Найти</button></form>
+          <p id="admin-users-status" role="status" aria-live="polite"></p>
+          <div class="admin-table-wrap" tabindex="0" role="region" aria-label="Зарегистрированные пользователи">
+            <table class="admin-users-table"><thead><tr><th scope="col">Имя и почта</th><th scope="col">Регистрация</th><th scope="col">Почта</th><th scope="col">Роль</th></tr></thead><tbody id="admin-users"></tbody></table>
+          </div>
+          <nav class="admin-pagination" aria-label="Страницы списка пользователей"><button type="button" id="admin-previous" disabled>← Назад</button><span id="admin-page"></span><button type="button" id="admin-next" disabled>Далее →</button></nav>
+        </details>
+      </section>
       <section class="card">
         <h2>Мой профиль</h2>
         <p id="account-email" class="muted"></p>
@@ -46,11 +62,12 @@
         <form id="group-form" class="inline-form"><label>Название группы<input name="name" placeholder="Например, КСП-21" required minlength="2" maxlength="80"></label><button class="primary" type="submit">Создать группу</button></form>
       </section>
       <section class="groups-section"><h2 id="groups-title">Мои группы</h2><div id="groups"></div></section>
-      <section class="card" id="feedback-section" hidden>
-        <div class="group-head"><h2>Предложения по учебнику</h2><button type="button" id="feedback-refresh">Обновить</button></div>
+      <details class="card account-disclosure" id="feedback-section" hidden>
+        <summary><h2>Предложения по учебнику</h2><span class="badge" id="feedback-count"></span></summary>
+        <div class="group-head"><p class="muted" id="feedback-new-count"></p><button type="button" id="feedback-refresh">Обновить предложения</button></div>
         <p class="muted">Последние 100 сообщений из формы сайта. У каждого есть тема, текст и состояние рассмотрения.</p>
         <div id="feedback-list"></div>
-      </section>
+      </details>
       <section class="card">
         <h2>Учебные материалы</h2>
         <div class="subjects"><a href="../#java"><b>Java</b><span>Лекции и практические →</span></a><a href="../it/"><b>ОП.03</b><span>Информационные технологии →</span></a><a href="../#home"><b>SQL</b><span>Базы данных и песочница →</span></a></div>
@@ -60,6 +77,7 @@
   </main>
   <script src="supabase.js"></script>
   <script src="config.js"></script>
+  <script src="admin.js"></script>
   <script src="account.js"></script>
   <script src="../site-updates.js?v=1"></script>
 </body>

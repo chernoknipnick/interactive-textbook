@@ -9,6 +9,8 @@ let mode = "login";
 let currentUser = null;
 let teacher = false;
 let refreshVersion = 0;
+let authIdentity;
+let authRefreshTimer;
 let client;
 
 function message(text, error = false) {
@@ -201,12 +203,13 @@ async function renderGroups(user, isTeacher, groups, version) {
 
 async function loadFeedback(version = refreshVersion) {
   const section = document.getElementById("feedback-section");
-  section.hidden = true;
-  if (!teacher || !currentUser) return;
+  if (!teacher || !currentUser) { section.hidden = true; return; }
   const entries = checked(await client.from("textbook_feedback")
     .select("id,category,message,topic_url,sender_name,status,created_at")
     .order("created_at", {ascending: false}).limit(100));
   if (version !== refreshVersion) return;
+  document.getElementById("feedback-count").textContent = entries.length === 100 ? "100 последних" : String(entries.length);
+  document.getElementById("feedback-new-count").textContent = "Новых среди загруженных: " + entries.filter(entry => entry.status === "new").length;
   const content = document.createDocumentFragment();
   const categories = {unclear: "Непонятно в теме", bug: "Ошибка на сайте", idea: "Идея развития"};
   for (const entry of entries) {
@@ -240,6 +243,7 @@ async function loadFeedback(version = refreshVersion) {
         checked(await client.from("textbook_feedback").update({status: select.value})
           .eq("id", entry.id).select("id").single());
         entry.status = select.value;
+        if (version === refreshVersion) document.getElementById("feedback-new-count").textContent = "Новых среди загруженных: " + entries.filter(item => item.status === "new").length;
         message("Состояние предложения сохранено.");
       } catch (error) {
         select.value = entry.status;
@@ -259,25 +263,31 @@ async function loadFeedback(version = refreshVersion) {
 
 async function refresh() {
   const version = ++refreshVersion;
+  window.textbookAdminPanel.cancel();
   try {
     const {user} = checked(await client.auth.getUser());
     if (version !== refreshVersion) return;
+    const userChanged = currentUser?.id !== user?.id;
+    if (userChanged || !user || mode === "recovery") dashboard.hidden = true;
     currentUser = user;
     authSection.hidden = Boolean(user);
-    dashboard.hidden = true;
     recovery.hidden = mode !== "recovery" || !user;
     if (!user) {
+      window.textbookAdminPanel.reset();
       teacher = false;
+      document.getElementById("intro").textContent = "Войди, чтобы открыть профиль и свои учебные группы.";
       document.getElementById("feedback-section").hidden = true;
       document.getElementById("feedback-list").replaceChildren();
       return;
     }
     if (mode === "recovery") {
+      window.textbookAdminPanel.reset();
       dashboard.hidden = true;
       return;
     }
     let profile = checked(await client.from("textbook_profiles")
       .select("full_name").eq("user_id", user.id).maybeSingle());
+    if (version !== refreshVersion) return;
     if (!profile && user.user_metadata?.full_name) {
       checked(await client.rpc("textbook_save_profile", {p_full_name: user.user_metadata.full_name}));
       profile = {full_name: user.user_metadata.full_name};
@@ -302,6 +312,12 @@ async function refresh() {
     const groups = checked(await query);
     await renderGroups(user, teacher, groups, version);
     if (version === refreshVersion) dashboard.hidden = false;
+    if (version === refreshVersion) window.textbookAdminPanel.load(client, user, () => version === refreshVersion).then(isAdmin => {
+      if (isAdmin && version === refreshVersion) {
+        document.getElementById("role").textContent = teacher ? "Администратор · Преподаватель" : "Администратор";
+        document.getElementById("intro").textContent = "Статистика учебника, учебные группы и предложения.";
+      }
+    });
     try {
       await loadFeedback(version);
     } catch {
@@ -310,6 +326,7 @@ async function refresh() {
   } catch (error) {
     if (version !== refreshVersion) return;
     if (error.name === "AuthSessionMissingError") {
+      window.textbookAdminPanel.reset();
       currentUser = null;
       authSection.hidden = false;
       dashboard.hidden = true;
@@ -327,6 +344,9 @@ document.getElementById("login-tab").onclick = () => setMode("login");
 document.getElementById("register-tab").onclick = () => setMode("register");
 document.getElementById("feedback-refresh").onclick = () => action(
   document.getElementById("feedback-section"), () => loadFeedback()
+);
+document.getElementById("account-refresh").onclick = () => action(
+  document.getElementById("account-refresh").parentElement, () => refresh()
 );
 
 authForm.addEventListener("submit", event => {
@@ -353,7 +373,7 @@ authForm.addEventListener("submit", event => {
       checked(await client.auth.signInWithPassword({email, password}));
       authForm.elements.password.value = "";
     }
-    await refresh();
+    // SIGNED_IN schedules the initial load once, outside the Auth lock.
   });
 });
 
@@ -390,10 +410,10 @@ document.getElementById("group-form").addEventListener("submit", event => {
 });
 
 document.getElementById("logout").onclick = () => action(dashboard, async () => {
+  window.textbookAdminPanel.reset();
   checked(await client.auth.signOut());
   mode = "login";
   document.getElementById("groups").replaceChildren();
-  await refresh();
   message("Ты вышел из кабинета.");
 });
 
@@ -422,11 +442,38 @@ if (config.url && config.publishableKey && window.supabase) {
   client = window.supabase.createClient(config.url, config.publishableKey, {
     auth: {storageKey: "textbook-account-session"}
   });
-  client.auth.onAuthStateChange((event) => {
+  client.auth.onAuthStateChange((event, session) => {
+    // Supabase may emit SIGNED_IN when a tab/window regains focus. Token
+    // rotation and a repeated identity do not invalidate loaded account data.
+    if (event === "TOKEN_REFRESHED") return;
+    if (event === "USER_UPDATED") {
+      if (session?.user && session.user.id === currentUser?.id) {
+        currentUser = session.user;
+        document.getElementById("account-email").textContent = currentUser.email || "";
+      }
+      return;
+    }
+    if (!["INITIAL_SESSION","SIGNED_IN","SIGNED_OUT","PASSWORD_RECOVERY"].includes(event)) return;
+    const identity = session?.user?.id || null;
+    if (event !== "PASSWORD_RECOVERY" && identity === authIdentity) return;
+    authIdentity = identity;
+    clearTimeout(authRefreshTimer);
+    // Hide private data immediately on a real account change or sign out.
+    ++refreshVersion;
+    currentUser = null;
+    teacher = false;
+    window.textbookAdminPanel.reset();
+    dashboard.hidden = true;
+    recovery.hidden = true;
+    authSection.hidden = Boolean(identity);
+    document.getElementById("feedback-section").hidden = true;
+    document.getElementById("feedback-section").open = false;
+    document.getElementById("feedback-list").replaceChildren();
     if (event === "PASSWORD_RECOVERY") mode = "recovery";
-    setTimeout(refresh, 0);
+    else if (mode === "recovery") mode = "login";
+    authRefreshTimer = setTimeout(refresh, 0);
   });
-  refresh();
+  // INITIAL_SESSION is the sole boot-time load (also covers email redirects).
 } else {
   loading.hidden = true;
   message("Кабинет подключается. Учебные материалы доступны по ссылке вверху.", true);
