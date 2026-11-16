@@ -135,3 +135,30 @@ body .oop-link{animation-play-state:paused}body .oop-widget.is-playing:not(.is-p
 .reader-accessible-title{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 
 body .search-result{min-width:0}body .search-snippet{overflow-wrap:anywhere}
+
+/* Theme control: stays visible without adding another header row. */
+body .tb-header .tb-theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex-shrink:0;min-width:42px;min-height:40px;padding:7px 11px;border:1px solid #aebed1;border-radius:8px;background:#fff;color:#294a77;font:600 14px/1.4 "Segoe UI",Arial,sans-serif;cursor:pointer}
+.tb-theme-toggle svg{display:block;width:22px;height:22px;flex-shrink:0}.tb-theme-toggle:hover{background:#edf2f9}.tb-header .tb-brand .tb-course-name{color:inherit;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1100px){body .tb-header{gap:7px}body .tb-header .tb-brand{flex:1;min-width:0;max-width:none;white-space:nowrap;overflow:hidden}body .tb-header .tb-theme-toggle{padding:7px;min-width:40px;min-height:40px}body .tb-theme-label{display:none}}
+@media print{.tb-theme-toggle{display:none!important}html{color-scheme:light!important}}
+
+/* Explicit palettes for syntax and the standalone SQL practice components. */
+body .codehilite .na{color:#253853}
+body.tb-legacy-material .hero h1 em,body.tb-legacy-material .s-title em{color:#192435!important}
+body .section-link small{color:#536276;font-size:13px}
+body.tb-legacy-material{--panel:#fff;--paper:#f4f6fa;--ink:#192435;--ink-muted:#536276;--teal:#0e7c7b;--teal-deep:#0a5958;--gold-soft:#fcebb8;--coral:#b4422c;--coral-soft:#fbe3da}
+body .flow-card,body .q-block,body .q-opt{background:#fff;color:#243348;border-color:#c5d3e3}
+body #flow>span{background:#eef3fa;color:#243348}body #flow>.lit{background:#f5c451;color:#422d08}
+body .try-callout{background:#edf7f4;color:#243348}body .flow-card small{color:#0a5958}
+body .q-opt.correct{background:#e5f4ec;color:#176747;border-color:#2a8858}body .q-opt.wrong{background:#fbe3da;color:#8a2e17;border-color:#b4422c}
+body .terminal h2{color:#e5edf7}
+body .codehilite .nd{color:#82500b}
+body.tb-legacy-material .db-table th{color:#485b72}
+body .lecture-menu a span{color:#536276}
+body a.back{color:#536276}
+body.tb-legacy-material .warn,body.tb-legacy-material .warn>div{color:#8f2434}
+body .visual-node.skipped{opacity:1;border-style:dashed}
+body .visual-node.skipped small,body .visual-node.skipped b{color:#536276}
+body .visual-controls button:disabled{opacity:1;background:#edf1f6;color:#536276;border-color:#bac9db}
+body.tb-legacy-material .hbadge.pg{color:#2457b6}
+body.tb-legacy-material .analogy-arrow{color:#536276}

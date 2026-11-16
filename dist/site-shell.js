@@ -62,11 +62,12 @@
     const course=document.body.dataset.course || (location.pathname.includes("/it/")?"it":"");
     if(course)document.body.dataset.course=course;
     const name={java:"Java",sql:"Базы данных и SQL",it:"Информационные технологии"}[course];
-    logo.replaceChildren(icon,document.createTextNode(name||"учебник"));
+    const courseName=document.createElement("span");courseName.className="tb-course-name";courseName.textContent=name||"учебник";logo.title=name||"Все дисциплины";logo.replaceChildren(icon,courseName);
     if(name){logo.href=new URL(course==="java"?"./#java":course==="sql"?"./#home":"it/",base).href;const small=document.createElement("small");small.textContent=" / учебник";logo.append(small);}else{logo.href=new URL("./#library",base).href;const span=document.createElement("span");span.textContent="./";logo.append(span);}
   }
   courseBrand();window.addEventListener("hashchange",courseBrand);
-  header.append(logo, topicToggle, menuToggle, nav);
+  const themeToggle=document.createElement("button");window.textbookTheme.bind(themeToggle);
+  header.append(logo, topicToggle, nav, themeToggle, menuToggle);
   const oldHeader = document.querySelector("body > header");
   if (oldHeader) oldHeader.replaceWith(header);
   else document.body.prepend(header);
