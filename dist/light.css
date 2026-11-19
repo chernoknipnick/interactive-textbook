@@ -131,6 +131,13 @@ body .trace-cells>div{transition:background-color var(--dur-2) var(--ease-out),b
 body .oop-node rect{transition:fill var(--dur-2) var(--ease-out),stroke var(--dur-2) var(--ease-out)}body .oop-node text{transition:fill var(--dur-2) var(--ease-out)}body .visual-node{transition:background-color var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out)}
 body .oop-link{animation-play-state:paused}body .oop-widget.is-playing:not(.is-paused) .oop-link{animation-play-state:running}
 @media(prefers-reduced-motion:reduce){body .course-page,body .practice-hub,body #library,body .course-card-image,body .trace-cells>div,body .oop-node *,body .oop-link,body .visual-node{animation:none!important;transition:none!important;transform:none!important}}
+body #courses .neural-discipline{border-top:4px solid #8363bc}
+html[data-theme="dark"] body #courses .neural-discipline{border-top-color:#bea4ee}
+.neural-card-art{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;place-items:center;padding:14px;border-radius:16px;background:#efe8fa;color:#7652aa}
+.neural-card-art i{width:10px;height:10px;border:1px solid currentColor;border-radius:50%}
+.neural-card-art i:nth-child(3n+2){background:currentColor}
+@media(min-width:901px){body #courses .discipline-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1450px){body #courses .discipline-grid{grid-template-columns:repeat(4,minmax(0,1fr))}body #courses .course-card-body{grid-template-columns:minmax(0,1fr) 72px;gap:10px}body #courses .course-card-image{width:72px;height:72px}body #courses .discipline-card>.card-bottom{flex-wrap:wrap}}
 
 .reader-accessible-title{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 
