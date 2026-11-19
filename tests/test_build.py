@@ -30,15 +30,15 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn(b"\r\n", page.read_bytes(), str(page))
             source=page.read_text(encoding="utf-8")
             self.assertEqual(1,source.count("<!-- textbook-icons -->"),str(page))
-            self.assertIn("light.css?v=29",source)
-            self.assertIn("dark.css?v=29",source)
+            self.assertIn("light.css?v=30",source)
+            self.assertIn("dark.css?v=30",source)
             # Apply the saved preference before paint on every entry point,
             # including standalone lectures and nested account/IT pages.
-            theme_start=source.index('theme-preference.js?v=29')
+            theme_start=source.index('theme-preference.js?v=30')
             theme_tag=source[source.rfind('<script',0,theme_start):source.index('>',theme_start)]
             self.assertNotIn('defer',theme_tag,str(page))
             self.assertNotIn('async',theme_tag,str(page))
-            self.assertLess(theme_start,source.index('light.css?v=29'),str(page))
+            self.assertLess(theme_start,source.index('light.css?v=30'),str(page))
         add_site_icons(ROOT / "build")
         self.assertEqual(first,digest_tree(ROOT / "build"))
 
