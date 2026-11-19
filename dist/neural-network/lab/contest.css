@@ -33,6 +33,79 @@
 .contest-actions { justify-content: flex-end; }
 #contest-next { font-size: clamp(16px, 2vw, 21px); padding: 12px 22px; }
 header:has(.primary) { flex-wrap: wrap; }
+.dataset-board {
+  margin: 16px 0;
+  padding: clamp(12px, 2vw, 18px);
+  background: #f1f7f3;
+  border: 1px solid #bfd5c9;
+  border-radius: 14px;
+}
+.dataset-entry { width: min(100%, 1050px); margin-inline: auto; }
+.dataset-entry > .dataset-board { background: white; }
+.dataset-board h2 { margin: 0 0 6px; font-size: clamp(20px, 3.1vw, 29px); }
+.dataset-board p { margin: 7px 0 11px; }
+.dataset-grid { display: grid; grid-template-columns: repeat(10, minmax(0,1fr)); gap: 7px; }
+.dataset-grid--variants { grid-template-columns: repeat(4, minmax(0, 120px)); gap: 8px; }
+.dataset-tile {
+  min-width: 0;
+  margin: 0;
+  padding: 6px 3px;
+  border-radius: 8px;
+  border: 1px solid #cee1d6;
+  background: white;
+  text-align: center;
+}
+.dataset-pixels {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 1px;
+  width: min(100%, 56px);
+  aspect-ratio: 1;
+  margin: auto;
+  padding: 3px;
+  background: #183c3a;
+  border-radius: 4px;
+}
+.dataset-pixels i { min-width: 0; background: rgb(226 244 226 / calc(.06 + var(--pixel) * .94)); }
+.dataset-tile figcaption { font-size: .875rem; line-height: 1.3; margin-top: 5px; }
+.dataset-tile small { display: block; font-size: .875rem; color: #345855; }
+.dataset-board .dataset-note { margin: 12px 0 0; color: #345855; font-size: 1rem; }
+.dataset-board summary { font-weight: 700; cursor: pointer; }
+.dataset-all { margin-top: 10px; }
+.dataset-all h3 { margin: 12px 0 6px; font-size: 1rem; }
+.dataset-all > .dataset-grid { margin-top: 10px; }
+.dataset-check-bar { display: grid; grid-template-columns: repeat(60, minmax(0,1fr)); gap: 2px; height: 17px; }
+.dataset-check-bar i { border-radius: 2px; }
+.dataset-hit { --swatch: #16806b; }
+.dataset-error { --swatch: #af523b; }
+.dataset-check-bar i { background: var(--swatch); }
+.dataset-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-weight: 650; }
+.dataset-legend span::before { content: ""; display: inline-block; width: .75em; height: .75em; margin-right: .4em; border-radius: 2px; background: var(--swatch); }
+.dataset-miss { border-color: #ddb4a8; }
+.train-trace { margin: 14px 0; padding: 12px; background: #f1f7f3; border: 1px solid #bfd5c9; border-radius: 12px; }
+.train-trace summary { font-weight: 700; cursor: pointer; }
+.train-trace h3 { margin: 0 0 7px; font-size: 1rem; }
+.train-trace p { margin: 8px 0; }
+.trace-flow { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px 22px; padding-left: 20px; }
+.trace-flow li { padding: 10px; background: white; border-radius: 8px; }
+.trace-input { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.trace-input p { flex: 1 1 120px; }
+.trace-pixels { display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; width: 132px; }
+.trace-pixels span { display: grid; place-items: center; aspect-ratio: 1; background: #e0ebdf; color: #153334; font: 9px/1 monospace; border-radius: 2px; }
+.trace-pixels span[style="--brightness:0.000"] { background: #214c43; color: #e1f0de; }
+.trace-pixels .trace-selected { outline: 2px solid #bb6640; outline-offset: -1px; }
+.trace-equation { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.train-trace pre { overflow: auto; padding: 10px; background: #153334; color: #f3f7f3; border-radius: 7px; font-size: .875rem; }
+@media (max-width: 700px) { .trace-flow { grid-template-columns: minmax(0,1fr); } }
+@media (max-width: 700px) {
+  .dataset-grid { grid-template-columns: repeat(5, minmax(0,1fr)); }
+  .dataset-grid--variants { grid-template-columns: repeat(4, minmax(0,1fr)); }
+  .dataset-check-bar { gap: 1px; }
+}
+@media (max-width: 400px) {
+  .dataset-grid--variants { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .dataset-miss figcaption, .dataset-miss small { overflow-wrap: anywhere; }
+}
 @media (max-width: 500px) {
   .contest-score-grid { gap: 5px; }
   .contest-score-grid span, .contest-layers span { font-size: 12px; }
