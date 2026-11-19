@@ -1,0 +1,41 @@
+.contest {
+  width: min(100% - 32px, 1050px);
+  margin: 22px auto;
+  padding: clamp(18px, 4vw, 42px);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+}
+.contest-top, .contest-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.contest-top span { font-weight: 700; color: var(--green); }
+.contest h1 { font-size: clamp(30px, 5vw, 58px); margin: 20px 0 8px; }
+.contest h1:focus { outline: none; }
+#contest-lead { font-size: clamp(17px, 2vw, 23px); margin: 8px 0 20px; max-width: 780px; }
+.contest-content:empty { display: none; }
+.contest-content { margin: 15px 0 20px; }
+.contest-layers, .contest-score-grid, .contest-update { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+.contest-layers > div, .contest-score-grid > div, .contest-update > div {
+  background: #eaf3ee; border-radius: 12px; padding: clamp(10px, 2vw, 20px);
+}
+.contest-layers strong, .contest-score-grid strong, .contest-update strong { display: block; font-size: clamp(19px, 3vw, 42px); line-height: 1.15; }
+.contest-dots { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; width: min(100%, 95px); margin-top: 10px; }
+.contest-dots i { aspect-ratio: 1; background: #478e7c; border-radius: 50%; }
+.contest-example { display: flex; align-items: center; gap: clamp(16px, 6vw, 65px); }
+.contest-pixels { display: grid; grid-template-columns: repeat(8,1fr); gap: 3px; width: clamp(105px, 25vw, 205px); padding: 9px; background: #183c3a; border-radius: 12px; }
+.contest-pixels i { aspect-ratio: 1; background: #244a46; border-radius: 2px; }
+.contest-pixels .lit { background: #e1f0de; }
+.contest-answer strong { display: block; font-size: clamp(40px, 9vw, 100px); line-height: 1; }
+.contest-update { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.contest-scores > p, .contest-detail { margin: 10px 0; color: var(--muted); }
+.contest-score-grid strong { margin-top: 6px; }
+.contest-quiz { display: flex; gap: 8px; flex-wrap: wrap; }
+.contest-quiz p { width: 100%; font-weight: 650; margin: 6px 0; }
+.contest-actions { justify-content: flex-end; }
+#contest-next { font-size: clamp(16px, 2vw, 21px); padding: 12px 22px; }
+header:has(.primary) { flex-wrap: wrap; }
+@media (max-width: 500px) {
+  .contest-score-grid { gap: 5px; }
+  .contest-score-grid span, .contest-layers span { font-size: 12px; }
+  .contest-update strong { font-size: 17px; }
+  #contest-next { width: 100%; }
+}

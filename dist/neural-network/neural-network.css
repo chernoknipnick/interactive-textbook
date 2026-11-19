@@ -1,0 +1,30 @@
+.neural-module {
+  width: min(100% - 32px, 1160px);
+  margin: 36px auto 64px;
+  line-height: 1.65;
+}
+.neural-module h1 { margin: 8px 0; font-size: clamp(34px, 6vw, 62px); line-height: 1.1; }
+.neural-module .course-tabs { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 22px 0; }
+.neural-module a { text-underline-offset: 3px; }
+.neural-open { display: inline-block; padding: 8px 0; font-weight: 650; }
+.neural-frame {
+  display: block;
+  width: 100%;
+  height: min(82vh, 900px);
+  min-height: 460px;
+  border: 1px solid #919f8a;
+  border-radius: 14px;
+  background: #f8faf7;
+}
+.neural-reference { max-width: 920px; }
+.neural-reference section { margin: 30px 0; scroll-margin-top: 100px; }
+.neural-reference dl { display: grid; grid-template-columns: minmax(130px, 1fr) 3fr; gap: 0; }
+.neural-reference dt, .neural-reference dd { margin: 0; padding: 10px; border-bottom: 1px solid #919f8a70; }
+.neural-reference dt { font-weight: 700; }
+.neural-reference details { padding: 10px 0; border-bottom: 1px solid #919f8a70; }
+.neural-reference summary { cursor: pointer; font-weight: 650; }
+@media (max-width: 520px) {
+  .neural-reference dl { display: block; }
+  .neural-reference dt { border: 0; padding-bottom: 0; }
+  .neural-reference dd { padding-top: 2px; }
+}

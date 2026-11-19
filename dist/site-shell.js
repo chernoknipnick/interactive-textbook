@@ -37,7 +37,8 @@
   for (const [number, title, path] of [
     ["01", "Дисциплины", "./#library"],
     ["02", "Практика", "./#all-practice"],
-    ["03", "Личный кабинет", "account/"]
+    ["03", "Личный кабинет", "account/"],
+    ["04", "Нейросети", "neural-network/"]
   ]) {
     const link = document.createElement("a");
     link.href = new URL(path, base).href;
@@ -108,7 +109,7 @@
   nav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => closeMenus()));
   function markSection() {
     const links = nav.querySelectorAll("a");
-    const active = location.pathname.includes("/account/") ? 2
+    const active = location.pathname.includes("/neural-network/") ? 3 : location.pathname.includes("/account/") ? 2
       : location.hash.includes("practice") || location.hash.includes("java-work-") || location.pathname.includes("practice") ? 1 : 0;
     links.forEach((link, index) => {
       if (index === active) link.setAttribute("aria-current", "page");

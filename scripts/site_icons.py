@@ -29,6 +29,9 @@ def add_site_icons(dist):
         )
         if page != dist / "index.html":
             links = links.replace('<!-- /textbook-icons -->', f'<script src="{prefix}reader-position.js?v=29" defer></script>\n<!-- /textbook-icons -->')
+        if page == dist / "neural-network" / "lab" / "index.html":
+            # The lab switches its own header and view in presentation mode.
+            links = re.sub(r'^.*(?:site-shell|reader-position|reading-presentation|java/motion)\.js.*\n', '', links, flags=re.MULTILINE)
         if "<!-- textbook-icons -->" in source:
             updated = re.sub(r"<!-- textbook-icons -->.*?<!-- /textbook-icons -->",
                              lambda _: links, source, flags=re.DOTALL)
