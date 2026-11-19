@@ -175,3 +175,14 @@ body .admin-metrics dd,body .account-disclosure>summary{color:#192435}
 body .admin-bar{background:#2457b6}
 body .admin-table-wrap,body .admin-bar-space{border-color:#c5d3e3}
 body .admin-users-table th{background:#eef3fa;color:#243348}
+
+/* The standalone neural lab shares the saved theme and readable surfaces. */
+body.neural-lab{--green:#0d7066;--orange:#99460f;--muted:#536276;--neural-node-bg:#edf3ee}
+body.neural-lab button,body.neural-lab select,body.neural-lab input{background:#fff;color:#192435;border-color:#b7c9df}
+body.neural-lab header,body.neural-lab .tag,body.neural-lab .contest,body.neural-lab details,body.neural-lab .dataset-entry>.dataset-board,body.neural-lab .dataset-tile,body.neural-lab .trace-flow li{background:#fff;color:#192435;border-color:#b7c9df}
+body.neural-lab .builder-grid>div,body.neural-lab .journey,body.neural-lab .stage-note,body.neural-lab .formula-box,body.neural-lab .change,body.neural-lab .assembly-caption,body.neural-lab .contest-layers>div,body.neural-lab .contest-score-grid>div,body.neural-lab .contest-update>div,body.neural-lab .dataset-board,body.neural-lab .train-trace{background:#eef3fa;color:#192435;border-color:#b7c9df}
+body.neural-lab .dataset-tile small,body.neural-lab .dataset-board .dataset-note{color:#536276}
+body.neural-lab .primary,body.neural-lab .route button.active,body.neural-lab .assembly-steps .active{background:#2457b6;color:#fff;border-color:#2457b6}
+body.neural-lab button:hover{background:#e4edf9;color:#192435}
+
+body.neural-lab .warning{background:#fff0db;color:#85440f;font-size:14px}

@@ -267,6 +267,10 @@ html[data-theme="dark"] body .search-matches{color:#b4c2d5;}
 html[data-theme="dark"] body mark{background:#392c1f;color:#f2d5a1;}
 html[data-theme="dark"] body .search-selected{background:#1c293b;outline:2px solid #a6bfed;}
 html[data-theme="dark"] body .share-section{background:#1b2534;border:1px solid #586f8e;color:#a6bfed;}
+html[data-theme="dark"] body #courses .neural-discipline{border-top:4px solid #c3b4df;}
+html[data-theme="dark"] html[data-theme="dark"] body #courses .neural-discipline{border-top-color:#586f8e;}
+html[data-theme="dark"] .neural-card-art{background:#1c293b;color:#c6b5de;}
+html[data-theme="dark"] .neural-card-art i:nth-child(3n/**/+2){background:currentColor;}
 html[data-theme="dark"] body .tb-header .tb-theme-toggle{border:1px solid #586f8e;background:#1b2534;color:#afc5e4;}
 html[data-theme="dark"] .tb-theme-toggle:hover{background:#202e42;}
 html[data-theme="dark"] .tb-header .tb-brand .tb-course-name{color:inherit;}
@@ -297,6 +301,14 @@ html[data-theme="dark"] body .admin-metrics dd,html[data-theme="dark"] body .acc
 html[data-theme="dark"] body .admin-bar{background:#2457b6;}
 html[data-theme="dark"] body .admin-table-wrap,html[data-theme="dark"] body .admin-bar-space{border-color:#586f8e;}
 html[data-theme="dark"] body .admin-users-table th{background:#202e42;color:#e5edf7;}
+html[data-theme="dark"] body.neural-lab{--green:#a1f2ea;--orange:#f2c1a1;--muted:#b4c2d5;--neural-node-bg:#1c293b;}
+html[data-theme="dark"] body.neural-lab button,html[data-theme="dark"] body.neural-lab select,html[data-theme="dark"] body.neural-lab input{background:#1b2534;color:#e5edf7;border-color:#586f8e;}
+html[data-theme="dark"] body.neural-lab header,html[data-theme="dark"] body.neural-lab .tag,html[data-theme="dark"] body.neural-lab .contest,html[data-theme="dark"] body.neural-lab details,html[data-theme="dark"] body.neural-lab .dataset-entry>.dataset-board,html[data-theme="dark"] body.neural-lab .dataset-tile,html[data-theme="dark"] body.neural-lab .trace-flow li{background:#1b2534;color:#e5edf7;border-color:#586f8e;}
+html[data-theme="dark"] body.neural-lab .builder-grid>div,html[data-theme="dark"] body.neural-lab .journey,html[data-theme="dark"] body.neural-lab .stage-note,html[data-theme="dark"] body.neural-lab .formula-box,html[data-theme="dark"] body.neural-lab .change,html[data-theme="dark"] body.neural-lab .assembly-caption,html[data-theme="dark"] body.neural-lab .contest-layers>div,html[data-theme="dark"] body.neural-lab .contest-score-grid>div,html[data-theme="dark"] body.neural-lab .contest-update>div,html[data-theme="dark"] body.neural-lab .dataset-board,html[data-theme="dark"] body.neural-lab .train-trace{background:#202e42;color:#e5edf7;border-color:#586f8e;}
+html[data-theme="dark"] body.neural-lab .dataset-tile small,html[data-theme="dark"] body.neural-lab .dataset-board .dataset-note{color:#b4c2d5;}
+html[data-theme="dark"] body.neural-lab .primary,html[data-theme="dark"] body.neural-lab .route button.active,html[data-theme="dark"] body.neural-lab .assembly-steps .active{background:#2457b6;color:#ffffff;border-color:#a6bfed;}
+html[data-theme="dark"] body.neural-lab button:hover{background:#1b2d47;color:#e5edf7;}
+html[data-theme="dark"] body.neural-lab .warning{background:#392c1f;color:#f2c5a1;}
 
 html[data-theme="dark"]{--accent-strong:#2457b6}
 html[data-theme="dark"] body[data-course="java"]{--accent-strong:#99460f}
