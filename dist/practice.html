@@ -205,6 +205,7 @@
     font-family:var(--mono);
     font-size:13px;
   }
+  table.result + table.result{margin-top:12px;}
   table.result thead th{
     background:#F5F7F6;
     text-align:left;
@@ -398,10 +399,14 @@ WHERE department = 'Sales';</textarea>
   const DEFAULT_QUERY = input.value;
 
   let db;
-  let progress;try{progress=JSON.parse(localStorage.getItem('sql-practice'))}catch(e){};progress=progress||{query:false,q1:false,q2:false};
+  const progress = {query:false,q1:false,q2:false};
+  try {
+    const saved = JSON.parse(localStorage.getItem('sql-practice'));
+    for (const key of Object.keys(progress)) progress[key] = saved?.[key] === true;
+  } catch {}
 
   function updateProgress(){
-    localStorage.setItem('sql-practice',JSON.stringify(progress));
+    try { localStorage.setItem('sql-practice',JSON.stringify(progress)); } catch {}
     const done = Object.values(progress).filter(Boolean).length;
     document.getElementById('progress-label').textContent = `Прогресс урока: ${done} / 3`;
     document.getElementById('progress-fill').style.width = (done/3*100) + '%';
@@ -440,15 +445,7 @@ WHERE department = 'Sales';</textarea>
     });
 
   function escapeHTML(v){const e=document.createElement('span');e.textContent=v===null?'NULL':String(v);return e.innerHTML;}
-  function renderResults(res){
-    table.innerHTML = '';
-    if (!res.length){
-      resultWrap.style.display = 'none';
-      statusEl.textContent = 'Запрос выполнен успешно — но подходящих строк не найдено.';
-      statusEl.className = 'status-msg ok';
-      return;
-    }
-    const { columns, values } = res[0];
+  function renderTable(table, {columns, values}){
     const thead = document.createElement('thead');
     const trh = document.createElement('tr');
     trh.innerHTML = '<th class="row-idx">#</th>' + columns.map(c=>`<th>${escapeHTML(c)}</th>`).join('');
@@ -463,9 +460,27 @@ WHERE department = 'Sales';</textarea>
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
-    resultWrap.style.display = 'block';
-    statusEl.textContent = `Готово — найдено строк: ${values.length}`;
+  }
+
+  function renderResults(results){
+    table.replaceChildren();
+    resultWrap.replaceChildren(table);
     statusEl.className = 'status-msg ok';
+    if (!results.length){
+      resultWrap.style.display = 'none';
+      statusEl.textContent = 'SQL выполнен. Нет строк для вывода.';
+      return;
+    }
+    let rowCount = 0;
+    results.forEach((result, index) => {
+      const resultTable = index === 0 ? table : document.createElement('table');
+      resultTable.className = 'result';
+      renderTable(resultTable, result);
+      if (index > 0) resultWrap.append(resultTable);
+      rowCount += result.values.length;
+    });
+    resultWrap.style.display = 'block';
+    statusEl.textContent = results.length === 1 ? `Строк: ${rowCount}` : `Таблиц: ${results.length}. Строк всего: ${rowCount}.`;
 
     if (!progress.query){ progress.query = true; updateProgress(); }
   }
@@ -519,5 +534,23 @@ WHERE department = 'Sales';</textarea>
 <section class="terminal"><small>НАСТРОЙКА ОКРУЖЕНИЯ · ТРЕНАЖЁР</small><h2>Первые команды в SQLite</h2><p>Это симуляция терминала: команды не устанавливают программы. Настоящие инструкции для MySQL, PostgreSQL и DBeaver находятся в лекции 0.</p><p>Введи по порядку: <code>sqlite3 --version</code> → <code>sqlite3 college.db</code> → <code>.databases</code> → <code>.quit</code></p><form id="terminal-form"><label for="command">Команда</label><br><input id="command" autocomplete="off" placeholder="sqlite3 --version"><button>Выполнить</button></form><pre id="terminal-output" aria-live="polite">Шаг 1 из 4. Проверь версию SQLite.</pre></section>
 <script>
 let running=false;document.getElementById('animate').onclick=async()=>{if(running)return;running=true;const steps=[...document.querySelectorAll('#flow span')],desc=['Ты отправляешь текст SELECT в SQL-движок.','Движок разбирает синтаксис и проверяет имена таблиц и столбцов.','FROM определяет, из какой таблицы получить строки.','WHERE оставляет строки, для которых условие истинно.','SELECT определяет столбцы результата. Результат запроса сам по себе не сохраняется как новая таблица.'];for(let i=0;i<steps.length;i++){steps.forEach(e=>e.classList.remove('lit'));steps[i].classList.add('lit');document.getElementById('flow-detail').textContent=desc[i];await new Promise(r=>setTimeout(r,1100));}running=false;};
-let stage=0;const commands=['sqlite3 --version','sqlite3 college.db','.databases','.quit'],answers=['Версия SQLite проверена. Теперь открой учебную базу.','База college.db открыта. Посмотри список подключённых баз.','main: college.db — учебная база подключена. Заверши сеанс.','Готово! Ты прошёл все четыре шага. Повтори команды в установленном SQLite.'];document.getElementById('terminal-form').onsubmit=e=>{e.preventDefault();const input=document.getElementById('command'),out=document.getElementById('terminal-output');if(stage===4){out.textContent='Тренажёр пройден. Обнови страницу для повторения.';return}if(input.value.trim()===commands[stage]){out.textContent=answers[stage++];if(stage===4)localStorage.setItem('sql-terminal-done','true');input.value=''}else out.textContent='Сейчас ожидается: '+commands[stage]+'. Проверь порядок и написание.'};
+let stage=0;const commands=['sqlite3 --version','sqlite3 college.db','.databases','.quit'],answers=['Версия SQLite проверена. Теперь открой учебную базу.','База college.db открыта. Посмотри список подключённых баз.','main: college.db — учебная база подключена. Заверши сеанс.','Готово! Ты прошёл все четыре шага. Повтори команды в установленном SQLite.'];
+document.getElementById('terminal-form').onsubmit = event => {
+  event.preventDefault();
+  const input = document.getElementById('command');
+  const output = document.getElementById('terminal-output');
+  if (stage === commands.length) {
+    output.textContent = 'Тренажёр пройден. Обнови страницу для повторения.';
+    return;
+  }
+  if (input.value.trim() !== commands[stage]) {
+    output.textContent = 'Сейчас ожидается: ' + commands[stage] + '. Проверь порядок и написание.';
+    return;
+  }
+  output.textContent = answers[stage++];
+  input.value = '';
+  if (stage === commands.length) {
+    try { localStorage.setItem('sql-terminal-done','true'); } catch {}
+  }
+};
 </script></body></html><link rel="stylesheet" href="reader-compact.css?v=5">

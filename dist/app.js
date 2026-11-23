@@ -15,6 +15,7 @@ const javaByKey = Object.fromEntries([
 ]);
 const frame = document.getElementById("frame");
 const status = document.getElementById("reader-status");
+const assetQuery = new URL(document.currentScript.src).search;
 let lastSQL = "home";
 let lastJava = "java";
 
@@ -115,11 +116,27 @@ for (const work of javaWorks) {
 document.getElementById("java-count").textContent = javaTopics.length + " тем · " + javaWorks.length + " работ";
 document.getElementById("java-meta").textContent = javaTopics.length + " ТЕМ / ОТ ОСНОВ К ООП";
 
-document.getElementById("course-select").onchange = event => {
-  const course = event.target.value;
-  if (course === "it") location.href = "it/";
-  else location.hash = course === "java" ? lastJava : lastSQL;
-};
+const coursePicker = document.querySelector(".course-picker");
+const courseSummary = coursePicker.querySelector("summary");
+const courseLinks = [...coursePicker.querySelectorAll("a")];
+coursePicker.addEventListener("keydown", event => {
+  if (event.key !== "Escape" || !coursePicker.open) return;
+  event.stopPropagation();
+  coursePicker.open = false;
+  courseSummary.focus();
+});
+coursePicker.addEventListener("focusout", event => {
+  if (event.relatedTarget && !coursePicker.contains(event.relatedTarget)) coursePicker.open = false;
+});
+document.addEventListener("click", event => {
+  if (!coursePicker.contains(event.target)) coursePicker.open = false;
+});
+coursePicker.addEventListener("click", event => {
+  const link = event.target.closest("a");
+  if (!link) return;
+  coursePicker.open = false;
+  courseSummary.focus();
+});
 document.getElementById("toggle-sidebar").onclick = event => {
   const mobile = matchMedia("(max-width: 900px)").matches;
   if (mobile) {
@@ -155,7 +172,16 @@ function route() {
   if (!reader) document.body.classList.remove("focus-view");
   document.getElementById("sql-nav").hidden = java;
   document.getElementById("java-nav").hidden = !java;
-  document.getElementById("course-select").value = java ? "java" : "sql";
+  coursePicker.open = false;
+  for (const link of courseLinks) {
+    const course = link.dataset.course;
+    if (course === "java") link.href = "#" + lastJava;
+    if (course === "sql") link.href = "#" + lastSQL;
+    if (course === (java ? "java" : "sql")) {
+      link.setAttribute("aria-current", "true");
+      document.getElementById("current-course").textContent = link.textContent;
+    } else link.removeAttribute("aria-current");
+  }
   for (const [id, visible] of [
     ["library", library], ["home", key === "home"], ["java-home", key === "java"],
     ["java-practice-home", key === "java-practice"], ["all-practice", hub], ["reader", reader]
@@ -176,13 +202,17 @@ function route() {
   else document.getElementById("main").prepend(breadcrumb);
   if (reader) {
     const topic = javaByKey[key];
-    const url = topic
-      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html?v=31"
-      : key === "practice" ? "practice.html?v=31"
-      : key === "setup" ? "lectures/setup.html?v=31"
-      : "lectures/course.html?v=31#" + key;
+    const material = topic
+      ? "java/" + (topic.work ? "work-" : "") + topic.id + ".html"
+      : key === "practice" ? "practice.html"
+      : key === "setup" ? "lectures/setup.html"
+      : "lectures/course.html";
+    const url = material + assetQuery + (material === "lectures/course.html" ? "#" + key : "");
     if (frame.getAttribute("src") !== url) {
-      status.hidden = false;
+      const loaded = frame.contentDocument;
+      const next = new URL(url, location.href);
+      next.hash = "";
+      status.hidden = loaded?.readyState === "complete" && loaded.URL.split("#", 1)[0] === next.href;
       frame.src = url;
     }
     frame.title = topic?.title || titles[key];

@@ -21,8 +21,16 @@
 <a class="skip-link" href="#main">К содержанию</a>
 <aside aria-label="Навигация дисциплины" id="course-sidebar">
 <a class="sidebar-back" href="#library">← Все дисциплины</a>
-<label class="sidebar-label" for="course-select">ДИСЦИПЛИНА</label>
-<select id="course-select"><option value="sql">Базы данных и SQL</option><option value="java">Java</option><option value="it">Инф. технологии</option></select>
+<p class="sidebar-label" id="course-picker-label">Дисциплина</p>
+<details class="course-picker">
+<summary aria-labelledby="course-picker-label current-course"><span id="current-course">Базы данных и SQL</span></summary>
+<ul aria-label="Дисциплины">
+<li><a href="#home" data-course="sql">Базы данных и SQL</a></li>
+<li><a href="#java" data-course="java">Java</a></li>
+<li><a href="it/" data-course="it">Информационные технологии</a></li>
+<li><a href="neural-network/">Нейросети</a></li>
+</ul>
+</details>
 <nav aria-label="Темы SQL" id="sql-nav">
 <a href="#home">Обзор дисциплины</a>
 <a href="#setup">Подготовка окружения</a>
@@ -40,27 +48,26 @@
 </aside>
 <main id="main" tabindex="-1"><nav aria-label="Путь к материалу" class="tb-breadcrumb" hidden="" id="app-breadcrumb"></nav>
 <section id="library">
-<div class="welcome"><p class="eyebrow">ТВОЁ УЧЕБНОЕ ПРОСТРАНСТВО</p><h1>Что изучаем сегодня?</h1><p>Выбери дисциплину или найди нужную тему. Все материалы доступны без входа.</p></div>
+<div class="welcome"><h1>Что изучаем сегодня?</h1><p>Лекции и практические доступны без входа.</p></div>
 <section aria-label="Поиск материалов" class="finder"><label for="material-search">Найти лекцию или практическую</label><div class="search-field"><span aria-hidden="true">⌕</span><input autocomplete="off" id="material-search" placeholder="Например: массивы, SELECT, информация" type="search"/><button hidden="" id="clear-search" type="button">Очистить</button></div><div hidden="" id="search-panel"><p aria-live="polite" id="search-summary" role="status"></p><div id="search-results"></div></div></section>
 <a class="resume-material" hidden="" id="resume-material"><span><small>ПОСЛЕДНИЙ ОТКРЫТЫЙ МАТЕРИАЛ · НА ЭТОМ УСТРОЙСТВЕ</small><strong id="resume-title"></strong></span><b>Продолжить →</b></a>
 <section aria-labelledby="courses-title" class="course-section" id="courses">
-<div class="section-heading"><h2 id="courses-title">Дисциплины</h2><p>Лекции и практика по каждому предмету</p></div>
+<div class="section-heading"><h2 id="courses-title">Дисциплины</h2></div>
 <div class="discipline-grid">
-<a class="discipline-card" href="#java"><span class="card-number">01 / ПРОГРАММИРОВАНИЕ </span><div class="course-card-body"><div class="course-card-copy"><h3>Java</h3><p>От первой программы до классов, <br/>объектов и собственной системы.</p></div><img alt="" class="course-card-image" height="150" src="assets/course-art/java.svg" width="180"/></div><span class="card-bottom"><span id="java-count">Лекции и практика</span><b>Открыть →</b></span></a>
-<a class="discipline-card" href="#home"><span class="card-number">02 / РАБОТА С ДАННЫМИ </span><div class="course-card-body"><div class="course-card-copy"><h3>Базы данных и SQL</h3><p>Таблицы, связи и запросы. <br/>Сразу с настоящей песочницей.</p></div><img alt="" class="course-card-image" height="150" src="assets/course-art/sql.svg" width="180"/></div><span class="card-bottom"><span>5 лекций · SQL в браузере</span><b>Открыть →</b></span></a>
-<a class="discipline-card" href="it/"><span class="card-number">03 / ОП.03 </span><div class="course-card-body"><div class="course-card-copy"><h3>Информационные технологии</h3><p>Как работают данные и инструменты. <br/>От модели до готового отчёта.</p></div><img alt="" class="course-card-image" height="150" src="assets/course-art/it.svg" width="180"/></div><span class="card-bottom"><span>24 лекции · пошаговые примеры</span><b>Открыть →</b></span></a>
+<a class="discipline-card" href="#java"><div class="course-card-body"><div class="course-card-copy"><h3>Java</h3><p>От первой программы до классов и объектов.</p></div><img alt="" class="course-card-image" height="150" src="assets/course-art/java.svg" width="180"/></div><span class="card-bottom"><span id="java-count">Лекции и практика</span><b aria-hidden="true">↗</b></span></a>
+<a class="discipline-card" href="#home"><div class="course-card-body"><div class="course-card-copy"><h3>Базы данных и SQL</h3><p>Таблицы, связи и запросы. Практика в SQLite.</p></div><img alt="" class="course-card-image" height="150" src="assets/course-art/sql.svg" width="180"/></div><span class="card-bottom"><span>5 лекций и песочница</span><b aria-hidden="true">↗</b></span></a>
+<a class="discipline-card" href="it/"><div class="course-card-body"><div class="course-card-copy"><h3>Информационные технологии</h3><p>Работа с данными: от модели до готового отчёта.</p></div><img alt="" class="course-card-image" height="150" src="assets/course-art/it.svg" width="180"/></div><span class="card-bottom"><span>24 лекции</span><b aria-hidden="true">↗</b></span></a>
 <a class="discipline-card neural-discipline" href="neural-network/">
-  <span class="card-number">04 / МАШИННОЕ ОБУЧЕНИЕ</span>
   <div class="course-card-body">
     <div class="course-card-copy"><h3>Нейросети</h3><p>Создай и обучи модель, которая распознаёт цифры.</p></div>
     <span class="neural-card-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
   </div>
-  <span class="card-bottom"><span>Тренажёр · словарь</span><b>Открыть →</b></span>
+  <span class="card-bottom"><span>Тренажёр и словарь</span><b aria-hidden="true">↗</b></span>
 </a>
 </div>
 </section>
-<section class="practice-feature"><div><p class="eyebrow">02 / ПОПРОБУЙ САМ</p><h2>От теории к своей программе.</h2><p>Выбери практическую, повтори общий пример<br/>и переходи к своему варианту.</p></div><a class="outline-button" href="#all-practice">Все практические <span>↗</span></a></section>
-<div class="landing-footer"><span>УЧЕБНИК / 2026</span><span>Лекции · Практические · Наглядные примеры</span><a href="account/">Мой кабинет ↗</a></div>
+<section class="practice-feature"><div><h2>Практические работы</h2><p>Разбери пример и выполни свой вариант.</p></div><a class="outline-button" href="#all-practice">Все практические <span>↗</span></a></section>
+<div class="landing-footer"><span>Учебник · 2026</span><a href="account/">Мой кабинет ↗</a></div>
 </section>
 <section class="course-page" hidden="" id="home">
 <div class="course-heading"><p class="eyebrow">ОП.08 / БАЗЫ ДАННЫХ И SQL</p><h1>Базы данных и SQL</h1><p>Разбери таблицы и связи, научись задавать вопросы данным и проверь запрос в песочнице.</p><div class="heading-actions"><a class="solid-button" href="#01">Начать с основ ↗</a><a href="#setup">Настроить окружение →</a></div></div>
@@ -87,6 +94,5 @@
 <script src="java-practices.js?v=31"></script>
 <script src="material-index.js?v=31"></script>
 <script src="reader-position.js?v=31"></script><script src="app.js?v=31"></script>
-<script src="site-updates.js?v=31"></script>
 <script src="search.js?v=31"></script><noscript><p>Для поиска нужен JavaScript. Материалы доступны напрямую: <a href="java/languages.html">Java</a>, <a href="lectures/course.html">SQL</a>, <a href="it/">информационные технологии</a>.</p></noscript></body>
 </html>

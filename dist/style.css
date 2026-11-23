@@ -56,7 +56,54 @@ body.library-view #course-sidebar,body.practice-hub-view #course-sidebar{display
 #course-sidebar{position:fixed;left:0;top:var(--tb-header-height,76px);bottom:0;width:250px;padding:28px 18px;background:#0c0c0cee;border-right:1px solid #ffffff16;overflow:auto;scrollbar-width:thin;scrollbar-color:#464640 transparent}
 .sidebar-back{display:block;margin:0 8px 26px;font-size:15px;color:#b1b0a7}
 .sidebar-label{display:block;margin:24px 8px 8px;font:13px/1.5 monospace;letter-spacing:1.4px;color:#aeafa5}
-#course-select{display:block;width:100%;background:#161616;color:#ebe8e1;border:1px solid #ffffff2a;border-radius:8px;padding:10px;font-size:15px}
+#course-sidebar .course-picker {
+  border: 1px solid var(--tb-control-line);
+  border-radius: 10px;
+  background: var(--tb-overlay);
+}
+.course-picker summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 9px 12px;
+  list-style: none;
+  cursor: pointer;
+}
+.course-picker summary::-webkit-details-marker { display: none; }
+#course-sidebar .course-picker summary { color: var(--tb-ink); }
+.course-picker summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: none;
+  margin: -4px 2px 0 0;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+.course-picker[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
+.course-picker ul { list-style: none; margin: 0; padding: 5px; border-top: 1px solid var(--tb-line); }
+.course-picker li { margin: 0; }
+#course-sidebar .course-picker a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--tb-ink);
+}
+#course-sidebar .course-picker a:hover { background: var(--tb-recess); }
+#course-sidebar .course-picker a[aria-current] {
+  background: var(--tb-accent-wash);
+  color: var(--tb-accent-ink);
+  font-weight: 600;
+}
+.course-picker a[aria-current]::after { content: "✓" / ""; }
 #course-sidebar nav{margin-top:24px}
 #course-sidebar nav a{display:flex;gap:10px;align-items:baseline;font-size:15px;line-height:1.5;border-radius:6px;padding:8px 10px;color:#b6b5ac;margin:2px 0}
 #course-sidebar nav a i{font:13px/1.4 monospace;color:#7e8275;flex-shrink:0}

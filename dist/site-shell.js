@@ -9,7 +9,8 @@
     return;
   }
   if (document.querySelector(".tb-header")) return;
-  const base = new URL("./", document.currentScript.src);
+  const scriptUrl = new URL(document.currentScript.src);
+  const base = new URL("./", scriptUrl);
   const header = document.createElement("header");
   header.className = "tb-header";
   const logo = document.createElement("a");
@@ -52,7 +53,6 @@
   feedback.className = "tb-contact";
   feedback.textContent = "Помощь и идеи";
   const news=document.createElement("button");news.type="button";news.className="tb-contact tb-news";news.textContent="Что нового";
-  news.onclick=async()=>{closeMenus();await ensureUpdates();document.querySelector(".su-launcher")?.click();};
   const more=document.createElement("details");more.className="tb-more";
   const summary=document.createElement("summary");summary.textContent="Ещё";
   const moreItems=document.createElement("div");moreItems.append(news,feedback);
@@ -67,7 +67,7 @@
     if(name){logo.href=new URL(course==="java"?"./#java":course==="sql"?"./#home":"it/",base).href;const small=document.createElement("small");small.textContent=" / учебник";logo.append(small);}else{logo.href=new URL("./#library",base).href;const span=document.createElement("span");span.textContent="./";logo.append(span);}
   }
   courseBrand();window.addEventListener("hashchange",courseBrand);
-  const themeToggle=document.createElement("button");window.textbookTheme.bind(themeToggle);
+  const themeToggle=document.createElement("details");window.textbookTheme.bind(themeToggle);
   header.append(logo, topicToggle, nav, themeToggle, menuToggle);
   const oldHeader = document.querySelector("body > header");
   if (oldHeader) oldHeader.replaceWith(header);
@@ -119,7 +119,9 @@
   markSection();
   window.addEventListener("hashchange", markSection);
   sidebar?.addEventListener("click", event => {
-    if (event.target.closest("a")) closeMenus();
+    if (event.target.closest("a")) {
+      closeMenus(Boolean(event.target.closest(".course-picker")) && document.body.classList.contains("course-menu-open"));
+    }
   });
   scrim.onclick = () => closeMenus(true);
   window.addEventListener("hashchange", () => closeMenus());
@@ -147,27 +149,34 @@
   }
   let updatesReady;
   function ensureUpdates() {
-    if (document.getElementById("site-updates-root")) return Promise.resolve();
     if (!updatesReady) {
       updatesReady = new Promise((resolve, reject) => {
         const script = document.createElement("script");
-        script.src = new URL("site-updates.js?v=24", base).href;
+        script.src = new URL("site-updates.js" + scriptUrl.search, base).href;
         script.onload = resolve;
-        script.onerror = reject;
+        script.onerror = () => {
+          script.remove();
+          updatesReady = undefined;
+          reject(new Error("Не удалось загрузить новости"));
+        };
         document.head.append(script);
       });
     }
     return updatesReady;
   }
-  feedback.onclick = async () => {
+  function focusUpdatesOpener() {
+    (menuToggle.getClientRects().length ? menuToggle : summary).focus();
+  }
+  async function openUpdates(feedback) {
     closeMenus();
     try {
       await ensureUpdates();
-      document.querySelector(".su-launcher").click();
-      document.querySelector(".su-feedback-tab").click();
+      window.textbookUpdates.open(feedback, focusUpdatesOpener);
     } catch {
-      location.href = new URL("it/", base).href;
+      focusUpdatesOpener();
     }
-  };
+  }
+  news.onclick = () => openUpdates(false);
+  feedback.onclick = () => openUpdates(true);
   ensureUpdates().catch(() => {});
 })();

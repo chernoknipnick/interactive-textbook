@@ -10,7 +10,7 @@
 <body class="account-page">
   <header><a class="brand" href="../">▤ Учебник</a><a href="../">← К материалам</a></header>
   <main>
-    <div class="page-heading"><p class="eyebrow">УЧЁБА В ОДНОМ МЕСТЕ</p><h1>Личный кабинет</h1><p id="intro">Войди, чтобы открыть профиль и свои учебные группы.</p></div>
+    <div class="page-heading"><h1>Личный кабинет</h1><p id="intro">Войди, чтобы открыть профиль и свои учебные группы.</p></div>
     <p id="notice" role="status" aria-live="polite" hidden></p>
     <section id="auth" class="card" hidden>
       <div class="tabs" role="group" aria-label="Вход или регистрация">
@@ -48,6 +48,7 @@
           <nav class="admin-pagination" aria-label="Страницы списка пользователей"><button type="button" id="admin-previous" disabled>← Назад</button><span id="admin-page"></span><button type="button" id="admin-next" disabled>Далее →</button></nav>
         </details>
       </section>
+      <div class="account-profile-grid">
       <section class="card">
         <h2>Мой профиль</h2>
         <p id="account-email" class="muted"></p>
@@ -61,6 +62,7 @@
         <h2>Создать группу</h2><p class="muted">После создания появится код для приглашения студентов.</p>
         <form id="group-form" class="inline-form"><label>Название группы<input name="name" placeholder="Например, КСП-21" required minlength="2" maxlength="80"></label><button class="primary" type="submit">Создать группу</button></form>
       </section>
+      </div>
       <section class="groups-section"><h2 id="groups-title">Мои группы</h2><div id="groups"></div></section>
       <details class="card account-disclosure" id="feedback-section" hidden>
         <summary><h2>Предложения по учебнику</h2><span class="badge" id="feedback-count"></span></summary>
@@ -79,6 +81,5 @@
   <script src="config.js"></script>
   <script src="admin.js"></script>
   <script src="account.js"></script>
-  <script src="../site-updates.js?v=1"></script>
 </body>
 </html>

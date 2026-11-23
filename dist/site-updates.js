@@ -1,11 +1,12 @@
 (() => {
   if (window.top !== window.self || document.getElementById("site-updates-root")) return;
-  const base = new URL("./", document.currentScript.src);
+  const scriptUrl = new URL(document.currentScript.src);
+  const base = new URL("./", scriptUrl);
   const root = document.createElement("div");
   root.id = "site-updates-root";
   const css = document.createElement("link");
   css.rel = "stylesheet";
-  css.href = new URL("site-updates.css?v=21", base).href;
+  css.href = new URL("site-updates.css" + scriptUrl.search, base).href;
   document.head.append(css);
   root.innerHTML = `
     <button class="su-launcher" type="button" aria-haspopup="dialog">Что нового <span class="su-badge" hidden>Новое</span></button>
@@ -15,36 +16,54 @@
       <button type="button" class="su-dismiss" aria-label="Скрыть уведомление">×</button>
     </aside>
     <dialog class="su-dialog" aria-labelledby="su-title">
-      <div class="su-head"><h2 id="su-title">Новости учебника</h2><button type="button" class="su-close" aria-label="Закрыть окно">×</button></div>
-      <div class="su-tabs" role="group" aria-label="Новости и обратная связь">
-        <button type="button" class="su-news-tab" aria-pressed="true">Что нового</button>
-        <button type="button" class="su-feedback-tab" aria-pressed="false">Предложить идею</button>
+      <div class="su-top">
+        <div class="su-head"><h2 id="su-title">Новости учебника</h2><button type="button" class="su-close" aria-label="Закрыть окно">×</button></div>
+        <div class="su-tabs" role="group" aria-label="Новости и обратная связь">
+          <button type="button" class="su-news-tab" aria-pressed="true" aria-controls="su-news">Что нового</button>
+          <button type="button" class="su-feedback-tab" aria-pressed="false" aria-controls="su-form">Предложить идею</button>
+        </div>
       </div>
-      <div class="su-news"><p class="su-load">Загружаем обновления…</p></div>
-      <form class="su-form" hidden>
-        <p>Расскажи, где было непонятно или что стоит добавить. Например, предложи задание, схему или идею для учебной карты в Roblox.</p>
-        <label>О чём сообщение<select name="category"><option value="unclear">Непонятно в теме</option><option value="bug">Ошибка на сайте</option><option value="idea">Идея развития</option></select></label>
-        <label>Ссылка на тему <span>(можно изменить или убрать)</span><input name="topic_url" type="url" maxlength="2048"></label>
-        <label>Сообщение<textarea name="message" required minlength="10" maxlength="3000" rows="5" placeholder="Укажи конкретное место и расскажи, какое объяснение помогло бы."></textarea></label>
-        <label>Имя или группа <span>(необязательно)</span><input name="sender_name" maxlength="100" autocomplete="name"></label>
-        <label class="su-trap" aria-hidden="true">Оставьте пустым<input name="website" tabindex="-1" autocomplete="off"></label>
-        <button class="su-send" type="submit">Отправить предложение</button>
-        <p class="su-result" role="status" aria-live="polite"></p>
-      </form>
+      <div class="su-body" tabindex="0" role="region" aria-label="Содержимое окна">
+        <div class="su-news" id="su-news"><p class="su-load">Загружаем обновления…</p></div>
+        <form class="su-form" id="su-form" hidden>
+          <p>Есть идея для учебника или что-то осталось непонятным? Расскажи об этом.</p>
+          <label>О чём сообщение<select name="category"><option value="unclear">Непонятно в теме</option><option value="bug">Ошибка на сайте</option><option value="idea">Идея для учебника</option></select></label>
+          <label>Сообщение<textarea name="message" required minlength="10" maxlength="3000" rows="4" placeholder="Что стоит добавить, исправить или объяснить подробнее?"></textarea></label>
+          <label>Ссылка на тему <span>(необязательно)</span><input name="topic_url" type="url" maxlength="2048"></label>
+          <label>Имя или группа <span>(необязательно)</span><input name="sender_name" maxlength="100" autocomplete="name"></label>
+          <label class="su-trap" aria-hidden="true">Оставь пустым<input name="website" tabindex="-1" autocomplete="off"></label>
+          <button class="su-send" type="submit">Отправить</button>
+          <p class="su-result" role="status" aria-live="polite"></p>
+        </form>
+      </div>
     </dialog>`;
   document.body.append(root);
   const launcher = root.querySelector(".su-launcher");
   const badge = root.querySelector(".su-badge");
   const toast = root.querySelector(".su-toast");
   const dialog = root.querySelector("dialog");
+  const scrollArea = root.querySelector(".su-body");
+  const closeButton = root.querySelector(".su-close");
+  const newsTab = root.querySelector(".su-news-tab");
+  const feedbackTab = root.querySelector(".su-feedback-tab");
   const news = root.querySelector(".su-news");
   const form = root.querySelector("form");
   const result = root.querySelector(".su-result");
   const readKey = "textbook-updates-read";
   const toastKey = "textbook-updates-shown";
   let releases = [];
+  let returnFocus;
   let submissionId = crypto.randomUUID();
   let submittedContent = null;
+  let suggestedTopic = currentTopic();
+  form.elements.topic_url.value = suggestedTopic;
+
+  function currentTopic() {
+    const topic = new URL(location.href);
+    topic.search = "";
+    if (topic.hash.includes("=") || topic.hash.includes("&")) topic.hash = "";
+    return topic.href;
+  }
 
   function stored(key) {
     try { return localStorage.getItem(key); } catch { return null; }
@@ -59,33 +78,36 @@
   function showTab(feedback) {
     news.hidden = feedback;
     form.hidden = !feedback;
-    root.querySelector(".su-news-tab").setAttribute("aria-pressed", String(!feedback));
-    root.querySelector(".su-feedback-tab").setAttribute("aria-pressed", String(feedback));
+    newsTab.setAttribute("aria-pressed", String(!feedback));
+    feedbackTab.setAttribute("aria-pressed", String(feedback));
+    scrollArea.scrollTop = 0;
     if (!feedback && releases.length) {
       remember(readKey, releases[0].id);
       unread();
     }
   }
-  function open() {
+  function open(feedback = false, restoreFocus = () => launcher.focus()) {
+    if (dialog.open) return;
+    returnFocus = restoreFocus;
+    const nextTopic = currentTopic();
+    if (form.elements.topic_url.value === suggestedTopic) form.elements.topic_url.value = nextTopic;
+    suggestedTopic = nextTopic;
     toast.hidden = true;
-    showTab(false);
     dialog.showModal();
+    showTab(feedback);
+    closeButton.focus();
   }
-  launcher.onclick = open;
-  root.querySelector(".su-view").onclick = open;
+  window.textbookUpdates = {open};
+  launcher.onclick = () => open();
+  root.querySelector(".su-view").onclick = () => open();
   root.querySelector(".su-dismiss").onclick = () => { toast.hidden = true; };
-  root.querySelector(".su-close").onclick = () => dialog.close();
-  dialog.addEventListener("close", () => launcher.focus());
-  root.querySelector(".su-news-tab").onclick = () => showTab(false);
-  root.querySelector(".su-feedback-tab").onclick = () => showTab(true);
+  closeButton.onclick = () => dialog.close();
+  dialog.addEventListener("close", () => returnFocus?.());
+  newsTab.onclick = () => showTab(false);
+  feedbackTab.onclick = () => showTab(true);
   window.addEventListener("storage", event => {
     if (event.key === readKey) unread();
   });
-
-  const topic = new URL(location.href);
-  topic.search = "";
-  if (topic.hash.includes("=") || topic.hash.includes("&")) topic.hash = "";
-  form.elements.topic_url.value = topic.href;
 
   fetch(new URL("site-updates.json", base), {cache: "no-cache"})
     .then(response => {
@@ -177,9 +199,9 @@
       form.elements.message.value = "";
       submissionId = crypto.randomUUID();
       submittedContent = null;
-      result.textContent = "Сообщение отправлено. Спасибо, что помогаешь улучшать учебник!";
+      result.textContent = "Спасибо, сообщение отправлено.";
     } catch {
-      result.textContent = "Не удалось отправить. Текст сохранён в форме — попробуй ещё раз.";
+      result.textContent = "Не удалось отправить. Текст остался в форме. Попробуй ещё раз.";
     } finally {
       submit.disabled = false;
     }

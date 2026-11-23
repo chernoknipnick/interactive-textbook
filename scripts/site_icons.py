@@ -4,6 +4,8 @@ from pathlib import Path
 import os
 import re
 
+ASSET_VERSION = 32
+
 
 def add_site_icons(dist):
     dist = Path(dist).resolve()
@@ -15,20 +17,20 @@ def add_site_icons(dist):
         prefix = "" if prefix == "." else prefix + "/"
         links = (
             '<!-- textbook-icons -->\n'
-            f'<script src="{prefix}theme-preference.js?v=31"></script>\n'
+            f'<script src="{prefix}theme-preference.js?v={ASSET_VERSION}"></script>\n'
             f'<link rel="icon" href="{prefix}favicon.ico?v=1" sizes="16x16 32x32 48x48">\n'
             f'<link rel="icon" href="{prefix}favicon.svg?v=1" type="image/svg+xml" sizes="any">\n'
             f'<link rel="apple-touch-icon" href="{prefix}apple-touch-icon.png?v=1" sizes="180x180">\n'
-            f'<link rel="stylesheet" href="{prefix}theme.css?v=31">\n'
-            f'<script src="{prefix}java/motion.js?v=31" defer></script>\n'
-            f'<script src="{prefix}reading-presentation.js?v=31" defer></script>\n'
-            f'<script src="{prefix}site-shell.js?v=31" defer></script>\n'
-            f'<link rel="stylesheet" href="{prefix}light.css?v=31">\n'
-            f'<link rel="stylesheet" href="{prefix}dark.css?v=31">\n'
+            f'<link rel="stylesheet" href="{prefix}theme.css?v={ASSET_VERSION}">\n'
+            f'<script src="{prefix}java/motion.js?v={ASSET_VERSION}" defer></script>\n'
+            f'<script src="{prefix}reading-presentation.js?v={ASSET_VERSION}" defer></script>\n'
+            f'<script src="{prefix}site-shell.js?v={ASSET_VERSION}" defer></script>\n'
+            f'<link rel="stylesheet" href="{prefix}light.css?v={ASSET_VERSION}">\n'
+            f'<link rel="stylesheet" href="{prefix}dark.css?v={ASSET_VERSION}">\n'
             '<!-- /textbook-icons -->'
         )
         if page != dist / "index.html":
-            links = links.replace('<!-- /textbook-icons -->', f'<script src="{prefix}reader-position.js?v=31" defer></script>\n<!-- /textbook-icons -->')
+            links = links.replace('<!-- /textbook-icons -->', f'<script src="{prefix}reader-position.js?v={ASSET_VERSION}" defer></script>\n<!-- /textbook-icons -->')
         if page == dist / "neural-network" / "lab" / "index.html":
             # The lab switches its own header and view in presentation mode.
             links = re.sub(r'^.*(?:site-shell|reader-position|reading-presentation|java/motion)\.js.*\n', '', links, flags=re.MULTILINE)
@@ -41,8 +43,8 @@ def add_site_icons(dist):
             href = match.group(2)
             if href.startswith(("http:", "https:", "//", "data:")):
                 return match.group(0)
-            return match.group(1) + href.split("?")[0] + "?v=31" + match.group(3)
-        updated = re.sub(r'(<link\b[^>]*rel="stylesheet"[^>]*href=")([^"]+)(")',
+            return match.group(1) + href.split("?")[0] + f"?v={ASSET_VERSION}" + match.group(3)
+        updated = re.sub(r'(<link\b(?=[^>]*\srel="stylesheet")[^>]*?\shref=")([^"]+)(")',
                          version_stylesheet, updated)
         updated = re.sub(r'(<script\b[^>]*src=")([^"]+)(")', version_stylesheet, updated)
         # Typography is bundled locally; avoid blocking lesson rendering on external font services.

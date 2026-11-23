@@ -39,9 +39,26 @@
    performance.measure('textbook-search',{start:started,end:performance.now()});
   }catch{if(ticket===serial)summary.textContent='Не удалось загрузить поиск. Проверь соединение и введи запрос ещё раз. Разделы ниже доступны без поиска.';}
  }
- input.addEventListener('focus',()=>load().catch(()=>{}));input.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(find,120);});
- input.addEventListener('keydown',event=>{if(event.key==='ArrowDown'){event.preventDefault();select(0);}if(event.key==='ArrowUp'){event.preventDefault();select(-1);}if(event.key==='Enter'){event.preventDefault();results.querySelector('a')?.click();}if(event.key==='Escape'){serial++;panel.hidden=true;}});
- results.addEventListener('keydown',event=>{if(['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();select(active+(event.key==='ArrowDown'?1:-1));}if(event.key==='Escape'){event.preventDefault();panel.hidden=true;input.focus();}});
- clear.onclick=()=>{serial++;clearTimeout(timer);input.value='';panel.hidden=true;clear.hidden=true;results.replaceChildren();input.focus();};
+ function closeResults(){
+  clearTimeout(timer);
+  serial++;
+  panel.hidden=true;
+  results.replaceChildren();
+ }
+ input.addEventListener('focus',()=>load().catch(()=>{}));
+ input.addEventListener('input',()=>{
+  closeResults();
+  clear.hidden=!input.value.trim();
+  if(!clear.hidden)timer=setTimeout(find,120);
+ });
+ input.addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&!clear.hidden){event.preventDefault();closeResults();}
+  if(panel.hidden)return;
+  if(event.key==='ArrowDown'){event.preventDefault();select(0);}
+  if(event.key==='ArrowUp'){event.preventDefault();select(-1);}
+  if(event.key==='Enter'){event.preventDefault();results.querySelector('a')?.click();}
+ });
+ results.addEventListener('keydown',event=>{if(['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();select(active+(event.key==='ArrowDown'?1:-1));}if(event.key==='Escape'){event.preventDefault();closeResults();input.focus();}});
+ clear.onclick=()=>{closeResults();input.value='';clear.hidden=true;input.focus();};
  const query=new URLSearchParams(location.search).get('q');if(query){input.value=query;input.focus();find();}
 })();

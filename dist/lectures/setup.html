@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Лекция 0 — Настройка окружения</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@400;700&family=Inter:wght@400;500;600&display=swap');
-
   :root {
     --bg: #0f1117;
     --bg2: #171b26;
@@ -200,6 +198,7 @@
   .copy-btn.copied { color: var(--green); border-color: rgba(74,222,128,0.3); }
 
   .tip {
+    overflow-wrap: anywhere;
     background: var(--accent-dim);
     border: 1px solid rgba(0,212,170,0.2);
     border-radius: 8px;
@@ -328,7 +327,9 @@
   }
 
   /* ── АНАЛОГИИ ── */
-  .analogy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .analogy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; }
+  .architecture-diagram { overflow-x: auto; }
+  .architecture-diagram > div { white-space: pre; }
   .analogy-card {
     background: var(--bg3);
     border: 1px solid var(--border);
@@ -480,7 +481,7 @@
       <div class="icon" style="background:var(--pg-dim)">🏗</div>
       Как это всё связано
     </div>
-    <div style="background:var(--bg3); border-radius:10px; padding:20px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:2;">
+    <div class="architecture-diagram" role="region" aria-label="Схема подключения к базам данных" tabindex="0" style="background:var(--bg3); border-radius:10px; padding:20px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:2;">
       <div style="color:var(--muted)">┌─────────────────────────────────────────────┐</div>
       <div>│  <span style="color:var(--accent)">Ваш компьютер</span>                               │</div>
       <div>│                                             │</div>
