@@ -119,9 +119,11 @@
   markSection();
   window.addEventListener("hashchange", markSection);
   sidebar?.addEventListener("click", event => {
-    if (event.target.closest("a")) {
-      closeMenus(Boolean(event.target.closest(".course-picker")) && document.body.classList.contains("course-menu-open"));
-    }
+    if (event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const topic = event.target.closest("[data-topic-route]");
+    if (!topic && !event.target.closest("a")) return;
+    const mobile = document.body.classList.contains("course-menu-open");
+    closeMenus(mobile && Boolean(topic || event.target.closest(".course-picker")));
   });
   scrim.onclick = () => closeMenus(true);
   window.addEventListener("hashchange", () => closeMenus());

@@ -13,6 +13,7 @@ button,input,textarea,select{font-family:inherit}
 .tb-brand span{color:#a5a49f}
 .tb-global-nav{display:flex;align-items:center;gap:28px;margin:0;overflow:visible}
 .tb-global-nav a,.tb-global-nav button{display:inline-flex;align-items:center;gap:7px;padding:6px 0;margin:0;font-size:15px;font-weight:600;color:var(--tb-ink);white-space:nowrap}
+.tb-header .tb-global-nav>a{border-radius:7px}
 .tb-global-nav small{font:13px/1.4 var(--tb-font);color:#b0b0a6}
 .tb-global-nav a:hover{color:white;text-decoration:underline;text-underline-offset:6px}
 .tb-global-nav .tb-contact{border:0;border-bottom:1px solid #d5d3ce;background:none;border-radius:0;color:var(--tb-ink);cursor:pointer}

@@ -27,7 +27,17 @@
         <div class="su-news" id="su-news"><p class="su-load">Загружаем обновления…</p></div>
         <form class="su-form" id="su-form" hidden>
           <p>Есть идея для учебника или что-то осталось непонятным? Расскажи об этом.</p>
-          <label>О чём сообщение<select name="category"><option value="unclear">Непонятно в теме</option><option value="bug">Ошибка на сайте</option><option value="idea">Идея для учебника</option></select></label>
+          <div class="su-category-field">
+            <span id="su-category-label">О чём сообщение</span>
+            <details class="su-category">
+              <summary aria-labelledby="su-category-label su-category-value"><span id="su-category-value">Непонятно в теме</span></summary>
+              <fieldset aria-labelledby="su-category-label">
+                <label><input type="radio" name="category" value="unclear" checked><span>Непонятно в теме</span></label>
+                <label><input type="radio" name="category" value="bug"><span>Ошибка на сайте</span></label>
+                <label><input type="radio" name="category" value="idea"><span>Идея для учебника</span></label>
+              </fieldset>
+            </details>
+          </div>
           <label>Сообщение<textarea name="message" required minlength="10" maxlength="3000" rows="4" placeholder="Что стоит добавить, исправить или объяснить подробнее?"></textarea></label>
           <label>Ссылка на тему <span>(необязательно)</span><input name="topic_url" type="url" maxlength="2048"></label>
           <label>Имя или группа <span>(необязательно)</span><input name="sender_name" maxlength="100" autocomplete="name"></label>
@@ -49,6 +59,8 @@
   const news = root.querySelector(".su-news");
   const form = root.querySelector("form");
   const result = root.querySelector(".su-result");
+  const category = form.querySelector(".su-category");
+  const categorySummary = category.querySelector("summary");
   const readKey = "textbook-updates-read";
   const toastKey = "textbook-updates-shown";
   let releases = [];
@@ -57,6 +69,35 @@
   let submittedContent = null;
   let suggestedTopic = currentTopic();
   form.elements.topic_url.value = suggestedTopic;
+
+  function closeCategory() {
+    category.open = false;
+    categorySummary.focus();
+  }
+  category.addEventListener("change", event => {
+    categorySummary.firstElementChild.textContent = event.target.labels[0].textContent;
+  });
+  category.addEventListener("click", event => {
+    if (!event.detail || !event.target.closest("label")) return;
+    requestAnimationFrame(() => {
+      if (category.open && dialog.open && !form.hidden) closeCategory();
+    });
+  });
+  category.addEventListener("keydown", event => {
+    if (!category.open) return;
+    if (event.key === "Tab") {
+      requestAnimationFrame(() => {
+        if (!category.contains(document.activeElement)) category.open = false;
+      });
+    }
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    event.stopPropagation();
+    closeCategory();
+  });
+  dialog.addEventListener("click", event => {
+    if (!category.contains(event.target)) category.open = false;
+  });
 
   function currentTopic() {
     const topic = new URL(location.href);
@@ -76,6 +117,7 @@
     launcher.setAttribute("aria-label", badge.hidden ? "Что нового в учебнике" : "Что нового в учебнике — есть обновления");
   }
   function showTab(feedback) {
+    category.open = false;
     news.hidden = feedback;
     form.hidden = !feedback;
     newsTab.setAttribute("aria-pressed", String(!feedback));

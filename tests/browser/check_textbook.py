@@ -56,6 +56,29 @@ class TextbookChecks(TestCase):
         self.page.get_by_role("button", name="Как в системе").click()
         expect(reader).to_have_attribute("data-theme", "light")
 
+    def test_course_art_uses_the_site_theme(self):
+        self.page.emulate_media(color_scheme="light")
+        self.page.goto(self.base)
+        illustrations = self.page.locator(".course-card-image")
+
+        def files():
+            return illustrations.evaluate_all("""art => Promise.all(art.map(async element => {
+                const image = new Image();
+                image.src = getComputedStyle(element).backgroundImage.slice(5, -2);
+                await image.decode();
+                return new URL(image.src).pathname.split('/').pop();
+            }))""")
+
+        light = ["java.svg", "sql.svg", "it.svg"]
+        self.assertEqual(files(), light)
+        self.page.locator(".tb-theme-toggle").click()
+        self.page.get_by_role("button", name="Тёмная", exact=True).click()
+        self.assertEqual(files(), ["java-dark.svg", "sql-dark.svg", "it-dark.svg"])
+        self.page.emulate_media(color_scheme="dark")
+        self.page.locator(".tb-theme-toggle").click()
+        self.page.get_by_role("button", name="Светлая", exact=True).click()
+        self.assertEqual(files(), light)
+
     def test_standalone_material_opens_updates_without_legacy_script(self):
         requests = []
 
@@ -100,6 +123,42 @@ class TextbookChecks(TestCase):
         picker.press("Enter")
         options.get_by_role("link", name="Базы данных и SQL").press("Enter")
         expect(self.page).to_have_url(self.base + "#home")
+
+    def test_sidebar_material_button_can_copy_and_open_the_same_topic(self):
+        self.page.add_init_script("navigator.clipboard.writeText = async value => { window.copiedLink = value; }")
+        self.page.goto(self.base + "#java")
+        row = self.page.locator("#java-work-links .sidebar-topic").filter(
+            has=self.page.locator("[data-topic-route='#java-work-lab02']")
+        )
+        topic = row.locator("button[data-topic-route]")
+        expect(topic).to_be_visible()
+        row.get_by_role("button", name="Скопировать ссылку", exact=False).click()
+        self.assertEqual(self.page.evaluate("window.copiedLink"), self.base + "#java-work-lab02")
+        expect(self.page).to_have_url(self.base + "#java")
+        topic.press("Enter")
+        expect(self.page).to_have_url(self.base + "#java-work-lab02")
+        expect(topic).to_have_attribute("aria-current", "page")
+
+    def test_feedback_category_supports_keyboard_and_keeps_form_value(self):
+        self.page.goto(self.base)
+        self.page.locator(".tb-more summary").click()
+        self.page.get_by_role("button", name="Помощь и идеи").click()
+        dialog = self.page.get_by_role("dialog")
+        summary = dialog.locator(".su-category summary")
+        summary.press("Enter")
+        first = dialog.get_by_role("radio", name="Непонятно в теме")
+        first.press("ArrowDown")
+        expect(dialog.get_by_role("radio", name="Ошибка на сайте")).to_be_checked()
+        self.page.keyboard.press("Escape")
+        expect(dialog).to_be_visible()
+        expect(summary).to_be_focused()
+        expect(summary).to_contain_text("Ошибка на сайте")
+        self.assertEqual(dialog.locator("form").evaluate("form => new FormData(form).get('category')"), "bug")
+        summary.click()
+        dialog.get_by_text("Идея для учебника", exact=True).click()
+        expect(summary).to_contain_text("Идея для учебника")
+        expect(dialog.locator(".su-category")).not_to_have_attribute("open", "")
+        self.assertEqual(dialog.locator("form").evaluate("form => new FormData(form).get('category')"), "idea")
 
     def test_updates_scrolls_inside_dialog_and_returns_focus(self):
         self.page.set_viewport_size({"width": 390, "height": 680})

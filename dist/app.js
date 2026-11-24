@@ -113,6 +113,51 @@ for (const work of javaWorks) {
     ));
   }
 }
+const sidebarNav = document.getElementById("course-sidebar");
+const copyStatus = element("p", "", "sidebar-copy-status");
+copyStatus.setAttribute("role", "status");
+sidebarNav.append(copyStatus);
+const sidebarTopics = [...sidebarNav.querySelectorAll("nav a[href^='#']")].map(link => {
+  const row = element("div", "", "sidebar-topic");
+  const open = element("button", "", "sidebar-topic-open");
+  const copy = element("button", "", "sidebar-copy");
+  const route = link.hash;
+  const url = new URL(route, location.href);
+  url.search = "";
+  const title = link.lastChild.textContent.trim();
+  open.type = copy.type = "button";
+  open.dataset.topicRoute = route;
+  open.append(...link.childNodes);
+  copy.setAttribute("aria-label", "Скопировать ссылку: " + title);
+  copy.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path class="sidebar-link-icon" d="m10 14 4-4m-6 1 4-4a3.5 3.5 0 0 1 5 5l-2 2m1-1-4 4a3.5 3.5 0 0 1-5-5l2-2"/><path class="sidebar-check-icon" d="m5 12 4 4 10-9" stroke-linejoin="round"/></svg>';
+  open.addEventListener("click", event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey) {
+      window.open(url.href, "_blank", "noopener");
+    } else {
+      location.hash = route;
+    }
+  });
+  open.addEventListener("auxclick", event => {
+    if (event.button !== 1) return;
+    event.preventDefault();
+    window.open(url.href, "_blank", "noopener");
+  });
+  let feedbackTimer;
+  copy.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(url.href);
+      copy.dataset.copied = "";
+      copyStatus.textContent = "Ссылка скопирована: " + title;
+      clearTimeout(feedbackTimer);
+      feedbackTimer = setTimeout(() => { delete copy.dataset.copied; }, 1500);
+    } catch {
+      window.prompt("Скопируй ссылку", url.href);
+    }
+  });
+  row.append(open, copy);
+  link.replaceWith(row);
+  return open;
+});
 document.getElementById("java-count").textContent = javaTopics.length + " тем · " + javaWorks.length + " работ";
 document.getElementById("java-meta").textContent = javaTopics.length + " ТЕМ / ОТ ОСНОВ К ООП";
 
@@ -188,11 +233,14 @@ function route() {
   ]) {
     document.getElementById(id).hidden = !visible;
   }
-  document.querySelectorAll("#course-sidebar nav a").forEach(link => {
-    const active = link.hash === "#" + key;
-    link.classList.toggle("active", active);
-    if (active) {link.setAttribute("aria-current", "page");const group=link.closest("details");if(group)group.open=true;}
-    else link.removeAttribute("aria-current");
+  sidebarTopics.forEach(button => {
+    if (button.dataset.topicRoute === "#" + key) {
+      button.setAttribute("aria-current", "page");
+      const group = button.closest("details");
+      if (group) group.open = true;
+    } else {
+      button.removeAttribute("aria-current");
+    }
   });
   document.getElementById("toggle-sidebar").setAttribute(
     "aria-expanded", String(!matchMedia("(max-width: 900px)").matches && !document.body.classList.contains("focus-view"))

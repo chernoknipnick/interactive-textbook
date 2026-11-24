@@ -83,11 +83,9 @@ html[data-theme="dark"] body .search-field{border-color:var(--tb-control-line)}
 html[data-theme="dark"] body .resume-material{background:#222c2b;border-color:#394946}
 html[data-theme="dark"] body .resume-material b,html[data-theme="dark"] body .card-bottom b{color:var(--accent)}
 html[data-theme="dark"] body #courses .discipline-card:hover{background:#252d2d;border-color:#6b817a}
-html[data-theme="dark"] body .course-card-image{filter:brightness(.87) saturate(.68)}
 html[data-theme="dark"] body .solid-button,html[data-theme="dark"] body .primary,html[data-theme="dark"] body .primary-action,html[data-theme="dark"] body .course-tabs a[aria-current],html[data-theme="dark"] body .work-row .card-bottom,html[data-theme="dark"] body .reader-sequence #next-material{background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
 html[data-theme="dark"] body .trace-controls button[data-trace-action=next],html[data-theme="dark"] body .trace-controls button[data-trace-action=play],html[data-theme="dark"] body .oop-controls button[data-oop-action=next],html[data-theme="dark"] body .oop-controls button[data-oop-action=play]{background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
 html[data-theme="dark"] body .trace-controls button:disabled,html[data-theme="dark"] body .oop-controls button:disabled{background:#262e2e;border-color:#3e4949;color:#b7c2bf}
-html[data-theme="dark"] body .course-card-image{border-radius:16px}
 html[data-theme="dark"] body.tb-legacy-material{--teal:#0e7c7b;--teal-deep:#9cd9d4}
 html[data-theme="dark"] body button#run-btn:hover{background:#0a5958;color:#fff}
 
