@@ -47,7 +47,44 @@ td,th{border-bottom:1px solid var(--line);padding:12px 6px;text-align:left;verti
 .feedback-entry{border-top:1px solid var(--line);padding:20px 0;overflow-wrap:anywhere}
 .feedback-entry p{white-space:pre-wrap}.feedback-entry small{display:block}
 .feedback-entry select{font:inherit;color:var(--tb-ink);background:var(--tb-recess);padding:8px;border:1px solid var(--tb-control-line);border-radius:7px;margin-top:10px;max-width:100%}
-#loading{grid-column:2}
+#loading,#account-retry{grid-column:2;grid-row:2;align-self:start}
+.account-loading{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:20px;
+  border:1px solid var(--tb-line);
+  border-radius:14px;
+  background:var(--tb-overlay);
+  color:var(--tb-ink);
+  font-weight:600;
+}
+.account-loading p{margin:0}
+.account-spinner{
+  flex:none;
+  width:24px;
+  height:24px;
+  border:2px solid var(--tb-control-line);
+  border-top-color:var(--tb-accent-ink);
+  border-radius:50%;
+}
+.account-refresh-overlay{
+  position:fixed;
+  inset:var(--tb-header-height) 0 0;
+  z-index:105;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:rgb(12 18 18 / 56%);
+  backdrop-filter:blur(4px);
+}
+.account-refresh-overlay .account-loading{box-shadow:0 12px 40px #0004}
+@media(prefers-reduced-motion:no-preference){
+  .account-spinner{animation:account-spin .8s linear infinite}
+  .account-refresh-overlay{animation:account-fade .16s ease-out}
+  @keyframes account-spin{to{transform:rotate(360deg)}}
+  @keyframes account-fade{from{opacity:0}to{opacity:1}}
+}
 :focus-visible{outline:2px solid #e7e9d4;outline-offset:4px}
 @media(max-width:900px){main{gap:24px;padding:40px 22px 70px}h1{font-size:52px}.card{padding:22px}.inline-form,.group-name-form{flex-direction:column;align-items:stretch}}
 @media(max-width:650px){main{display:block;padding:28px 18px 65px}.page-heading{padding:0;margin-bottom:30px}h1{font-size:45px}.card{padding:20px}.subjects{grid-template-columns:1fr}.group-card table{font-size:15px}.group-card td:last-child button{font-size:14px;padding:6px 9px}#notice{margin-bottom:20px}}

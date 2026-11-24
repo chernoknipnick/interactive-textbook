@@ -4,13 +4,25 @@ const authSection = document.getElementById("auth");
 const dashboard = document.getElementById("dashboard");
 const recovery = document.getElementById("recovery");
 const loading = document.getElementById("loading");
+const retry = document.getElementById("account-retry");
+const refreshOverlay = document.getElementById("account-refresh-overlay");
+const refreshButton = document.getElementById("account-refresh");
 const authForm = document.getElementById("auth-form");
 let mode = "login";
 let currentUser = null;
 let teacher = false;
 let refreshVersion = 0;
+let feedbackVersion = 0;
 let authIdentity;
+let authSession;
+let accountEpoch = 0;
 let authRefreshTimer;
+let refreshTask;
+let overlayToken;
+let lastRefreshAt = 0;
+let activeActions = 0;
+let pendingFeedbackWrites = 0;
+const activeButtons = new Set();
 let client;
 
 function message(text, error = false) {
@@ -45,15 +57,29 @@ function explain(error) {
 }
 
 async function action(form, task) {
-  const buttons = Array.from(form.querySelectorAll("button"));
-  buttons.forEach(button => button.disabled = true);
+  const buttons = [...form.querySelectorAll("button:not(:disabled)")];
+  const epoch = accountEpoch;
+  const current = () => epoch === accountEpoch;
+  activeActions++;
+  for (const button of buttons) {
+    activeButtons.add(button);
+    button.disabled = true;
+  }
+  refreshButton.disabled = true;
   message("");
   try {
-    await task();
+    await task(current);
   } catch (error) {
-    message(explain(error), true);
+    if (current()) message(explain(error), true);
   } finally {
-    buttons.forEach(button => button.disabled = false);
+    if (current()) {
+      activeActions--;
+      for (const button of buttons) {
+        activeButtons.delete(button);
+        button.disabled = false;
+      }
+      refreshButton.disabled = activeActions > 0;
+    }
   }
 }
 
@@ -90,124 +116,164 @@ function setMode(next) {
   message("");
 }
 
-async function renderGroups(user, isTeacher, groups, version) {
-  const container = document.createDocumentFragment();
-  for (const group of groups) {
-    const card = node("section", null, "card group-card");
-    const heading = node("div", null, "group-head");
-    heading.append(node("h3", group.name));
-    card.append(heading);
-    if (isTeacher) {
-      const code = checked(await client.rpc("textbook_group_code", {p_group: group.id}));
-      const invite = node("div", null, "invite");
-      invite.append(node("p", "Код приглашения"), node("code", code));
-      const controls = node("div", null, "group-actions");
-      controls.append(button("Копировать код", async () => {
-        try {
-          await navigator.clipboard.writeText(code);
-          message("Код скопирован. Передай его участникам группы.");
-        } catch {
-          message("Выдели и скопируй код из карточки группы.");
-        }
-      }));
-      controls.append(button("Обновить код", async () => {
-        if (!window.confirm("Создать новый код приглашения? Участникам, которые уже вступили, повторный вход в группу не потребуется.")) return;
-        checked(await client.rpc("textbook_group_code", {p_group: group.id, p_rotate: true}));
-        await refresh();
-        message("Новый код готов. Используй его для следующих приглашений.");
-      }));
-      invite.append(controls);
-      card.append(invite);
-
-      const rename = document.createElement("form");
-      rename.className = "group-name-form";
-      const label = node("label", "Название группы");
-      const input = document.createElement("input");
-      input.name = "name";
-      input.value = group.name;
-      input.required = true;
-      input.minLength = 2;
-      input.maxLength = 80;
-      label.append(input);
-      const save = node("button", "Переименовать");
-      save.type = "submit";
-      rename.append(label, save);
-      rename.addEventListener("submit", event => {
-        event.preventDefault();
-        action(rename, async () => {
-          const updated = checked(await client.from("textbook_groups")
-            .update({name: input.value.trim()}).eq("id", group.id).select("id").single());
-          if (!updated) throw new Error("GROUP_ACCESS_DENIED");
-          await refresh();
-          message("Название группы сохранено.");
-        });
-      });
-      card.append(rename);
-
-      const members = checked(await client.from("textbook_memberships")
-        .select("user_id,joined_at").eq("group_id", group.id).order("joined_at"));
-      heading.append(node("span", members.length + " участников", "badge"));
-      if (members.length) {
-        const profiles = checked(await client.from("textbook_profiles")
-          .select("user_id,full_name").in("user_id", members.map(member => member.user_id)));
-        const names = new Map(profiles.map(profile => [profile.user_id, profile.full_name]));
-        const table = document.createElement("table");
-        const header = document.createElement("thead");
-        const headerRow = document.createElement("tr");
-        for (const title of ["Студент", "Дата вступления", ""]) {
-          const cell = node("th", title);
-          cell.scope = "col";
-          headerRow.append(cell);
-        }
-        header.append(headerRow);
-        table.append(header);
-        const body = document.createElement("tbody");
-        for (const member of members) {
-          const row = document.createElement("tr");
-          row.append(node("td", names.get(member.user_id) || "Участник"));
-          row.append(node("td", new Intl.DateTimeFormat("ru-RU").format(new Date(member.joined_at))));
-          const controlsCell = document.createElement("td");
-          controlsCell.append(button("Исключить", async () => {
-            if (!window.confirm("Исключить участника из группы «" + group.name + "»?")) return;
-            checked(await client.from("textbook_memberships").delete()
-              .eq("group_id", group.id).eq("user_id", member.user_id));
-            await refresh();
-            message("Состав группы обновлён.");
-          }));
-          row.append(controlsCell);
-          body.append(row);
-        }
-        table.append(body);
-        card.append(table);
-      } else {
-        card.append(node("p", "Передай код студентам. После вступления они появятся здесь.", "muted"));
+async function renderGroup(user, isTeacher, group, version) {
+  const card = node("section", null, "card group-card");
+  const heading = node("div", null, "group-head");
+  heading.append(node("h3", group.name));
+  card.append(heading);
+  if (isTeacher) {
+    const [codeResult, membersResult] = await Promise.all([
+      client.rpc("textbook_group_code", {p_group: group.id}),
+      client.from("textbook_memberships").select("user_id,joined_at").eq("group_id", group.id).order("joined_at")
+    ]);
+    if (version !== refreshVersion) return;
+    const code = checked(codeResult);
+    const members = checked(membersResult);
+    const invite = node("div", null, "invite");
+    invite.append(node("p", "Код приглашения"), node("code", code));
+    const controls = node("div", null, "group-actions");
+    controls.append(button("Копировать код", async () => {
+      try {
+        await navigator.clipboard.writeText(code);
+        message("Код скопирован. Передай его участникам группы.");
+      } catch {
+        message("Выдели и скопируй код из карточки группы.");
       }
+    }));
+    controls.append(button("Обновить код", async current => {
+      if (!window.confirm("Создать новый код приглашения? Участникам, которые уже вступили, повторный вход в группу не потребуется.")) return;
+      checked(await client.rpc("textbook_group_code", {p_group: group.id, p_rotate: true}));
+      if (!current()) return;
+      await refresh({restart: true});
+      if (current()) message("Новый код готов. Используй его для следующих приглашений.");
+    }));
+    invite.append(controls);
+    card.append(invite);
+
+    const rename = document.createElement("form");
+    rename.className = "group-name-form";
+    const label = node("label", "Название группы");
+    const input = document.createElement("input");
+    input.name = "name";
+    input.id = "group-name-" + group.id;
+    input.defaultValue = group.name;
+    input.required = true;
+    input.minLength = 2;
+    input.maxLength = 80;
+    label.append(input);
+    const save = node("button", "Переименовать");
+    save.type = "submit";
+    rename.append(label, save);
+    rename.addEventListener("submit", event => {
+      event.preventDefault();
+      action(rename, async current => {
+        const name = input.value.trim();
+        const updated = checked(await client.from("textbook_groups")
+          .update({name}).eq("id", group.id).select("id").single());
+        if (!current()) return;
+        if (!updated) throw new Error("GROUP_ACCESS_DENIED");
+        if (input.value.trim() === name) input.value = name;
+        input.defaultValue = name;
+        await refresh({restart: true});
+        if (current()) message("Название группы сохранено.");
+      });
+    });
+    card.append(rename);
+
+    heading.append(node("span", members.length + " участников", "badge"));
+    if (members.length) {
+      const profiles = checked(await client.from("textbook_profiles")
+        .select("user_id,full_name").in("user_id", members.map(member => member.user_id)));
+      if (version !== refreshVersion) return;
+      const names = new Map(profiles.map(profile => [profile.user_id, profile.full_name]));
+      const table = document.createElement("table");
+      const header = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+      for (const title of ["Студент", "Дата вступления", ""]) {
+        const cell = node("th", title);
+        cell.scope = "col";
+        headerRow.append(cell);
+      }
+      header.append(headerRow);
+      table.append(header);
+      const body = document.createElement("tbody");
+      for (const member of members) {
+        const row = document.createElement("tr");
+        row.append(node("td", names.get(member.user_id) || "Участник"));
+        row.append(node("td", new Intl.DateTimeFormat("ru-RU").format(new Date(member.joined_at))));
+        const controlsCell = document.createElement("td");
+        controlsCell.append(button("Исключить", async current => {
+          if (!window.confirm("Исключить участника из группы «" + group.name + "»?")) return;
+          checked(await client.from("textbook_memberships").delete()
+            .eq("group_id", group.id).eq("user_id", member.user_id));
+          if (!current()) return;
+          await refresh({restart: true});
+          if (current()) message("Состав группы обновлён.");
+        }));
+        row.append(controlsCell);
+        body.append(row);
+      }
+      table.append(body);
+      card.append(table);
     } else {
-      const controls = node("div", null, "group-actions");
-      controls.append(button("Выйти из группы", async () => {
-        if (!window.confirm("Выйти из группы «" + group.name + "»? Для повторного вступления понадобится код.")) return;
-        checked(await client.from("textbook_memberships").delete()
-          .eq("group_id", group.id).eq("user_id", user.id));
-        await refresh();
-        message("Ты вышел из группы.");
-      }));
-      card.append(node("p", "Ты участник этой группы.", "muted"), controls);
+      card.append(node("p", "Передай код студентам. После вступления они появятся здесь.", "muted"));
     }
-    container.append(card);
+  } else {
+    const controls = node("div", null, "group-actions");
+    controls.append(button("Выйти из группы", async current => {
+      if (!window.confirm("Выйти из группы «" + group.name + "»? Для повторного вступления понадобится код.")) return;
+      checked(await client.from("textbook_memberships").delete()
+        .eq("group_id", group.id).eq("user_id", user.id));
+      if (!current()) return;
+      await refresh({restart: true});
+      if (current()) message("Ты вышел из группы.");
+    }));
+    card.append(node("p", "Ты участник этой группы.", "muted"), controls);
   }
+  return card;
+}
+
+async function loadGroups(user, isTeacher, version) {
+  const section = document.getElementById("groups");
+  let query = client.from("textbook_groups").select("id,name,created_at").order("created_at");
+  if (isTeacher) query = query.eq("owner_id", user.id);
+  const groups = checked(await query);
+  const container = document.createDocumentFragment();
+  // Keep requests for large teaching accounts bounded.
+  for (let index = 0; index < groups.length && version === refreshVersion; index += 4) {
+    const cards = await Promise.all(groups.slice(index, index + 4)
+      .map(group => renderGroup(user, isTeacher, group, version)));
+    if (version !== refreshVersion) return;
+    container.append(...cards);
+  }
+  if (version !== refreshVersion) return;
   if (!groups.length) {
     container.append(node("p", isTeacher ? "Создай первую группу и пригласи студентов по коду." : "Пока нет групп. Введи код, который дал преподаватель.", "muted"));
   }
-  if (version === refreshVersion) document.getElementById("groups").replaceChildren(container);
+  const active = document.activeElement;
+  let restoreInput;
+  for (const input of container.querySelectorAll(".group-name-form input")) {
+    const previous = document.getElementById(input.id);
+    if (!previous) continue;
+    if (previous.value !== previous.defaultValue) input.value = previous.value;
+    if (previous === active) restoreInput = input;
+  }
+  section.replaceChildren(container);
+  if (restoreInput) {
+    restoreInput.focus({preventScroll: true});
+    restoreInput.setSelectionRange(active.selectionStart, active.selectionEnd);
+  }
 }
 
 async function loadFeedback(version = refreshVersion) {
   const section = document.getElementById("feedback-section");
   if (!teacher || !currentUser) { section.hidden = true; return; }
+  const ticket = ++feedbackVersion;
+  const latest = () => version === refreshVersion && ticket === feedbackVersion;
   const entries = checked(await client.from("textbook_feedback")
     .select("id,category,message,topic_url,sender_name,status,created_at")
     .order("created_at", {ascending: false}).limit(100));
-  if (version !== refreshVersion) return;
+  if (!latest() || pendingFeedbackWrites) return;
   document.getElementById("feedback-count").textContent = entries.length === 100 ? "100 последних" : String(entries.length);
   document.getElementById("feedback-new-count").textContent = "Новых среди загруженных: " + entries.filter(entry => entry.status === "new").length;
   const content = document.createDocumentFragment();
@@ -237,21 +303,34 @@ async function loadFeedback(version = refreshVersion) {
       select.append(option);
     }
     select.value = entry.status;
-    select.addEventListener("change", async () => {
+    select.addEventListener("change", () => action(label, async current => {
+      const status = select.value;
       select.disabled = true;
+      pendingFeedbackWrites++;
       try {
-        checked(await client.from("textbook_feedback").update({status: select.value})
+        checked(await client.from("textbook_feedback").update({status})
           .eq("id", entry.id).select("id").single());
-        entry.status = select.value;
-        if (version === refreshVersion) document.getElementById("feedback-new-count").textContent = "Новых среди загруженных: " + entries.filter(item => item.status === "new").length;
-        message("Состояние предложения сохранено.");
       } catch (error) {
         select.value = entry.status;
-        message(explain(error), true);
+        throw error;
       } finally {
+        if (current()) pendingFeedbackWrites--;
         select.disabled = false;
       }
-    });
+      if (!current()) return;
+      entry.status = status;
+      if (latest() && !refreshTask) {
+        document.getElementById("feedback-new-count").textContent = "Новых среди загруженных: " + entries.filter(item => item.status === "new").length;
+      } else {
+        try {
+          await loadFeedback();
+        } catch {
+          if (current()) message("Состояние сохранено. Не удалось обновить список предложений.", true);
+          return;
+        }
+      }
+      if (current()) message("Состояние предложения сохранено.");
+    }));
     label.append(select);
     article.append(label);
     content.append(article);
@@ -261,93 +340,210 @@ async function loadFeedback(version = refreshVersion) {
   section.hidden = false;
 }
 
-async function refresh() {
-  const version = ++refreshVersion;
-  window.textbookAdminPanel.cancel();
+function resetAccount() {
+  ++refreshVersion;
+  ++accountEpoch;
+  activeActions = 0;
+  pendingFeedbackWrites = 0;
+  refreshButton.disabled = false;
+  for (const button of activeButtons) button.disabled = false;
+  activeButtons.clear();
+  refreshTask = null;
+  lastRefreshAt = 0;
+  currentUser = null;
+  teacher = false;
+  window.textbookAdminPanel.reset();
+  dashboard.hidden = true;
+  dashboard.inert = false;
+  dashboard.removeAttribute("aria-busy");
+  refreshOverlay.hidden = true;
+  overlayToken = undefined;
+  recovery.hidden = true;
+  retry.hidden = true;
+  const profileForm = document.getElementById("profile-form");
+  profileForm.elements.full_name.defaultValue = "";
+  profileForm.reset();
+  document.getElementById("account-email").textContent = "";
+  document.getElementById("join-form").reset();
+  document.getElementById("group-form").reset();
+  document.getElementById("groups").replaceChildren();
+  const feedback = document.getElementById("feedback-section");
+  feedback.hidden = true;
+  feedback.open = false;
+  document.getElementById("feedback-list").replaceChildren();
+}
+
+function showSignedOut() {
+  authIdentity = null;
+  authSession = null;
+  loading.hidden = true;
+  authSection.hidden = false;
+  document.getElementById("intro").textContent = "Войди, чтобы открыть профиль и свои учебные группы.";
+}
+
+function describeAccount(isTeacher, isAdmin) {
+  const role = isTeacher ? "Преподаватель" : "Обучающийся";
+  document.getElementById("role").textContent = isAdmin
+    ? (isTeacher ? "Администратор · Преподаватель" : "Администратор")
+    : role;
+  document.getElementById("intro").textContent = isAdmin
+    ? "Статистика учебника, учебные группы и предложения."
+    : (isTeacher ? "Учебные группы и их участники." : "Твой профиль, группы и учебные материалы.");
+}
+
+async function verifyUser() {
+  const token = authSession?.expires_at > Date.now() / 1000 + 15 ? authSession.access_token : undefined;
+  // A valid token lets Auth verify the identity without holding the session lock
+  // while the parallel profile and permissions requests read the session.
+  const result = await client.auth.getUser(token);
+  return token && result.error?.status === 401 ? client.auth.getUser() : result;
+}
+
+async function loadAccount(identity, version, background) {
+  const current = () => version === refreshVersion;
   try {
-    const {user} = checked(await client.auth.getUser());
-    if (version !== refreshVersion) return;
-    const userChanged = currentUser?.id !== user?.id;
-    if (userChanged || !user || mode === "recovery") dashboard.hidden = true;
-    currentUser = user;
-    authSection.hidden = Boolean(user);
-    recovery.hidden = mode !== "recovery" || !user;
-    if (!user) {
-      window.textbookAdminPanel.reset();
-      teacher = false;
-      document.getElementById("intro").textContent = "Войди, чтобы открыть профиль и свои учебные группы.";
-      document.getElementById("feedback-section").hidden = true;
-      document.getElementById("feedback-list").replaceChildren();
-      return;
-    }
     if (mode === "recovery") {
-      window.textbookAdminPanel.reset();
-      dashboard.hidden = true;
-      return;
+      const {user} = checked(await verifyUser());
+      if (!current()) return false;
+      if (user?.id !== identity) throw new Error("AUTH_REQUIRED");
+      recovery.hidden = false;
+      return true;
     }
-    let profile = checked(await client.from("textbook_profiles")
-      .select("full_name").eq("user_id", user.id).maybeSingle());
-    if (version !== refreshVersion) return;
+
+    const [auth, profileResult, rolesResult] = await Promise.all([
+      verifyUser(),
+      client.from("textbook_profiles").select("full_name").eq("user_id", identity).maybeSingle(),
+      client.from("textbook_teachers").select("user_id").eq("user_id", identity)
+    ]);
+    if (!current()) return false;
+    const {user} = checked(auth);
+    if (user?.id !== identity) {
+      resetAccount();
+      showSignedOut();
+      return false;
+    }
+    currentUser = user;
+    let profile = checked(profileResult);
+    const isTeacher = checked(rolesResult).length > 0;
     if (!profile && user.user_metadata?.full_name) {
       checked(await client.rpc("textbook_save_profile", {p_full_name: user.user_metadata.full_name}));
+      if (!current()) return false;
       profile = {full_name: user.user_metadata.full_name};
     }
-    const roles = checked(await client.from("textbook_teachers").select("user_id").eq("user_id", user.id));
-    teacher = roles.length > 0;
-    if (version !== refreshVersion) return;
-    document.getElementById("intro").textContent = teacher ? "Учебные группы и их участники." : "Твой профиль, группы и учебные материалы.";
-    document.getElementById("role").textContent = teacher ? "Преподаватель" : "Обучающийся";
+
+    const groups = document.getElementById("groups");
+    const loadingGroups = dashboard.hidden || teacher !== isTeacher;
+    if (loadingGroups) {
+      groups.replaceChildren(node("p", "Загружаем группы…", "muted"));
+    }
+    teacher = isTeacher;
+    describeAccount(teacher, !document.getElementById("admin-section").hidden);
     document.getElementById("account-email").textContent = user.email || "";
-    document.getElementById("profile-form").elements.full_name.value = profile?.full_name || "";
+    const name = document.getElementById("profile-form").elements.full_name;
+    if (name.value === name.defaultValue) name.value = profile?.full_name || "";
+    name.defaultValue = profile?.full_name || "";
     document.getElementById("teacher-section").hidden = !teacher;
     document.getElementById("join-section").hidden = teacher;
-    const pending = sessionStorage.getItem("textbook-pending-group");
-    if (pending && profile && !teacher) {
-      document.getElementById("join-form").elements.code.value = pending;
-      sessionStorage.removeItem("textbook-pending-group");
-      message("Подтверждение входа получено. Нажми «Присоединиться», чтобы вступить по сохранённому коду.");
-    }
-    let query = client.from("textbook_groups").select("id,name,created_at").order("created_at");
-    if (teacher) query = query.eq("owner_id", user.id);
-    const groups = checked(await query);
-    await renderGroups(user, teacher, groups, version);
-    if (version === refreshVersion) dashboard.hidden = false;
-    if (version === refreshVersion) window.textbookAdminPanel.load(client, user, () => version === refreshVersion).then(isAdmin => {
-      if (isAdmin && version === refreshVersion) {
-        document.getElementById("role").textContent = teacher ? "Администратор · Преподаватель" : "Администратор";
-        document.getElementById("intro").textContent = "Статистика учебника, учебные группы и предложения.";
-      }
-    });
     try {
-      await loadFeedback(version);
-    } catch {
-      if (teacher && version === refreshVersion) message("Группы загружены. Не удалось обновить предложения — попробуй позже.", true);
+      const pending = sessionStorage.getItem("textbook-pending-group");
+      if (pending && profile && !teacher) {
+        const code = document.getElementById("join-form").elements.code;
+        if (!code.value) code.value = pending;
+        sessionStorage.removeItem("textbook-pending-group");
+        message("Нажми «Присоединиться», чтобы вступить по сохранённому коду.");
+      }
+    } catch {}
+    dashboard.hidden = false;
+    recovery.hidden = true;
+    loading.hidden = true;
+
+    const updates = await Promise.allSettled([
+      loadGroups(user, isTeacher, version),
+      loadFeedback(version),
+      window.textbookAdminPanel.load(client, user, () => authIdentity === identity, background).then(({isAdmin, complete}) => {
+        if (current()) describeAccount(isTeacher, isAdmin);
+        return complete;
+      })
+    ]);
+    if (!current()) return false;
+    if (updates[0].status === "rejected" && loadingGroups) {
+      groups.replaceChildren(node("p", "Не удалось загрузить группы. Попробуй обновить кабинет.", "muted"));
     }
+    const complete = updates.every(update => update.status === "fulfilled" && update.value !== false);
+    if (!complete && !background) message("Не удалось обновить все данные. Попробуй ещё раз.", true);
+    return complete;
   } catch (error) {
-    if (version !== refreshVersion) return;
-    if (error.name === "AuthSessionMissingError") {
-      window.textbookAdminPanel.reset();
-      currentUser = null;
-      authSection.hidden = false;
-      dashboard.hidden = true;
-      recovery.hidden = true;
-      document.getElementById("intro").textContent = "Войди, чтобы открыть профиль и свои учебные группы.";
-    } else {
+    if (!current()) return false;
+    if (error.name === "AuthSessionMissingError" || error.status === 401) {
+      resetAccount();
+      showSignedOut();
+    } else if (!background) {
       message(explain(error), true);
+      retry.hidden = !dashboard.hidden || !recovery.hidden;
     }
-  } finally {
-    if (version === refreshVersion) loading.hidden = true;
+    return false;
   }
 }
+
+function refresh({background = false, restart = false} = {}) {
+  if (!authIdentity) return Promise.resolve(false);
+  if (refreshTask && !restart) return refreshTask;
+  const version = ++refreshVersion;
+  lastRefreshAt = Date.now();
+  retry.hidden = true;
+  if (dashboard.hidden && recovery.hidden) loading.hidden = false;
+  dashboard.setAttribute("aria-busy", "true");
+  refreshTask = loadAccount(authIdentity, version, background).finally(() => {
+    if (version !== refreshVersion) return;
+    refreshTask = null;
+    loading.hidden = true;
+    dashboard.removeAttribute("aria-busy");
+    lastRefreshAt = Date.now();
+  });
+  return refreshTask;
+}
+
+function refreshAfterReturn() {
+  if (document.hidden || dashboard.hidden || mode === "recovery" || refreshTask || activeActions) return;
+  if (Date.now() - lastRefreshAt >= 90_000) refresh({background: true});
+}
+
+window.addEventListener("focus", refreshAfterReturn);
+window.addEventListener("pageshow", event => { if (event.persisted) refreshAfterReturn(); });
+document.addEventListener("visibilitychange", refreshAfterReturn);
 
 document.getElementById("login-tab").onclick = () => setMode("login");
 document.getElementById("register-tab").onclick = () => setMode("register");
 document.getElementById("feedback-refresh").onclick = () => action(
   document.getElementById("feedback-section"), () => loadFeedback()
 );
-document.getElementById("account-refresh").onclick = () => action(
-  document.getElementById("account-refresh").parentElement, () => refresh()
-);
+function hideRefreshOverlay() {
+  const restoreFocus = document.activeElement === refreshOverlay;
+  overlayToken = undefined;
+  refreshOverlay.hidden = true;
+  dashboard.inert = false;
+  if (restoreFocus && !dashboard.hidden) refreshButton.focus({preventScroll: true});
+}
+refreshOverlay.addEventListener("keydown", event => {
+  if (event.key === "Escape") hideRefreshOverlay();
+});
+refreshButton.onclick = async () => {
+  if (!refreshOverlay.hidden || dashboard.hidden || activeActions) return;
+  message("");
+  dashboard.inert = true;
+  refreshOverlay.hidden = false;
+  refreshOverlay.focus({preventScroll: true});
+  const token = overlayToken = {};
+  const completed = await refresh();
+  if (overlayToken !== token) return;
+  hideRefreshOverlay();
+  if (completed) message("Кабинет обновлён.");
+  else if (notice.hidden) message("Не удалось обновить кабинет. Попробуй ещё раз.", true);
+};
+retry.querySelector("button").onclick = () => {
+  message("");
+  refresh();
+};
 
 authForm.addEventListener("submit", event => {
   event.preventDefault();
@@ -380,41 +576,48 @@ authForm.addEventListener("submit", event => {
 document.getElementById("profile-form").addEventListener("submit", event => {
   event.preventDefault();
   const form = event.currentTarget;
-  action(form, async () => {
-    checked(await client.rpc("textbook_save_profile", {p_full_name: form.elements.full_name.value.trim()}));
-    await refresh();
-    message("Профиль сохранён.");
+  action(form, async current => {
+    const input = form.elements.full_name;
+    const name = input.value.trim();
+    checked(await client.rpc("textbook_save_profile", {p_full_name: name}));
+    if (!current()) return;
+    if (input.value.trim() === name) input.value = name;
+    input.defaultValue = name;
+    await refresh({restart: true});
+    if (current()) message("Профиль сохранён.");
   });
 });
 
 document.getElementById("join-form").addEventListener("submit", event => {
   event.preventDefault();
   const form = event.currentTarget;
-  action(form, async () => {
+  action(form, async current => {
     checked(await client.rpc("textbook_join_group", {p_code: form.elements.code.value.trim()}));
+    if (!current()) return;
     form.reset();
-    await refresh();
-    message("Ты присоединился к группе.");
+    await refresh({restart: true});
+    if (current()) message("Ты присоединился к группе.");
   });
 });
 
 document.getElementById("group-form").addEventListener("submit", event => {
   event.preventDefault();
   const form = event.currentTarget;
-  action(form, async () => {
+  action(form, async current => {
     checked(await client.rpc("textbook_create_group", {p_name: form.elements.name.value.trim()}));
+    if (!current()) return;
     form.reset();
-    await refresh();
-    message("Группа создана. Теперь можно передать код студентам.");
+    await refresh({restart: true});
+    if (current()) message("Группа создана. Теперь можно передать код студентам.");
   });
 });
 
 document.getElementById("logout").onclick = () => action(dashboard, async () => {
-  window.textbookAdminPanel.reset();
   checked(await client.auth.signOut());
-  mode = "login";
-  document.getElementById("groups").replaceChildren();
-  message("Ты вышел из кабинета.");
+  if (!authIdentity) {
+    setMode("login");
+    message("Ты вышел из кабинета.");
+  }
 });
 
 document.getElementById("forgot").onclick = () => action(authSection, async () => {
@@ -429,12 +632,14 @@ document.getElementById("forgot").onclick = () => action(authSection, async () =
 document.getElementById("recovery-form").addEventListener("submit", event => {
   event.preventDefault();
   const form = event.currentTarget;
-  action(form, async () => {
+  action(form, async current => {
     checked(await client.auth.updateUser({password: form.elements.password.value}));
+    if (!current()) return;
     form.reset();
     mode = "login";
-    await refresh();
-    message("Новый пароль сохранён.");
+    recovery.hidden = true;
+    await refresh({restart: true});
+    if (current()) message("Новый пароль сохранён.");
   });
 });
 
@@ -445,7 +650,10 @@ if (config.url && config.publishableKey && window.supabase) {
   client.auth.onAuthStateChange((event, session) => {
     // Supabase may emit SIGNED_IN when a tab/window regains focus. Token
     // rotation and a repeated identity do not invalidate loaded account data.
-    if (event === "TOKEN_REFRESHED") return;
+    if (event === "TOKEN_REFRESHED") {
+      if (session?.user?.id === authIdentity) authSession = session;
+      return;
+    }
     if (event === "USER_UPDATED") {
       if (session?.user && session.user.id === currentUser?.id) {
         currentUser = session.user;
@@ -455,23 +663,20 @@ if (config.url && config.publishableKey && window.supabase) {
     }
     if (!["INITIAL_SESSION","SIGNED_IN","SIGNED_OUT","PASSWORD_RECOVERY"].includes(event)) return;
     const identity = session?.user?.id || null;
+    authSession = session;
     if (event !== "PASSWORD_RECOVERY" && identity === authIdentity) return;
     authIdentity = identity;
     clearTimeout(authRefreshTimer);
-    // Hide private data immediately on a real account change or sign out.
-    ++refreshVersion;
-    currentUser = null;
-    teacher = false;
-    window.textbookAdminPanel.reset();
-    dashboard.hidden = true;
-    recovery.hidden = true;
+    resetAccount();
     authSection.hidden = Boolean(identity);
-    document.getElementById("feedback-section").hidden = true;
-    document.getElementById("feedback-section").open = false;
-    document.getElementById("feedback-list").replaceChildren();
     if (event === "PASSWORD_RECOVERY") mode = "recovery";
     else if (mode === "recovery") mode = "login";
-    authRefreshTimer = setTimeout(refresh, 0);
+    if (identity) {
+      loading.hidden = false;
+      authRefreshTimer = setTimeout(refresh, 0);
+    } else {
+      showSignedOut();
+    }
   });
   // INITIAL_SESSION is the sole boot-time load (also covers email redirects).
 } else {

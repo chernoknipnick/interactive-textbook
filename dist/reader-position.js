@@ -47,6 +47,7 @@ localStorage.setItem('tb-scroll:'+current,String(scrollPosition(scroller)));}cat
   detach();clearTimeout(throttle);current=key;doc=nextDoc;
   const targetScroller=scrollTarget(nextDoc,nextWin);scroller=targetScroller;
   const serial=++restoreSerial,savedPosition=getStore(key);
+  let expectedPosition=scrollPosition(targetScroller);
   let cancelled=false;const cancel=()=>{cancelled=true;};const scroll=()=>{clearTimeout(throttle);throttle=setTimeout(save,180);};
   targetScroller.addEventListener('scroll',scroll,{passive:true});
   if(targetScroller!==nextWin)nextWin.addEventListener('hashchange',restore);
@@ -56,10 +57,11 @@ localStorage.setItem('tb-scroll:'+current,String(scrollPosition(scroller)));}cat
    nextWin.removeEventListener('hashchange',restore);
    for(const event of ['wheel','touchstart','keydown'])nextDoc.removeEventListener(event,cancel);
   };
-  const apply=()=>{if(serial!==restoreSerial||cancelled)return;
+  const apply=()=>{if(serial!==restoreSerial||cancelled||scrollPosition(targetScroller)!==expectedPosition)return;
    const target=section?doc.getElementById(section):null;
    if(target){reveal(target);target.scrollIntoView({block:'start',behavior:'instant'});updateExternal(section);}
    else {targetScroller.scrollTo({top:savedPosition,behavior:'instant'});updateExternal();}
+   expectedPosition=scrollPosition(targetScroller);
   };
   nextWin.requestAnimationFrame(()=>nextWin.requestAnimationFrame(apply));
   Promise.all([...doc.images].filter(img=>!img.complete).map(img=>new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true});}))).then(apply);

@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 import re
 
-ASSET_VERSION = 32
+ASSET_VERSION = 33
 
 
 def add_site_icons(dist):

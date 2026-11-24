@@ -3,6 +3,7 @@
   const find = id => document.getElementById(id);
   let client, sessionUser = null, generation = 0, userRequest = 0;
   let page = 1, query = '', directoryLoaded = false, validSession = () => false;
+  let directoryPending = false;
   const number = new Intl.NumberFormat('ru-RU');
   const date = new Intl.DateTimeFormat('ru-RU', {dateStyle:'medium', timeZone:'Europe/Moscow'});
   const check = result => { if (result.error) throw result.error; return result.data; };
@@ -21,20 +22,20 @@
     for (const id of ['admin-metrics','admin-daily','admin-users']) find(id).replaceChildren();
     for (const id of ['admin-status','admin-users-status','admin-page']) find(id).textContent = '';
     find('admin-users-section').open = false;
-    find('admin-search').reset(); directoryLoaded = false; page = 1; query = '';
+    find('admin-search').reset(); directoryLoaded = false; directoryPending = false; page = 1; query = '';
     find('admin-previous').disabled = find('admin-next').disabled = true;
     find('admin-search').querySelector('button').disabled = false;
     find('admin-refresh').disabled = false;
   }
 
-  async function statistics(ticket = generation) {
-    if (!current(ticket)) return;
+  async function statistics(ticket = generation, quiet = false) {
+    if (!current(ticket)) return false;
     find('admin-refresh').disabled = true;
-    find('admin-status').textContent = 'Загружаем статистику…';
+    if (!quiet) find('admin-status').textContent = 'Загружаем статистику…';
     section.setAttribute('aria-busy','true');
     try {
       const data = check(await client.rpc('textbook_admin_statistics'));
-      if (!current(ticket)) return;
+      if (!current(ticket)) return false;
       const metrics = document.createDocumentFragment();
       for (const [key, label] of [['accounts','Всего аккаунтов'],['confirmed','Подтвердили почту'],['unconfirmed','Ждут подтверждения'],['new_7_days','Новых за 7 дней'],['groups','Учебных групп'],['group_members','Участников в группах']]) {
         const item = element('div');
@@ -60,30 +61,35 @@
       const updated = new Date(data.generated_at);
       const time = Number.isNaN(updated.getTime()) ? '' : new Intl.DateTimeFormat('ru-RU',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Moscow'}).format(updated);
       find('admin-status').textContent = 'Сегодня зарегистрировались: '+number.format(count(data.new_today))+(time?' · Обновлено в '+time+' МСК':'');
+      return true;
     } catch {
-      if (current(ticket)) {
+      if (current(ticket) && !quiet) {
         find('admin-metrics').replaceChildren(); find('admin-daily').replaceChildren();
         find('admin-status').textContent = 'Не удалось загрузить статистику. Нажми «Обновить статистику», чтобы повторить.';
       }
+      return false;
     } finally {
       if (current(ticket)) { find('admin-refresh').disabled = false; section.removeAttribute('aria-busy'); }
     }
   }
 
-  async function users(nextPage = page) {
-    if (!current(generation)) return;
-    const ticket = generation, request = ++userRequest;
-    const fresh = () => current(ticket) && request === userRequest;
-    find('admin-previous').disabled = find('admin-next').disabled = true;
-    find('admin-search').querySelector('button').disabled = true;
-    find('admin-users').replaceChildren(); find('admin-page').textContent = '';
-    find('admin-users-status').textContent = 'Загружаем пользователей…';
+  async function users(nextPage = page, quiet = false) {
+    if (!current(generation)) return false;
+    const user = sessionUser, request = ++userRequest;
+    const fresh = () => user === sessionUser && validSession() && request === userRequest;
+    directoryPending = true;
+    if (!quiet) {
+      find('admin-previous').disabled = find('admin-next').disabled = true;
+      find('admin-search').querySelector('button').disabled = true;
+      find('admin-users').replaceChildren(); find('admin-page').textContent = '';
+      find('admin-users-status').textContent = 'Загружаем пользователей…';
+    }
     try {
       const data = check(await client.rpc('textbook_admin_users',{p_query:query,p_page:nextPage}));
-      if (!fresh()) return;
+      if (!fresh()) return false;
       const total = count(data.total), size = count(data.page_size) || 25;
       const pages = Math.max(1,Math.ceil(total / size));
-      if (nextPage > pages) { await users(pages); return; }
+      if (nextPage > pages) return users(pages, quiet);
       page = nextPage; directoryLoaded = true;
       const rows = document.createDocumentFragment();
       for (const user of data.users || []) {
@@ -100,10 +106,15 @@
       find('admin-page').textContent = total ? page+' / '+pages : '';
       find('admin-previous').disabled = page <= 1;
       find('admin-next').disabled = page >= pages;
+      return true;
     } catch {
-      if (fresh()) { directoryLoaded = false; find('admin-users-status').textContent = 'Не удалось загрузить список. Повтори поиск или раскрой список заново.'; }
+      if (fresh() && !quiet) { directoryLoaded = false; find('admin-users-status').textContent = 'Не удалось загрузить список. Повтори поиск или раскрой список заново.'; }
+      return false;
     } finally {
-      if (fresh()) find('admin-search').querySelector('button').disabled = false;
+      if (fresh()) {
+        directoryPending = false;
+        find('admin-search').querySelector('button').disabled = false;
+      }
     }
   }
 
@@ -119,20 +130,25 @@
 
   window.textbookAdminPanel = {
     reset,
-    cancel() { generation++; userRequest++; },
-    async load(connection,user,guard) {
+    async load(connection,user,guard,quiet = false) {
       if (sessionUser !== user.id) reset();
-      const ticket = ++generation;
+      const ticket = ++generation, directoryRequest = userRequest;
       client = connection; sessionUser = user.id; validSession = guard;
       try {
         const roles = check(await client.from('textbook_administrators').select('user_id').eq('user_id',user.id));
-        if (!current(ticket)) return false;
-        if (!roles.length) { reset(); return false; }
+        if (!current(ticket)) return {isAdmin: false, complete: false};
+        if (!roles.length) { reset(); return {isAdmin: false, complete: true}; }
         section.hidden = false;
-        await statistics(ticket);
-        if (current(ticket) && find('admin-users-section').open) await users(page);
-        return Boolean(current(ticket));
-      } catch { if (current(ticket)) reset(); return false; }
+        const statsLoaded = await statistics(ticket, quiet);
+        const directoryLoadedNow = current(ticket) && !directoryPending && userRequest === directoryRequest && find('admin-users-section').open
+          ? await users(page, quiet && directoryLoaded)
+          : true;
+        const isAdmin = Boolean(current(ticket));
+        return {isAdmin, complete: isAdmin && statsLoaded && directoryLoadedNow};
+      } catch {
+        const isAdmin = Boolean(current(ticket) && !section.hidden);
+        return {isAdmin, complete: false};
+      }
     }
   };
 })();
