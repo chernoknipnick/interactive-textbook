@@ -16,11 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -31,25 +28,17 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static website
-        id: pages_artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: build
-      - name: Wait for Pages artifact to become visible
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PAGES_ARTIFACT_ID: ${{ steps.pages_artifact.outputs.artifact_id }}
-        run: |
-          for attempt in {1..12}; do
-            if gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts?name=github-pages" \
-              --jq '.artifacts[].id' | grep -Fxq "$PAGES_ARTIFACT_ID"; then
-              exit 0
-            fi
-            sleep 3
-          done
-          echo "::error::The uploaded Pages artifact did not appear in the workflow run."
-          exit 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
